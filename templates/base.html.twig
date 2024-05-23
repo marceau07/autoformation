@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="theme-color" content="#317EFB" />
+    <meta name="description" content="Retrouvez l'ensemble des cours de votre Session sur cette page." />
+    <title>
+      {% block title %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+      {% endblock %}&nbsp;- Autoformation
+    </title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>" />
+
+    <link rel="stylesheet" href="css/_reset.css" />
+    <link rel="stylesheet" href="css/_style.css" />
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    {% block javascripts %}
+      {% block importmap %}
+        {{ importmap('app') }}
+      {% endblock %}
+    {% endblock %}
+  </head>
+  <body>
+    {{ dump(app.user) }}
+    {% block body %}
+      {% block header %}
+
+      {% endblock %}
+      {% block main %}
+
+      {% endblock %}
+      {% block footer %}
+
+      {% endblock %}
+    {% endblock %}
+  </body>
 </html>
