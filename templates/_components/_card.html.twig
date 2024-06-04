@@ -1,0 +1,11 @@
+<div class="col-xs-1 col-md-3 col-lg-3 mb-3">
+  <a title="Cours fait par Marceau RODRIGUES" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
+    <div class="card h-100">
+      <span class="card-img-top"><img class="img-course" alt="Illustration {{ course.title }}" src="{{ asset('/images/css.svg') }}" loading="lazy" /></span>
+      <div class="card-body">
+        <p class="card-title h5 text-decoration-underline font-weight-bold">{{ course.title }}</p>
+        <p class="card-text">{{ course.synopsis }}</p>
+      </div>
+    </div>
+  </a>
+</div>

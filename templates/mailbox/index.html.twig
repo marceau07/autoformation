@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Mailbox
+{% endblock %}
+
+{% block main %}
+  <div class="container">
+    <div class="row pb-5">
+      <div class="col-12">
+        <h1 class="text-center">Bienvenue dans votre <em>boîte aux lettres</em></h1>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if sessions is defined and sessions is not empty %}
+      <div class="row" style="min-height: 71vh;">
+        <div class="col-2 border rounded-start height-message-scroll">
+          {% for session in sessions %}
+            <div class="ps-1 pt-2 pb-2 fake-link" onclick="showMessagesSession({{ session.id }})">{{ session.name }}</div>
+            {% if accounts is defined and accounts is not empty %}
+              {% for account in accounts %}
+                <div class="ps-4 pt-2 pb-2 fake-link" onclick="showMessages({{ account.id }})">
+                  <img src="" />&nbsp;({{ account.id }})&nbsp;{{ account.firstname|capitalize }}&nbsp;{{ account.lastname|upper }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="col-10 border rounded-end text-center" id="messages">
+          <input type="hidden" id="form_user_id" value="" />
+          <input type="hidden" id="form_session_id" value="" />
+          <h2 class="d-none user-visibility">Début de la conversation avec <span id="user"></span></h2>
+          <h2 class="d-none session-visibility">Début de la conversation avec <span id="session"></span></h2>
+          <div id="contenu" class="height-message-scroll2">Sélectionner un compte pour voir les messages...</div>
+          <div class="d-none user-visibility session-visibility bg-dark">
+            <input type="text" id="form_message" placeholder="Ton message ici..." class="form-control w-75" onkeypress="sendMessage(event);" />
+            <a href="#" class="btn btn-success" onclick="sendMessage(event);"><i class="fa-solid fa-paper-plane"></i>&nbsp;Envoyer</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="row">Aucun compte disponible pour le chat !</div>
+    {% endif %}
+  </div>
+{% endblock %}

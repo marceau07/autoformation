@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Questionnaire satisfaction
+{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    .form-check-input:checked ~ img {
+      border: 1px solid beige;
+      border-radius: 20px;
+      background-color: #d9d9d9;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <div class="container">
+    <div class="row">
+      <h1>Questionnaire satisfaction</h1>
+      <p>
+        Merci de prendre quelques minutes pour nous donner votre avis.<br /><small>Les champs marqués par (<span class="required">*</span>) sont obligatoires.</small>
+      </p>
+      {% if questions is defined and questions is not empty %}
+        <form action="{{ path('app_survey') }}" class="mb-3" method="POST">
+          {% for key, question in questions %}
+            <input type="hidden" name="questionnaire_id_{{ key }}" value="{{ question.id }}" />
+            <div class="col-12">
+              <p class="fw-bold">
+                {{ question.question }}<span class="required">*</span>
+              </p>
+              <div class="emojis">
+                <label class="form-check-label" for="tres_satisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="tres_satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="5" />
+                  <img src="{{ asset('/images/tres_satisfait.png') }}" alt="Très satisfait" />
+                </label>
+                <label class="form-check-label" for="satisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="4" />
+                  <img src="{{ asset('/images/satisfait.png') }}" alt="Satisfait" />
+                </label>
+                <label class="form-check-label" for="neutre_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="neutre_{{ question.id }}" name="satisfaction_{{ key }}" value="3" />
+                  <img src="{{ asset('/images/neutre.png') }}" alt="Neutre" />
+                </label>
+                <label class="form-check-label" for="insatisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="insatisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="2" />
+                  <img src="{{ asset('/images/insatisfait.png') }}" alt="Insatisfait" />
+                </label>
+                <label class="form-check-label" for="tres_insatisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="tres_insatisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="1" />
+                  <img src="{{ asset('/images/tres_insatisfait.png') }}" alt="Très insatisfait" />
+                </label>
+              </div>
+              <div>
+                <label for="commentaires_{{ question.id }}">Commentaires</label>
+                <textarea id="commentaires_{{ question.id }}" name="commentaires_{{ key }}" rows="5" cols="50" class="form-control"></textarea>
+              </div>
+            </div>
+            <hr />
+          {% endfor %}
+          <br />
+          <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+      {% else %}
+        <p>Désolé, aucune question n'est disponible pour le moment.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

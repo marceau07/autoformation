@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  FAQ
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid">
+    <div class="row p-5 bg-primary">
+      <div class="col-12">
+        <h1 class="text-white">Foire aux Questions</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container pt-5">
+    {% if listThemes is defined and listThemes is not empty %}
+      <div class="row">
+        <div class="col-3 position-fixed">
+          <div>
+            <a href="#{{ 'global'|replace(' ', '-') }}">Global</a>
+          </div>
+          {% for theme in listThemes %}
+            {% if theme != 'global' %}
+              <div>
+                <a href="#{{ theme|replace(' ', '-') }}">{{ theme|capitalize }}</a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-7 offset-5">
+          <h2 id="{{ 'global'|replace(' ', '-') }}" class="text-primary">Global</h2>
+          {% if listFaqs is defined and listFaqs is not empty %}
+            {% for faq in listFaqs %}
+              {% if faq.theme == 'global' %}
+                <div class="ms-5">
+                  <h3 id="{{ theme|replace(' ', '-') }}">{{ faq.title }}</h3>
+                  {% autoescape 'html' %}
+                    <p>{{ faq.content|raw }}</p>
+                  {% endautoescape %}
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            {% for faq in listFaqs %}
+              {% if faq.theme != 'global' %}
+                <div class="ms-5">
+                  <h3 id="{{ theme|replace(' ', '-') }}">{{ faq.title }}</h3>
+                  {% autoescape 'html' %}
+                    <p>{{ faq.content|raw }}</p>
+                  {% endautoescape %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <div class="ms-5">
+              <p>Aucune donnée n'est disponible.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div>
+        <h2>Retrouvez la réponse à vos questions les plus génériques ici bientôt !</h2>
+      </div>
+      <div>
+        <img class="img-center" style="width: 50vw; height: 75vh;" src="{{ asset('/images/no_data.svg') }}" alt="Illustration pour une page non trouvée" />
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

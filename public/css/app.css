@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
+/* Définition des couleurs */
+:root {
+    --coul-principale: #45BEEB;
+    --coul-secondaire: #1A1F37;
+    --coul-ternaire: #FFFFFF;
+    --coul-quaternaire: #163460;
+
+    --col-primary: #f5f5f5;
+    --col-primary-dark: #181818;
+}
+
+/* Fin définition des couleurs */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.fake-link:hover {
+    background-color: #D9D9D9;
+}
+
+.fake-link {
+    cursor: pointer;
+}
+
+/* Définition style light */
+.bg-v1-primary {
+    background-color: var(--col-primary) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    /* font-size: 19px; */
+    font-weight: 700;
+    color: var(--coul-principale);
+    text-transform: uppercase;
+}
+
+label,
+p,
+form input[type="submit"] {
+    font-family: 'Roboto', serif;
+    font-size: 16px;
+}
+
+.nav-link,
+.dropdown-menu a,
+span {
+    color: var(--col-primary-dark) !important;
+}
+
+.link a:link,
+.link a:visited {
+    color: var(--coul-principale);
+}
+
+form input:not([type="submit"], form input[type="file"]):disabled,
+form select:disabled,
+textarea:disabled {
+    background-color: black;
+    opacity: 0.3;
+}
+
+form input:not([type="submit"], form input[type="hidden"], form input[type="file"]),
+form select,
+textarea {
+    background-color: var(--coul-quaternaire);
+    border-color: #D9D9D9;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+form input:not([type="submit"], form input[type="hidden"], form input[type="file"]),
+form select {
+    height: 30px;
+}
+
+.btn-primary {
+    background-color: var(--coul-principale);
+}
+
+blockquote {
+    padding: 15px;
+    background: #eee;
+    border-radius: 5px;
+}
+
+.splide02 .splide__arrows>.splide__arrow--prev {
+    left: -2.5em;
+}
+
+.splide02 .splide__arrows>.splide__arrow--next {
+    right: -2.5em;
+}
+
+/* Fin définition style light */
+
+/* Définition style dark */
+[data-theme="dark"] {
+    color: var(--col-primary) !important;
+}
+
+[data-theme="dark"] .border-light,
+[data-theme="dark"] blockquote,
+[data-theme="dark"] .card {
+    border-color: var(--col-primary-dark) !important;
+}
+
+[data-theme="dark"] .bg-v1-primary,
+[data-theme="dark"] .dropdown-menu,
+[data-theme="dark"] blockquote,
+[data-theme="dark"] .card {
+    background-color: var(--col-primary-dark) !important;
+}
+
+[data-theme="dark"] .nav-link,
+[data-theme="dark"] .dropdown-menu a,
+[data-theme="dark"] span,
+[data-theme="dark"] .card {
+    color: var(--col-primary) !important;
+}
+
+/* Fin définition style dark */
+
+.form-switch .form-check-input {
+    margin-left: 0.3em !important;
+}
+
+.form-switch .form-check-label {
+    margin-left: 0.5em;
+}
+
+/* Start navbar search module */
+#searchBox {
+    border-radius: 55px;
+    padding: 0.313rem;
+    background: #264653;
+    display: flex;
+    align-items: center;
+}
+
+.inputNav {
+    font-size: 1.25rem;
+    width: 0px;
+    border: 0;
+    background: transparent;
+    outline: none;
+    transition: 0.5s;
+}
+
+.active .inputNav {
+    width: 20rem;
+    padding: 0 0.313rem;
+}
+
+/* End navbar search module */

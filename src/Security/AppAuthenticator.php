@@ -42,6 +42,22 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
+    // public function recovery(Request $request): Passport
+    // {
+    //     $username = $request->getPayload()->getString('username');
+
+    //     $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
+
+    //     return new Passport(
+    //         new UserBadge($username),
+    //         new PasswordCredentials($request->getPayload()->getString('password')),
+    //         [
+    //             new CsrfTokenBadge('recovery', $request->getPayload()->getString('_csrf_token')),
+    //             new RememberMeBadge(),
+    //         ]
+    //     );
+    // }
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {

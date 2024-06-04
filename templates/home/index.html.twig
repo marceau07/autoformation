@@ -1,20 +1,139 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}
+  Accueil
+{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
+  <style>
+    .splide__pagination__page.is-active {
+      background-color: #6bcee8 !important;
+    }
+    
+    .splide__pagination {
+      bottom: -1rem !important;
+    }
+  </style>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block javascripts %}
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/autoformation/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>/var/www/html/autoformation/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+{% block main %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center">Bienvenue sur la plateforme pédagogique</h1>
+      </div>
+    </div>
+
+    {% if satisfactionSurvey and satisfactionSurvey.finish_date <= ('now'|date('Y-m-d')) %}
+      <div class="row pt-5">
+        <div class="alert alert-success w-auto" role="alert">
+          <h4 class="alert-heading">Enquête de satisfaction !</h4>
+          <p>Dites-nous ce que vous avez pensé de nous en répondant à ce bref questionnaire !</p>
+          <hr />
+          <p class="mb-0">
+            <a class="btn btn-secondary text-white" href="{{ path('app_survey') }}">Répondre au questionnaire</a>
+          </p>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_TRAINEE') %}
+      <div class="row pt-5">
+        <h2>Vos derniers cours suivis</h2>
+        {% if latestCourses is not empty %}
+          {% for course in latestCourses %}
+            {% include '_components/_card.html.twig' %}
+          {% endfor %}
+        {% else %}
+
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="row pt-5 pb-5">
+      <h2>Les cours les plus populaires</h2>
+      <div class="col-12">
+        {% if popularCourses is not empty %}
+          <section class="splide splide01" aria-label="Les cours les plus populaires actuellement">
+            <ul class="splide__pagination"></ul>
+            <div class="splide__track">
+              <ul class="splide__list">
+                {% for course in popularCourses %}
+                  <li class="splide__slide">
+                    <a title="Cours fait par {{ course.first_name ~ ' ' ~ course.last_name }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
+                      <div class="splide__slide__container">
+                        <img class="img-course" alt="Illustration {{ course.title }}" src="{{ asset('/images/' ~ course.illustration) }}" loading="lazy" />
+                        <span>{{ course.title }}</span>
+                      </div>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </section>
+        {% else %}
+          <p>Aucun cours populaire pour le moment, réessayez plus tard...</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row pt-5 pb-5">
+      <h2>Ils sont passés par chez nous...</h2>
+      <div class="col-12">
+        {% if traineesOpinions %}
+          <section class="splide splide02" aria-label="Les avis des anciens stagiaires">
+            <ul class="splide__pagination"></ul>
+            <div class="splide__track">
+              <ul class="splide__list">
+                {% for opinion in traineesOpinions %}
+                  <li class="splide__slide">
+                    <div class="splide__slide__container">
+                      <blockquote>
+                        <p class="opacity-100">{{ opinion.answer }}</p>
+                        <footer class="opacity-100">
+                          —&nbsp;<img style="border-radius: 100%;border:1px lightgrey solid;width:25px;" alt="{{ opinion.label }}" src="{{ asset('/images/avatars/' ~ opinion.link) }}" loading="lazy" />&nbsp;{{ opinion.first_name }}
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </section>
+        {% else %}
+          <p>Aucun commentaire laissé pour le moment, réessayez plus tard...</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      if (document.querySelector('.splide')) {
+        if (document.querySelector('.splide01')) {
+          var splide1 = new Splide('.splide01', {
+            arrows: false,
+            snap: true,
+            perPage: 3,
+            focus: 0,
+            omitEnd: true
+          })
+          splide1.mount()
+        }
+        if (document.querySelector('.splide02')) {
+          var splide2 = new Splide('.splide02', {
+            gap: '1em',
+            perPage: 2,
+            focus: 0
+          })
+          splide2.mount()
+        }
+      }
+    })
+  </script>
 {% endblock %}

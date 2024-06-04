@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Cours {{ course.title }}
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid">
+    <div class="row d-flex justify-content-around">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a class="btn btn-success" href="{{ path('app_course', { course: course.uuid }) }}">Retour sur les cours</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h2>[{{ course.label }}] - {{ course.title }}</h2>
+      </div>
+      {% if is_granted('ROLE_TRAINER') %}
+        <div class="col-3 mt-2 mb-2 float-end text-end">
+          <button role="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAjouterRessource">Ajouter une ressource</button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <iframe class="pt-5" src="https://docs.google.com/presentation/d/e/{{ course.link }}/embed?start=true&delayms=120000" frameborder="0" style="width:100%;height:50vh;" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  <div class="container">
+    <div class="row">
+      {% if listResources is defined and listResources is not empty %}
+        <div class="col-12">
+          <h2>Les ressources</h2>
+          <div class="row pb-3">
+            {% for resource in listResources %}
+              {% set link = '' %}
+              {% if resource.link is defined and resource.link is not empty %}
+                {% set link = path('app_download', { q: resource.records_link }) %}
+              {% else %}
+                {% set link = resource.link %}
+              {% endif %}
+              <div class="col-xs-1 col-lg-2 col-xl-3">
+                <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
+                  <div class="card">
+                    <div class="card-body">
+                      <p class="card-title text-decoration-underline">{{ resource.title }}</p>
+                      <i class="fa-solid fa-circle-down text-black" style="position: absolute;right: 1vw;bottom: 0.5vh;font-size: 3rem;opacity: 0.5;"></i>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <hr />
+      {% endif %}
+
+      {% if listExercises is defined and listExercises is not empty %}
+        <div class="col-12">
+          <h2>Les exercices</h2>
+          <div class="row pb-3">
+            {% for exercise in listExercises %}
+              <div class="col-xs-1 col-lg-2 col-xl-3">
+                <a target="_blank" href="{{ exercise.link }}" class="text-black text-decoration-none">
+                  <div class="card">
+                    <span class="card-img-top"><img src="{{ asset('/images/homeworks.svg') }}" alt="Illustration devoirs à la maison" /></span>
+                    <div class="card-body">
+                      <h6 class="card-title text-decoration-underline">{{ exercise.title }}</h6>
+                      <small>{{ exercise.resume }}</small>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <hr />
+      {% endif %}
+
+      {% if listTps is defined and listTps is not empty %}
+        <div class="col-12">
+          <h2>Les TPs</h2>
+          <div class="row pb-5">
+            {% for tp in listTps %}
+              <div class="col-xs-1 col-lg-3 col-xl-4">
+                <a target="_blank" href="{{ tp.link }}" class="text-black text-decoration-none">
+                  <div class="card">
+                    <span class="card-img-top" alt="Illustration devoirs à la maison">
+                      {% if is_granted('ROLE_USER') %}
+                        {% if tp.completed_link %}
+                          <i class="fa-solid fa-arrow-up-from-bracket text-grey upload-file" title="Rendre le TP" onclick="document.querySelector('#file_input_tp_{{ tp.id }}').click();"></i>
+                          <input type="file" name="file_input_tp_{{ tp.id }}" id="file_input_tp_{{ tp.id }}" class="hidden" onchange="sendTp({{ tp.id }}, this.name);" />
+                        {% else %}
+                          <i class="fa-solid fa-check-to-slot text-green upload-file"></i>
+                        {% endif %}
+                        <img src="{{ asset('/images/homeworks.svg') }}" alt="Illustration devoirs à la maison" />
+                      {% endif %}
+                    </span>
+                    <div class="card-body">
+                      <h6 class="card-title text-decoration-underline">{{ tp.title }}</h6>
+                      <small>{{ tp.resume }}</small>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAjouterRessource" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAjouterRessourceTitle" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAjouterRessourceTitle">Ajouter une ressource</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="../../src/c/requests.php" method="post" id="form_ressource_add" enctype="multipart/form-data">
+            <input type="hidden" name="form_ressource_cours_id" value="<?= @$_GET['slide'] ?>" />
+            <div class="mb-3">
+              <label for="form_ressource_titre" class="form-label">Titre de la ressource:</label>
+              <input type="text" class="form-control" name="form_ressource_titre" id="form_ressource_titre" placeholder="TP sur... / Exercice sur..." />
+            </div>
+            <div class="mb-3">
+              <label for="form_ressource_synopsis" class="form-label">Synopsis de la ressource:</label>
+              <input type="text" class="form-control" name="form_ressource_synopsis" id="form_ressource_synopsis" placeholder="Cette ressource va vous permettre de pouvoir être évalués sur..." />
+            </div>
+            <div class="mb-3">
+              <label for="form_ressource_lien" class="form-label">Lien de la ressource:</label>
+              <input type="text" class="form-control" name="form_ressource_lien" id="form_ressource_lien" placeholder="https://lien/vers/ma/ressource" />
+            </div>
+            <div class="mb-3">
+              <label for="form_ressource_type" class="form-label">Type de ressource:</label>
+              <select name="form_ressource_type" id="form_ressource_type" class="form-control" onchange="majInputRessource();">
+                <option value="autre">Autre</option>
+                <option value="exercice">Exercice</option>
+                <option value="tp">TP</option>
+              </select>
+            </div>
+            <div class="mb-3" id="div_form_ressource_file">
+              <label for="form_ressource_file" class="form-label">Archive à joindre:</label>
+              <input type="file" name="form_ressource_file" id="form_ressource_file" class="form-control" accept=".gz,.tar,.zip,.rar" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fermer</button>
+          <button type="submit" class="btn btn-success" name="form_ressource_add" value="1" form="form_ressource_add">Ajouter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
