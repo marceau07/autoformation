@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
+    <script>
+      const setTheme = (theme) => {
+        theme ??= localStorage.theme || 'light'
+        document.documentElement.dataset.theme = theme
+        document.documentElement.setAttribute('data-bs-theme', theme)
+        localStorage.theme = theme
+      }
+      setTheme()
+    </script>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
@@ -11,13 +20,21 @@
 
       {% endblock %}&nbsp;- Autoformation
     </title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>" />
 
-    <link rel="stylesheet" href="css/_reset.css" />
-    <link rel="stylesheet" href="css/_style.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="//adrar.dev/erp/public/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="//adrar.dev/erp/public/img/favicon-16x16.png" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}" />
+    {# Permet de personnaliser les vidéos #}
+    {# <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> #}
+    {# Permet d'afficher le code formaté pour les cours #}
+    {# <link rel="stylesheet" href="{{ asset('css/prism.css') }}" /> #}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     {% block stylesheets %}
 
     {% endblock %}
+
+    <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     {% block javascripts %}
       {% block importmap %}
@@ -28,12 +45,138 @@
   <body>
     {% block body %}
       {% block header %}
-
+        <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_logo.svg') }}" height="100" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('app_modules') }}">Modules</a>
+                </li>
+                {% if is_granted('ROLE_TRAINER') %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">Administration</a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('app_mailbox') }}">BAL</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('app_faq') }}">FAQ</a>
+                </li>
+                {# <li class="nav-item">
+                  <form action="{{ path('_update_session_filter') }}">
+                    <select name="form_filter_session" id="form_filter_session" class="form-select pe-5" onchange="this.form.submit();">
+                      <option value="-1">Tout le secteur</option>
+                      <option value="0" selected="">Toutes mes sessions</option>
+                    </select>
+                  </form>
+                </li> #}
+              </ul>
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <form class="d-flex formIndex" role="search" action="#" method="GET" id="searchForm2">
+                    <div class="hero">
+                      <div id="searchBox" class="">
+                        <img src="{{ asset('/images/magnifying_glass.png') }}" alt="" id="searchIcon" style="width: 30px;" />
+                        <input type="text" class="text-white inputNav" id="searchInput" placeholder="Recherche..." autocomplete="off" />
+                      </div>
+                    </div>
+                  </form>
+                </li>
+                <li class="nav-item">
+                  <div class="nav-link form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="form_edition_mode" onclick="toggleEditionMode();" />
+                    <label class="form-check-label" for="form_edition_mode">Mode édition</label>
+                  </div>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                  <a href="#" onclick="loadNewNotifications(true);" class="text-decoration-none"><i class="fas fa-bell fa-lg text-grey position-relative"><span class="notifications-count"></span></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.firstName|capitalize }}&nbsp;{{ app.user.lastName|upper }}</a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_user">
+                    <li>
+                      <a class="dropdown-item" href="{{ path('app_account') }}">Modifier mes informations</a>
+                    </li>
+                    <li>
+                      <a role="button" data-bs-toggle="modal" data-bs-target="#modalTrainees" class="dropdown-item" onclick="loadTrainees();">Actions sur les stagiaires</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item nav-link form-check form-switch" href="#">
+                        <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
+                        <label class="form-check-label" for="form_dark_mode">Dark mode</label>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
       {% endblock %}
       {% block main %}
 
       {% endblock %}
       {% block footer %}
+        <footer class="border-top border-light bg-v1-primary fixed-bottom">
+          <p class="text-center m-0">
+            &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - Site développé par <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="/mentions-legales">Mentions légales</a>&nbsp;|&nbsp;<a href="/politique-confidentialite">Politique de confidentialité</a>
+          </p>
+        </footer>
+      {% endblock %}
+      <div class="modal modal-xl fade" id="modalTrainees" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalTraineesTitle" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="container">
+                <div class="row">
+                  <h5 class="modal-title w-auto" id="modalTraineesTitle">Se connecter en tant que...</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <div>
+                      <label for="form_trainee_filter" class="form-label">Nom d'utilisateur:<input type="text" name="form_trainee_filter" id="form_trainee_filter" class="form-control" placeholder="Chercher un stagiaire..." /></label>
+                      <table class="table table-responsive table-bordered" id="form_trainee_table">
+                        <thead>
+                          <tr>
+                            <th>Stagiaire (pseudo) - Prénom NOM</th>
+                            <th>Se connecter</th>
+                            <th>Réinitialiser le MDP</th>
+                            <th>Éval. stagiaire</th>
+                            <th>Documents</th>
+                          </tr>
+                        </thead>
+                        <tbody id="form_trainee_table_tbody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {# Permet de personnaliser les vidéos #}
+      {# <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script> #}
+      {# Permet d'afficher le code formaté pour les cours #}
+      {# <script src="{{ asset('js/prism.js') }}"></script> #}
+      <script src="{{ asset('js/darkMode.js') }}"></script>
+      <script src="{{ asset('js/script.js') }}"></script>
+      {% block js %}
 
       {% endblock %}
     {% endblock %}

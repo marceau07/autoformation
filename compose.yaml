@@ -37,8 +37,11 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+<<<<<<< HEAD
 
 ###> symfony/mercure-bundle ###
   mercure_data:
   mercure_config:
 ###< symfony/mercure-bundle ###
+=======
+>>>>>>> 586d262 (Dépôt initial)
