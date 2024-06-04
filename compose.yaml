@@ -38,10 +38,16 @@ volumes:
   database_data:
 ###< doctrine/doctrine-bundle ###
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a3fc018 (MÃàj site)
 
 ###> symfony/mercure-bundle ###
   mercure_data:
   mercure_config:
 ###< symfony/mercure-bundle ###
+<<<<<<< HEAD
 =======
 >>>>>>> 586d262 (Dépôt initial)
+=======
+>>>>>>> a3fc018 (MÃàj site)

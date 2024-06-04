@@ -1375,6 +1375,9 @@
         },
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a3fc018 (MÃàj site)
             "name": "lcobucci/jwt",
             "version": "5.2.0",
             "source": {
@@ -1448,8 +1451,11 @@
             "time": "2023-11-20T21:17:42+00:00"
         },
         {
+<<<<<<< HEAD
 =======
 >>>>>>> 586d262 (Dépôt initial)
+=======
+>>>>>>> a3fc018 (MÃàj site)
             "name": "monolog/monolog",
             "version": "3.5.0",
             "source": {
@@ -4282,6 +4288,9 @@
         },
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a3fc018 (MÃàj site)
             "name": "symfony/mercure",
             "version": "v0.6.4",
             "source": {
@@ -4449,8 +4458,11 @@
             "time": "2023-12-03T22:26:24+00:00"
         },
         {
+<<<<<<< HEAD
 =======
 >>>>>>> 586d262 (Dépôt initial)
+=======
+>>>>>>> a3fc018 (MÃàj site)
             "name": "symfony/messenger",
             "version": "v7.0.4",
             "source": {
