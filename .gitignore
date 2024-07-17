@@ -21,5 +21,8 @@
 
 ###> symfony/asset-mapper ###
 /public/assets/
+/public/internships/
+/public/homeworks/
 /assets/vendor/
+/assets/images/shields/
 ###< symfony/asset-mapper ###
