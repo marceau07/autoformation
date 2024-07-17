@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  New Cohort
+{% endblock %}
+
+{% block main %}
+  <h1>Create new Cohort</h1>
+
+  {{ include('cohort/_form.html.twig') }}
+
+  <a href="{{ path('app_cohort_index') }}">back to list</a>
+{% endblock %}

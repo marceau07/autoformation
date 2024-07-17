@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Cohort
+{% endblock %}
+
+{% block main %}
+  <h1>Cohort</h1>
+
+  <table class="table table-responsive">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ cohort.id }}</td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td>{{ cohort.name }}</td>
+      </tr>
+      <tr>
+        <th>Acronym</th>
+        <td>{{ cohort.acronym }}</td>
+      </tr>
+      <tr>
+        <th>Shield</th>
+        <td>{{ cohort.shield }}</td>
+      </tr>
+      <tr>
+        <th>Documents</th>
+        <td>{{ cohort.documents }}</td>
+      </tr>
+      <tr>
+        <th>StartDate</th>
+        <td>{{ cohort.startDate ? cohort.startDate|date('Y-m-d') : '' }}</td>
+      </tr>
+      <tr>
+        <th>FinishDate</th>
+        <td>{{ cohort.finishDate ? cohort.finishDate|date('Y-m-d') : '' }}</td>
+      </tr>
+      <tr>
+        <th>Uuid</th>
+        <td>{{ cohort.uuid }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a href="{{ path('app_cohort_index') }}">back to list</a>
+
+  <a href="{{ path('app_cohort_edit', { uuid: cohort.uuid }) }}">edit</a>
+
+  {{ include('cohort/_delete_form.html.twig') }}
+{% endblock %}

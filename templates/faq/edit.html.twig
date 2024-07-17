@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Edit Faq
+{% endblock %}
+
+{% block main %}
+  <a href="{{ path('app_faq_index') }}" class="btn btn-success">back to list</a>
+  <h1 class="text-center">Edit Faq</h1>
+
+  {{ include('faq/_form.html.twig', { button_label: 'Update' }) }}
+
+  {{ include('faq/_delete_form.html.twig') }}
+{% endblock %}

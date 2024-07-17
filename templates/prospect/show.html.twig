@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prospect{% endblock %}
+
+{% block body %}
+    <h1>Prospect</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ prospect.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ prospect.name }}</td>
+            </tr>
+            <tr>
+                <th>Siren</th>
+                <td>{{ prospect.siren }}</td>
+            </tr>
+            <tr>
+                <th>Nic</th>
+                <td>{{ prospect.nic }}</td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td>{{ prospect.number }}</td>
+            </tr>
+            <tr>
+                <th>Street</th>
+                <td>{{ prospect.street }}</td>
+            </tr>
+            <tr>
+                <th>Additional_address</th>
+                <td>{{ prospect.additionalAddress }}</td>
+            </tr>
+            <tr>
+                <th>Postal_code</th>
+                <td>{{ prospect.postalCode }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ prospect.city }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ prospect.country }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ prospect.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone_number</th>
+                <td>{{ prospect.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Phone_number_bis</th>
+                <td>{{ prospect.phoneNumberBis }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_prospect_index') }}">back to list</a>
+
+    <a href="{{ path('app_prospect_edit', {'id': prospect.id}) }}">edit</a>
+
+    {{ include('prospect/_delete_form.html.twig') }}
+{% endblock %}

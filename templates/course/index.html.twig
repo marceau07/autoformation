@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Liste des cours
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbar.html.twig' with { 
+        'choosenElement': "course"
+        } 
+      %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active">
+        <div class="mt-2 mb-2">
+          <a role="button" class="btn btn-primary" href="{{ path('app_course_new') }}">Ajouter un nouveau cours</a>
+          {# <button role="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalManagecours" onclick="showModalManagecours();">Gérer les cours</button> #}
+        </div>
+        <div>
+          <table class="table table-bordered table-striped" id="list_courses">
+            <thead>
+              <tr>
+                <th>actions</th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Synopsis</th>
+                <th>Keywords</th>
+                <th>Link</th>
+                <th>Position</th>
+                <th>Visitors</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for course in courses %}
+                <tr>
+                  <td>
+                    <a href="{{ path('app_course_show', { id: course.id }) }}">show</a>
+                    <a href="{{ path('app_course_edit', { id: course.id }) }}">edit</a>
+                  </td>
+                  <td>{{ course.id }}</td>
+                  <td>{{ course.title }}</td>
+                  <td>{{ course.synopsis }}</td>
+                  <td>{{ course.keywords|replace({";": "\n"})|nl2br }}</td>
+                  <td>{{ course.link }}</td>
+                  <td>{{ course.position }}</td>
+                  <td>{{ course.visitors }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="8">no records found</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $('#list_courses').DataTable().destroy();
+    $('#list_courses').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true,
+      "responsive": true,
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+      }
+    });
+  });
+</script>
+{% endblock %}

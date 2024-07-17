@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Internship index{% endblock %}
+
+{% block main %}
+ <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbar.html.twig' with { 
+        'choosenElement': "internship"
+        } 
+      %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active">
+        <div class="mt-2 mb-2">
+          <a role="button" class="btn btn-primary" href="{{ path('app_internship_new') }}">Ajouter un nouveau stage</a>
+        </div>
+        <div>
+          <table class="table table-bordered table-striped" id="list_internships">
+            <thead>
+                <tr>
+                    <th>actions</th>
+                    <th>Id</th>
+                    <th>Tutor_last_name</th>
+                    <th>Tutor_first_name</th>
+                    <th>Tutor_email</th>
+                    <th>Tutor_phone_number</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for internship in internships %}
+                <tr>
+                    <td>
+                        <a href="{{ path('app_internship_show', {'id': internship.id}) }}">show</a>
+                        <a href="{{ path('app_internship_edit', {'id': internship.id}) }}">edit</a>
+                    </td>
+                    <td>{{ internship.id }}</td>
+                    <td>{{ internship.tutorLastName }}</td>
+                    <td>{{ internship.tutorFirstName }}</td>
+                    <td>{{ internship.tutorEmail }}</td>
+                    <td>{{ internship.tutorPhoneNumber }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <a href="{{ path('app_internship_new') }}">Create new</a>
+{% endblock %}

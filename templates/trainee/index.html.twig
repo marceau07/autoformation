@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Liste des stagiaires
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbar.html.twig' with { 
+        'choosenElement': "trainee"
+        } 
+      %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active">
+        <div class="mt-2 mb-2">
+          <a role="button" class="btn btn-primary" href="{{ path('app_trainee_new') }}">Ajouter un·e stagiaire</a>
+        </div>
+        <div>
+          <table class="table table-bordered table-striped" style="margin: 0 auto;" id="list_trainees">
+            <thead>
+              <tr>
+                <th>actions</th>
+                <th>Id</th>
+                <th>Username</th>
+                <th>LastName</th>
+                <th>FirstName</th>
+                <th>Email</th>
+                <th>Activated</th>
+                <th>TmpCode</th>
+                <th>Signature</th>
+                <th>Uuid</th>
+                <th>Documents</th>
+                <th>Diploma</th>
+                <th>Cohorte</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for trainee in trainees %}
+                <tr>
+                  <td class="text-center">
+                    <a href="{{ path('app_trainee_show', { uuid: trainee.uuid }) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_trainee_edit', { uuid: trainee.uuid }) }}"><i class="fas fa-pen"></i></a>
+                  </td>
+                  <td>{{ trainee.id }}</td>
+                  <td>{{ trainee.username }}</td>
+                  <td>{{ trainee.lastName }}</td>
+                  <td>{{ trainee.firstName }}</td>
+                  <td>{{ trainee.email }}</td>
+                  <td>{{ trainee.activated ? 'Yes' : 'No' }}</td>
+                  <td>{{ trainee.tmpCode }}</td>
+                  <td>{% if trainee.signature is defined and trainee.signature is not empty %}
+                    <img src="{{ trainee.signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
+                    {% else %}
+                    Pas de signature pour {{ trainee.username }}
+                    {% endif %}
+                  </td>
+                  <td>{{ trainee.uuid }}</td>
+                  <td>
+                    {% if trainee.documents is defined and trainee.documents is not empty %}
+                      {% set documents = trainee.documents|json_decode %} 
+                      {% for internship in documents.internships %}
+                        <div>
+                          {% if internship.id is defined and internship.internship_id is empty and internship.agreement == 0 %}
+                          <a href="{{ path('pdf_generate', { element: 'internship-agreement' }) }}" target="_blank">Générer la convention</a>
+                          {% elseif internship.id is defined and internship.internship_id is empty and internship.agreement == 2 %}
+                          <a href="/internships/tmp/Convention_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser la convention</a>
+                          {% endif %}
+                        </div>
+                        
+                        <div>
+                          {% if internship.id is defined and internship.id is empty and internship.certificate == 0 %}
+                          <a href="{{ path('pdf_generate', { element: 'internship-certificate' }) }}" target="_blank">Générer l'attestation</a>
+                          {% elseif internship.id is defined and internship.id is empty and internship.certificate == 2 %}
+                          <a href="/internships/tmp/Attestation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'attestation</a>
+                          {% endif %}
+                        </div>
+                        
+                        <div>
+                          {% if internship.id is defined and internship.id is empty and internship.evaluation == 0 %}
+                          <a href="{{ path('pdf_generate', { element: 'internship-evaluation' }) }}" target="_blank">Générer l'évaluation</a>
+                          {% elseif internship.id is defined and internship.id is empty and internship.evaluation == 2 %}
+                          <a href="/internships/tmp/Evaluation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'évaluation</a>
+                          {% endif %}
+                        </div>
+                        
+                      {% endfor %}
+                    {% else %}
+                      Aucun document de stage trouvé
+                    {% endif %}
+                  </td>
+                  <td>{{ trainee.getDiplomaLabel }}</td>
+                  <td>{{ trainee.cohort.name }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="13">no records found</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $('#list_trainees').DataTable().destroy();
+    $('#list_trainees').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.attributes.get('_locale') == 'fr' ? 'French' : 'English' }}.json"
+      }
+    });
+  });
+</script>
+{% endblock %}

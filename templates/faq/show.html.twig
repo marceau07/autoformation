@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Faq
+{% endblock %}
+
+{% block main %}
+  <a href="{{ path('app_faq_index') }}" class="btn btn-success">back to list</a>
+
+  <a href="{{ path('app_faq_edit', { id: faq.id }) }}" class="btn btn-warning">edit</a>
+
+  <h1 class="text-center">Faq n°{{ faq.id }}</h1>
+
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ faq.id }}</td>
+      </tr>
+      <tr>
+        <th>Theme</th>
+        <td>{{ faq.theme }}</td>
+      </tr>
+      <tr>
+        <th>Title</th>
+        <td>{{ faq.title }}</td>
+      </tr>
+      <tr>
+        <th>Content</th>
+        <td>{{ faq.content }}</td>
+      </tr>
+      <tr>
+        <th>Visibility</th>
+        <td>{{ faq.visibility ? 'Yes' : 'No' }}</td>
+      </tr>
+      <tr>
+        <th>Priority</th>
+        <td>{{ faq.priority }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {{ include('faq/_delete_form.html.twig') }}
+{% endblock %}
