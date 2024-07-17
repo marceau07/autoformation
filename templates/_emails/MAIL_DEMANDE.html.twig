@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Première demande de documents de stage</title>
+    <style>
+        * {
+            font-family: 'Arial', 'Helvetica', 'sans-serif';
+        }
+    </style>
+</head>
+
+<body>
+    <p>Monsieur, Madame {{NOM_TUTEUR}},</p><br>
+
+    <p>Je me permets de vous contacter aujourd'hui afin de vous demander de bien vouloir remplir le(s) document(s)
+        suivant(s) concernant {{PRENOM_NOM_STAGIAIRE}}:
+    <ul>
+        {{LISTE_DOCUMENTS}}
+    </ul>
+    </p>
+
+    <p>Comme vous le savez, cet outil est essentiel pour évaluer les compétences acquises par le stagiaire au cours de
+        son stage et pour déterminer si les objectifs fixés au début du stage ont été atteints. Votre contribution est
+        donc cruciale pour garantir que le stagiaire reçoive une évaluation complète et juste de son travail.</p><br>
+
+    <p>Je vous prie de bien vouloir les remplir et de me les retourner par courriel le plus rapidement possible afin de
+        pouvoir finaliser la procédure.</p><br>
+
+    <p>Je vous remercie par avance pour votre coopération et reste à votre disposition pour toute information
+        complémentaire.</p><br>
+
+    <p>Cordialement,</p><br>
+
+    <table style="width:393.0pt;word-wrap:break-word;">
+        <tbody>
+            <tr style="padding: 5px;">
+                <td>
+                    <img src="https://zupimages.net/up/23/23/e8tf.png" alt="Logo ADRAR"
+                        style="width:.5833in;height:.7416in;">
+                </td>
+                <td style="color:#03234a; font-weight: 600;padding:7px;">
+                    <p>{{CARTE_PRENOM}}&nbsp;{{CARTE_NOM}}</p>
+                    <p>{{CARTE_ROLE}}</p>
+                </td>
+                <td>
+                    <img src="https://adrar.dev/erp/public/img/{{CARTE_LOGO_SECTEUR}}" alt="Logo du secteur"
+                        style="width: 1.8666in;height: 0.725in;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td style="font-size:10.0pt;">
+                    {{CARTE_LIENS}}
+                </td>
+                <td>
+                    {{CARTE_NUMEROS}}
+                </td>
+            </tr>
+            <tr>
+                <td style="height:10px;"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width:100%;background:#03234a;padding:0cm 0cm 0cm 0cm;height:1.5pt;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/j5s6.png" alt="Linkedin Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/w1b6.png" alt="Twitter Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/u0wd.png" alt="YouTube Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/xmp1.png" alt="Facebook Adrar">
+                    </span>
+                    <span>
+                        <img width="15" height="22" src="https://zupimages.net/up/23/23/iev8.png"
+                            alt="Localisation sites Adrar">
+                    </span>
+                    <span style="font-size:10.0pt;color:#03234a;">
+                        {{CARTE_ADRESSE}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

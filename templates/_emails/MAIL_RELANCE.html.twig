@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relance de demande des documents de stage</title>
+    <style>
+        * {
+            font-family: 'Arial', 'Helvetica', 'sans-serif';
+        }
+    </style>
+</head>
+
+<body>
+    <p>Cher(e) {{NOM_TUTEUR}},</p><br>
+
+    <p>J'espère que ce message vous trouve bien. Je me permets de vous relancer ({{NB_RELANCE}} tentative(s)) concernant
+        les documents de stage que
+        vous
+        devez nous envoyer.</p><br>
+
+    <p>Nous tenons à rappeler l'importance de nous transmettre les documents suivants dans les plus brefs délais :</p>
+
+    <ol>
+        {{LISTE_DOCUMENTS}}
+    </ol>
+    <p>Ces documents sont essentiels pour valider le stage de {{PRENOM_NOM_STAGIAIRE}} et pour nous permettre d'évaluer
+        sa progression. Nous
+        comptons sur votre coopération pour nous les fournir dès que possible.</p><br>
+    <p>Suites à des problèmes avec notre serveur mail, il est possible que vous ayez pu les envoyer mais que nous
+        n'ayons pas pu les recevoir.</p><br>
+    <p>En cas de difficultés ou de questions supplémentaires, n'hésitez pas à me contacter par email ou par téléphone.
+    </p>
+    <p>Nous vous remercions par avance de votre collaboration et de votre diligence.</p>
+    <p>Cordialement,</p><br>
+
+    <table style="width:393.0pt;word-wrap:break-word;">
+        <tbody>
+            <tr style="padding: 5px;">
+                <td>
+                    <img src="https://zupimages.net/up/23/23/e8tf.png" alt="Logo ADRAR"
+                        style="width:.5833in;height:.7416in;">
+                </td>
+                <td style="color:#03234a; font-weight: 600;padding:7px;">
+                    <p>{{CARTE_PRENOM}}&nbsp;{{CARTE_NOM}}</p>
+                    <p>{{CARTE_ROLE}}</p>
+                </td>
+                <td>
+                    <img src="https://adrar.dev/erp/public/img/{{CARTE_LOGO_SECTEUR}}" alt="Logo du secteur"
+                        style="width: 1.8666in;height: 0.725in;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td style="font-size:10.0pt;">
+                    {{CARTE_LIENS}}
+                </td>
+                <td>
+                    {{CARTE_NUMEROS}}
+                </td>
+            </tr>
+            <tr>
+                <td style="height:10px;"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width:100%;background:#03234a;padding:0cm 0cm 0cm 0cm;height:1.5pt;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/j5s6.png" alt="Linkedin Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/w1b6.png" alt="Twitter Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/u0wd.png" alt="YouTube Adrar">
+                    </span>
+                    <span>
+                        <img width="22" height="22" src="https://zupimages.net/up/23/23/xmp1.png" alt="Facebook Adrar">
+                    </span>
+                    <span>
+                        <img width="15" height="22" src="https://zupimages.net/up/23/23/iev8.png"
+                            alt="Localisation sites Adrar">
+                    </span>
+                    <span style="font-size:10.0pt;color:#03234a;">
+                        {{CARTE_ADRESSE}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
