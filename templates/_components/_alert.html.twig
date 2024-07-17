@@ -1,0 +1,11 @@
+<div class="alert alert-{{ type }} fade show" role="alert">
+  <div class="container row" style="display: contents;">
+    <div class="col-1">
+      <i class="fa fa-{{ fa }} faa-tada animated"></i>
+    </div>
+    <div class="col">{{ message }}</div>
+    <div class="col-1">
+      <i onclick="$(this).parent().parent().parent().remove();" aria-label="Close" class="close fa fa-times text-danger" style="cursor: pointer;"></i>
+    </div>
+  </div>
+</div>

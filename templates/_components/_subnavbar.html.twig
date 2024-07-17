@@ -1,0 +1,10 @@
+{% set elements = ['course', 'trainer', 'cohort', 'trainee', 'faq', 'prospect', 'internship'] %}
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="subnavbar">
+  {% for element in elements %}
+    <li class="nav-item">
+      {# By default, the nav-link element gets also: data-bs-toggle="tab" #}
+      <a class="nav-link {{ element == choosenElement ? 'active' : '' }}" href="{{ path('app_' ~ (element|lower) ~ '_index') }}">{{ element|capitalize }}</a>
+    </li>
+  {% endfor %}
+</ul>
