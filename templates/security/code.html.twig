@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Connexion
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/signup.css') }}" />
+{% endblock %}
+
+{% block body %}
+  <div class="container justify-content-center d-flex">
+    <div class="row">
+      <div class="col-12 text-center">
+        <img src="{{ asset('/images/adrar_logo.svg') }}" alt="Logo de l'ADRAR" width="150" />
+        <h1 class="h3 mt-5 font-weight-700">Bienvenue sur l'ERP</h1>
+      </div>
+      <div class="col-12">
+        <form method="post" href="{{ path('app_code', { code: code ?? null }) }}">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('signup') }}" />
+          <div>
+            <label for="form_signup_code" class="text-white">Code reçu (6 chiffres, valable 1 semaine)</label>
+            <input type="text" name="form_signup_code" placeholder="{{ random(100000, 999999) }}" value="{{ code is defined ? code : '' }}" autocomplete="off" />
+          </div>
+          <p>
+            Là par erreur et vous avez un compte ? <a class="link link-opacity-75 link-opacity-100-hover" href="{{ path('app_login') }}">Connectez-vous !</a>
+          </p>
+          <input class="btn btn-lg btn-primary w-100" type="submit" value="Récupérer" />
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{{ asset('js/signup.js') }}"></script>
+{% endblock %}

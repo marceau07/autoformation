@@ -1,0 +1,323 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Mon compte
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/account.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+  {# <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
+      });
+
+    </script> #}
+    {# <div id="calendar"></div> #}
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3 pt-2">
+    {{ form_errors(form) }}
+    <div>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" id="subnavbar">
+        <li class="nav-item">
+          <a class="nav-link text-dark active" data-bs-toggle="tab" href="#privacy-informations">{{ 'account.personal_informations'|trans }}</a>
+        </li>
+        {% if is_granted('ROLE_TRAINEE') %}
+        <li class="nav-item">
+          <a class="nav-link text-dark" data-bs-toggle="tab" href="#cohort-informations">{{ 'cohort.informations'|trans }}</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link text-dark" data-bs-toggle="tab" href="#documents">{{ 'account.documents'|trans }}</a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane container-fluid active fade show" id="privacy-informations">
+          <div>
+            <div class="row">
+              <div class="col-12 text-center">
+                <input type="hidden" value="{{ user.avatar.id }}" />
+                <img class="img-fluid rounded m-5 img-profile" src="{{ asset('images/avatars/' ~ user.avatar.link) }}" alt="{{ 'account.avatar_alt'|trans({'%name%': user.avatar.label}) }}" />
+              </div>
+              <div class="col-12 text-center">
+                {% if avatars is defined and avatars is not empty %}
+                  {% for avatar in avatars %}
+                    <img onclick="changerAvatar(this);" data-id="{{ avatar.id }}" class="img-fluid rounded me-2 mb-5 img-preview {{ avatar.id == user.avatar.id ? 'img-selected' : '' }}" src="{{ asset('images/avatars/' ~ avatar.link) }}" alt="{{ 'account.avatar_alt'|trans({'%name%': avatar.label}) }}" />
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <div class="col-12">
+                {{ form_start(form, { method: 'POST' }) }}
+                <div class="row">
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.username, { label: "account.username"|trans }) }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.lastName, { label: 'account.lastname'|trans }) }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.firstName, { label: 'account.firstname'|trans }) }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.password, { label: 'account.password'|trans }) }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.email, { label: 'account.email'|trans }) }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">{{ form_row(form.phoneNumber, { label: 'account.phone_number'|trans }) }}</div>
+                  </div>
+                  <div class="col-3 d-none">
+                    <div class="form-group">{{ form_row(form.avatar, { label: 'account.avatar'|trans }) }}</div>
+                  </div>
+                </div>
+                <div class="row py-2">
+                  <div class="col-4">
+                    <div class="form-group d-none">{{ form_row(form.signature, { label: 'account.signature'|trans }) }}</div>
+                    <div class="form-group position-relative">
+                      <span class="position-absolute pt-2 translate-middle-x" style="padding-left: 13.5vw; color:black!important;">{{ 'account.draw_signature'|trans }}</span>
+                      <canvas class="box-signature" id="signature-pad" width="auto" style="touch-action: none;"></canvas>
+                    </div>
+                    <span>
+                      <button id="approve-signature" class="btn border" type="button">{{ 'account.approve_signature'|trans }}</button>
+                      <button id="clear-signature" class="btn border" type="button">{{ 'account.discard_signature'|trans }}</button>
+                    </span>
+                  </div>
+                  {% if user.signature is defined and user.signature is not empty %}
+                    <div class="col-4">
+                      <div class="form-group">
+                        <span>{{ 'account.current_signature_text'|trans }}</span>
+                        <div>
+                          <img class="box-signature" src="{{ user.signature }}" alt="{{ 'account.current_signature_alt'|trans({'%name%': user.lastName ~ ' ' ~ user.firstName}) }}" width="250" height="125" />
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="row float-end my-3">
+                  <div class="form-group">{{ form_row(form.save, { label: 'btn_send'|trans, label_attr: { class: 'btn btn-dark' } }) }}</div>
+                </div>
+
+                {{ form_end(form) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane container-fluid fade" id="cohort-informations">
+            {% if is_granted('ROLE_TRAINEE') and trainee is defined and trainee is not empty %}
+            <div class="container">
+              <div class="row mt-3">
+                <div class="col-12">
+                  <h2>{{ 'cohort.informations'|trans }}</h2>
+                </div>
+                {% if cohort is defined and cohort is not empty %}
+                  <div class="col-6">
+                    <p>
+                      <b>{{ 'cohort.name'|trans }}:</b>&nbsp;{{ cohort.name }}
+                    </p>
+                    <p>
+                      <b>{{ 'cohort.acronym'|trans }}:</b>&nbsp;{{ cohort.acronym }}
+                    </p>
+                    <p>
+                      <b>{{ 'cohort.key_dates'|trans }}:</b>
+                      <ul>
+                        <li>{{ 'cohort.training_start_date'|trans }} {{ app.request.attributes.get('_locale') == 'fr' ? cohort.start_date|date('d/m/Y') : cohort.start_date|date('m/d/Y') }}</li>
+                        <li>{{ 'cohort.training_end_date'|trans }} {{ app.request.attributes.get('_locale') == 'fr' ? cohort.finish_date|date('d/m/Y') : cohort.finish_date|date('m/d/Y') }}</li>
+                        <li>{{ 'internship.internships'|trans }}</li>
+                        {% if cohort.documents is defined and cohort.documents is not empty %}
+                          {% set documents = cohort.documents|json_decode %} 
+                          {% for internship in documents.internships %}
+                          <ul>
+                            <li>{{ internship.label }}</li>
+                            <ul>
+                              <li>{{ 'internship.begin_internship'|trans }}: {{ app.request.attributes.get('_locale') == 'fr' ? internship.start_date|date('d/m/Y') : internship.start_date|date('m/d/Y') }}</li>
+                              <li>{{ 'internship.end_internship'|trans }}: {{ app.request.attributes.get('_locale') == 'fr' ? internship.finish_date|date('d/m/Y') : internship.finish_date|date('m/d/Y') }}</li>
+                            </ul>
+                          </ul>
+                          {% endfor %}
+                        {% else %}
+                          <ul>
+                            <li>{{ 'internship.no_internship'|trans }}</li>
+                          </ul>
+                        {% endif %}
+                      </ul>
+                    </p>
+                  </div>
+                  <div class="col-6 text-center">
+                    {% if cohort.shield is defined and cohort.shield is not empty %}
+                    <img src="{{ asset('images/shields/' ~ cohort.shield) }}" alt="{{ 'cohort.shield'|trans }}" style="max-height:50vh;width:auto;" />
+                    <p>
+                      <b>{{ 'cohort.shield'|trans }}</b>
+                    </p>
+                    {% else %}
+                      {{ 'cohort.no_shield'|trans }}
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <div class="col-6">
+                    <p>{{ 'cohort.no_information'|trans }}</p>
+                  </div>
+                {% endif %}
+              </div>
+              {% if surveys is defined and surveys is not empty %}
+              <div class="row my-4">
+                {% for survey in surveys %}
+                  {% if survey.rate == 5.00 %}
+                    {% set img = "tres_satisfait.png" %}
+                    {% set alt = "Très satisfait" %}
+                  {% elseif survey.rate == 4.00 %}
+                    {% set img = "satisfait.png" %}
+                    {% set alt = "Satisfait" %}
+                  {% elseif survey.rate == 3.00 %}
+                    {% set img = "neutre.png" %}
+                    {% set alt = "Neutre" %}
+                  {% elseif survey.rate == 2.00 %}
+                    {% set img = "insatisfait.png" %}
+                    {% set alt = "Insatisfait" %}
+                  {% elseif survey.rate == 1.00 %}
+                    {% set img = "tres_insatisfait.png" %}
+                    {% set alt = "Très insatisfait" %}
+                  {% else %}
+                    {% set img = "" %}
+                    {% set alt = "Introuvable" %}
+                  {% endif %}
+                  <div class="col-xs-1 col-md-3 col-lg-3 text-center">
+                    <div title="{{ survey.answer != '' ? survey.answer : 'Aucun commentaire laissé.' }}">
+                    <img src="{{ asset('images/surveys/' ~ img) }}" alt="{{ alt }}">
+                  </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane container-fluid fade" id="documents">
+            <div class="row mt-3">
+              <div class="col-12">
+                <h2>Documents{% if is_granted('ROLE_TRAINER') %} personnels{% else %} en cours de formation{% endif %}</h2>
+                <table class="table table-bordered table-striped compact w-100" style="margin: 0 auto;">
+                  <thead>
+                    <tr>
+                      <th scope="col">Intitulé du document</th>
+                      <th scope="col">Lien</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if is_granted('ROLE_TRAINER') %}
+                    <td colspan="2">Planning, Attestation de formation...</td>
+                    {% elseif is_granted('ROLE_TRAINEE') %}
+                    <td colspan="2">Attestation d'entrée, de fin de formation, d'acquisition, délivrance de certificats complémentaires, démarches extérieures...</td>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {% if is_granted('ROLE_TRAINEE') %}
+            <div class="row mt-3">
+              <div class="col-12">
+                <h2>Documents de stages</h2>
+                <table class="table table-bordered table-striped compact w-100" style="margin: 0 auto;">
+                  <thead>
+                    <tr>
+                      <th scope="col">Stage</th>
+                      <th scope="col">Période</th>
+                      <th scope="col">Contact</th>
+                      <th scope="col">Convention</th>
+                      <th scope="col">Attestation</th>
+                      <th scope="col">Évaluation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if trainee.documents is defined and trainee.documents is not empty %}
+                      {% set documents = trainee.documents|json_decode %} 
+                      {% set cohort_documents = cohort.documents|json_decode %} 
+                        {% for internship in documents.internships %}
+                        <tr>
+                          <td>{{ cohort_documents.internships[internship.id - 1].label }}</td>
+                          <td>{{ cohort_documents.internships[internship.id - 1].start_date|date('d/m/Y') ~ " au " ~ cohort_documents.internships[internship.id - 1].finish_date|date('d/m/Y') }}</td>
+                          {% if internship.agreement == 0 %}
+                          <td>A définir...</td>
+                          <td>
+                            <a href="{{ path('pdf_generate', {element: 'internship-agreement'}) }}" target="_blank" rel="noopener noreferrer">Générer</a>
+                            <label for="upload-agreement"></label>
+                            <input type="file" id="upload-agreement" name="upload-agreement" onchange="sendAgreement(this.name);">
+                          </td>
+                          {% elseif internship.agreement == 2 %}
+                          <td>A définir par votre référent·e...</td>
+                          <td>En cours de révision par votre référent·e...</td>
+                          {% elseif internship.agreement == 1 and internship.agreement_link is defined and internship.agreement_link is not empty %}
+                          {# TODO: changer pour un controller avec verif #}
+                          <td>{{ internship.internship_id }}</td>
+                          <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Convention_de_stage_' ~ internship.agreement_link ~ '.pdf') }}">Voir</a></td>
+                          {% endif %} 
+                          
+                          {% if internship.certificate == 0 %}
+                          <td>
+                            <a href="{{ path('pdf_generate', {element: 'internship-certificate'}) }}" target="_blank" rel="noopener noreferrer">Générer</a>
+                            <label for="upload-certificate"></label>
+                            <input type="file" id="upload-certificate" name="upload-certificate" onchange="sendCertificate(this.name);">
+                          </td>
+                          {% elseif internship.certificate == 2 %}
+                          <td>En cours de révision par votre référent·e...</td>
+                          {% elseif internship.certificate == 1 and internship.certificate_link is defined and internship.certificate_link is not empty %}
+                          {# TODO: changer pour un controller avec verif #}
+                          <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.certificate_link) }}">Voir</a></td>
+                          {% endif %} 
+                          
+                          {% if internship.evaluation == 0 %}
+                          <td>
+                            <a href="{{ path('pdf_generate', {element: 'internship-evaluation'}) }}" target="_blank" rel="noopener noreferrer">Générer</a>
+                            <label for="upload-evaluation"></label>
+                            <input type="file" id="upload-evaluation" name="upload-evaluation" onchange="sendEvaluation(this.name);">
+                          </td>
+                          {% elseif internship.evaluation == 2 %}
+                          <td>En cours de révision par votre référent·e...</td>
+                          {% elseif internship.evaluation == 1 and internship.evaluation_link is defined and internship.evaluation_link is not empty %}
+                          {# TODO: changer pour un controller avec verif #}
+                          <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.evaluation_link) }}">Voir</a></td>
+                          {% endif %} 
+                        </tr>
+                        {% endfor %}
+                    {% elseif cohort.documents is defined and cohort.documents is not empty %}
+                      {% set documents = cohort.documents|json_decode %} 
+                      {% for internship in documents.internships %}
+                      <tr>
+                        <td>{{ internship.label }}</td>
+                        <td>{{ internship.start_date|date('d/m/Y') }}&nbsp;-&nbsp;{{ internship.finish_date|date('d/m/Y') }}</td>
+                        <td><em>A définir...</em></td>
+                        <td><a href="{{ path('pdf_generate', {element: 'internship-agreement'}) }}" target="_blank" rel="noopener noreferrer">Générer</a></td>
+                        <td><a href="{{ path('pdf_generate', {element: 'internship-certificate'}) }}" target="_blank" rel="noopener noreferrer">Générer</a></td>
+                        <td><a href="{{ path('pdf_generate', {element: 'internship-evaluation'}) }}" target="_blank" rel="noopener noreferrer">Générer</a></td>
+                      </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr><td colspan="5">Pas de stage programmé pour votre cohorte.</td></tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="{{ asset('js/account.js') }}"></script>
+{% endblock %}
