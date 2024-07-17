@@ -1,0 +1,67 @@
+global:
+  btn_send:
+    "Send"
+
+account:
+  personal_informations: 
+    "Personal informations"
+  documents:
+    "Documents"
+  username:
+    "Username"
+  lastname:
+    "Lastname"
+  firstname:
+    "Firstname"
+  password:
+    "Password"
+  email:
+    "Email"
+  phone_number:
+    "Phone number"
+  avatar:
+    "Avatar"
+  avatar_alt:
+    "Avatar %name%"
+  signature:
+    "Signature"
+  draw_signature:
+    "Draw your signature"
+  approve_signature:
+    "Approve your signature"
+  discard_signature:
+    "Discard your signature"
+  current_signature_text:
+    "Current signature"
+  current_signature_alt:
+    "Signature of %name%"
+
+cohort:
+  informations:
+    "Cohort informations"
+  name:
+    "Name of the cohort"
+  acronym:
+    "Acronym of the cohort"
+  key_dates:
+    "Your key dates"
+  training_start_date:
+    "Training start date"
+  training_end_date:
+    "Training end date"
+  shield:
+    "Shield of the cohort"
+  no_shield:
+    "No shield for your cohort"
+  no_information:
+    "No information for your cohort"
+
+internship:
+  internships:
+    "Internships"
+  begin_internship:
+    "Begin internship"
+  end_internship:
+    "End internship"
+  no_internship:
+    "No internship for your cohort"

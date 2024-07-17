@@ -1,0 +1,67 @@
+global:
+  btn_send:
+    "Envoyer"
+
+account:
+  personal_informations: 
+    "Informations personnelles"
+  documents:
+    "Documents"
+  username:
+    "Nom d'utilisateur"
+  lastname:
+    "Nom de famille"
+  firstname:
+    "Prénom"
+  password:
+    "Mot de passe"
+  email:
+    "Email"
+  phone_number:
+    "Numéro de téléphone"
+  avatar:
+    "Avatar"
+  avatar_alt:
+    "Avatar de %name%"
+  signature:
+    "Signature"
+  draw_signature:
+    "Dessiner votre signature"
+  approve_signature:
+    "Approuver votre signature"
+  discard_signature:
+    "Annuler votre signature"
+  current_signature_text:
+    "Signature actuelle"
+  current_signature_alt:
+    "Signature de %name%"
+
+cohort:
+  informations:
+    "Informations de la cohorte"
+  name:
+    "Nom de la cohorte"
+  acronym:
+    "Acronyme de la cohorte"
+  key_dates:
+    "Vos dates clés"
+  training_start_date:
+    "Date de début de la formation"
+  training_end_date:
+    "Date de fin de la formation"
+  shield:
+    "Blason de la cohorte"
+  no_shield:
+    "Pas de blason pour votre cohorte"
+  no_information:
+    "Pas d'information pour votre cohorte"
+
+internship:
+  internships:
+    "Stages"
+  begin_internship:
+    "Début du stage"
+  end_internship:
+    "Fin du stage"
+  no_internship:
+    "Pas de stage pour votre cohorte"
