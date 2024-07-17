@@ -4,6 +4,14 @@
   Mailbox
 {% endblock %}
 
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/mailbox.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://cdn.jsdelivr.net/npm/@dotlottie/player-component@v1.3.0/dist/dotlottie-player.js"></script>
+{% endblock %}
+
 {% block main %}
   <div class="container">
     <div class="row pb-5">
@@ -12,35 +20,70 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid">
-    {% if sessions is defined and sessions is not empty %}
+  {% if cohorts is defined and cohorts is not empty %}
+    <div class="container-fluid">
       <div class="row" style="min-height: 71vh;">
         <div class="col-2 border rounded-start height-message-scroll">
-          {% for session in sessions %}
-            <div class="ps-1 pt-2 pb-2 fake-link" onclick="showMessagesSession({{ session.id }})">{{ session.name }}</div>
-            {% if accounts is defined and accounts is not empty %}
-              {% for account in accounts %}
-                <div class="ps-4 pt-2 pb-2 fake-link" onclick="showMessages({{ account.id }})">
-                  <img src="" />&nbsp;({{ account.id }})&nbsp;{{ account.firstname|capitalize }}&nbsp;{{ account.lastname|upper }}
-                </div>
-              {% endfor %}
+          {% for cohort in cohorts %}
+            {% if is_granted('ROLE_TRAINER') or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
+              <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link" title="Discuter avec les membres de {{ cohort.name }}"><div class="row ps-1 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' bg-info' : '' }}">{{ cohort.name }}</div></a>
+              {% if app.user.id != cohort.trainer.id %}
+                <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link" title="Échanger avec le/la référent(e) {{ cohort.trainer.firstname|capitalize }} {{ cohort.trainer.lastname|upper }}">
+                  <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' bg-info' : '' }}">
+                    <div class="col-10 text-truncate">
+                      <img src="{{ asset('images/avatars/' ~ cohort.trainer.avatar.link) }}" style="width: 20px;" />&nbsp;({{ cohort.trainer.id }})&nbsp;{{ cohort.trainer.firstname|capitalize }}&nbsp;{{ cohort.trainer.lastname|upper }}
+                    </div>
+                    <div class="col-2">
+                      <i class="fa-solid fa-star text-success"></i>
+                    </div>
+                  </div>
+                </a>
+              {% endif %}
+
+              {% if cohort.trainees is defined and cohort.trainees is not empty %}
+                {% for trainee in cohort.trainees %}
+                  {% if app.user.id != trainee.id %}
+                    <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link" title="Parler avec {{ trainee.firstname|capitalize }} {{ trainee.lastname|upper }}">
+                      <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? ' bg-info' : '' }}">
+                        <div class="col-10 text-truncate">
+                          <img src="{{ asset('images/avatars/' ~ trainee.avatar.link) }}" style="width: 20px;" />&nbsp;({{ trainee.id }})&nbsp;{{ trainee.firstname|capitalize }}&nbsp;{{ trainee.lastname|upper }}
+                        </div>
+                      </div>
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
             {% endif %}
           {% endfor %}
         </div>
-        <div class="col-10 border rounded-end text-center" id="messages">
-          <input type="hidden" id="form_user_id" value="" />
-          <input type="hidden" id="form_session_id" value="" />
-          <h2 class="d-none user-visibility">Début de la conversation avec <span id="user"></span></h2>
-          <h2 class="d-none session-visibility">Début de la conversation avec <span id="session"></span></h2>
-          <div id="contenu" class="height-message-scroll2">Sélectionner un compte pour voir les messages...</div>
-          <div class="d-none user-visibility session-visibility bg-dark">
-            <input type="text" id="form_message" placeholder="Ton message ici..." class="form-control w-75" onkeypress="sendMessage(event);" />
-            <a href="#" class="btn btn-success" onclick="sendMessage(event);"><i class="fa-solid fa-paper-plane"></i>&nbsp;Envoyer</a>
-          </div>
+        <div class="col-10 border rounded-end text-center height-message-scroll" id="messages">
+          {% if uuid is defined and uuid is not empty %}
+            {% if contact is defined and contact is not empty %}
+              <h2 class="user-visibility">Début de la conversation avec <span>{{ contact.firstname|capitalize }}&nbsp;{{ contact.lastname|upper }}</span></h2>
+            {% elseif cohort is defined and cohort is not empty %}
+              <h2 class="user-visibility">Début de la conversation avec <span>{{ cohort.name|upper }}</span></h2>
+            {% endif %}
+            {% include '/mailbox/messages.html.twig' %}
+          {% else %}
+            <div id="contenu" class="height-message-scroll2">Sélectionnez un compte pour voir les messages...</div>
+          {% endif %}
         </div>
       </div>
-    {% else %}
+    </div>
+  {% else %}
+    <div class="container">
       <div class="row">Aucun compte disponible pour le chat !</div>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block js %}
+  <script>
+    document.querySelector('#form_message').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        document.querySelector('.btn-success').click()
+      }
+    })
+  </script>
 {% endblock %}

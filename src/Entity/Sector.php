@@ -26,9 +26,16 @@ class Sector
     #[ORM\OneToMany(targetEntity: Faq::class, mappedBy: 'sector')]
     private Collection $faqs;
 
+    /**
+     * @var Collection<int, Trainer>
+     */
+    #[ORM\OneToMany(targetEntity: Trainer::class, mappedBy: 'sector')]
+    private Collection $trainers;
+
     public function __construct()
     {
         $this->faqs = new ArrayCollection();
+        $this->trainers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,6 +91,36 @@ class Sector
             // set the owning side to null (unless already changed)
             if ($faq->getSector() === $this) {
                 $faq->setSector(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trainer>
+     */
+    public function getTrainers(): Collection
+    {
+        return $this->trainers;
+    }
+
+    public function addTrainer(Trainer $trainer): static
+    {
+        if (!$this->trainers->contains($trainer)) {
+            $this->trainers->add($trainer);
+            $trainer->setSector($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrainer(Trainer $trainer): static
+    {
+        if ($this->trainers->removeElement($trainer)) {
+            // set the owning side to null (unless already changed)
+            if ($trainer->getSector() === $this) {
+                $trainer->setSector(null);
             }
         }
 

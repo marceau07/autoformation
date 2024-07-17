@@ -16,27 +16,28 @@ class Trainer extends User implements UserInterface
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
-    private ?string $phoneNumber = null;
-
     #[ORM\Column(length: 6, nullable: true)]
     private ?string $entranceCode = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $entranceCodeDate = null;
 
-    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'trainer')]
-    private Collection $sessions;
-
     #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'trainer')]
     private Collection $courses;
-    
-    public function __construct() {
+
+    #[ORM\ManyToOne(inversedBy: 'trainers')]
+    private ?Sector $sector = null;
+
+    #[ORM\OneToMany(targetEntity: Cohort::class, mappedBy: 'trainer')]
+    private Collection $cohorts;
+
+    public function __construct()
+    {
         $roles = $this->getRoles();
         $roles[] = "ROLE_TRAINER";
         $this->setRoles($roles);
-        $this->sessions = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->cohorts = new ArrayCollection();
     }
 
     public function getRole(): ?string
@@ -51,18 +52,6 @@ class Trainer extends User implements UserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?string $phoneNumber): static
-    {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-    
     public function getEntranceCode(): ?string
     {
         return $this->entranceCode;
@@ -83,36 +72,6 @@ class Trainer extends User implements UserInterface
     public function setEntranceCodeDate(?\DateTimeImmutable $entranceCodeDate): static
     {
         $this->entranceCodeDate = $entranceCodeDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Session>
-     */
-    public function getSessions(): Collection
-    {
-        return $this->sessions;
-    }
-
-    public function addSession(Session $session): static
-    {
-        if (!$this->sessions->contains($session)) {
-            $this->sessions->add($session);
-            $session->setTrainer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSession(Session $session): static
-    {
-        if ($this->sessions->removeElement($session)) {
-            // set the owning side to null (unless already changed)
-            if ($session->getTrainer() === $this) {
-                $session->setTrainer(null);
-            }
-        }
 
         return $this;
     }
@@ -141,6 +100,48 @@ class Trainer extends User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($course->getTrainer() === $this) {
                 $course->setTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSector(): ?Sector
+    {
+        return $this->sector;
+    }
+
+    public function setSector(?Sector $sector): static
+    {
+        $this->sector = $sector;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cohort>
+     */
+    public function getCohorts(): Collection
+    {
+        return $this->cohorts;
+    }
+
+    public function addCohort(Cohort $cohort): static
+    {
+        if (!$this->cohorts->contains($cohort)) {
+            $this->cohorts->add($cohort);
+            $cohort->setTrainer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCohort(Cohort $cohort): static
+    {
+        if ($this->cohorts->removeElement($cohort)) {
+            // set the owning side to null (unless already changed)
+            if ($cohort->getTrainer() === $this) {
+                $cohort->setTrainer(null);
             }
         }
 

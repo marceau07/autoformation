@@ -4,19 +4,34 @@
   Cours {{ course.title }}
 {% endblock %}
 
+{% set listResources = [] %}
+{% set listExercises = [] %}
+{% set listTps = [] %}
+{% for resource in course.courseResources %}
+  {% if resource.type is same as("other") %}
+    {% set listResources = listResources|merge([resource]) %}
+  {% elseif resource.type is same as("exercise") %}
+    {% set listExercises = listExercises|merge([resource]) %}
+  {% elseif resource.type is same as("tp") %}
+    {% set listTps = listTps|merge([resource]) %}
+  {% endif %}
+{% endfor %}
+
 {% block main %}
   <div class="container-fluid">
     <div class="row d-flex justify-content-around">
       <div class="col-3 mt-2 mb-2 text-start">
-        <a class="btn btn-success" href="{{ path('app_course', { course: course.uuid }) }}">Retour sur les cours</a>
+        <a class="btn btn-success" href="{{ path('app_course', { course: course.module.uuid }) }}">Retour sur les cours</a>
       </div>
       <div class="col-6 text-center mt-2 mb-2">
-        <h2>[{{ course.label }}] - {{ course.title }}</h2>
+        <h2>[{{ course.module.label }}] - {{ course.title }}</h2>
       </div>
       {% if is_granted('ROLE_TRAINER') %}
         <div class="col-3 mt-2 mb-2 float-end text-end">
           <button role="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAjouterRessource">Ajouter une ressource</button>
         </div>
+      {% else %}
+        <div class="col-3 mt-2 mb-2 float-end text-end"></div>
       {% endif %}
     </div>
   </div>
@@ -28,22 +43,22 @@
           <h2>Les ressources</h2>
           <div class="row pb-3">
             {% for resource in listResources %}
-              {% set link = '' %}
-              {% if resource.link is defined and resource.link is not empty %}
-                {% set link = path('app_download', { q: resource.records_link }) %}
-              {% else %}
-                {% set link = resource.link %}
-              {% endif %}
-              <div class="col-xs-1 col-lg-2 col-xl-3">
-                <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
-                  <div class="card">
-                    <div class="card-body">
-                      <p class="card-title text-decoration-underline">{{ resource.title }}</p>
-                      <i class="fa-solid fa-circle-down text-black" style="position: absolute;right: 1vw;bottom: 0.5vh;font-size: 3rem;opacity: 0.5;"></i>
+                {% set link = '' %}
+                {% if resource.link is defined and resource.link is not empty %}
+                  {% set link = path('app_download', { filename: resource.recordLink }) %}
+                {% else %}
+                  {% set link = resource.link %}
+                {% endif %}
+                <div class="col-xs-1 col-lg-2 col-xl-3 my-2">
+                  <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="card-title text-decoration-underline">{{ resource.title }}</p>
+                        <i class="fa-solid fa-circle-down text-black" style="position: absolute;right: 1vw;bottom: 0.5vh;font-size: 3rem;opacity: 0.5;"></i>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </div>
+                  </a>
+                </div>
             {% endfor %}
           </div>
         </div>
@@ -82,11 +97,21 @@
                   <div class="card">
                     <span class="card-img-top" alt="Illustration devoirs à la maison">
                       {% if is_granted('ROLE_USER') %}
-                        {% if tp.completed_link %}
-                          <i class="fa-solid fa-arrow-up-from-bracket text-grey upload-file" title="Rendre le TP" onclick="document.querySelector('#file_input_tp_{{ tp.id }}').click();"></i>
-                          <input type="file" name="file_input_tp_{{ tp.id }}" id="file_input_tp_{{ tp.id }}" class="hidden" onchange="sendTp({{ tp.id }}, this.name);" />
-                        {% else %}
-                          <i class="fa-solid fa-check-to-slot text-green upload-file"></i>
+                        {% if is_granted('ROLE_TRAINEE') %}
+                          {% set html = '' %}
+                          {% for completedTp in traineeResources %}
+                            {% if completedTp.trainee.id == app.user.id and completedTp.resource.id == tp.id %}
+                              {% set html %}
+                              <i class="fa-solid fa-check-to-slot text-success upload-file position-absolute" style="cursor: pointer; position: absolute; right: 10px; top: 5px;"></i>
+                              {% endset %}
+                            {% endif %}
+                          {% endfor %}
+                          {% if html is not empty %}
+                            {{ html|raw }}
+                          {% else %}
+                            <i class="fa-solid fa-arrow-up-from-bracket upload-file position-absolute" style="cursor: pointer; position: absolute; right: 10px; top: 5px;" title="Rendre le TP" onclick="document.querySelector('#file_input_tp_{{ tp.id }}').click();"></i>
+                            <input type="file" name="file_input_tp_{{ tp.id }}" id="file_input_tp_{{ tp.id }}" class="d-none" onchange="sendTp({{ tp.id }}, this.name);" accept="application/pdf,application/x-pdf" />
+                          {% endif %}
                         {% endif %}
                         <img src="{{ asset('/images/homeworks.svg') }}" alt="Illustration devoirs à la maison" />
                       {% endif %}
@@ -148,4 +173,8 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{{ asset('js/embed.js') }}"></script>
 {% endblock %}

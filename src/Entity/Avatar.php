@@ -6,6 +6,7 @@ use App\Repository\AvatarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: AvatarRepository::class)]
@@ -15,12 +16,15 @@ class Avatar
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['trainee_search', 'trainer_search'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['trainee_search', 'trainer_search'])]
     private ?string $label = null;
 
     #[ORM\Column(length: 75)]
+    #[Groups(['trainee_search', 'trainer_search'])]
     private ?string $link = null;
 
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'avatar')]

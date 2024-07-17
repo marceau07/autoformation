@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Session;
+use App\Entity\Cohort;
 use App\Entity\Trainee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,12 +22,28 @@ class TraineeRepository extends ServiceEntityRepository
         parent::__construct($registry, Trainee::class);
     }
 
-    public function getSessionsInformations($idUser): array|bool
+    /**
+     * @param string $search
+     * @return Trainee[]
+     */
+    public function searchTrainees(string $search): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.username LIKE :q OR t.lastName LIKE :q OR t.firstName LIKE :q OR t.email LIKE :q')
+            ->andWhere('t.roles LIKE :role')
+            ->setParameter('q', '%' . $search . '%')
+            ->setParameter('role', '%ROLE_TRAINEE%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getCohortsInformations($idUser): array|bool
     {
         $bdd = $this->getEntityManager()->getConnection();
 
         $query = $bdd->executeQuery(
-            'SELECT s.* FROM user u INNER JOIN trainee t INNER JOIN session s WHERE (u.username=:username AND u.id = t.id AND t.session_id = s.id)',
+            'SELECT s.* FROM user u INNER JOIN trainee t INNER JOIN cohort s WHERE (u.username=:username AND u.id = t.id AND t.cohort_id = s.id)',
             ['username' => $idUser]
         );
         return $query->fetchAssociative();

@@ -20,7 +20,7 @@ class CourseTraineeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CourseTrainee::class);
     }
-
+    
     //    /**
     //     * @return CourseTrainee[] Returns an array of CourseTrainee objects
     //     */

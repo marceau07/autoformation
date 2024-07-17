@@ -18,7 +18,7 @@ class Trainee extends User implements UserInterface
     private ?string $passwordSave = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $documents = null;
+    private ?string $documents = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $diploma = null;
@@ -28,10 +28,22 @@ class Trainee extends User implements UserInterface
 
     #[ORM\ManyToOne(inversedBy: 'trainees')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Session $session = null;
+    private ?Cohort $cohort = null;
 
     #[ORM\OneToMany(targetEntity: SurveyTrainee::class, mappedBy: 'trainee')]
     private Collection $surveyTrainees;
+
+    /**
+     * @var Collection<int, TraineeResource>
+     */
+    #[ORM\OneToMany(targetEntity: TraineeResource::class, mappedBy: 'trainee')]
+    private Collection $traineeResources;
+
+    /**
+     * @var Collection<int, Internship>
+     */
+    #[ORM\OneToMany(targetEntity: Internship::class, mappedBy: 'trainee')]
+    private Collection $internships;
 
     public function __construct()
     {
@@ -40,6 +52,8 @@ class Trainee extends User implements UserInterface
         $this->setRoles($roles);
         $this->courseTrainees = new ArrayCollection();
         $this->surveyTrainees = new ArrayCollection();
+        $this->traineeResources = new ArrayCollection();
+        $this->internships = new ArrayCollection();
     }
 
     public function getPasswordSave(): ?string
@@ -54,16 +68,36 @@ class Trainee extends User implements UserInterface
         return $this;
     }
 
-    public function getDocuments(): ?array
+    public function getDocuments(): ?string
     {
         return $this->documents;
     }
 
-    public function setDocuments(?array $documents): static
+    public function setDocuments(?string $documents): static
     {
         $this->documents = $documents;
 
         return $this;
+    }
+
+    public function getDiplomaLabel(): string
+    {
+        switch($this->diploma) {
+            case 0:
+                return "Pas de diplôme";
+            case -1:
+                return "Diplômé·e partiellement (CCP1)";
+            case -2:
+                return "Diplômé·e partiellement (CCP2)";
+            case -3:
+                return "Diplômé·e partiellement (CCP3)";
+            case -4:
+                return "Ne s'est pas présenté·e à l'examen";
+            case 1:
+                return "Diplômé·e";
+            default:
+                return "Non renseigné";
+        }
     }
 
     public function getDiploma(): ?int
@@ -108,14 +142,14 @@ class Trainee extends User implements UserInterface
         return $this;
     }
 
-    public function getSession(): ?Session
+    public function getCohort(): ?Cohort
     {
-        return $this->session;
+        return $this->cohort;
     }
 
-    public function setSession(?Session $session): static
+    public function setCohort(?Cohort $cohort): static
     {
-        $this->session = $session;
+        $this->cohort = $cohort;
 
         return $this;
     }
@@ -144,6 +178,66 @@ class Trainee extends User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($surveyTrainee->getTrainee() === $this) {
                 $surveyTrainee->setTrainee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TraineeResource>
+     */
+    public function getTraineeResources(): Collection
+    {
+        return $this->traineeResources;
+    }
+
+    public function addTraineeResource(TraineeResource $traineeResource): static
+    {
+        if (!$this->traineeResources->contains($traineeResource)) {
+            $this->traineeResources->add($traineeResource);
+            $traineeResource->setTrainee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraineeResource(TraineeResource $traineeResource): static
+    {
+        if ($this->traineeResources->removeElement($traineeResource)) {
+            // set the owning side to null (unless already changed)
+            if ($traineeResource->getTrainee() === $this) {
+                $traineeResource->setTrainee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Internship>
+     */
+    public function getInternships(): Collection
+    {
+        return $this->internships;
+    }
+
+    public function addInternship(Internship $internship): static
+    {
+        if (!$this->internships->contains($internship)) {
+            $this->internships->add($internship);
+            $internship->setTrainee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInternship(Internship $internship): static
+    {
+        if ($this->internships->removeElement($internship)) {
+            // set the owning side to null (unless already changed)
+            if ($internship->getTrainee() === $this) {
+                $internship->setTrainee(null);
             }
         }
 

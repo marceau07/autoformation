@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
@@ -16,33 +17,39 @@ class Course
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('course_search')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('course_search')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $synopsis = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups('course_search')]
     private ?string $keywords = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('course_search')]
     private ?string $link = null;
 
     #[ORM\Column]
+    #[Groups('course_search')]
     private ?int $position = null;
 
-    #[ORM\ManyToOne(inversedBy: 'module')]
+    #[ORM\ManyToOne(inversedBy: 'courses')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('course_search')]
     private ?CourseModule $module = null;
 
     #[ORM\ManyToOne(inversedBy: null)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $trainer = null;
 
-    #[ORM\OneToMany(targetEntity: CourseSession::class, mappedBy: 'course')]
-    private Collection $courseSessions;
+    #[ORM\OneToMany(targetEntity: CourseCohort::class, mappedBy: 'course')]
+    private Collection $courseCohorts;
 
     #[ORM\OneToMany(targetEntity: CourseTrainee::class, mappedBy: 'course')]
     private Collection $courseTrainees;
@@ -55,7 +62,7 @@ class Course
 
     public function __construct()
     {
-        $this->courseSessions = new ArrayCollection();
+        $this->courseCohorts = new ArrayCollection();
         $this->courseTrainees = new ArrayCollection();
         $this->courseResources = new ArrayCollection();
     }
@@ -150,29 +157,29 @@ class Course
     }
 
     /**
-     * @return Collection<int, CourseSession>
+     * @return Collection<int, CourseCohort>
      */
-    public function getCourseSessions(): Collection
+    public function getCourseCohorts(): Collection
     {
-        return $this->courseSessions;
+        return $this->courseCohorts;
     }
 
-    public function addCourseSession(CourseSession $courseSession): static
+    public function addCourseCohort(CourseCohort $courseCohort): static
     {
-        if (!$this->courseSessions->contains($courseSession)) {
-            $this->courseSessions->add($courseSession);
-            $courseSession->setCourse($this);
+        if (!$this->courseCohorts->contains($courseCohort)) {
+            $this->courseCohorts->add($courseCohort);
+            $courseCohort->setCourse($this);
         }
 
         return $this;
     }
 
-    public function removeCourseSession(CourseSession $courseSession): static
+    public function removeCourseCohort(CourseCohort $courseCohort): static
     {
-        if ($this->courseSessions->removeElement($courseSession)) {
+        if ($this->courseCohorts->removeElement($courseCohort)) {
             // set the owning side to null (unless already changed)
-            if ($courseSession->getCourse() === $this) {
-                $courseSession->setCourse(null);
+            if ($courseCohort->getCourse() === $this) {
+                $courseCohort->setCourse(null);
             }
         }
 

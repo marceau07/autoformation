@@ -6,15 +6,7 @@
 
 {% block stylesheets %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
-  <style>
-    .splide__pagination__page.is-active {
-      background-color: #6bcee8 !important;
-    }
-    
-    .splide__pagination {
-      bottom: -1rem !important;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -42,15 +34,15 @@
       </div>
     {% endif %}
 
-    {% if is_granted('ROLE_TRAINEE') %}
+    {% if is_granted('ROLE_TRAINEE') and latestCourses is defined %}
       <div class="row pt-5">
         <h2>Vos derniers cours suivis</h2>
         {% if latestCourses is not empty %}
           {% for course in latestCourses %}
-            {% include '_components/_card.html.twig' %}
+            {{ include('_components/_card.html.twig', { isSummary: true }) }}
           {% endfor %}
         {% else %}
-
+          <p>Aucun cours suivi pour le moment, réessayez plus tard...</p>
         {% endif %}
       </div>
     {% endif %}
@@ -63,14 +55,7 @@
             <div class="splide__track">
               <ul class="splide__list">
                 {% for course in popularCourses %}
-                  <li class="splide__slide">
-                    <a title="Cours fait par {{ course.first_name ~ ' ' ~ course.last_name }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
-                      <div class="splide__slide__container">
-                        <img class="img-course" alt="Illustration {{ course.title }}" src="{{ asset('/images/' ~ course.illustration) }}" loading="lazy" />
-                        <span>{{ course.title }}</span>
-                      </div>
-                    </a>
-                  </li>
+                  {% include '_components/_card3.html.twig' %}
                 {% endfor %}
               </ul>
             </div>
@@ -112,28 +97,5 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      if (document.querySelector('.splide')) {
-        if (document.querySelector('.splide01')) {
-          var splide1 = new Splide('.splide01', {
-            arrows: false,
-            snap: true,
-            perPage: 3,
-            focus: 0,
-            omitEnd: true
-          })
-          splide1.mount()
-        }
-        if (document.querySelector('.splide02')) {
-          var splide2 = new Splide('.splide02', {
-            gap: '1em',
-            perPage: 2,
-            focus: 0
-          })
-          splide2.mount()
-        }
-      }
-    })
-  </script>
+  <script src="{{ asset('js/index.js') }}"></script>
 {% endblock %}

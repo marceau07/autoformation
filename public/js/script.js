@@ -1,17 +1,8 @@
 /* Search Icon */
-const searchInput = document.getElementById("searchInput");
-const searchBox = document.getElementById("searchBox");
-const searchIcon = document.getElementById("searchIcon");
-
-searchIcon.onclick = function () {
-    searchBox.classList.toggle("active");
-    searchInput.focus();
-};
-
-searchIcon.onmouseenter = function () {
-    searchBox.classList.add("active");
-    searchInput.focus();
-};
+var searchInput = document.getElementById("searchInput");
+var searchBox = document.getElementById("searchBox");
+var searchIcon = document.getElementById("searchIcon");
+var containerSearchResultsh = document.getElementById("containerSearchResults");
 
 searchInput.onblur = function () {
     searchBox.classList.remove("active");
@@ -27,6 +18,12 @@ function handleSearchIconTouch(event) {
     handleSearchIconClick();
 };
 
+function handleLeavingElement() {
+    containerSearchResultsh.classList.add("d-none", "fade", "show");
+}
+
+document.addEventListener("click", handleLeavingElement);
 searchIcon.addEventListener("click", handleSearchIconClick);
+searchIcon.addEventListener("onmouseenter", handleSearchIconClick);
 searchIcon.addEventListener("touchstart", handleSearchIconTouch);
 /* Fin search Icon */

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CourseResourceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
@@ -37,6 +39,17 @@ class CourseResource
     #[ORM\ManyToOne(inversedBy: 'courseResources')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Course $course = null;
+
+    /**
+     * @var Collection<int, TraineeResource>
+     */
+    #[ORM\OneToMany(targetEntity: TraineeResource::class, mappedBy: 'resource')]
+    private Collection $traineeResources;
+
+    public function __construct()
+    {
+        $this->traineeResources = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,6 +136,36 @@ class CourseResource
     public function setCourse(?Course $course): static
     {
         $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TraineeResource>
+     */
+    public function getTraineeResources(): Collection
+    {
+        return $this->traineeResources;
+    }
+
+    public function addTraineeResource(TraineeResource $traineeResource): static
+    {
+        if (!$this->traineeResources->contains($traineeResource)) {
+            $this->traineeResources->add($traineeResource);
+            $traineeResource->setResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraineeResource(TraineeResource $traineeResource): static
+    {
+        if ($this->traineeResources->removeElement($traineeResource)) {
+            // set the owning side to null (unless already changed)
+            if ($traineeResource->getResource() === $this) {
+                $traineeResource->setResource(null);
+            }
+        }
 
         return $this;
     }

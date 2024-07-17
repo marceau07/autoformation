@@ -5,13 +5,7 @@
 {% endblock %}
 
 {% block stylesheets %}
-  <style>
-    .form-check-input:checked ~ img {
-      border: 1px solid beige;
-      border-radius: 20px;
-      background-color: #d9d9d9;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/survey.css') }}">
 {% endblock %}
 
 {% block main %}
@@ -30,25 +24,25 @@
                 {{ question.question }}<span class="required">*</span>
               </p>
               <div class="emojis">
-                <label class="form-check-label" for="tres_satisfait_{{ question.id }}">
-                  <input type="radio" class="form-check-input d-none" id="tres_satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="5" />
-                  <img src="{{ asset('/images/tres_satisfait.png') }}" alt="Très satisfait" />
-                </label>
-                <label class="form-check-label" for="satisfait_{{ question.id }}">
-                  <input type="radio" class="form-check-input d-none" id="satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="4" />
-                  <img src="{{ asset('/images/satisfait.png') }}" alt="Satisfait" />
-                </label>
-                <label class="form-check-label" for="neutre_{{ question.id }}">
-                  <input type="radio" class="form-check-input d-none" id="neutre_{{ question.id }}" name="satisfaction_{{ key }}" value="3" />
-                  <img src="{{ asset('/images/neutre.png') }}" alt="Neutre" />
+                <label class="form-check-label" for="tres_insatisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="tres_insatisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="1" />
+                  <img src="{{ asset('/images/surveys/tres_insatisfait.png') }}" alt="Très insatisfait" />
                 </label>
                 <label class="form-check-label" for="insatisfait_{{ question.id }}">
                   <input type="radio" class="form-check-input d-none" id="insatisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="2" />
-                  <img src="{{ asset('/images/insatisfait.png') }}" alt="Insatisfait" />
+                  <img src="{{ asset('/images/surveys/insatisfait.png') }}" alt="Insatisfait" />
                 </label>
-                <label class="form-check-label" for="tres_insatisfait_{{ question.id }}">
-                  <input type="radio" class="form-check-input d-none" id="tres_insatisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="1" />
-                  <img src="{{ asset('/images/tres_insatisfait.png') }}" alt="Très insatisfait" />
+                <label class="form-check-label" for="satisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="4" />
+                  <img src="{{ asset('/images/surveys/satisfait.png') }}" alt="Satisfait" />
+                </label>
+                <label class="form-check-label" for="neutre_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="neutre_{{ question.id }}" name="satisfaction_{{ key }}" value="3" />
+                  <img src="{{ asset('/images/surveys/neutre.png') }}" alt="Neutre" />
+                </label>
+                <label class="form-check-label" for="tres_satisfait_{{ question.id }}">
+                  <input type="radio" class="form-check-input d-none" id="tres_satisfait_{{ question.id }}" name="satisfaction_{{ key }}" value="5" />
+                  <img src="{{ asset('/images/surveys/tres_satisfait.png') }}" alt="Très satisfait" />
                 </label>
               </div>
               <div>

@@ -21,6 +21,22 @@ class TrainerRepository extends ServiceEntityRepository
         parent::__construct($registry, Trainer::class);
     }
 
+    /**
+     * @param string $search
+     * @return Trainer[]
+     */
+    public function searchTrainers(string $search): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.username LIKE :q OR t.lastName LIKE :q OR t.firstName LIKE :q OR t.email LIKE :q')
+            ->andWhere('t.roles LIKE :role')
+            ->setParameter('q', '%' . $search . '%')
+            ->setParameter('role', '%ROLE_TRAINER%')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Trainer[] Returns an array of Trainer objects
     //     */

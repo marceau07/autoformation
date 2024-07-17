@@ -6,20 +6,18 @@
 
 {% block main %}
   <div class="container">
-    {% include '_components/_searchbar.html.twig' %}
-
     <div class="row pt-5">
       <h2 class="">Les modules</h2>
       <div class="col-12">
         <div class="row pb-5" id="liste_modules">
           {% if listModules is defined and listModules is not empty %}
-            {% for module in listModules %}
-              <div class="col-xs-1 col-md-3 col-lg-3 mb-3">
-                <a href="{{ path('app_course', { course: module.uuid, search: '' }) }}" class="text-black">
+            {% for value in listModules %}
+              <div class="col-xs-1 col-md-6 col-lg-3 mb-3">
+                <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}" class="text-black">
                   <div class="card">
-                    <span class="card-img-top"><img class="img-course" alt="Illustration {{ module.label }}" src="{{ asset('/images/' ~ module.illustration) }}" loading="lazy" /></span>
+                    <span class="card-img-top"><img class="img-course" alt="Illustration {{ value.module.label }}" src="{{ asset('/images/' ~ value.module.illustration) }}" loading="lazy" /></span>
                     <div class="card-body">
-                      <p class="card-title h5 text-decoration-underline">{{ module.label|upper }}</p>
+                      <p class="card-title h5 text-decoration-underline">{{ value.module.label|upper }}</p>
                     </div>
                   </div>
                 </a>

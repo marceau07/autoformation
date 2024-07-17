@@ -21,7 +21,7 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
-
+            switch_user: ~
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
@@ -41,6 +41,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_TRAINER: [ROLE_ALLOWED_TO_SWITCH]
 
 when@test:
     security:

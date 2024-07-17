@@ -16,11 +16,11 @@ class CourseTrainee
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courseTrainee')]
+    #[ORM\ManyToOne(inversedBy: 'courseTrainees')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trainee $trainee = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courseTrainee')]
+    #[ORM\ManyToOne(inversedBy: 'courseTrainees')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Course $course = null;
 
