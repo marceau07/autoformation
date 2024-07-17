@@ -1,0 +1,7 @@
+.splide__pagination__page.is-active {
+    background-color: #6bcee8 !important;
+}
+
+.splide__pagination {
+    bottom: -1rem !important;
+}

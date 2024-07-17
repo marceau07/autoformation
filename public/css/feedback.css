@@ -1,0 +1,25 @@
+.feedback-button {
+    position: fixed;
+    top: 50%;
+    right: -2.2rem;
+    background-color: var(--coul-principale);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: rotate(-90deg);
+    z-index: 9998;
+}
+
+.feedback-button:hover {
+    cursor: pointer;
+    color: var(--col-primary-dark);
+    background-color: var(--col-primary);
+    border: 1px solid var(--col-primary-dark);
+}
+[data-theme="dark"] .feedback-button:hover {
+    border: 1px solid var(--col-primary) !important;
+}

@@ -1,0 +1,55 @@
+.fake-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--col-primary-dark);
+}
+
+[data-theme="dark"] .fake-link {
+    color: var(--col-primary);
+}
+
+.fake-link:hover div {
+    background-color: var(--col-primary-dark);
+    color: var(--col-primary);
+}
+
+[data-theme="dark"] .fake-link:hover div {
+    background-color: var(--coul-principale);
+    color: var(--col-primary);
+}
+
+.height-message-scroll {
+    overflow-y: auto;
+    max-height: calc(100vh - 300px);
+}
+
+.height-message-scroll2 {
+    overflow-y: auto;
+}
+
+.msg {
+    padding: 1.25rem 0.75rem;
+    border: 2px solid #FFF;
+    border-radius: 5px;
+    display: block;
+    width: fit-content;
+    margin: 0.5rem;
+}
+
+.msg-sender {
+    background-color: var(--coul-principale);
+    color: var(--col-primary);
+}
+
+.msg-receiver {
+    background-color: var(--col-primary);
+    color: var(--col-primary-dark);
+}
+
+.user-visibility input, .user-visibility a, .session-visibility input, .session-visibility a {
+    position: absolute;
+    bottom: 7.2vh;
+}
+.user-visibility a, .session-visibility a {
+    right: 1.5vw;
+}

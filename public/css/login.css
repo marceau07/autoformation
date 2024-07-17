@@ -1,0 +1,20 @@
+body {
+    color: var(--col-primary-dark);
+    background-color: var(--col-secondary);
+}
+
+form input:not([type="submit"], form input[type="hidden"], form input[type="file"]),
+form select,
+textarea {
+    /* background-color: var(--coul-quaternaire);
+    border-color: #D9D9D9;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 16px; */
+    box-shadow: none!important;
+}
+
+[data-theme="dark"] body {
+    color: var(--col-primary);
+    background-color: var(--col-primary-dark) !important;
+}

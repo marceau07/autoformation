@@ -1,0 +1,20 @@
+.img-profile {
+    width: 150px;
+    height: 150px;
+}
+
+.img-preview {
+    width: 75px;
+    height: 75px;
+    cursor: pointer;
+}
+
+.img-selected {
+    border: 2px solid green;
+}
+
+.box-signature {
+    background-color: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}

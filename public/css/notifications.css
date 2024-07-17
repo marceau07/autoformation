@@ -1,0 +1,299 @@
+.content {
+    padding: 15px;
+    margin-top: 60px;
+    color: #333;
+}
+
+.dropdown-container {
+    overflow-y: hidden;
+}
+
+.dropdown-container.expanded .dropdown {
+    -webkit-animation: fadein 0.5s;
+    -moz-animation: fadein 0.5s;
+    -ms-animation: fadein 0.5s;
+    -o-animation: fadein 0.5s;
+    animation: fadein 0.5s;
+    display: block;
+}
+
+.dropdown-container .dropdown {
+    -webkit-animation: fadeout 0.5s;
+    -moz-animation: fadeout 0.5s;
+    -ms-animation: fadeout 0.5s;
+    -o-animation: fadeout 0.5s;
+    animation: fadeout 0.5s;
+    display: none;
+    position: absolute;
+    width: 300px;
+    height: auto;
+    max-height: 600px;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+    background: #eee;
+    margin-top: 3px;
+    margin-right: -15px;
+    border-top: 4px solid var(--coul-principale);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    -webkit-box-shadow: 2px 2px 15px -5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 2px 15px -5px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 2px 15px -5px rgba(0, 0, 0, 0.75);
+    /*
+    &:before{
+      position: absolute;
+      content: ' ';
+      width: 0; 
+      height: 0; 
+      top: -13px;
+      right: 7px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 10px solid $secondary-color; 
+    }
+    */
+}
+
+.dropdown-container .dropdown .notification-group {
+    border-bottom: 1px solid #e3e3e3;
+    overflow: hidden;
+    min-height: 65px;
+}
+
+.dropdown-container .dropdown .notification-group:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.dropdown-container .dropdown .notification-group .notification-tab {
+    padding: 0px 25px;
+    min-height: 65px;
+}
+
+.dropdown-container .dropdown .notification-group .notification-tab:hover {
+    cursor: pointer;
+    background: #3f51b5;
+}
+
+.dropdown-container .dropdown .notification-group .notification-tab:hover .fa,
+.dropdown-container .dropdown .notification-group .notification-tab:hover h4,
+.dropdown-container .dropdown .notification-group .notification-tab:hover .label {
+    color: #FFF;
+    display: inline-block;
+}
+
+.dropdown-container .dropdown .notification-group .notification-tab:hover .label, 
+.dropdown-container .dropdown .notification-group.expanded .notification-tab .label {
+    background: var(--coul-principale);
+    border-color: var(--col-primary);
+}
+
+.dropdown-container .dropdown .notification-group .notification-list {
+    padding: 0;
+    overflow-y: auto;
+    height: 0px;
+    max-height: 250px;
+    transition: height 0.5s;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item {
+    padding: 5px 25px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item .message {
+    margin: 5px 5px 10px;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item .item-footer a {
+    color: #3f51b5;
+    text-decoration: none;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item .item-footer .date {
+    float: right;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item:nth-of-type(odd) {
+    background: #e3e3e3;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item:hover {
+    cursor: pointer;
+}
+
+.dropdown-container .dropdown .notification-group .notification-list .notification-list-item:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.dropdown-container .dropdown .notification-group.expanded .notification-tab {
+    background: #3f51b5;
+}
+
+.dropdown-container .dropdown .notification-group.expanded .notification-tab .fa,
+.dropdown-container .dropdown .notification-group.expanded .notification-tab h4,
+.dropdown-container .dropdown .notification-group.expanded .notification-tab .label {
+    color: #FFF;
+    display: inline-block;
+}
+
+.dropdown-container .dropdown .notification-group.expanded .notification-list {
+    height: 250px;
+    max-height: 250px;
+    transition: height 0.5s;
+}
+
+.dropdown-container .dropdown .notification-group .fa,
+.dropdown-container .dropdown .notification-group h4,
+.dropdown-container .dropdown .notification-group .label {
+    color: #333;
+    display: inline-block;
+}
+
+.dropdown-container .dropdown .notification-group .fa {
+    margin-right: 5px;
+    margin-top: 25px;
+}
+
+.dropdown-container .dropdown .notification-group .label {
+    float: right;
+    margin-top: 20px;
+    color: #3f51b5;
+    border: 1px solid #3f51b5;
+    padding: 0px 7px;
+    border-radius: 15px;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+@media only screen and (max-width: 321px) {
+    .dropdown-container .dropdown .notification-group .notification-tab h4 {
+        display: none;
+    }
+
+    .dropdown-container .dropdown .notification-group .notification-tab:hover h4 {
+        display: none;
+    }
+
+    .dropdown-container .dropdown .notification-group.expanded .notification-tab h4 {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 514px) {
+    .dropdown-container .dropdown {
+        width: 100%;
+        margin: 0px;
+        left: 0;
+    }
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-ms-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@-o-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}

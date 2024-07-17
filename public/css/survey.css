@@ -1,0 +1,5 @@
+.form-check-input:checked~img {
+    border: 1px solid beige;
+    border-radius: 20px;
+    background-color: #d9d9d9;
+}
