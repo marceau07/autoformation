@@ -12,8 +12,10 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\UuidV7;
 
+#[IsGranted('ROLE_TRAINER')]
 #[Route('/{_locale}/internship')]
 class InternshipController extends AbstractController
 {
