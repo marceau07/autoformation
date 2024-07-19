@@ -122,6 +122,7 @@ class CourseRepository extends ServiceEntityRepository
             ->where('t.username = :username')
             ->andWhere('c.visitors > 0')
             ->setParameter('username', $userId)
+            ->setMaxResults(10)
             ->orderBy('c.visitors', 'DESC')
             ->getQuery()
             ->getResult();
@@ -144,6 +145,7 @@ class CourseRepository extends ServiceEntityRepository
             ->where('tr.username = :username')
             ->andWhere('c.visitors > 0')
             ->setParameter('username', $userId)
+            ->setMaxResults(10)
             ->orderBy('c.visitors', 'DESC')
             ->getQuery()
             ->getResult();
