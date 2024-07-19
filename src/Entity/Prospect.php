@@ -242,4 +242,9 @@ class Prospect
 
         return $this;
     }
+
+    public function getAddress(): string
+    {
+        return $this->number . ' ' . $this->street . ' ' . $this->additional_address;
+    }
 }
