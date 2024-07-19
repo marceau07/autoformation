@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Statistiques
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbar.html.twig' with { 
+        'choosenElement': "statistic",
+        } 
+      %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active">
+        <div class="row mt-2 mb-2">
+            <div class="col-4">
+                <div class="border border-top-0" style="border-top: 3px solid var(--coul-principale) !important; height: 300px;">
+                    <div class="pt-3 px-3 h5">
+                        Stage
+                    </div>
+                    <hr>
+                    <div class="pb-3 px-3">
+                        <div class="row" style="height: 10vh;">
+                            <div class="col-6">
+                                <div class="border border-primary h-100 p-2">
+                                    <span><b>{{ (ratio_agreement * 100)|number_format(2, ',', ' ') }}%</b> de conventions reçues</span>
+                                    <p>{{ ratio_agreement_label }}</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border border-secondary h-100 p-2">
+                                    <span><b>{{ (ratio_certificate * 100)|number_format(2, ',', ' ') }}%</b> d'attestations reçues</span>
+                                    <p>{{ ratio_certificate_label }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pb-3 px-3">
+                        <div class="row" style="height: 10vh;">
+                            <div class="col-6">
+                                <div class="border border-primary h-100 p-2">
+                                    <span><b>{{ (ratio_evaluation * 100)|number_format(2, ',', ' ') }}%</b> d'évaluations reçues</span>
+                                    <p>{{ ratio_evaluation_label }}</p>
+                                </div>
+                            </div>
+                            {# TODO: virer cet élément si non nécessaire #}
+                            {# <div class="col-6">
+                                <div class="border border-primary h-100 p-2">
+                                    <span><b id="ratio_valeur_stage_presence">{{ ratio_agreement }}%</b> de présence reçues</span>
+                                    <p id="ratio_libelle_stage_presence"></p>
+                                </div>
+                            </div> #}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="border border-top-0" style="border-top: 3px solid var(--coul-principale) !important; height: 300px;">
+                    <div class="pt-3 px-3 h5">
+                        Session
+                    </div>
+                    <hr>
+                    <div class="pb-3 px-3">
+                        <div class="row" style="height: 10vh;">
+                            <div class="col-6">
+                                <div class="border border-primary h-100 p-2">
+                                    <span><b id="ratio_valeur_session_reussite">XXX%</b> de réussite</span>
+                                    <p id="ratio_libelle_session_reussite"></p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border border-secondary h-100 p-2">
+                                    <span><b id="ratio_valeur_session_satisfaction">XXX%</b> de satisfaction</span>
+                                    <p id="ratio_libelle_session_satisfaction"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
