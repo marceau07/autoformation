@@ -94,9 +94,9 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/dl/{filename}', name: 'app_download', methods: "GET")]
-    public function download(string $filename): Response
+    public function download(string $filename, TrainerRepository $trainerRepository): Response
     {
-        $path = $_SERVER['DOCUMENT_ROOT'] . "homeworks/" . $this->getUser()->getUserIdentifier() . "/" . $filename;
+        $path = $_SERVER['DOCUMENT_ROOT'] . "homeworks/trainers/" . $filename;
 
         if (!file_exists($path)) {
             throw $this->createNotFoundException();
@@ -145,6 +145,12 @@ class HomeController extends AbstractController
     #[Route('/mailbox/trainee/{uuid}', name: 'app_mailbox_trainee', methods: "GET")]
     public function mailboxTrainee(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, string $uuid = null): Response
     {
+        $user = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
+        if ($uuid == $user->getUuid()) {
+            $this->addFlash('error', 'Vous ne pouvez pas vous envoyer de message à vous même.');
+            return $this->redirectToRoute('app_mailbox');
+        }
+
         $contact = $userRepository->findOneBy(["uuid" => $uuid]);
         $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
         if ($this->isGranted('ROLE_TRAINER')) {
@@ -166,6 +172,12 @@ class HomeController extends AbstractController
     #[Route('/mailbox/trainer/{uuid}', name: 'app_mailbox_trainer', methods: "GET")]
     public function mailboxTrainer(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, string $uuid = null): Response
     {
+        $user = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
+        if ($uuid == $user->getUuid()) {
+            $this->addFlash('error', 'Vous ne pouvez pas vous envoyer de message à vous même.');
+            return $this->redirectToRoute('app_mailbox');
+        }
+
         $contact = $userRepository->findOneBy(["uuid" => $uuid]);
         $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
         if ($this->isGranted('ROLE_TRAINEE')) {
@@ -185,7 +197,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/faq', name: 'app_faq', methods: "GET")]
+    #[Route('/q&a', name: 'app_q_and_a', methods: "GET")]
     public function faq(FaqRepository $faqRepository): Response
     {
         // TODO: changer les id pour les thèmes et les faqs
