@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\NotificationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
@@ -16,7 +17,10 @@ class Notification
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
-    private ?string $title = null;
+    private ?string $origin = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $message = null;
 
     #[ORM\Column(length: 255)]
     private ?string $link = null;
@@ -36,14 +40,26 @@ class Notification
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getOrigin(): ?string
     {
-        return $this->title;
+        return $this->origin;
     }
 
-    public function setTitle(string $title): static
+    public function setOrigin(string $origin): static
     {
-        $this->title = $title;
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): static
+    {
+        $this->message = $message;
 
         return $this;
     }
@@ -53,8 +69,11 @@ class Notification
         return $this->link;
     }
 
-    public function setLink(string $link): static
+    public function setLink(string $link, bool $removeLocale = false): static
     {
+        if ($removeLocale) {
+            $link = preg_replace('/\/[a-z]{2}\//', '/', $link);
+        }
         $this->link = $link;
 
         return $this;

@@ -1,0 +1,7 @@
+<li class="notification-list-item">
+  <p class="message">{{ notification.message }}</p>
+  <div class="item-footer">
+    <span class="from"><a href="/{{ app.request.attributes.get('_locale') }}{{ notification.link }}">{{ notification.origin }}</a></span>
+    <span class="date">{{ notification.date|time_ago }}</span>
+  </div>
+</li>
