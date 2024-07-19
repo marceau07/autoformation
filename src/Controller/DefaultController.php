@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Feedback;
 use App\Entity\Message;
+use App\Entity\Notification;
 use App\Entity\Trainee;
 use App\Entity\TraineeResource;
 use App\Repository\CohortRepository;
@@ -276,27 +277,66 @@ class DefaultController extends AbstractController
     #[Route('/send_message', name: 'app_send_message', methods: "POST")]
     public function sendMessage(Request $request, UserRepository $userRepository, CohortRepository $cohortRepository, EntityManagerInterface $entityManager): Response
     {
+        $notificationNewMessage = new Notification();
+        $notificationNewMessage->setDate(new \DateTimeImmutable());
+        $notificationNewMessage->setCategory("new_message");
+        $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
+        $notificationNewMessage->setMessage("Vous avez reçu un nouveau message de la part de @" . $this->getUser()->getUserIdentifier());
+
         $message = new Message();
         $message->setContent($request->request->get('form_message'));
         $message->setDate(new \DateTimeImmutable());
         if ($this->isGranted("ROLE_TRAINER")) {
             $message->setSendTrainer($this->getUser());
+
+            $notificationNewMessage->setLink($this->generateUrl('app_mailbox_trainer', ['uuid' => $request->request->get('form_sender_uuid')]), true);
         } elseif ($this->isGranted("ROLE_TRAINEE")) {
             $message->setSendTrainee($this->getUser());
+
+            $notificationNewMessage->setLink($this->generateUrl('app_mailbox_trainee', ['uuid' => $request->request->get('form_sender_uuid')]), true);
         }
 
         if (!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "cohort") {
-            $message->setCohort($cohortRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]));
+            $cohort = $cohortRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
+            $message->setCohort($cohort);
+
+            $cohortTrainees = $cohort->getTrainees();
+            foreach ($cohortTrainees as $cohortTrainee) {
+                $notificationNewMessage = new Notification();
+                $notificationNewMessage->setDate(new \DateTimeImmutable());
+                $notificationNewMessage->setCategory("new_message");
+                $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
+                $notificationNewMessage->setUser($cohortTrainee);
+                $notificationNewMessage->setMessage("Vous avez reçu un nouveau message dans #" . $cohort->getName());
+                $notificationNewMessage->setLink($this->generateUrl('app_mailbox_cohort', ['uuid' => $cohort->getUuid()]), true);
+                $entityManager->persist($notificationNewMessage);
+            }
         } elseif ((!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "trainee")) {
-            $message->setTrainee($userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]));
+            $trainee = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
+            $message->setTrainee($trainee);
+
+            $notificationNewMessage->setUser($trainee);
         } elseif ((!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "trainer")) {
-            $message->setTrainer($userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]));
+            $trainer = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
+            $message->setTrainer($trainer);
+
+            $notificationNewMessage->setUser($trainer);
         }
         $message->setContent($request->request->get('form_message'));
+
         $entityManager->persist($message);
+        $entityManager->persist($notificationNewMessage);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_mailbox');
+        // Get the referer URL from the request headers
+        $referer = $request->headers->get('referer');
+
+        // If the referer is not available, you can set a default route
+        if ($referer) {
+            return $this->redirect($referer);
+        } else {
+            return $this->redirectToRoute('app_mailbox');
+        }
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
@@ -363,42 +403,5 @@ class DefaultController extends AbstractController
             ],
             status: Response::HTTP_NOT_FOUND
         );
-    }
-
-    #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
-    #[Route('/notifications_todo', name: 'app_get_notifications_todo', methods: "GET")]
-    public function getNotificationsToDo(Request $request, CourseRepository $courseRepository): Response
-    {
-        // if ($request->isXmlHttpRequest()) {
-        $notificationsToDo = [];
-
-        $notificationsToDo = $courseRepository->homeworksToDo($this->getUser()->getUserIdentifier());
-        die(print_r($notificationsToDo));
-        if (isset($notificationsToDo) && count($notificationsToDo) > 0) {
-            return $this->json(
-                [
-                    'success' => true,
-                    'message' => "Aucun exercice à rendre... Youpi !",
-                ],
-                status: Response::HTTP_OK
-            );
-        }
-
-        return $this->json(
-            [
-                'success' => true,
-                'message' => "Aucun exercice à rendre... Youpi !",
-            ],
-            status: Response::HTTP_OK
-        );
-        // }
-
-        // return $this->json(
-        //     [
-        //         'success' => false,
-        //         'message' => "Une erreur est survenue lors de la récupération des notifications des travaux à rendre...",
-        //     ],
-        //     status: Response::HTTP_BAD_REQUEST
-        // );
     }
 }
