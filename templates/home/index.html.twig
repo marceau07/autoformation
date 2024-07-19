@@ -17,18 +17,18 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h1 class="text-center">Bienvenue sur la plateforme pédagogique</h1>
+        <h1 class="text-center">{{ 'home.welcome'|trans }}</h1>
       </div>
     </div>
 
     {% if satisfactionSurvey and satisfactionSurvey.finish_date <= ('now'|date('Y-m-d')) %}
       <div class="row pt-5">
         <div class="alert alert-success w-auto" role="alert">
-          <h4 class="alert-heading">Enquête de satisfaction !</h4>
-          <p>Dites-nous ce que vous avez pensé de nous en répondant à ce bref questionnaire !</p>
+          <h4 class="alert-heading">{{ 'survey.heading'|trans }}</h4>
+          <p>{{ 'survey.paragraph'|trans }}</p>
           <hr />
           <p class="mb-0">
-            <a class="btn btn-secondary text-white" href="{{ path('app_survey') }}">Répondre au questionnaire</a>
+            <a class="btn btn-secondary text-white" href="{{ path('app_survey') }}">{{ 'survey.answer'|trans }}</a>
           </p>
         </div>
       </div>
@@ -36,21 +36,21 @@
 
     {% if is_granted('ROLE_TRAINEE') and latestCourses is defined %}
       <div class="row pt-5">
-        <h2>Vos derniers cours suivis</h2>
+        <h2>{{ 'course.latest_courses'|trans }}</h2>
         {% if latestCourses is not empty %}
           {% for course in latestCourses %}
             {{ include('_components/_card.html.twig', { isSummary: true }) }}
           {% endfor %}
         {% else %}
-          <p>Aucun cours suivi pour le moment, réessayez plus tard...</p>
+          <p>{{ 'course.no_content_latest_courses'|trans }}</p>
         {% endif %}
       </div>
     {% endif %}
     <div class="row pt-5 pb-5">
-      <h2>Les cours les plus populaires</h2>
+      <h2>{{ 'course.popular_courses'|trans }}</h2>
       <div class="col-12">
         {% if popularCourses is not empty %}
-          <section class="splide splide01" aria-label="Les cours les plus populaires actuellement">
+          <section class="splide splide01" aria-label="{{ 'course.popular_courses'|trans }}">
             <ul class="splide__pagination"></ul>
             <div class="splide__track">
               <ul class="splide__list">
@@ -61,15 +61,15 @@
             </div>
           </section>
         {% else %}
-          <p>Aucun cours populaire pour le moment, réessayez plus tard...</p>
+          <p>{{ 'course.no_content_popular_courses'|trans }}</p>
         {% endif %}
       </div>
     </div>
     <div class="row pt-5 pb-5">
-      <h2>Ils sont passés par chez nous...</h2>
+      <h2>{{ 'survey.review'|trans }}</h2>
       <div class="col-12">
         {% if traineesOpinions %}
-          <section class="splide splide02" aria-label="Les avis des anciens stagiaires">
+          <section class="splide splide02" aria-label="{{ 'survey.review'|trans }}">
             <ul class="splide__pagination"></ul>
             <div class="splide__track">
               <ul class="splide__list">
@@ -89,7 +89,7 @@
             </div>
           </section>
         {% else %}
-          <p>Aucun commentaire laissé pour le moment, réessayez plus tard...</p>
+          <p>{{ 'survey.no_content'|trans }}</p>
         {% endif %}
       </div>
     </div>

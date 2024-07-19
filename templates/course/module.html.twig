@@ -7,7 +7,7 @@
 {% block main %}
   <div class="container">
     <div class="row pt-5">
-      <h2 class="">Les modules</h2>
+      <h2>{{ 'module.text'|trans }}</h2>
       <div class="col-12">
         <div class="row pb-5" id="liste_modules">
           {% if listModules is defined and listModules is not empty %}
@@ -24,7 +24,7 @@
               </div>
             {% endfor %}
           {% else %}
-            <p>Vous n'avez pas de cours dans votre secteur...</p>
+            <p>{{ 'module.no_content'|trans }}</p>
           {% endif %}
         </div>
       </div>

@@ -4,20 +4,19 @@
   Cours {{ course.title }}
 {% endblock %}
 
-{% set listResources = [] %}
-{% set listExercises = [] %}
-{% set listTps = [] %}
-{% for resource in course.courseResources %}
-  {% if resource.type is same as("other") %}
-    {% set listResources = listResources|merge([resource]) %}
-  {% elseif resource.type is same as("exercise") %}
-    {% set listExercises = listExercises|merge([resource]) %}
-  {% elseif resource.type is same as("tp") %}
-    {% set listTps = listTps|merge([resource]) %}
-  {% endif %}
-{% endfor %}
-
 {% block main %}
+  {% set listResources = [] %}
+  {% set listExercises = [] %}
+  {% set listTps = [] %}
+  {% for resource in course.courseResources %}
+    {% if resource.type == 'other' %}
+      {% set listResources = listResources|merge([resource]) %}
+    {% elseif resource.type == 'exercise' %}
+      {% set listExercises = listExercises|merge([resource]) %}
+    {% elseif resource.type == 'tp' %}
+      {% set listTps = listTps|merge([resource]) %}
+    {% endif %}
+  {% endfor %}
   <div class="container-fluid">
     <div class="row d-flex justify-content-around">
       <div class="col-3 mt-2 mb-2 text-start">
@@ -43,22 +42,22 @@
           <h2>Les ressources</h2>
           <div class="row pb-3">
             {% for resource in listResources %}
-                {% set link = '' %}
-                {% if resource.link is defined and resource.link is not empty %}
-                  {% set link = path('app_download', { filename: resource.recordLink }) %}
-                {% else %}
-                  {% set link = resource.link %}
-                {% endif %}
-                <div class="col-xs-1 col-lg-2 col-xl-3 my-2">
-                  <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
-                    <div class="card">
-                      <div class="card-body">
-                        <p class="card-title text-decoration-underline">{{ resource.title }}</p>
-                        <i class="fa-solid fa-circle-down text-black" style="position: absolute;right: 1vw;bottom: 0.5vh;font-size: 3rem;opacity: 0.5;"></i>
-                      </div>
+              {% set link = '' %}
+              {% if resource.link is defined and resource.link is not empty %}
+                {% set link = path('app_download', { filename: resource.recordLink }) %}
+              {% else %}
+                {% set link = resource.link %}
+              {% endif %}
+              <div class="col-xs-1 col-lg-2 col-xl-3 my-2">
+                <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
+                  <div class="card">
+                    <div class="card-body">
+                      <p class="card-title text-decoration-underline">{{ resource.title }}</p>
+                      <i class="fa-solid fa-circle-down text-black" style="position: absolute;right: 1vw;bottom: 0.5vh;font-size: 3rem;opacity: 0.5;"></i>
                     </div>
-                  </a>
-                </div>
+                  </div>
+                </a>
+              </div>
             {% endfor %}
           </div>
         </div>
@@ -100,9 +99,9 @@
                         {% if is_granted('ROLE_TRAINEE') %}
                           {% set html = '' %}
                           {% for completedTp in traineeResources %}
-                            {% if completedTp.trainee.id == app.user.id and completedTp.resource.id == tp.id %}
+                            {% if completedTp.trainee.id == app.user.id and completedTp.courseResource.id == tp.id %}
                               {% set html %}
-                              <i class="fa-solid fa-check-to-slot text-success upload-file position-absolute" style="cursor: pointer; position: absolute; right: 10px; top: 5px;"></i>
+                                <i class="fa-solid fa-check-to-slot text-success upload-file position-absolute" style="cursor: pointer; position: absolute; right: 10px; top: 5px;"></i>
                               {% endset %}
                             {% endif %}
                           {% endfor %}

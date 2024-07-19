@@ -59,21 +59,21 @@
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">{{ 'global.home'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_modules') }}">Modules</a>
+                  <a class="nav-link" href="{{ path('app_modules') }}">{{ 'global.modules'|trans }}</a>
                 </li>
                 {% if is_granted('ROLE_TRAINER') %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">Administration</a>
+                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">{{ 'global.administration'|trans }}</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_mailbox') }}">BAL</a>
+                  <a class="nav-link" href="{{ path('app_mailbox') }}">{{ 'global.mailbox'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_faq') }}">FAQ</a>
+                  <a class="nav-link" href="{{ path('app_q_and_a') }}">{{ 'global.faq'|trans }}</a>
                 </li>
                 {# <li class="nav-item">
                   <form action="{{ path('_update_session_filter') }}">
@@ -123,91 +123,55 @@
                         <div class="notification-tab">
                           <i class="fa fa-list-check"></i>
                           <h4>A faire</h4>
-                          <span class="label">4</span>
+                          <span class="label">{{ notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty ? notificationsHomeworksToDo|length : 0 }}</span>
                         </div>
                         <!-- tab -->
                         <ul class="notification-list">
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">project3</a></span>
-                              <span class="date">2 minutes ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">project2</a></span>
-                              <span class="date">12 hours ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">project6</a></span>
-                              <span class="date">2 days ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">project2</a></span>
-                              <span class="date">2 days ago</span>
-                            </div>
-                          </li>
+                          {% if notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty %}
+                            {% for notification in notificationsHomeworksToDo %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">Aucun devoir à rendre !</p>
+                            </li>
+                          {% endif %}
                         </ul>
                       </li>
                       <li class="notification-group" id="notificationsMessages">
                         <div class="notification-tab">
                           <i class="fa fa-envelope"></i>
                           <h4>Messages</h4>
-                          <span class="label">3</span>
+                          <span class="label">{{ notificationsMessages is defined and notificationsMessages is not empty ? notificationsMessages|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">@mstrlaw</a></span>
-                              <span class="date">2 minutes ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">@mstrlaw</a></span>
-                              <span class="date">12 hours ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">@mstrlaw</a></span>
-                              <span class="date">2 days ago</span>
-                            </div>
-                          </li>
+                          {% if notificationsMessages is defined and notificationsMessages is not empty %}
+                            {% for notification in notificationsMessages %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">Aucun message reçu...</p>
+                            </li>
+                          {% endif %}
                         </ul>
                       </li>
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsCourses">
                         <div class="notification-tab">
                           <i class="fa fa-circle-info"></i>
                           <h4>Cours</h4>
-                          <span class="label">2</span>
+                          <span class="label">{{ notificationsNewCourses is defined and notificationsNewCourses is not empty ? notificationsNewCourses|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">technical</a></span>
-                              <span class="date">2 weeks ago</span>
-                            </div>
-                          </li>
-                          <li class="notification-list-item">
-                            <p class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                            <div class="item-footer">
-                              <span class="from"><a href="#">personal</a></span>
-                              <span class="date">3 weeks ago</span>
-                            </div>
-                          </li>
+                          {% if notificationsNewCourses is defined and notificationsNewCourses is not empty %}
+                            {% for notification in notificationsNewCourses %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">Pas de nouveau cours partagé...</p>
+                            </li>
+                          {% endif %}
                         </ul>
                       </li>
                     </ul>
