@@ -17,7 +17,7 @@ class Trainee extends User implements UserInterface
     #[ORM\Column(length: 60)]
     private ?string $passwordSave = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $documents = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -82,7 +82,7 @@ class Trainee extends User implements UserInterface
 
     public function getDiplomaLabel(): string
     {
-        switch($this->diploma) {
+        switch ($this->diploma) {
             case 0:
                 return "Pas de diplôme";
             case -1:
