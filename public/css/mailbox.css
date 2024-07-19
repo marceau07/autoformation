@@ -28,7 +28,7 @@
 }
 
 .msg {
-    padding: 1.25rem 0.75rem;
+    padding: 0.25rem 0.75rem;
     border: 2px solid #FFF;
     border-radius: 5px;
     display: block;
@@ -46,10 +46,15 @@
     color: var(--col-primary-dark);
 }
 
-.user-visibility input, .user-visibility a, .session-visibility input, .session-visibility a {
+.user-visibility input,
+.user-visibility a,
+.session-visibility input,
+.session-visibility a {
     position: absolute;
-    bottom: 7.2vh;
+    bottom: 6.2rem;
 }
-.user-visibility a, .session-visibility a {
+
+.user-visibility a,
+.session-visibility a {
     right: 1.5vw;
 }

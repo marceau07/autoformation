@@ -16,7 +16,7 @@
   <div class="container">
     <div class="row pb-5">
       <div class="col-12">
-        <h1 class="text-center">Bienvenue dans votre <em>boîte aux lettres</em></h1>
+        <h1 class="text-center">{{ 'mailbox.welcome'|trans }}</h1>
       </div>
     </div>
   </div>
@@ -26,9 +26,9 @@
         <div class="col-2 border rounded-start height-message-scroll">
           {% for cohort in cohorts %}
             {% if is_granted('ROLE_TRAINER') or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
-              <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link" title="Discuter avec les membres de {{ cohort.name }}"><div class="row ps-1 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' bg-info' : '' }}">{{ cohort.name }}</div></a>
+              <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_cohort'|trans({ '%cohort%': cohort.name }) }}"><div class="row ps-1 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' bg-info' : '' }}">{{ cohort.name }}</div></a>
               {% if app.user.id != cohort.trainer.id %}
-                <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link" title="Échanger avec le/la référent(e) {{ cohort.trainer.firstname|capitalize }} {{ cohort.trainer.lastname|upper }}">
+                <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_trainer_referent'|trans({ '%trainer%': (cohort.trainer.firstname|capitalize) ~ ' ' ~ (cohort.trainer.lastname|upper) }) }}">
                   <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' bg-info' : '' }}">
                     <div class="col-10 text-truncate">
                       <img src="{{ asset('images/avatars/' ~ cohort.trainer.avatar.link) }}" style="width: 20px;" />&nbsp;({{ cohort.trainer.id }})&nbsp;{{ cohort.trainer.firstname|capitalize }}&nbsp;{{ cohort.trainer.lastname|upper }}
@@ -43,7 +43,7 @@
               {% if cohort.trainees is defined and cohort.trainees is not empty %}
                 {% for trainee in cohort.trainees %}
                   {% if app.user.id != trainee.id %}
-                    <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link" title="Parler avec {{ trainee.firstname|capitalize }} {{ trainee.lastname|upper }}">
+                    <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_with'|trans({ '%trainee%': trainee.firstname|capitalize }) }} {{ trainee.lastname|upper }}">
                       <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? ' bg-info' : '' }}">
                         <div class="col-10 text-truncate">
                           <img src="{{ asset('images/avatars/' ~ trainee.avatar.link) }}" style="width: 20px;" />&nbsp;({{ trainee.id }})&nbsp;{{ trainee.firstname|capitalize }}&nbsp;{{ trainee.lastname|upper }}
@@ -59,20 +59,20 @@
         <div class="col-10 border rounded-end text-center height-message-scroll" id="messages">
           {% if uuid is defined and uuid is not empty %}
             {% if contact is defined and contact is not empty %}
-              <h2 class="user-visibility">Début de la conversation avec <span>{{ contact.firstname|capitalize }}&nbsp;{{ contact.lastname|upper }}</span></h2>
+              <h2 class="user-visibility">{{ 'mailbox.start_conversation'|trans }}<span class="fw-bold">{{ contact.firstname|capitalize }}&nbsp;{{ contact.lastname|upper }}</span></h2>
             {% elseif cohort is defined and cohort is not empty %}
-              <h2 class="user-visibility">Début de la conversation avec <span>{{ cohort.name|upper }}</span></h2>
+              <h2 class="user-visibility">{{ 'mailbox.start_conversation'|trans }}<span class="fw-bold">{{ cohort.name|upper }}</span></h2>
             {% endif %}
             {% include '/mailbox/messages.html.twig' %}
           {% else %}
-            <div id="contenu" class="height-message-scroll2">Sélectionnez un compte pour voir les messages...</div>
+            <div id="contenu" class="height-message-scroll2">{{ 'mailbox.select_account'|trans }}</div>
           {% endif %}
         </div>
       </div>
     </div>
   {% else %}
     <div class="container">
-      <div class="row">Aucun compte disponible pour le chat !</div>
+      <div class="row">{{ 'mailbox.no_account_available'|trans }}</div>
     </div>
   {% endif %}
 {% endblock %}

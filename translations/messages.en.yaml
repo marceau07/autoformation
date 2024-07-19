@@ -1,6 +1,108 @@
 global:
+  home:
+    "Home"
+  modules:
+    "Modules"
+  administration:
+    "Administration"
+  mailbox:
+    "Mailbox"
+  faq:
+    "Q&A"
   btn_send:
     "Send"
+  btn_save:
+    "Save"
+  btn_cancel:
+    "Cancel"
+  btn_delete:
+    "Delete"
+  btn_edit:
+    "Edit"
+  btn_add:
+    "Add"
+  btn_back:
+    "Back"
+  btn_next:
+    "Next"
+  btn_previous:
+    "Previous"
+  btn_confirm:
+    "confirm"
+  btn_close:
+    "Close"
+  btn_download:
+    "Download"
+  btn_upload:
+    "Upload"
+  day:
+    "%time% day ago"
+  days:
+    "%time% days ago"
+  week:
+    "%time% week ago"
+  weeks:
+    "%time% weeks ago"
+  month:  
+    "%time% month ago"
+  months: 
+    "%time% months ago"
+  year:
+    "%time% year ago"
+  years:  
+    "%time% years ago"
+  hour:
+    "%time% hour ago"
+  hours:
+    "%time% hours ago"
+  minute:
+    "%time% minute ago"
+  minutes:
+    "%time% minutes ago"
+  second:
+    "%time% second ago"
+  seconds:
+    "%time% seconds ago"
+  now:
+    "just now"
+
+home:
+  welcome:
+    "Welcome to the andragogic platform"
+
+survey:
+  heading:
+    "Satisfaction survey !"
+  paragraph:
+    "Tell us what you thought of us by answering this short questionnaire !"
+  answer:
+    "Answer the questionnaire"
+  review:
+    "They have been through us..."
+  no_content:
+    "No review for the moment, try again later..."
+
+module:
+  text:
+    "Modules"
+  no_content:
+    "No content for the moment, try again later..."
+
+course:
+  latest_courses:
+    "Your latest courses"
+  no_content_latest_courses:
+    "No course followed for the moment, try again later..."
+  popular_courses:
+    "The most popular courses" 
+  no_content_popular_courses:
+    "No popular course for the moment, try again later..."
+  text:
+    "Courses"
+  no_content: 
+    "No course for the moment, try again later..."
+  illustration_no_content_alt:
+    "Illustration of no course"
 
 account:
   personal_informations: 
@@ -35,6 +137,26 @@ account:
     "Current signature"
   current_signature_alt:
     "Signature of %name%"
+
+mailbox:
+  welcome:
+    "Welcome to your mailbox"
+  chat_cohort:
+    "Chat with members of %cohort%"
+  chat_trainer_referent:
+    "Discuss with the referent trainer %trainer%"
+  chat_with:
+    "Chat with %trainee%"
+  start_conversation:
+    "Start of conversation with "
+  select_account:
+    "Choose an account to chat with..."
+  no_content:
+    "No conversation for the moment, try again later..."
+  start_typing_here:
+    "Start typing a message here..."
+  no_account_available:
+    "No account available for the moment, try again later..."
 
 cohort:
   informations:

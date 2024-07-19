@@ -1,6 +1,108 @@
 global:
+  home:
+    "Accueil"
+  modules:
+    "Modules"
+  administration:
+    "Administration"
+  mailbox:
+    "BAL"
+  faq:
+    "FAQ"
   btn_send:
     "Envoyer"
+  btn_save:
+    "Enregistrer"
+  btn_cancel:
+    "Annuler"
+  btn_delete:
+    "Supprimer"
+  btn_edit:
+    "Modifier"
+  btn_add:
+    "Ajouter"
+  btn_back:
+    "Retour"
+  btn_next:
+    "Suivant"
+  btn_previous:
+    "Précédent"
+  btn_confirm:
+    "Confirmer"
+  btn_close:
+    "Fermer"
+  btn_download:
+    "Télécharger"
+  btn_upload:
+    "Téléverser"
+  day:
+    "il y a %time% jour"
+  days:
+    "il y a %time% jours"
+  week:
+    "il y a %time% semaine"
+  weeks:
+    "il y a %time% semaines"
+  month:  
+    "il y a %time% mois"
+  months: 
+    "il y a %time% mois"
+  year:
+    "il y a %time% an"
+  years:  
+    "il y a %time% ans"
+  hour:
+    "il y a %time% heure"
+  hours:
+    "il y a %time% heures"
+  minute:
+    "il y a %time% minute"
+  minutes:
+    "il y a %time% minutes"
+  second:
+    "il y a %time% seconde"
+  seconds:
+    "il y a %time% secondes"
+  now:
+    "à l'instant"
+
+home:
+  welcome:
+    "Bienvenue sur la plateforme andragogique"
+
+survey:
+  heading:
+    "Enquête de satisfaction !"
+  paragraph:
+    "Dites-nous ce que vous avez pensé de nous en répondant à ce bref questionnaire !"
+  answer:
+    "Répondre au questionnaire"
+  review:
+    "Ils sont passés par chez nous..."
+  no_content:
+    "Aucun avis pour le moment, réessayez plus tard..."
+
+module:
+  text:
+    "Les modules"
+  no_content:
+    "Pas de contenu pour le moment, réessayez plus tard..."
+
+course:
+  latest_courses:
+    "Vos derniers cours suivis"
+  no_content_latest_courses:
+    "Aucun cours suivi pour le moment, réessayez plus tard..."
+  popular_courses:
+    "Les cours les plus populaires"
+  no_content_popular_courses:
+    "Aucun cours populaire pour le moment, réessayez plus tard..."
+  text:
+    "Les cours"
+  no_content:
+    "Pas de cours pour le moment, réessayez plus tard..."
+  illustration_no_content_alt:
+    "Illustration de l'absence de contenu"
 
 account:
   personal_informations: 
@@ -35,6 +137,26 @@ account:
     "Signature actuelle"
   current_signature_alt:
     "Signature de %name%"
+
+mailbox:
+  welcome:
+    "Bienvenue dans votre boîte aux lettres"
+  chat_cohort:
+    "Discuter avec les membres de %cohort%"
+  chat_trainer_referent:
+    "Échanger avec le/la référent(e) %trainer%"
+  chat_with:
+    "Parler avec %trainee%"
+  start_conversation:
+    "Début de la conversation avec "
+  select_account:
+    "Sélectionnez un compte pour commencer la conversation..."
+  no_content:
+    "Pas de message pour le moment, réessayez plus tard..."
+  start_typing_here:
+    "Commencer à taper un message ici..."
+  no_account_available:
+    "Aucun compte disponible pour le moment, réessayez plus tard..."
 
 cohort:
   informations:
