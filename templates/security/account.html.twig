@@ -107,7 +107,7 @@
                   {% endif %}
                 </div>
                 <div class="row float-end my-3">
-                  <div class="form-group">{{ form_row(form.save, { label: 'btn_send'|trans, label_attr: { class: 'btn btn-dark' } }) }}</div>
+                  <div class="form-group">{{ form_row(form.save, { label: 'global.btn_send'|trans, label_attr: { class: 'btn btn-dark' } }) }}</div>
                 </div>
 
                 {{ form_end(form) }}
@@ -259,7 +259,6 @@
                           <td>A définir par votre référent·e...</td>
                           <td>En cours de révision par votre référent·e...</td>
                           {% elseif internship.agreement == 1 and internship.agreement_link is defined and internship.agreement_link is not empty %}
-                          {# TODO: changer pour un controller avec verif #}
                           <td>{{ internship.internship_id }}</td>
                           <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Convention_de_stage_' ~ internship.agreement_link ~ '.pdf') }}">Voir</a></td>
                           {% endif %} 
@@ -273,7 +272,6 @@
                           {% elseif internship.certificate == 2 %}
                           <td>En cours de révision par votre référent·e...</td>
                           {% elseif internship.certificate == 1 and internship.certificate_link is defined and internship.certificate_link is not empty %}
-                          {# TODO: changer pour un controller avec verif #}
                           <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.certificate_link) }}">Voir</a></td>
                           {% endif %} 
                           
@@ -286,7 +284,6 @@
                           {% elseif internship.evaluation == 2 %}
                           <td>En cours de révision par votre référent·e...</td>
                           {% elseif internship.evaluation == 1 and internship.evaluation_link is defined and internship.evaluation_link is not empty %}
-                          {# TODO: changer pour un controller avec verif #}
                           <td><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.evaluation_link) }}">Voir</a></td>
                           {% endif %} 
                         </tr>

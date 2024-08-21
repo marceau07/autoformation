@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block main %}
-  <h1>Create new Course</h1>
+  <h1>{{ 'administration.course.create'|trans }}</h1>
+
+  <a href="{{ path('app_course_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
 
   {{ include('course/_form.html.twig') }}
-
-  <a href="{{ path('app_course_index') }}">back to list</a>
 {% endblock %}

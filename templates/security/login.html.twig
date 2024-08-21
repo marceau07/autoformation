@@ -20,6 +20,15 @@
           {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
           {% endif %}
+          {% for flashMessage in app.session.flashbag.get('notice') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'success', 'bg': 'success', 'fa': 'bell', 'message': flashMessage } %}
+          {% endfor %}
+          {% for flashMessage in app.session.flashbag.get('info') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'info', 'bg': 'info', 'fa': 'info', 'message': flashMessage } %}
+          {% endfor %}
+          {% for flashMessage in app.session.flashbag.get('error') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'error', 'bg': 'danger', 'fa': 'times', 'message': flashMessage } %}
+          {% endfor %}
 
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
           <div>

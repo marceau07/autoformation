@@ -16,29 +16,29 @@
     <div class="tab-content">
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
-          <a role="button" class="btn btn-primary" href="{{ path('app_course_new') }}">Ajouter un nouveau cours</a>
+          <a role="button" class="btn btn-primary" href="{{ path('app_course_new') }}">{{ 'global.btn_add'|trans }}</a>
           {# <button role="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalManagecours" onclick="showModalManagecours();">Gérer les cours</button> #}
         </div>
         <div>
-          <table class="table table-bordered table-striped" id="list_courses">
+          <table class="table table-bordered table-striped display responsive nowrap" id="list_courses">
             <thead>
               <tr>
-                <th>actions</th>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Synopsis</th>
-                <th>Keywords</th>
-                <th>Link</th>
-                <th>Position</th>
-                <th>Visitors</th>
+                <th>#</th>
+                <th>{{ 'administration.course.id'|trans }}</th>
+                <th>{{ 'administration.course.title'|trans }}</th>
+                <th>{{ 'administration.course.synopsis'|trans }}</th>
+                <th>{{ 'administration.course.keywords'|trans }}</th>
+                <th>{{ 'administration.course.link'|trans }}</th>
+                <th>{{ 'administration.course.position'|trans }}</th>
+                <th>{{ 'administration.course.visitors'|trans }}</th>
               </tr>
             </thead>
             <tbody>
               {% for course in courses %}
                 <tr>
                   <td>
-                    <a href="{{ path('app_course_show', { id: course.id }) }}">show</a>
-                    <a href="{{ path('app_course_edit', { id: course.id }) }}">edit</a>
+                    <a href="{{ path('app_course_show', { id: course.id }) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_course_edit', { id: course.id }) }}"><i class="fas fa-pen"></i></a>
                   </td>
                   <td>{{ course.id }}</td>
                   <td>{{ course.title }}</td>
@@ -50,7 +50,7 @@
                 </tr>
               {% else %}
                 <tr>
-                  <td colspan="8">no records found</td>
+                  <td colspan="8">{{ 'administration.course.no_course'|trans }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -64,17 +64,20 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_courses').DataTable().destroy();
     $('#list_courses').DataTable({
+      "destroy": true,
       "paging": true,
       "lengthChange": true,
       "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": true,
-      "responsive": true,
+      // "scrollX": true, // If you want horizontal scrolling, and not responsive
+      "responsive": {
+        "details": true // If you want to show details in a responsive way
+      },
       "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
       }
     });
   });

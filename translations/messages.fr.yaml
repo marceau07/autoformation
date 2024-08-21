@@ -1,14 +1,12 @@
 global:
-  home:
-    "Accueil"
-  modules:
-    "Modules"
-  administration:
-    "Administration"
-  mailbox:
-    "BAL"
-  faq:
-    "FAQ"
+  meta_title:
+    "Platforme andragogique"
+  meta_description:
+    "Retrouvez tous vos cours et échangez avec vos formateurs et vos camarades de cohorte sur la plateforme andragogique."
+  language_french:
+    "Français"
+  language_english:
+    "Anglais"
   btn_send:
     "Envoyer"
   btn_save:
@@ -65,10 +63,55 @@ global:
     "il y a %time% secondes"
   now:
     "à l'instant"
+  yes:
+    "Oui"
+  no:
+    "Non"
+    
+header:
+  home:
+    "Accueil"
+  modules:
+    "Modules"
+  administration:
+    "Administration"
+  mailbox:
+    "BAL"
+  faq:
+    "FAQ"
+  search:
+    "Rechercher..."
+
 
 home:
   welcome:
     "Bienvenue sur la plateforme andragogique"
+
+feedback:
+  title:
+    "Signaler un problème !"
+  form_link:
+    "Lien de la page concernée:"
+  form_category:
+    "Catégorie du problème:"
+  form_category_placeholder:
+    "Sélectionnez une catégorie..."
+  form_weight:
+    "Poids du problème:"
+  form_weight_placeholder:
+    "Sélectionnez un poids..."
+  form_weight_light:
+    "Très peu important"
+  form_weight_medium:
+    "Peu important"
+  form_weight_heavy:
+    "Important"
+  form_weight_critical:
+    "Très important"
+  form_description:
+    "Description du problème:"
+  form_description_placeholder:
+    "Décrivez le problème rencontré..."
 
 survey:
   heading:
@@ -103,6 +146,8 @@ course:
     "Pas de cours pour le moment, réessayez plus tard..."
   illustration_no_content_alt:
     "Illustration de l'absence de contenu"
+  made_by:
+    "Réalisé par %trainer%"
 
 account:
   personal_informations: 
@@ -187,3 +232,226 @@ internship:
     "Fin du stage"
   no_internship:
     "Pas de stage pour votre cohorte"
+
+footer:
+  text:
+    "Site développé par"
+  legal_notices:
+    "Mentions légales"
+  privacy_policy:
+    "Politique de confidentialité"
+
+chatbot:
+  placeholder:
+    "Que recherchez-vous ?"
+    
+administration:
+  default:
+    "Choisissez la catégorie à gérer ci-dessus...
+    Vous pouvez ajouter, modifier ou supprimer des éléments de cette catégorie."
+  course:
+    menu:
+      "Cours"
+    create:
+      "Créer un nouveau cours"
+    id:
+      "Identifiant"
+    title:
+      "Titre"
+    synopsis:
+      "Synopsis"
+    keywords:
+      "Mots-clés"
+    link:
+      "Lien"
+    position:
+      "Position"
+    visitors:
+      "Visiteurs"
+    module:
+      "Module associé"
+    trainer:
+      "Formateur rédacteur"
+    no_course:
+      "Pas de cours pour le moment, réessayez plus tard..."
+  trainer:
+    menu:
+      "Formateurs"
+    id:
+      "Identifiant"
+    lastname:
+      "Nom de famille"
+    firstname:
+      "Prénom"
+    username:
+      "Nom d'utilisateur"
+    role:
+      "Rôle"
+    active:
+      "Actif"
+    uuid:
+      "UUID"
+    email:
+      "Email"
+    phone_number:
+      "Numéro de téléphone"
+    avatar:
+      "Avatar"
+    entrance_date:
+      "Code d'entrée"
+    signature:
+      "Signature"
+    no_signature:
+      "Pas de signature pour %trainer%"
+    no_trainer:
+      "Pas de formateur pour le moment, réessayez plus tard..."
+  cohort:
+    menu:
+      "Cohortes"
+    id:
+      "Identifiant"
+    name:
+      "Nom"
+    acronym:
+      "Acronyme"
+    shield:
+      "Blason"
+    documents:
+      "Documents"
+    start_date:
+      "Date de début"
+    finish_date:
+      "Date de fin"
+    uuid:
+      "UUID"
+  trainee:
+    menu:
+      "Stagiaires"
+    id:
+      "Identifiant"
+    username:
+      "Nom d'utilisateur"
+    lastname:
+      "Nom de famille"
+    firstname:
+      "Prénom"
+    email:
+      "Email"
+    activated:
+      "Actif"
+    tmp_code:
+      "Code temporaire"
+    signature:
+      "Signature"
+    no_signature:
+      "Pas de signature pour %trainee%"
+    uuid:
+      "UUID"
+    documents:
+      "Documents"
+    no_document:
+      "Pas de document de stage"
+    diploma:
+      "Diplôme"
+    no_diploma:
+      "Pas de diplôme"
+    diploma_got_ccp1:
+      "Diplômé·e partiellement (CCP1)"
+    diploma_got_ccp2:
+      "Diplômé·e partiellement (CCP2)"
+    diploma_got_ccp3:
+      "Diplômé·e partiellement (CCP3)"
+    diploma_got_ccp1_ccp2:
+      "Diplômé·e partiellement (CCP1 et CCP2)"
+    diploma_got_ccp2_ccp3:
+      "Diplômé·e partiellement (CCP2 et CCP3)"
+    diploma_got_ccp1_ccp3:
+      "Diplômé·e partiellement (CCP1 et CCP3)"
+    diploma_not_show_up:
+      "Ne s'est pas présenté·e à l'examen"
+    diploma_full:
+      "Diplômé·e"
+    diploma_unknow:
+      "Non renseigné"
+    cohort:
+      "Cohorte"
+    no_trainee:
+      "Pas de stagiaire pour le moment, réessayez plus tard..."
+  faq:
+    menu:
+      "F.A.Q"
+    id:
+      "Identifiant"
+    theme:
+      "Thème"
+    title:
+      "Titre"
+    content:
+      "Contenu"
+    visibility:
+      "Visibilité"
+    priority:
+      "Priorité"
+    no_faq:
+      "Pas de question pour le moment, réessayez plus tard..."
+  prospect:
+    menu:
+      "Prospects"
+    id:
+      "Identifiant"
+    name:
+      "Nom"
+    siren:
+      "SIREN"
+    nic:
+      "NIC"
+    address_number:
+      "Numéro de voie"
+    address_street:
+      "Nom de la voie"
+    address_additional_information:
+      "Complément d'adresse"
+    address_zipcode:
+      "Code postal"
+    address_city:
+      "Ville"
+    address_country:
+      "Pays"
+    email:
+      "Email"
+    phone_number:
+      "Numéro de téléphone"
+    phone_number_bis:
+      "Numéro de téléphone bis"
+    no_prospect:
+      "Pas de prospect pour le moment, réessayez plus tard..."
+  internship:
+    menu:
+      "Stages"
+    id:
+      "Identifiant"
+    tutor_lastname:
+      "Nom du tuteur"
+    tutor_firstname:
+      "Prénom du tuteur"
+    tutor_email:
+      "Email du tuteur"
+    tutor_phone_number:
+      "Numéro de téléphone du tuteur"
+    no_internship:
+      "Pas de stage pour le moment, réessayez plus tard..."
+  statistic:
+    menu:
+      "Statistiques"
+    internship:
+      agreement_percentage:
+        "<b>%percentage%%</b> de conventions reçues"
+      certificate_percentage:
+        "<b>%percentage%%</b> d'attestations reçues"
+      evaluation_percentage:
+        "<b>%percentage%%</b> d'évaluations reçues"
+    cohort:
+      graduation_percentage:
+        "<b>%percentage%%</b> de réussite"
+      satisfaction_percentage:
+        "<b>%percentage%%</b> de satisfaction"

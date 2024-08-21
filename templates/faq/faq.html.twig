@@ -30,12 +30,12 @@
       </div>
       <div class="row">
         <div class="col-7 offset-5">
-          <h2 id="{{ 'global' }}" class="text-primary">Global</h2>
           {% if listFaqs is defined and listFaqs is not empty %}
+            <h2 id="{{ 'global' }}" class="text-primary">Global</h2>
             {% for faq in listFaqs %}
               {% if faq.theme == 'global' %}
                 <div class="ms-5">
-                  <h3 id="{{ faq.theme|replace({' ': '-'}) }}">{{ faq.title }}</h3>
+                  <h3>{{ faq.title }}</h3>
                   {% autoescape 'html' %}
                     <p>{{ faq.content|raw }}</p>
                   {% endautoescape %}
@@ -43,14 +43,19 @@
               {% endif %}
             {% endfor %}
 
+            {% set actualTheme = "" %}
             {% for faq in listFaqs %}
               {% if faq.theme != 'global' %}
+                {% if actualTheme != faq.theme %}
+                  <h2 id="{{ faq.theme|replace({' ': '-'}) }}" class="text-primary">{{ faq.theme|capitalize }}</h2>
+                {% endif %}
                 <div class="ms-5">
-                  <h3 id="{{ faq.theme|replace({' ': '-'}) }}">{{ faq.title }}</h3>
+                  <h3>{{ faq.title }}</h3>
                   {% autoescape 'html' %}
                     <p>{{ faq.content|raw }}</p>
                   {% endautoescape %}
                 </div>
+                {% set actualTheme = faq.theme %}
               {% endif %}
             {% endfor %}
           {% else %}

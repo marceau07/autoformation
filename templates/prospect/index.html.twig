@@ -16,53 +16,53 @@
     <div class="tab-content">
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
-          <a role="button" class="btn btn-primary" href="{{ path('app_prospect_new') }}">Ajouter un prospect</a>
+          <a role="button" class="btn btn-primary" href="{{ path('app_prospect_new') }}">{{ 'global.btn_add'|trans }}</a>
         </div>
         <div>
-          <table class="table table-bordered table-striped" style="margin: 0 auto;" id="list_prospects">
+          <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_prospects">
             <thead>
-                <tr>
-                    <th>actions</th>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Siren</th>
-                    <th>Nic</th>
-                    <th>Number</th>
-                    <th>Street</th>
-                    <th>Additional_address</th>
-                    <th>Postal_code</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Email</th>
-                    <th>Phone_number</th>
-                    <th>Phone_number_bis</th>
-                </tr>
+              <tr>
+                <th>#</th>
+                <th>{{ 'administration.prospect.id'|trans }}</th>
+                <th>{{ 'administration.prospect.name'|trans }}</th>
+                <th>{{ 'administration.prospect.siren'|trans }}</th>
+                <th>{{ 'administration.prospect.nic'|trans }}</th>
+                <th>{{ 'administration.prospect.address_number'|trans }}</th>
+                <th>{{ 'administration.prospect.address_street'|trans }}</th>
+                <th>{{ 'administration.prospect.address_additional_information'|trans }}</th>
+                <th>{{ 'administration.prospect.address_zipcode'|trans }}</th>
+                <th>{{ 'administration.prospect.address_city'|trans }}</th>
+                <th>{{ 'administration.prospect.address_country'|trans }}</th>
+                <th>{{ 'administration.prospect.email'|trans }}</th>
+                <th>{{ 'administration.prospect.phone_number'|trans }}</th>
+                <th>{{ 'administration.prospect.phone_number_bis'|trans }}</th>
+              </tr>
             </thead>
             <tbody>
             {% for prospect in prospects %}
-                <tr>
-                    <td>
-                        <a href="{{ path('app_prospect_show', {'id': prospect.id}) }}">show</a>
-                        <a href="{{ path('app_prospect_edit', {'id': prospect.id}) }}">edit</a>
-                    </td>
-                    <td>{{ prospect.id }}</td>
-                    <td>{{ prospect.name }}</td>
-                    <td>{{ prospect.siren }}</td>
-                    <td>{{ prospect.nic }}</td>
-                    <td>{{ prospect.number }}</td>
-                    <td>{{ prospect.street }}</td>
-                    <td>{{ prospect.additionalAddress }}</td>
-                    <td>{{ prospect.postalCode }}</td>
-                    <td>{{ prospect.city }}</td>
-                    <td>{{ prospect.country }}</td>
-                    <td>{{ prospect.email }}</td>
-                    <td>{{ prospect.phoneNumber }}</td>
-                    <td>{{ prospect.phoneNumberBis }}</td>
-                </tr>
+              <tr>
+                <td>
+                    <a href="{{ path('app_prospect_show', {'id': prospect.id}) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_prospect_edit', {'id': prospect.id}) }}"><i class="fas fa-pen"></i></a>
+                </td>
+                <td>{{ prospect.id }}</td>
+                <td>{{ prospect.name }}</td>
+                <td>{{ prospect.siren }}</td>
+                <td>{{ prospect.nic }}</td>
+                <td>{{ prospect.number }}</td>
+                <td>{{ prospect.street }}</td>
+                <td>{{ prospect.additionalAddress }}</td>
+                <td>{{ prospect.postalCode }}</td>
+                <td>{{ prospect.city }}</td>
+                <td>{{ prospect.country }}</td>
+                <td>{{ prospect.email }}</td>
+                <td>{{ prospect.phoneNumber }}</td>
+                <td>{{ prospect.phoneNumberBis }}</td>
+              </tr>
             {% else %}
-                <tr>
-                    <td colspan="14">no records found</td>
-                </tr>
+              <tr>
+                <td colspan="14">{{ 'administration.prosprect.no_prospect'|trans }}</td>
+              </tr>
             {% endfor %}
             </tbody>
           </table>
@@ -75,17 +75,20 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_prospects').DataTable().destroy();
     $('#list_prospects').DataTable({
+      "destroy": true,
       "paging": true,
       "lengthChange": true,
       "searching": true,
       "ordering": true,
       "info": true,
-      "autoWidth": false,
-      "responsive": true,
+      "autoWidth": true,
+      // "scrollX": true, // If you want horizontal scrolling, and not responsive
+      "responsive": {
+        "details": true // If you want to show details in a responsive way
+      },
       "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.attributes.get('_locale') == 'fr' ? 'French' : 'English' }}.json"
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
       }
     });
   });

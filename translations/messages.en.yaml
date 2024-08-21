@@ -1,14 +1,12 @@
 global:
-  home:
-    "Home"
-  modules:
-    "Modules"
-  administration:
-    "Administration"
-  mailbox:
-    "Mailbox"
-  faq:
-    "Q&A"
+  meta_title:
+    "Andragogic Platform"
+  meta_description:
+    "Follow your training courses on the andragogic platform"
+  language_french:
+    "French"
+  language_english:
+    "English"
   btn_send:
     "Send"
   btn_save:
@@ -28,7 +26,7 @@ global:
   btn_previous:
     "Previous"
   btn_confirm:
-    "confirm"
+    "Confirm"
   btn_close:
     "Close"
   btn_download:
@@ -65,10 +63,54 @@ global:
     "%time% seconds ago"
   now:
     "just now"
+  yes:
+    "Yes"
+  no:
+    "No"
+
+header:
+  home:
+    "Home"
+  modules:
+    "Modules"
+  administration:
+    "Administration"
+  mailbox:
+    "Mailbox"
+  faq:
+    "Q&A"
+  search:
+    "Search..."
 
 home:
   welcome:
     "Welcome to the andragogic platform"
+
+feedback:
+  title:
+    "Report a problem !"
+  form_link:
+    "Link of the page concerned:"
+  form_category:
+    "Category of the problem:"
+  form_category_placeholder:
+    "Choose a category..."
+  form_weight:
+    "Weight of the problem:"
+  form_weight_placeholder:
+    "Choose a weight..."
+  form_weight_light:
+    "Not important"
+  form_weight_medium:
+    "Little important"
+  form_weight_heavy:
+    "Important"
+  form_weight_critical:
+    "Very important"
+  form_description:
+    "Description of the problem:"
+  form_description_placeholder:
+    "Describe the problem here..."
 
 survey:
   heading:
@@ -103,6 +145,8 @@ course:
     "No course for the moment, try again later..."
   illustration_no_content_alt:
     "Illustration of no course"
+  made_by:
+    "Made by %trainer%"
 
 account:
   personal_informations: 
@@ -187,3 +231,225 @@ internship:
     "End internship"
   no_internship:
     "No internship for your cohort"
+
+footer:
+  text:
+    "Website created by"
+  legal_notices:
+    "Legal notices"
+  privacy_policy:
+    "Privacy policy"
+
+chatbot:
+  placeholder:
+    "What can I do for you ?"
+
+administration:
+  default:
+    "Choose a category to manage..."
+  course:
+    menu:
+      "Courses"
+    create:
+      "Create new course"
+    id:
+      "ID"
+    title:
+      "Title"
+    synopsis:
+      "Synopsis"
+    keywords:
+      "Keywords"
+    link:
+      "Link"
+    position:
+      "Position"
+    visitors:
+      "Visitors"
+    module:
+      "Associated module"
+    trainer:
+      "Redactor trainer"
+    no_course:
+      "No course for the moment, try again later..."
+  trainer:
+    menu:
+      "Trainers"
+    id:
+      "ID"
+    lastname:
+      "Lastname"
+    firstname:
+      "Firstname"
+    username:
+      "Username"
+    role:
+      "Role"
+    active:
+      "Active"
+    uuid:
+      "UUID"
+    email:
+      "Email"
+    phone_number:
+      "Phone number"
+    avatar:
+      "Avatar"
+    signature:
+      "Signature"
+    entrance_date:
+      "Entrance date"
+    no_signature:
+      "No signature for %trainer%"
+    no_trainer:
+      "No trainer for the moment, try again later..."
+  cohort:
+    menu:
+      "Cohorts"
+    id:
+      "ID"
+    name:
+      "Name"
+    acronym:
+      "Acronym"
+    shield:
+      "Shield"
+    documents:
+      "Documents"
+    start_date:
+      "Start date"
+    finish_date:
+      "Finish date"
+    uuid:
+      "UUID"
+  trainee:
+    menu:
+      "Trainees"
+    id:
+      "ID"
+    username:
+      "Username"
+    lastname:
+      "Lastname"
+    firstname:
+      "Firstname"
+    email:
+      "Email"
+    activated:
+      "Active"
+    tmp_code:
+      "Temporary code"
+    signature:
+      "Signature"
+    no_signature:
+      "No signature for %trainee%"
+    uuid:
+      "UUID"
+    documents:
+      "Documents"
+    no_document:
+      "No internship report"
+    diploma:
+      "Diploma"
+    no_diploma:
+      "No diploma"
+    diploma_got_ccp1:
+      "Partially graduated (CCP1)"
+    diploma_got_ccp2:
+      "Partially graduated (CCP2)"
+    diploma_got_ccp3:
+      "Partially graduated (CCP3)"
+    diploma_got_ccp1_ccp2:
+      "Partially graduated (CCP1 and CCP2)"
+    diploma_got_ccp1_ccp3:
+      "Partially graduated (CCP1 and CCP3)"
+    diploma_got_ccp2_ccp3:
+      "Partially graduated (CCP2 and CCP3)"
+    diploma_not_show_up:
+      "Did not show up"
+    diploma_full:
+      "Graduated"
+    diploma_unknow:
+      "Unknown"
+    cohort:
+      "Cohort"
+    no_trainee:
+      "No trainee for the moment, try again later..."
+  faq:
+    menu:
+      "Q&A"
+    id:
+      "ID"
+    theme:
+      "Theme"
+    title:
+      "Title"
+    content:
+      "Content"
+    visibility:
+      "Visibility"
+    priority:
+      "Priority"
+    no_faq:
+      "No question for the moment, try again later..."
+  prospect:
+    menu:
+      "Prospects"
+    id:
+      "ID"
+    name:
+      "Name"
+    siren:
+      "SIREN"
+    nic:
+      "NIC"
+    address_number:
+      "Number"
+    address_street:
+      "Street"
+    address_additional_information:
+      "Additional information"
+    address_zipcode:
+      "Zipcode"
+    address_city:
+      "City"
+    address_country:
+      "Country"
+    email:
+      "Email"
+    phone_number:
+      "Phone number"
+    phone_number_bis:
+      "Phone number bis"
+    no_prospect:
+      "No prospect for the moment, try again later..."
+  internship:
+    menu:
+      "Internships"
+    id:
+      "ID"
+    tutor_lastname:
+      "Tutor lastname"
+    tutor_firstname:
+      "Tutor firstname"
+    tutor_email:
+      "Tutor email"
+    tutor_phone_number:
+      "Tutor phone number"
+    no_internship:
+      "No internship for the moment, try again later..."
+  statistic:
+    menu:
+      "Statistics"
+    internship:
+      agreement_percentage:
+        "<b>%percentage%%</b> of received agreements"
+      certificate_percentage:
+        "<b>%percentage%%</b> of received certificates"
+      evaluation_percentage:
+        "<b>%percentage%%</b> of received evaluations"
+    cohort:
+      graduation_percentage:
+        "<b>%percentage%%</b> of graduated trainees"
+      satisfaction_percentage:
+        "<b>%percentage%%</b> of satisfied trainees"

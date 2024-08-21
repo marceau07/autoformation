@@ -16,38 +16,38 @@
     <div class="tab-content">
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
-          <a role="button" class="btn btn-primary" href="{{ path('app_faq_new') }}">Ajouter une FAQ</a>
+          <a role="button" class="btn btn-primary" href="{{ path('app_faq_new') }}">{{ 'global.btn_add'|trans }}</a>
         </div>
         <div>
-          <table class="table table-bordered table-striped" style="margin: 0 auto;" id="list_faqs">
+          <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_faqs">
             <thead>
                 <tr>
-                    <th>actions</th>
-                    <th>Id</th>
-                    <th>Theme</th>
-                    <th>Title</th>
-                    <th>Content</th>
-                    <th>Visibility</th>
-                    <th>Priority</th>
+                  <th>#</th>
+                  <th>{{ 'administration.faq.id'|trans }}</th>
+                  <th>{{ 'administration.faq.theme'|trans }}</th>
+                  <th>{{ 'administration.faq.title'|trans }}</th>
+                  <th>{{ 'administration.faq.content'|trans }}</th>
+                  <th>{{ 'administration.faq.visibility'|trans }}</th>
+                  <th>{{ 'administration.faq.priority'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
             {% for faq in faqs %}
                 <tr>
-                    <td class="text-center">
-                        <a href="{{ path('app_faq_show', { id: faq.id }) }}"><i class="fas fa-eye"></i></a>
-                        <a href="{{ path('app_faq_edit', { id: faq.id }) }}"><i class="fas fa-pen"></i></a>
-                    </td>
-                    <td>{{ faq.id }}</td>
-                    <td>{{ faq.theme }}</td>
-                    <td>{{ faq.title }}</td>
-                    <td>{{ faq.content }}</td>
-                    <td>{{ faq.visibility ? 'Yes' : 'No' }}</td>
-                    <td>{{ faq.priority }}</td>
+                  <td class="text-center">
+                    <a href="{{ path('app_faq_show', { id: faq.id }) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_faq_edit', { id: faq.id }) }}"><i class="fas fa-pen"></i></a>
+                  </td>
+                  <td>{{ faq.id }}</td>
+                  <td>{{ faq.theme }}</td>
+                  <td>{{ faq.title }}</td>
+                  <td>{{ faq.content }}</td>
+                  <td>{{ faq.visibility ? 'global.yes'|trans : 'global.no'|trans }}</td>
+                  <td>{{ faq.priority }}</td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">no records found</td>
+                  <td colspan="7">{{ 'administration.faq.no_faq'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -61,17 +61,20 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_faqs').DataTable().destroy();
     $('#list_faqs').DataTable({
+      "destroy": true,
       "paging": true,
       "lengthChange": true,
       "searching": true,
       "ordering": true,
       "info": true,
-      "autoWidth": false,
-      "responsive": true,
+      "autoWidth": true,
+      // "scrollX": true, // If you want horizontal scrolling, and not responsive
+      "responsive": {
+        "details": true // If you want to show details in a responsive way
+      },
       "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.attributes.get('_locale') == 'fr' ? 'French' : 'English' }}.json"
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
       }
     });
   });

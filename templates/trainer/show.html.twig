@@ -6,79 +6,85 @@
 
 {% block main %}
   <h1>Trainer</h1>
+  <a href="{{ path('app_trainer_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
 
-  <table class="table table-responsive">
-    <tbody>
-      <tr>
-        <th>Id</th>
-        <td>{{ trainer.id }}</td>
-      </tr>
-      <tr>
-        <th>Username</th>
-        <td>{{ trainer.username }}</td>
-      </tr>
-      <tr>
-        <th>LastName</th>
-        <td>{{ trainer.lastName }}</td>
-      </tr>
-      <tr>
-        <th>FirstName</th>
-        <td>{{ trainer.firstName }}</td>
-      </tr>
-      <tr>
-        <th>Roles</th>
-        <td>{{ trainer.roles ? trainer.roles|json_encode:'' }}</td>
-      </tr>
-      <tr>
-        <th>Password</th>
-        <td>{{ trainer.password }}</td>
-      </tr>
-      <tr>
-        <th>Email</th>
-        <td>{{ trainer.email }}</td>
-      </tr>
-      <tr>
-        <th>Activated</th>
-        <td>{{ trainer.activated ? 'Yes' : 'No' }}</td>
-      </tr>
-      <tr>
-        <th>TmpCode</th>
-        <td>{{ trainer.tmpCode }}</td>
-      </tr>
-      <tr>
-        <th>TmpCodeDate</th>
-        <td>{{ trainer.tmpCodeDate ? trainer.tmpCodeDate|date('Y-m-d H:i:s') : '' }}</td>
-      </tr>
-      <tr>
-        <th>Signature</th>
-        <td>{{ trainer.signature }}</td>
-      </tr>
-      <tr>
-        <th>Uuid</th>
-        <td>{{ trainer.uuid }}</td>
-      </tr>
-      <tr>
-        <th>Role</th>
-        <td>{{ trainer.role }}</td>
-      </tr>
-      <tr>
-        <th>PhoneNumber</th>
-        <td>{{ trainer.phoneNumber }}</td>
-      </tr>
-      <tr>
-        <th>EntranceCode</th>
-        <td>{{ trainer.entranceCode }}</td>
-      </tr>
-      <tr>
-        <th>EntranceCodeDate</th>
-        <td>{{ trainer.entranceCodeDate ? trainer.entranceCodeDate|date('Y-m-d H:i:s') : '' }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>Id</th>
+          <td>{{ trainer.id }}</td>
+        </tr>
+        <tr>
+          <th>Username</th>
+          <td>{{ trainer.username }}</td>
+        </tr>
+        <tr>
+          <th>LastName</th>
+          <td>{{ trainer.lastName }}</td>
+        </tr>
+        <tr>
+          <th>FirstName</th>
+          <td>{{ trainer.firstName }}</td>
+        </tr>
+        <tr>
+          <th>Roles</th>
+          <td>{{ trainer.roles ? trainer.roles|json_encode:'' }}</td>
+        </tr>
+        <tr>
+          <th>Password</th>
+          <td>{{ trainer.password }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ trainer.email }}</td>
+        </tr>
+        <tr>
+          <th>Activated</th>
+          <td>{{ trainer.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
+        </tr>
+        <tr>
+          <th>TmpCode</th>
+          <td>{{ trainer.tmpCode }}</td>
+        </tr>
+        <tr>
+          <th>TmpCodeDate</th>
+          <td>{{ trainer.tmpCodeDate ? trainer.tmpCodeDate|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+          <th>Signature</th>
+          <td>{% if trainer.signature is defined and trainer.signature is not empty %}
+            <img src="{{ trainer.signature }}" alt="Signature de {{ trainer.username }}">
+            {% else %}
+            Pas de signature pour {{ trainer.username }}
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Uuid</th>
+          <td>{{ trainer.uuid }}</td>
+        </tr>
+        <tr>
+          <th>Role</th>
+          <td>{{ trainer.role }}</td>
+        </tr>
+        <tr>
+          <th>PhoneNumber</th>
+          <td>{{ trainer.phoneNumber }}</td>
+        </tr>
+        <tr>
+          <th>EntranceCode</th>
+          <td>{{ trainer.entranceCode }}</td>
+        </tr>
+        <tr>
+          <th>EntranceCodeDate</th>
+          <td>{{ trainer.entranceCodeDate ? trainer.entranceCodeDate|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <a href="{{ path('app_trainer_index') }}">back to list</a>
-
-  <a href="{{ path('app_trainer_edit', { id: trainer.id }) }}">edit</a>
+  <a href="{{ path('app_trainer_edit', { uuid: trainer.uuid }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
 
   {{ include('trainer/_delete_form.html.twig') }}
 {% endblock %}

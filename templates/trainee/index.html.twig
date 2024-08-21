@@ -16,25 +16,25 @@
     <div class="tab-content">
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
-          <a role="button" class="btn btn-primary" href="{{ path('app_trainee_new') }}">Ajouter un·e stagiaire</a>
+          <a role="button" class="btn btn-primary" href="{{ path('app_trainee_new') }}">{{ 'global.btn_add'|trans }}</a>
         </div>
         <div>
-          <table class="table table-bordered table-striped" style="margin: 0 auto;" id="list_trainees">
+          <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_trainees">
             <thead>
               <tr>
-                <th>actions</th>
-                <th>Id</th>
-                <th>Username</th>
-                <th>LastName</th>
-                <th>FirstName</th>
-                <th>Email</th>
-                <th>Activated</th>
-                <th>TmpCode</th>
-                <th>Signature</th>
-                <th>Uuid</th>
-                <th>Documents</th>
-                <th>Diploma</th>
-                <th>Cohorte</th>
+                <th>#</th>
+                <th>{{ 'administration.trainee.id'|trans }}</th>
+                <th>{{ 'administration.trainee.username'|trans }}</th>
+                <th>{{ 'administration.trainee.lastname'|trans }}</th>
+                <th>{{ 'administration.trainee.firstname'|trans }}</th>
+                <th>{{ 'administration.trainee.email'|trans }}</th>
+                <th>{{ 'administration.trainee.activated'|trans }}</th>
+                <th>{{ 'administration.trainee.tmp_code'|trans }}</th>
+                <th>{{ 'administration.trainee.signature'|trans }}</th>
+                <th>{{ 'administration.trainee.uuid'|trans }}</th>
+                <th>{{ 'administration.trainee.documents'|trans }}</th>
+                <th>{{ 'administration.trainee.diploma'|trans }}</th>
+                <th>{{ 'administration.trainee.cohort'|trans }}</th>
               </tr>
             </thead>
             <tbody>
@@ -49,12 +49,12 @@
                   <td>{{ trainee.lastName }}</td>
                   <td>{{ trainee.firstName }}</td>
                   <td>{{ trainee.email }}</td>
-                  <td>{{ trainee.activated ? 'Yes' : 'No' }}</td>
+                  <td>{{ trainee.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
                   <td>{{ trainee.tmpCode }}</td>
                   <td>{% if trainee.signature is defined and trainee.signature is not empty %}
                     <img src="{{ trainee.signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
                     {% else %}
-                    Pas de signature pour {{ trainee.username }}
+                    {{ 'administration.trainee.no_signature'|trans({'%trainee%': trainee.username}) }}
                     {% endif %}
                   </td>
                   <td>{{ trainee.uuid }}</td>
@@ -88,15 +88,15 @@
                         
                       {% endfor %}
                     {% else %}
-                      Aucun document de stage trouvé
+                      {{ 'administration.trainee.no_document'|trans }}
                     {% endif %}
                   </td>
-                  <td>{{ trainee.getDiplomaLabel }}</td>
+                  <td>{{ trainee.getDiplomaLabel|trans }}</td>
                   <td>{{ trainee.cohort.name }}</td>
                 </tr>
               {% else %}
                 <tr>
-                  <td colspan="13">no records found</td>
+                  <td colspan="13">{{ 'administration.trainee.no_trainee'|trans }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -110,17 +110,20 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_trainees').DataTable().destroy();
     $('#list_trainees').DataTable({
+      "destroy": true,
       "paging": true,
       "lengthChange": true,
       "searching": true,
       "ordering": true,
       "info": true,
-      "autoWidth": false,
-      "responsive": true,
+      "autoWidth": true,
+      // "scrollX": true, // If you want horizontal scrolling, and not responsive
+      "responsive": {
+        "details": true // If you want to show details in a responsive way
+      },
       "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.attributes.get('_locale') == 'fr' ? 'French' : 'English' }}.json"
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
       }
     });
   });

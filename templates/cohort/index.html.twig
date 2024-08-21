@@ -16,29 +16,29 @@
     <div class="tab-content">
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
-          <a role="button" class="btn btn-primary" href="{{ path('app_cohort_new') }}">Ajouter une cohorte</a>
+          <a role="button" class="btn btn-primary" href="{{ path('app_cohort_new') }}">{{ 'global.btn_add'|trans }}</a>
         </div>
         <div>
-          <table class="table table-bordered table-striped" style="margin: 0 auto;" id="list_cohorts">
+          <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_cohorts">
             <thead>
               <tr>
-                <th>actions</th>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Acronym</th>
-                <th>Shield</th>
-                <th>Documents</th>
-                <th>StartDate</th>
-                <th>FinishDate</th>
-                <th>Uuid</th>
+                <th>#</th>
+                <th>{{ 'administration.cohort.id'|trans }}</th>
+                <th>{{ 'administration.cohort.name'|trans }}</th>
+                <th>{{ 'administration.cohort.acronym'|trans }}</th>
+                <th>{{ 'administration.cohort.shield'|trans }}</th>
+                <th>{{ 'administration.cohort.documents'|trans }}</th>
+                <th>{{ 'administration.cohort.start_date'|trans }}</th>
+                <th>{{ 'administration.cohort.finish_date'|trans }}</th>
+                <th>{{ 'administration.cohort.uuid'|trans }}</th>
               </tr>
             </thead>
             <tbody>
               {% for cohort in cohorts %}
                 <tr>
                   <td>
-                    <a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">show</a>
-                    <a href="{{ path('app_cohort_edit', { uuid: cohort.uuid }) }}">edit</a>
+                    <a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_cohort_edit', { uuid: cohort.uuid }) }}"><i class="fas fa-pen"></i></a>
                   </td>
                   <td>{{ cohort.id }}</td>
                   <td>{{ cohort.name }}</td>
@@ -66,15 +66,19 @@
 <script>
   $(document).ready(function() {
     $('#list_cohorts').DataTable({
+      "destroy": true,
       "paging": true,
       "lengthChange": true,
       "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": true,
-      "responsive": true,
+      // "scrollX": true, // If you want horizontal scrolling, and not responsive
+      "responsive": {
+        "details": true // If you want to show details in a responsive way
+      },
       "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
       }
     });
   });

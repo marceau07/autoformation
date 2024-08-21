@@ -7,9 +7,9 @@
 {% block main %}
   <h1>Edit Cohort</h1>
 
-  {{ include('cohort/_form.html.twig', { button_label: 'Update' }) }}
+  {{ include('cohort/_form.html.twig', { button_label: 'global.btn_save'|trans }) }}
 
-  <a href="{{ path('app_cohort_index') }}">back to list</a>
+  <a href="{{ path('app_cohort_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
 
   {{ include('cohort/_delete_form.html.twig') }}
 {% endblock %}

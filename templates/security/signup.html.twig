@@ -17,9 +17,18 @@
       </div>
       <div class="col-12">
         <form method="post" href="{{ path('app_signup', { uuid: uuid, code: code }) }}">
+          {% for flashMessage in app.session.flashbag.get('notice') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'success', 'bg': 'success', 'fa': 'bell', 'message': flashMessage } %}
+          {% endfor %}
+          {% for flashMessage in app.session.flashbag.get('info') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'info', 'bg': 'info', 'fa': 'info', 'message': flashMessage } %}
+          {% endfor %}
+          {% for flashMessage in app.session.flashbag.get('error') %}
+            {% include '_components/_alert.html.twig' with { 'type': 'error', 'bg': 'danger', 'fa': 'times', 'message': flashMessage } %}
+          {% endfor %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('signup') }}" />
           <div>
-            <label for="form_signup_password" class="text-white">Code reçu (6 chiffres, valable 1 semaine)</label>
+            <label for="form_signup_password" class="text-white">Nouveau mot de passe</label>
             <input type="password" name="form_signup_password" placeholder="monSuperM0tDeP4sse!" autocomplete="new-password" />
           </div>
           <p>

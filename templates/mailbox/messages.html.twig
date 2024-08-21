@@ -29,7 +29,7 @@
       <input type="hidden" name="form_origin" value="{{ cohort is defined and cohort is not empty ? 'cohort' : trainee is defined ? 'trainee' : 'trainer' }}" />
       <input type="hidden" name="form_sender_uuid" value="{{ app.user.uuid }}" />
       <input type="hidden" name="form_receiver_uuid" value="{{ uuid }}" />
-      <input type="text" name="form_message" id="form_message" placeholder="{{ 'mailbox.start_typing_here'|trans }}" class="form-control w-75" autocomplete="off" />
+      <input type="text" name="form_message" id="form_message" placeholder="{{ 'mailbox.start_typing_here'|trans }}" class="form-control" style="width: 77%;" autocomplete="off" />
       <input type="submit" class="d-none" value="Envoyer" id="form-btn-send" />
       <a href="#" class="btn btn-success" onclick="$('#form-btn-send').click();"><i class="fa-solid fa-paper-plane"></i>&nbsp;{{ 'global.btn_send'|trans }}</a>
     </form>

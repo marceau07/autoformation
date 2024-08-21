@@ -19,20 +19,20 @@
             <div class="col-4">
                 <div class="border border-top-0" style="border-top: 3px solid var(--coul-principale) !important; height: 300px;">
                     <div class="pt-3 px-3 h5">
-                        Stage
+                        {{ 'administration.internship.menu'|trans }}
                     </div>
                     <hr>
                     <div class="pb-3 px-3">
                         <div class="row" style="height: 10vh;">
                             <div class="col-6">
                                 <div class="border border-primary h-100 p-2">
-                                    <span><b>{{ (ratio_agreement * 100)|number_format(2, ',', ' ') }}%</b> de conventions reçues</span>
+                                    <span>{{ 'administration.statistic.internship.agreement_percentage'|trans({ '%percentage%': (ratio_agreement * 100)|number_format(2, ',', ' ') })|striptags('<b>')|raw }}</span>
                                     <p>{{ ratio_agreement_label }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="border border-secondary h-100 p-2">
-                                    <span><b>{{ (ratio_certificate * 100)|number_format(2, ',', ' ') }}%</b> d'attestations reçues</span>
+                                    <span>{{ 'administration.statistic.internship.certificate_percentage'|trans({ '%percentage%': (ratio_certificate * 100)|number_format(2, ',', ' ') })|striptags('<b>')|raw }}</span>
                                     <p>{{ ratio_certificate_label }}</p>
                                 </div>
                             </div>
@@ -42,17 +42,10 @@
                         <div class="row" style="height: 10vh;">
                             <div class="col-6">
                                 <div class="border border-primary h-100 p-2">
-                                    <span><b>{{ (ratio_evaluation * 100)|number_format(2, ',', ' ') }}%</b> d'évaluations reçues</span>
+                                    <span>{{ 'administration.statistic.internship.evaluation_percentage'|trans({ '%percentage%': (ratio_evaluation * 100)|number_format(2, ',', ' ') })|striptags('<b>')|raw }}</span>
                                     <p>{{ ratio_evaluation_label }}</p>
                                 </div>
                             </div>
-                            {# TODO: virer cet élément si non nécessaire #}
-                            {# <div class="col-6">
-                                <div class="border border-primary h-100 p-2">
-                                    <span><b id="ratio_valeur_stage_presence">{{ ratio_agreement }}%</b> de présence reçues</span>
-                                    <p id="ratio_libelle_stage_presence"></p>
-                                </div>
-                            </div> #}
                         </div>
                     </div>
                 </div>
@@ -60,21 +53,21 @@
             <div class="col-4">
                 <div class="border border-top-0" style="border-top: 3px solid var(--coul-principale) !important; height: 300px;">
                     <div class="pt-3 px-3 h5">
-                        Session
+                        {{ 'administration.cohort.menu'|trans }}
                     </div>
                     <hr>
                     <div class="pb-3 px-3">
                         <div class="row" style="height: 10vh;">
                             <div class="col-6">
                                 <div class="border border-primary h-100 p-2">
-                                    <span><b id="ratio_valeur_session_reussite">XXX%</b> de réussite</span>
-                                    <p id="ratio_libelle_session_reussite"></p>
+                                    <span>{{ 'administration.statistic.cohort.graduation_percentage'|trans({ '%percentage%': (0 * 100)|number_format(2, ',', ' ') })|striptags('<b>')|raw }}</span>
+                                    <p></p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="border border-secondary h-100 p-2">
-                                    <span><b id="ratio_valeur_session_satisfaction">XXX%</b> de satisfaction</span>
-                                    <p id="ratio_libelle_session_satisfaction"></p>
+                                    <span>{{ 'administration.statistic.cohort.satisfaction_percentage'|trans({ '%percentage%': (0 * 100)|number_format(2, ',', ' ') })|striptags('<b>')|raw }}</span>
+                                    <p></p>
                                 </div>
                             </div>
                         </div>

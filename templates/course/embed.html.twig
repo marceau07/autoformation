@@ -26,8 +26,9 @@
         <h2>[{{ course.module.label }}] - {{ course.title }}</h2>
       </div>
       {% if is_granted('ROLE_TRAINER') %}
+        {# TODO: currently not working #}
         <div class="col-3 mt-2 mb-2 float-end text-end">
-          <button role="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAjouterRessource">Ajouter une ressource</button>
+          <button role="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddResource">Ajouter une ressource</button>
         </div>
       {% else %}
         <div class="col-3 mt-2 mb-2 float-end text-end"></div>
@@ -129,11 +130,11 @@
     </div>
   </div>
 
-  <div class="modal fade" id="modalAjouterRessource" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAjouterRessourceTitle" aria-hidden="true">
+  <div class="modal fade" id="modalAddResource" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddResourceTitle" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalAjouterRessourceTitle">Ajouter une ressource</h5>
+          <h5 class="modal-title" id="modalAddResourceTitle">Ajouter une ressource</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
