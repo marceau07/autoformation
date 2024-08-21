@@ -84,19 +84,25 @@ class Trainee extends User implements UserInterface
     {
         switch ($this->diploma) {
             case 0:
-                return "Pas de diplôme";
+                return "administration.trainee.no_diploma";
             case -1:
-                return "Diplômé·e partiellement (CCP1)";
+                return "administration.trainee.diploma_got_ccp1";
             case -2:
-                return "Diplômé·e partiellement (CCP2)";
+                return "administration.trainee.diploma_got_ccp2";
             case -3:
-                return "Diplômé·e partiellement (CCP3)";
+                return "administration.trainee.diploma_got_ccp3";
             case -4:
-                return "Ne s'est pas présenté·e à l'examen";
+                return "administration.trainee.diploma_not_show_up";
+            case -5:
+                return "administration.trainee.diploma_got_ccp1_ccp2";
+            case -6:
+                return "administration.trainee.diploma_got_ccp2_ccp3";
+            case -7:
+                return "administration.trainee.diploma_got_ccp1_ccp3";
             case 1:
-                return "Diplômé·e";
+                return "administration.trainee.diploma_full";
             default:
-                return "Non renseigné";
+                return "administration.trainee.diploma_unknow";
         }
     }
 

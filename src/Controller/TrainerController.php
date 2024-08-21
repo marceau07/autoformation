@@ -44,17 +44,18 @@ class TrainerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trainer_show', methods: ['GET'])]
-    public function show(Trainer $trainer): Response
+    #[Route('/{uuid}', name: 'app_trainer_show', methods: ['GET'])]
+    public function show(TrainerRepository $trainerRepository, string $uuid): Response
     {
         return $this->render('trainer/show.html.twig', [
-            'trainer' => $trainer,
+            'trainer' => $trainerRepository->findOneBy(['uuid' => $uuid]),
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_trainer_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Trainer $trainer, EntityManagerInterface $entityManager): Response
+    #[Route('/{uuid}/edit', name: 'app_trainer_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, TrainerRepository $trainerRepository, EntityManagerInterface $entityManager, string $uuid): Response
     {
+        $trainer = $trainerRepository->findOneBy(['uuid' => $uuid]);
         $form = $this->createForm(TrainerType::class, $trainer);
         $form->handleRequest($request);
 
@@ -70,9 +71,10 @@ class TrainerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trainer_delete', methods: ['POST'])]
-    public function delete(Request $request, Trainer $trainer, EntityManagerInterface $entityManager): Response
+    #[Route('/{uuid}', name: 'app_trainer_delete', methods: ['POST'])]
+    public function delete(Request $request, TrainerRepository $trainerRepository, EntityManagerInterface $entityManager, string $uuid): Response
     {
+        $trainer = $trainerRepository->findOneBy(['uuid' => $uuid]);
         if ($this->isCsrfTokenValid('delete' . $trainer->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trainer);
             $entityManager->flush();

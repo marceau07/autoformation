@@ -34,6 +34,12 @@ class CourseRepository extends ServiceEntityRepository
     public function searchCourses(string $search): array
     {
         return $this->createQueryBuilder('c')
+            ->innerJoin('c.trainer', 't')
+            ->innerJoin('c.module', 'cm')
+            ->innerJoin('c.courseTrainees', 'ct')
+            ->innerJoin('ct.trainee', 'tr')
+            ->innerJoin('tr.cohort', 'co')
+            ->innerJoin('co.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND co.id = cc.cohort AND cc.active = 1')
             ->where('c.title LIKE :q OR c.keywords LIKE :q')
             ->setParameter('q', '%' . $search . '%')
             ->getQuery()

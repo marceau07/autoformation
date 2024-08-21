@@ -92,6 +92,11 @@ class SecurityController extends AbstractController
             $user = $userRepository->findOneBy(['tmpCode' => $request->getPayload()->get('form_signup_code')]);
             if (isset($user) && !empty($user) && $user instanceof User) {
                 return $this->redirectToRoute('app_signup', ['uuid' => $user->getUuid(), 'code' => $user->getTmpCode()]);
+            } else {
+                $this->addFlash(
+                    'error',
+                    'Une erreur s\'est produite, veuillez réessayer !'
+                );
             }
         }
 
@@ -125,7 +130,17 @@ class SecurityController extends AbstractController
                 $email->html("Un nouveau mdp a été défini sur votre compte !");
 
                 $mailer->send($email);
+                $this->addFlash(
+                    'notice',
+                    'Votre mot de passe a bien été modifié !'
+                );
+
                 return $this->redirectToRoute('app_login');
+            } else {
+                $this->addFlash(
+                    'error',
+                    'Une erreur est survenue lors de la modification de votre mot de passe !'
+                );
             }
         }
         return $this->render('security/signup.html.twig', [

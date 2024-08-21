@@ -36,31 +36,6 @@ class DefaultController extends AbstractController
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
-    #[Route('/get_notifications', name: 'app_get_notifications', methods: "GET")]
-    public function notifications(Request $request, SerializerInterface $serializer, CourseRepository $courseRepository): Response
-    {
-        if ($request->isXmlHttpRequest()) {
-            $search = $request->request->get('q');
-
-            $courses = $courseRepository->searchCourses($search);
-            return $this->json(
-                [
-                    'success' => true,
-                    'courses' => json_decode($serializer->serialize($courses, 'json', ['groups' => ['course_search']]), true),
-                ],
-                status: 200
-            );
-        }
-        return $this->json(
-            [
-                'success' => false,
-                'message' => "Veuillez passer par le module de recherche...",
-            ],
-            status: Response::HTTP_BAD_REQUEST
-        );
-    }
-
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/feedback', name: 'app_feedback', methods: "POST")]
     public function feedback(FeedbackCategoryRepository $feedbackCategoryRepository, EntityManagerInterface $entityManager, Request $request): Response
     {

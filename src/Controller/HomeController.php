@@ -186,7 +186,11 @@ class HomeController extends AbstractController
             $messages = $messageRepository->getMessagesBetweenTrainers($currentUser->getUuid(), $contact->getUuid());
         }
 
-        $messageRepository->makeMessageReaded();
+        foreach ($messages as $message) {
+            if ($message->getTrainer() !== null && $message->getTrainer()->getId() == $currentUser->getId() || $message->getTrainee() !== null && $message->getTrainee()->getId() == $currentUser->getId()) {
+                $messageRepository->makeMessageReaded($message->getId());
+            }
+        }
 
         return $this->render('mailbox/index.html.twig', [
             'cohorts' => ($this->isGranted('ROLE_TRAINER') ? $cohortRepository->findAll() : [$traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()]),
@@ -198,19 +202,25 @@ class HomeController extends AbstractController
     }
 
     #[Route('/q&a', name: 'app_q_and_a', methods: "GET")]
-    public function faq(FaqRepository $faqRepository): Response
+    public function faq(FaqRepository $faqRepository, TraineeRepository $traineeRepository, TrainerRepository $trainerRepository): Response
     {
-        // TODO: changer les id pour les thèmes et les faqs
+        $sectorId = null;
+        if($this->isGranted('ROLE_TRAINEE') === true) {
+            $sectorId = $traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])->getCohort()->getTrainer()->getSector()->getId();
+        } elseif($this->isGranted('ROLE_TRAINER') === true) {
+            $sectorId = $trainerRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])->getSector()->getId();
+        }
+
         return $this->render('faq/faq.html.twig', [
-            'listThemes' => $faqRepository->getThemes(4),
-            'listFaqs' => $faqRepository->getFaqs(4)
+            'listThemes' => $faqRepository->getThemes($sectorId),
+            'listFaqs' => $faqRepository->getFaqs($sectorId)
         ]);
     }
 
-    #[Route('/legal-notice', name: 'app_legal_notice', methods: "GET")]
-    public function legalNotice(): Response
+    #[Route('/legal-notices', name: 'app_legal_notices', methods: "GET")]
+    public function legalNotices(): Response
     {
-        return $this->render('home/legal_notice.html.twig', [
+        return $this->render('home/legal_notices.html.twig', [
             'serverName' => $_SERVER["SERVER_NAME"]
         ]);
     }

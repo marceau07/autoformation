@@ -7,6 +7,7 @@ use App\Entity\Sector;
 use App\Entity\Trainer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +19,9 @@ class TrainerType extends AbstractType
             ->add('username')
             ->add('lastName')
             ->add('firstName')
-            ->add('roles')
+            ->add('roles', TextType::class, [
+                'mapped' => false,
+            ])
             ->add('password')
             ->add('email')
             ->add('activated')

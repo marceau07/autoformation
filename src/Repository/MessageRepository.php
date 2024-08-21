@@ -91,13 +91,13 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     # TODO: Make this method retieving only the messages that are not readed for the current user in the current conversation 
-    public function makeMessageReaded()
+    public function makeMessageReaded(int $idMessage)
     {
         return $this->createQueryBuilder('m')
             ->update('App\Entity\Message', 'm')
             ->set('m.readed', true)
-            ->where('m.id = 1')
-            // ->setParameter('uuid', $uuid)
+            ->where('m.id=:idMessage')
+            ->setParameter(':idMessage', $idMessage)
             ->getQuery()
             ->execute();
     }

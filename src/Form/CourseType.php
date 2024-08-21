@@ -15,7 +15,7 @@ class CourseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title', null, [])
             ->add('synopsis')
             ->add('keywords')
             ->add('link')
@@ -23,7 +23,7 @@ class CourseType extends AbstractType
             ->add('visitors')
             ->add('module', EntityType::class, [
                 'class' => CourseModule::class,
-                'choice_label' => 'id',
+                'choice_label' => 'label',
             ])
             ->add('trainer', EntityType::class, [
                 'class' => User::class,

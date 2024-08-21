@@ -142,7 +142,7 @@
 }
 
 .dropdown-container .dropdown .notification-group.expanded .notification-list {
-    height: 250px;
+    height: 100px;
     max-height: 250px;
     transition: height 0.5s;
 }

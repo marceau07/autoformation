@@ -21,26 +21,40 @@ class FaqRepository extends ServiceEntityRepository
         parent::__construct($registry, Faq::class);
     }
 
-    public function getThemes($idSector = null): array|bool
+    public function getThemes($idSector = null): array
     {
-        $bdd = $this->getEntityManager()->getConnection();
+        return $this->createQueryBuilder('f')
+            ->where('(f.sector=:idSector OR f.sector IS NULL)')
+            ->setParameter(':idSector', $idSector)
+            ->groupBy('f.theme')
+            ->getQuery()
+            ->getResult();
 
-        $query = $bdd->executeQuery(
-            'SELECT s.*, f.* FROM sector s INNER JOIN faq f WHERE (s.id = f.sector_id) AND (sector_id=:idSector OR sector_id IS NULL) GROUP BY f.theme', 
-            ['idSector' => $idSector]
-        );
-        return $query->fetchAllAssociative();
+        // $bdd = $this->getEntityManager()->getConnection();
+
+        // $query = $bdd->executeQuery(
+        //     'SELECT s.*, f.* FROM sector s INNER JOIN faq f WHERE (s.id = f.sector_id) AND (sector_id=:idSector OR sector_id IS NULL) GROUP BY f.theme', 
+        //     ['idSector' => $idSector]
+        // );
+        // return $query->fetchAllAssociative();
     }
 
-    public function getFaqs($idSector = null): array|bool
+    public function getFaqs($idSector = null): array
     {
-        $bdd = $this->getEntityManager()->getConnection();
+        return $this->createQueryBuilder('f')
+            ->where('(f.sector=:idSector OR f.sector IS NULL)')
+            ->andWhere('f.visibility = TRUE')
+            ->setParameter(':idSector', $idSector)
+            ->orderBy('f.sector, f.title')
+            ->getQuery()
+            ->getResult();
+        // $bdd = $this->getEntityManager()->getConnection();
 
-        $query = $bdd->executeQuery(
-            'SELECT s.*, f.* FROM sector s INNER JOIN faq f WHERE (s.id = f.sector_id) AND visibility IS TRUE AND (f.sector_id=:idSector OR f.sector_id IS NULL) ORDER BY f.sector_id, f.title', 
-            ['idSector' => $idSector]
-        );
-        return $query->fetchAllAssociative();
+        // $query = $bdd->executeQuery(
+        //     'SELECT s.*, f.* FROM sector s INNER JOIN faq f WHERE (s.id = f.sector_id) AND visibility IS TRUE AND (f.sector_id=:idSector OR f.sector_id IS NULL) ORDER BY f.sector_id, f.title', 
+        //     ['idSector' => $idSector]
+        // );
+        // return $query->fetchAllAssociative();
     }
 
     //    /**

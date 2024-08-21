@@ -25,6 +25,7 @@
 
 .height-message-scroll2 {
     overflow-y: auto;
+    max-height: 80%;
 }
 
 .msg {
