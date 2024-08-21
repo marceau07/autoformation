@@ -4,7 +4,7 @@
   {% for element in elements %}
     <li class="nav-item">
       {# By default, the nav-link element gets also: data-bs-toggle="tab" #}
-      <a class="nav-link {{ element == choosenElement ? 'active' : '' }}" href="{{ path('app_' ~ (element|lower) ~ '_index') }}">{{ (element|capitalize) ~ 's' }}</a>
+      <a class="nav-link {{ element == choosenElement ? 'active' : '' }}" href="{{ path('app_' ~ (element|lower) ~ '_index') }}">{{ ('administration.' ~ element ~ '.menu')|trans }}</a>
     </li>
   {% endfor %}
 </ul>

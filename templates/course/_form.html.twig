@@ -1,4 +1,16 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="row">
+  <div class="col-3">
+    <div class="form-group">{{ form_row(form.title, { label: 'administration.course.title'|trans }) }}</div>
+  </div>
+</div>
+{{ form_row(form.synopsis, { label: 'administration.course.synopsis'|trans }) }}
+{{ form_row(form.keywords, { label: 'administration.course.keywords'|trans }) }}
+{{ form_row(form.link, { label: 'administration.course.link'|trans }) }}
+{{ form_row(form.position, { label: 'administration.course.position'|trans }) }}
+{{ form_row(form.visitors, { label: 'administration.course.visitors'|trans }) }}
+{{ form_row(form.module, { label: 'administration.course.module'|trans }) }}
+{{ form_row(form.trainer, { label: 'administration.course.trainer'|trans }) }}
+
+<button class="btn">{{ button_label|default('global.btn_save'|trans) }}</button>
 {{ form_end(form) }}

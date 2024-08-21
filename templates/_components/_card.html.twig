@@ -1,5 +1,5 @@
 <div class="col-xs-1 col-md-3 col-lg-3 mb-3">
-  <a title="Cours fait par {{ (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
+  <a title="{{ 'course.made_by'|trans({ '%trainer': course.trainer.firstname|capitalize ~ ' ' ~ course.trainer.lastname|upper}) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
     <div class="card h-100">
       <span class="card-img-top"><img class="img-course" alt="Illustration {{ course.title }}" src="{{ asset('/images/' ~ course.module.illustration) }}" loading="lazy" /></span>
       <div class="card-body">
