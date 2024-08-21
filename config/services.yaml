@@ -13,6 +13,7 @@ services:
             $entityManager: '@doctrine.orm.entity_manager'
             $security: '@security.helper'
             $translator: '@translator'
+
             
     # default configuration for services in *this* file
     _defaults:

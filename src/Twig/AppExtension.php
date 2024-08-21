@@ -3,25 +3,28 @@
 namespace App\Twig;
 
 use App\Service\GlobalDataService;
+use App\Service\VersionService;
 use DateTimeImmutable;
-use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension implements GlobalsInterface
 {
     private $globalDataService;
     private $security;
     private $translator;
+    private VersionService $versionService;
 
-    public function __construct(GlobalDataService $globalDataService, Security $security, TranslatorInterface $translator)
+    public function __construct(GlobalDataService $globalDataService, Security $security, TranslatorInterface $translator, VersionService $versionService)
     {
         $this->globalDataService = $globalDataService;
         $this->security = $security;
         $this->translator = $translator;
+        $this->versionService = $versionService;
     }
 
     public function getGlobals(): array
@@ -40,6 +43,18 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('json_decode', [$this, 'jsonDecode']),
             new TwigFilter('time_ago', [$this, 'timeAgo']),
         ];
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('app_version', [$this, 'getVersion']),
+        ];
+    }
+
+    public function getVersion(): string
+    {
+        return $this->versionService->getVersion();
     }
 
     public function getCurrentUser()

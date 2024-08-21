@@ -14,11 +14,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <meta name="theme-color" content="#317EFB" />
-    <meta name="description" content="Retrouvez l'ensemble des cours de votre cohorte sur cette page." />
+    <meta name="title" content="{{ 'global.meta_title'|trans }}" />
+    <meta name="description" content="{{ 'global.meta_description'|trans }}" />
     <title>
       {% block title %}
 
-      {% endblock %}&nbsp;- Autoformation
+      {% endblock %}&nbsp;- {{ 'global.meta_title'|trans }}
     </title>
 
     <link rel="icon" type="image/png" sizes="32x32" href="//adrar.dev/erp/public/img/favicon-32x32.png" />
@@ -36,11 +37,16 @@
     <link rel="stylesheet" href="{{ asset('css/notifications.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.0/css/dataTables.dataTables.min.css" />
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.0/af-2.7.0/r-3.0.2/datatables.min.css" rel="stylesheet">
+
+    {# <link rel="stylesheet" href="//cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" /> #}
     {% block stylesheets %}
 
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    {# <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> #}
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.0/af-2.7.0/r-3.0.2/datatables.min.js"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     
     {% block javascripts %}
@@ -59,21 +65,21 @@
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">{{ 'global.home'|trans }}</a>
+                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">{{ 'header.home'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_modules') }}">{{ 'global.modules'|trans }}</a>
+                  <a class="nav-link" href="{{ path('app_modules') }}">{{ 'header.modules'|trans }}</a>
                 </li>
                 {% if is_granted('ROLE_TRAINER') %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">{{ 'global.administration'|trans }}</a>
+                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">{{ 'header.administration'|trans }}</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_mailbox') }}">{{ 'global.mailbox'|trans }}</a>
+                  <a class="nav-link" href="{{ path('app_mailbox') }}">{{ 'header.mailbox'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_q_and_a') }}">{{ 'global.faq'|trans }}</a>
+                  <a class="nav-link" href="{{ path('app_q_and_a') }}">{{ 'header.faq'|trans }}</a>
                 </li>
                 {# <li class="nav-item">
                   <form action="{{ path('_update_session_filter') }}">
@@ -84,13 +90,19 @@
                   </form>
                 </li> #}
               </ul>
+              {% if app.environment is same as("dev") %}
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
+                DEBUG
+              </ul>
+              {% endif %}
+              
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                   <form class="d-flex formIndex" role="search" action="#" method="GET" id="searchForm2">
                     <div class="hero">
                       <div id="searchBox" class="border rounded">
                         <i class="fa-solid fa-magnifying-glass fa-lg" id="searchIcon"></i>
-                        <input type="text" class="text-white inputNav" id="searchInput" placeholder="Recherche..." autocomplete="off" />
+                        <input type="text" class="text-white inputNav" id="searchInput" placeholder="{{ 'header.search'|trans }}" autocomplete="off" />
                       </div>
                     </div>
                   </form>
@@ -181,10 +193,10 @@
                   <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
                     <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">Français</a>
+                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">{{ 'global.language_french'|trans }}</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">Anglais</a>
+                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">{{ 'global.language_english'|trans }}</a>
                     </li>
                   </ul>
                 </li>
@@ -194,19 +206,6 @@
                     <li>
                       <a class="dropdown-item" href="{{ path('app_account') }}">Modifier mes informations</a>
                     </li>
-                    {% if is_granted('ROLE_TRAINER') %}
-                      <li>
-                        <div class="dropdown-item nav-link form-check form-switch">
-                          <input class="form-check-input" type="checkbox" role="switch" id="form_edition_mode" onclick="toggleEditionMode();" />
-                          <label class="form-check-label" for="form_edition_mode">Mode édition</label>
-                        </div>
-                      </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_TRAINER') %}
-                      <li>
-                        <a role="button" data-bs-toggle="modal" data-bs-target="#modalTrainees" class="dropdown-item" onclick="loadTrainees();">Actions sur les stagiaires</a>
-                      </li>
-                    {% endif %}
                     <li>
                       <a class="dropdown-item nav-link form-check form-switch" href="#">
                         <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
@@ -219,6 +218,9 @@
                       {% endif %}
                       <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
                     </li>
+                    <li class="text-muted text-end pe-3">
+                      <p class="text-reset">v.{{ app_version() ~ "." ~ app.environment|upper }}</p>
+                    </li>
                   </ul>
                 </li>
               </ul>
@@ -230,21 +232,23 @@
         <a role="button" data-bs-toggle="modal" data-bs-target="#modalFeedback" class="feedback-button" href="#">Feedback</a>
       {% endblock %}
       {% for flashMessage in app.session.flashbag.get('notice') %}
-        {% include '_components/_alert.html.twig' with { 'type': 'success', 'fa': 'bell', 'message': flashMessage } %}
+        {% include '_components/_alert.html.twig' with { 'type': 'success', 'bg': 'success', 'fa': 'bell', 'message': flashMessage } %}
       {% endfor %}
       {% for flashMessage in app.session.flashbag.get('info') %}
-        {% include '_components/_alert.html.twig' with { 'type': 'info', 'fa': 'info', 'message': flashMessage } %}
+        {% include '_components/_alert.html.twig' with { 'type': 'info', 'bg': 'info', 'fa': 'info', 'message': flashMessage } %}
       {% endfor %}
       {% for flashMessage in app.session.flashbag.get('error') %}
-        {% include '_components/_alert.html.twig' with { 'type': 'error', 'fa': 'times', 'message': flashMessage } %}
+        {% include '_components/_alert.html.twig' with { 'type': 'error', 'bg': 'danger', 'fa': 'times', 'message': flashMessage } %}
       {% endfor %}
-      {% block main %}
+      <main class="mb-5">
+        {% block main %}
 
-      {% endblock %}
+        {% endblock %}
+      </main>
       {% block footer %}
         <footer class="border-top border-light bg-v1-primary fixed-bottom">
           <p class="text-center m-0">
-            &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - Site développé par <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notice') }}">Mentions légales</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">Politique de confidentialité</a>
+            &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
           </p>
         </footer>
       {% endblock %}
@@ -270,50 +274,12 @@
         <div class="chat-area" id="message-box"></div>
         <div class="line"></div>
         <div class="input-div">
-          <input class="input-message" name="message" type="text" id="message" placeholder="Que recherchez-vous ?" />
+          <input class="input-message" name="message" type="text" id="message" placeholder="{{ 'chatbot.placeholder'|trans }}" />
           <button class="input-send" onclick="send()">
             <svg style="width:24px;height:24px">
               <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
             </svg>
           </button>
-        </div>
-      </div>
-      <div class="modal modal-xl fade" id="modalTrainees" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalTraineesTitle" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="container">
-                <div class="row">
-                  <h5 class="modal-title w-auto" id="modalTraineesTitle">Se connecter en tant que...</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  &nbsp;
-                </div>
-              </div>
-            </div>
-            <div class="modal-body">
-              <div class="container">
-                <div class="row">
-                  <div class="col-12">
-                    <div>
-                      <label for="form_trainee_filter" class="form-label">Nom d'utilisateur:<input type="text" name="form_trainee_filter" id="form_trainee_filter" class="form-control" placeholder="Chercher un stagiaire..." /></label>
-                      <table class="table table-responsive table-bordered" id="form_trainee_table">
-                        <thead>
-                          <tr>
-                            <th>Stagiaire (pseudo) - Prénom NOM</th>
-                            <th>Se connecter</th>
-                            <th>Réinitialiser le MDP</th>
-                            <th>Éval. stagiaire</th>
-                            <th>Documents</th>
-                          </tr>
-                        </thead>
-                        <tbody id="form_trainee_table_tbody"></tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -323,7 +289,7 @@
             <div class="modal-header">
               <div class="container">
                 <div class="row">
-                  <h5 class="modal-title w-auto" id="modalFeedbackTitle">Signaler un problème !</h5>
+                  <h5 class="modal-title w-auto" id="modalFeedbackTitle">{{ 'feedback.title'|trans }}</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   &nbsp;
                 </div>
@@ -335,44 +301,44 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="form-group">
-                        <label for="form_feedback_link" class="form-label required">Lien de la page concernée:</label>
+                        <label for="form_feedback_link" class="form-label mb-0 required">{{ 'feedback.form_link'|trans }}</label>
                         <input type="text" class="form-control" name="form_feedback_link" id="form_feedback_link" placeholder="https://..." value="{{ app.request.uri }}" />
                       </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mt-2">
                       <div class="form-group">
-                        <label for="form_feedback_category" class="form-label required">Catégorie:</label>
+                        <label for="form_feedback_category" class="form-label mb-0 required">{{ 'feedback.form_category'|trans }}</label>
                         <select name="form_feedback_category" id="form_feedback_category" class="form-select">
-                          <option value="0" disabled selected>Sélectionnez une catégorie...</option>
+                          <option value="0" disabled selected>{{ 'feedback.form_category_placeholder'|trans }}</option>
                           {% for feedbackCategory in feedbackCategories %}
                             <option value="{{ feedbackCategory.id }}">{{ feedbackCategory.label }}</option>
                           {% endfor %}
                         </select>
                       </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mt-2">
                       <div class="form-group">
-                        <label for="form_feedback_weight" class="form-label required">Importance:</label>
+                        <label for="form_feedback_weight" class="form-label mb-0 required">{{ 'feedback.form_weight'|trans }}</label>
                         <select name="form_feedback_weight" id="form_feedback_weight" class="form-select">
-                          <option value="0" disabled selected>Sélectionnez un niveau d'importance...</option>
-                          <option value="1">1 - Très peu important</option>
-                          <option value="2">2 - Peu important</option>
-                          <option value="3">3 - Moyen</option>
-                          <option value="4">4 - Très important</option>
-                          <option value="5">5 - Très important</option>
+                          <option value="0" disabled selected>{{ 'feedback.form_weight_placeholder'|trans }}</option>
+                          <option value="1">1 - {{ 'feedback.form_weight_light'|trans }}</option>
+                          <option value="2">2 - {{ 'feedback.form_weight_medium'|trans }}</option>
+                          <option value="3">3 - {{ 'feedback.form_weight_medium'|trans }}</option>
+                          <option value="4">4 - {{ 'feedback.form_weight_heavy'|trans }}</option>
+                          <option value="5">5 - {{ 'feedback.form_weight_critical'|trans }}</option>
                         </select>
                       </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mt-2">
                       <div class="form-group">
-                        <label for="form_feedback_annotation" class="form-label required">Message:</label>
-                        <textarea class="form-control" name="form_feedback_annotation" id="form_feedback_annotation" rows="5" placeholder="Votre message..."></textarea>
+                        <label for="form_feedback_annotation" class="form-label mb-0 required">{{ 'feedback.form_description'|trans }}</label>
+                        <textarea class="form-control" name="form_feedback_annotation" id="form_feedback_annotation" rows="5" placeholder="{{ 'feedback.form_description_placeholder'|trans }}"></textarea>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row mt-2">
                     <div class="col-12">
-                      <a value="Envoyer" class="btn btn-primary" onclick="sendFeedback();$('#form_feedback').reset();$('#modalFeedback').modal('hide');">Envoyer</a>
+                      <a value="Envoyer" class="btn btn-primary float-end" onclick="sendFeedback();$('#form_feedback').reset();$('#modalFeedback').modal('hide');">{{ 'global.btn_send'|trans }}</a>
                     </div>
                   </div>
                 </div>
@@ -405,8 +371,8 @@
                 success: (r) => {
                   // Suppression des résultats précédents
                   $('#searchResults #searchCourses > div > a').remove()
-                  $('#searchResults #searchTrainees > div > div').remove()
-                  $('#searchResults #searchTrainers > div > a').remove()
+                  $('#searchResults #searchTrainees > div > div > a').remove()
+                  $('#searchResults #searchTrainers > div > div > a').remove()
                   $('#containerSearchResults').removeClass('d-none')
                   $('#containerSearchResults').addClass('show')
                   if (r.courses.length > 0) {
@@ -422,7 +388,7 @@
                   if (r.trainees.length > 0) {
                     $('#searchResults #searchTrainees').removeClass('d-none')
                     r.trainees.forEach((trainee) => {
-                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainee.lastName + ' ' + trainee.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
                     })
                   } else {
                     $('#searchResults #searchTrainees').addClass('d-none')
@@ -431,7 +397,7 @@
                   if (r.trainers.length > 0) {
                     $('#searchResults #searchTrainers').removeClass('d-none')
                     r.trainers.forEach((trainer) => {
-                      $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-regular fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a>')
+                      $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainer/' + trainer.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
                     })
                   } else {
                     $('#searchResults #searchTrainers').addClass('d-none')
@@ -443,8 +409,8 @@
               })
             } else {
               $('#searchResults #searchCourses > div > a').remove()
-              $('#searchResults #searchTrainees > div > div').remove()
-              $('#searchResults #searchTrainers > div > a').remove()
+              $('#searchResults #searchTrainees > div > div > a').remove()
+              $('#searchResults #searchTrainers > div > div > a').remove()
               $('#containerSearchResults').addClass('d-none')
             }
           })
