@@ -61,22 +61,24 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_faqs').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
-      }
-    });
+    {% if faqs is defined and faqs is not empty %}
+      $('#list_faqs').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
   });
 </script>
 {% endblock %}

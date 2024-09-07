@@ -1,4 +1,41 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.acronym) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.shield) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.startDate) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.finishDate) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.trainer) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.documents_label) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.documents_start_date) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.documents_finish_date) }}
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+            {{ form_row(form.documents_duration) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mt-2 text-end">
+            <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+        </div>
+    </div>
 {{ form_end(form) }}

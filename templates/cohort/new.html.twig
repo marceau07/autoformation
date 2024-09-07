@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block main %}
-  <h1>Create new Cohort</h1>
+  <div class="container-fluid">
+    <div class="row d-flex flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_cohort_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Create new Cohort</h1>
+      </div>
+    </div>
 
-  {{ include('cohort/_form.html.twig') }}
-
-  <a href="{{ path('app_cohort_index') }}">{{ 'global.btn_back'|trans }}</a>
+    {{ include('cohort/_form.html.twig') }}
+  </div>
 {% endblock %}

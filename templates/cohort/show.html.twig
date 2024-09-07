@@ -30,7 +30,18 @@
       </tr>
       <tr>
         <th>Documents</th>
-        <td>{{ cohort.documents }}</td>
+        <td>
+          {% set documents = cohort.documents|json_decode|json_decode %}
+          {% if documents.internships is defined and documents.internships is not empty %}
+            <ul>
+            {% for internship in documents.internships %}
+              <li>{{ internship.label }}: {{ internship.start_date|date('d/m/Y') }} - {{ internship.finish_date|date('d/m/Y') }} | {{ internship.duration }}h</li>
+            {% endfor %}
+            </ul>
+          {% else %}
+            {{ 'administration.cohort.no_documents'|trans }}  
+          {% endif %}
+        </td>
       </tr>
       <tr>
         <th>StartDate</th>

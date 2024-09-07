@@ -1,8 +1,8 @@
 global:
   meta_title:
-    "Andragogic Platform"
+    "PAF - Learning and Training Platform"
   meta_description:
-    "Follow your training courses on the andragogic platform"
+    "Access all your courses and interact with your trainers and cohort mates on the andragogical platform."
   language_french:
     "French"
   language_english:
@@ -34,39 +34,63 @@ global:
   btn_upload:
     "Upload"
   day:
-    "%time% day ago"
+    " %time% day ago"
   days:
-    "%time% days ago"
+    " %time% days ago"
   week:
-    "%time% week ago"
+    " %time% week ago"
   weeks:
-    "%time% weeks ago"
-  month:  
-    "%time% month ago"
-  months: 
-    "%time% months ago"
+    " %time% weeks ago"
+  month:
+    " %time% month ago"
+  months:
+    " %time% months ago"
   year:
-    "%time% year ago"
-  years:  
-    "%time% years ago"
+    " %time% year ago"
+  years:
+    " %time% years ago"
   hour:
-    "%time% hour ago"
+    " %time% hour ago"
   hours:
-    "%time% hours ago"
+    " %time% hours ago"
   minute:
-    "%time% minute ago"
+    " %time% minute ago"
   minutes:
-    "%time% minutes ago"
+    " %time% minutes ago"
   second:
-    "%time% second ago"
+    " %time% second ago"
   seconds:
-    "%time% seconds ago"
+    " %time% seconds ago"
   now:
     "just now"
   yes:
     "Yes"
   no:
     "No"
+  courses:
+    "Courses"
+  course:
+    "Course"
+  modules:
+    "Modules"
+  module:
+    "Module"
+  users:
+    "Users"
+  user:
+    "User"
+  trainees:
+    "Trainees"
+  trainee:
+    "Trainee"
+  trainers:
+    "Trainers"
+  trainer:
+    "Trainer"
+  cohorts:
+    "Cohorts"
+  cohort:
+    "Cohort"
 
 header:
   home:
@@ -78,97 +102,102 @@ header:
   mailbox:
     "Mailbox"
   faq:
-    "Q&A"
+    "FAQ"
   search:
     "Search..."
 
 home:
   welcome:
-    "Welcome to the andragogic platform"
+    "Welcome to PAF"
+  welcome_small:
+    "Your Learning and Training Platform"
 
 feedback:
   title:
-    "Report a problem !"
+    "Report a Problem!"
   form_link:
-    "Link of the page concerned:"
+    "Link of the concerned page:"
   form_category:
-    "Category of the problem:"
+    "Problem category:"
   form_category_placeholder:
-    "Choose a category..."
+    "Select a category..."
   form_weight:
-    "Weight of the problem:"
+    "Problem weight:"
   form_weight_placeholder:
-    "Choose a weight..."
+    "Select a weight..."
   form_weight_light:
-    "Not important"
+    "Very low importance"
   form_weight_medium:
-    "Little important"
+    "Low importance"
   form_weight_heavy:
     "Important"
   form_weight_critical:
     "Very important"
   form_description:
-    "Description of the problem:"
+    "Problem description:"
   form_description_placeholder:
-    "Describe the problem here..."
+    "Describe the encountered problem..."
 
 survey:
   heading:
-    "Satisfaction survey !"
+    "Satisfaction Survey!"
   paragraph:
-    "Tell us what you thought of us by answering this short questionnaire !"
+    "Tell us what you think about us by answering this short questionnaire!"
   answer:
     "Answer the questionnaire"
   review:
-    "They have been through us..."
+    "They have been here..."
   no_content:
-    "No review for the moment, try again later..."
+    "No reviews at the moment, please try again later..."
 
 module:
   text:
     "Modules"
   no_content:
-    "No content for the moment, try again later..."
+    "No content at the moment, please try again later..."
 
 course:
   latest_courses:
-    "Your latest courses"
+    "Your latest followed courses"
   no_content_latest_courses:
-    "No course followed for the moment, try again later..."
+    "No courses followed at the moment, please try again later..."
   popular_courses:
-    "The most popular courses" 
+    "Most popular courses"
   no_content_popular_courses:
-    "No popular course for the moment, try again later..."
+    "No popular courses at the moment, please try again later..."
   text:
     "Courses"
-  no_content: 
-    "No course for the moment, try again later..."
+  no_content:
+    "No courses at the moment, please try again later..."
   illustration_no_content_alt:
-    "Illustration of no course"
+    "Illustration of no content"
   made_by:
     "Made by %trainer%"
+  filtered:
+    no_content:
+      "No courses found, try to change your search criteria..."
 
 account:
-  personal_informations: 
-    "Personal informations"
+  personal_informations:
+    "Personal Information"
   documents:
     "Documents"
   username:
     "Username"
   lastname:
-    "Lastname"
+    "Last Name"
   firstname:
-    "Firstname"
+    "First Name"
   password:
     "Password"
   email:
     "Email"
   phone_number:
-    "Phone number"
+    "Phone Number"
   avatar:
     "Avatar"
   avatar_alt:
-    "Avatar %name%"
+    "%name%'s Avatar"
   signature:
     "Signature"
   draw_signature:
@@ -178,45 +207,49 @@ account:
   discard_signature:
     "Discard your signature"
   current_signature_text:
-    "Current signature"
+    "Current Signature"
   current_signature_alt:
-    "Signature of %name%"
+    "%name%'s Signature"
+  not_activated:
+    "Your account is not yet activated, please contact your trainer for more information."
 
 mailbox:
   welcome:
     "Welcome to your mailbox"
   chat_cohort:
-    "Chat with members of %cohort%"
+    "Chat with %cohort% members"
   chat_trainer_referent:
-    "Discuss with the referent trainer %trainer%"
+    "Exchange with %trainer% referent"
   chat_with:
     "Chat with %trainee%"
   start_conversation:
-    "Start of conversation with "
+    "Start conversation with "
   select_account:
-    "Choose an account to chat with..."
+    "Select an account to start the conversation..."
   no_content:
-    "No conversation for the moment, try again later..."
+    "No messages at the moment, please try again later..."
   start_typing_here:
     "Start typing a message here..."
   no_account_available:
-    "No account available for the moment, try again later..."
+    "No account available at the moment, please try again later..."
 
 cohort:
   informations:
-    "Cohort informations"
+    "Cohort Information"
   name:
-    "Name of the cohort"
+    "Cohort Name"
   acronym:
-    "Acronym of the cohort"
+    "Cohort Acronym"
+  trainer:
+    "Referent Trainer"
   key_dates:
-    "Your key dates"
+    "Your Key Dates"
   training_start_date:
-    "Training start date"
+    "Training Start Date"
   training_end_date:
-    "Training end date"
+    "Training End Date"
   shield:
-    "Shield of the cohort"
+    "Cohort Shield"
   no_shield:
     "No shield for your cohort"
   no_information:
@@ -226,32 +259,104 @@ internship:
   internships:
     "Internships"
   begin_internship:
-    "Begin internship"
+    "Internship Start"
   end_internship:
-    "End internship"
+    "Internship End"
   no_internship:
     "No internship for your cohort"
 
 footer:
   text:
-    "Website created by"
+    "Site developed by"
   legal_notices:
-    "Legal notices"
+    "Legal Notices"
   privacy_policy:
-    "Privacy policy"
+    "Privacy Policy"
 
 chatbot:
+  welcome:
+    "Welcome to the chatbot! How can I assist you?"
   placeholder:
-    "What can I do for you ?"
+    "What are you looking for?"
+  didnt_understand:
+    "I didn't understand your request, please rephrase."
+  keys:
+    hello:
+      "hello"
+    hey:
+      "hey"
+    help:
+      "help"
+    courses:
+      "courses"
+    modules:
+      "modules"
+    users:
+      "users"
+    goodbye:
+      "goodbye"
+  values:
+    hello:
+      "Hello! How can I assist you?"
+    hey:
+      "Hey! How can I assist you?"
+    help:
+      "I'm here to help you. Ask me a question or type <code>/help</code> to see the list of possible actions."
+    courses:
+      "Type a keyword to search for a course..."
+    goodbye:
+      "Goodbye! Feel free to come back if you need any help."
+  commands:
+    courses:
+      "Search for a course"
+    help:
+      "Display this help"
+    modules:
+      "Search for a module"
+    users:
+      "Search for a user"
+
+notifications:
+  new_message:
+    "You have received a new message from %from_username%"
+  new_message_cohort:
+    "You have received a new message in %from_cohort%"
+  no_new_message:
+    "No new messages at the moment"
+  new_homework:
+    "New homework in %course%"
+  no_new_homework:
+    "No new homework at the moment"
+  new_internship:
+    "New document's internship [%document%]"
+  no_new_internship:
+    "Everything is up to date"
+  new_course:
+    "%course% is now available"
+  no_new_course:
+    "No new courses at the moment"
+  unread_messages:
+    "You have unread messages"
 
 administration:
   default:
-    "Choose a category to manage..."
+    "Choose the category to manage above...
+    You can add, edit, or delete items in this category."
   course:
     menu:
       "Courses"
     create:
-      "Create new course"
+      "Create a new course"
+    manage_courses:
+      "Manage courses"
+    manage_courses_searchbar:
+      "Search for a course, keyword, ..."
+    manage_courses_default_text:
+      "Please select a cohort to view the courses available and optionally filter throw active and/or title's and/or keywords" 
+    course_active:
+      "All courses"
+    course_non_active:
+      "Course non-active"
     id:
       "ID"
     title:
@@ -267,20 +372,20 @@ administration:
     visitors:
       "Visitors"
     module:
-      "Associated module"
+      "Associated Module"
     trainer:
-      "Redactor trainer"
+      "Writing Trainer"
     no_course:
-      "No course for the moment, try again later..."
+      "No courses at the moment, please try again later..."
   trainer:
     menu:
       "Trainers"
     id:
       "ID"
     lastname:
-      "Lastname"
+      "Last Name"
     firstname:
-      "Firstname"
+      "First Name"
     username:
       "Username"
     role:
@@ -292,17 +397,17 @@ administration:
     email:
       "Email"
     phone_number:
-      "Phone number"
+      "Phone Number"
     avatar:
       "Avatar"
+    entrance_date:
+      "Entry Code"
     signature:
       "Signature"
-    entrance_date:
-      "Entrance date"
     no_signature:
       "No signature for %trainer%"
     no_trainer:
-      "No trainer for the moment, try again later..."
+      "No trainers at the moment, please try again later..."
   cohort:
     menu:
       "Cohorts"
@@ -314,14 +419,18 @@ administration:
       "Acronym"
     shield:
       "Shield"
+    shield_alt:
+      "%cohort%'s Shield"
     documents:
       "Documents"
     start_date:
-      "Start date"
+      "Start Date"
     finish_date:
-      "Finish date"
+      "Finish Date"
     uuid:
       "UUID"
+    no_cohort:
+      "No cohorts at the moment, please try again later..."
   trainee:
     menu:
       "Trainees"
@@ -330,15 +439,15 @@ administration:
     username:
       "Username"
     lastname:
-      "Lastname"
+      "Last Name"
     firstname:
-      "Firstname"
+      "First Name"
     email:
       "Email"
     activated:
       "Active"
     tmp_code:
-      "Temporary code"
+      "Temporary Code"
     signature:
       "Signature"
     no_signature:
@@ -348,36 +457,36 @@ administration:
     documents:
       "Documents"
     no_document:
-      "No internship report"
+      "No internship document"
     diploma:
       "Diploma"
     no_diploma:
       "No diploma"
     diploma_got_ccp1:
-      "Partially graduated (CCP1)"
+      "Partially certified (CCP1)"
     diploma_got_ccp2:
-      "Partially graduated (CCP2)"
+      "Partially certified (CCP2)"
     diploma_got_ccp3:
-      "Partially graduated (CCP3)"
+      "Partially certified (CCP3)"
     diploma_got_ccp1_ccp2:
-      "Partially graduated (CCP1 and CCP2)"
-    diploma_got_ccp1_ccp3:
-      "Partially graduated (CCP1 and CCP3)"
+      "Partially certified (CCP1 and CCP2)"
     diploma_got_ccp2_ccp3:
-      "Partially graduated (CCP2 and CCP3)"
+      "Partially certified (CCP2 and CCP3)"
+    diploma_got_ccp1_ccp3:
+      "Partially certified (CCP1 and CCP3)"
     diploma_not_show_up:
-      "Did not show up"
+      "Did not show up for the exam"
     diploma_full:
-      "Graduated"
+      "Certified"
     diploma_unknow:
-      "Unknown"
+      "Not specified"
     cohort:
       "Cohort"
     no_trainee:
-      "No trainee for the moment, try again later..."
+      "No trainees at the moment, please try again later..."
   faq:
     menu:
-      "Q&A"
+      "F.A.Q"
     id:
       "ID"
     theme:
@@ -391,7 +500,7 @@ administration:
     priority:
       "Priority"
     no_faq:
-      "No question for the moment, try again later..."
+      "No questions at the moment, please try again later..."
   prospect:
     menu:
       "Prospects"
@@ -404,13 +513,13 @@ administration:
     nic:
       "NIC"
     address_number:
-      "Number"
+      "Street Number"
     address_street:
-      "Street"
+      "Street Name"
     address_additional_information:
-      "Additional information"
+      "Additional Address Information"
     address_zipcode:
-      "Zipcode"
+      "Zip Code"
     address_city:
       "City"
     address_country:
@@ -418,26 +527,26 @@ administration:
     email:
       "Email"
     phone_number:
-      "Phone number"
+      "Phone Number"
     phone_number_bis:
-      "Phone number bis"
+      "Secondary Phone Number"
     no_prospect:
-      "No prospect for the moment, try again later..."
+      "No prospects at the moment, please try again later..."
   internship:
     menu:
       "Internships"
     id:
       "ID"
     tutor_lastname:
-      "Tutor lastname"
+      "Tutor Last Name"
     tutor_firstname:
-      "Tutor firstname"
+      "Tutor First Name"
     tutor_email:
-      "Tutor email"
+      "Tutor Email"
     tutor_phone_number:
-      "Tutor phone number"
+      "Tutor Phone Number"
     no_internship:
-      "No internship for the moment, try again later..."
+      "No internships at the moment, please try again later..."
   statistic:
     menu:
       "Statistics"
@@ -450,6 +559,154 @@ administration:
         "<b>%percentage%%</b> of received evaluations"
     cohort:
       graduation_percentage:
-        "<b>%percentage%%</b> of graduated trainees"
+        "<b>%percentage%%</b> success rate"
       satisfaction_percentage:
-        "<b>%percentage%%</b> of satisfied trainees"
+        "<b>%percentage%%</b> satisfaction rate"
+
+tourguide:
+  index:
+    trainee:
+      navbar:
+        title:
+          "Navigation"
+        content:
+          "Navigate between different sections of the platform using the navigation bar."
+      account:
+        replay_tutorial:
+          title:
+            "Replay Tutorial"
+          content:
+            "Replay the tutorial to review the different steps from the beginning."
+        avatar:
+          title:
+            "Avatar"
+          content:
+            "Choose the avatar that represents you."
+        informations:
+          tab:
+            title:
+              "Sub-menu"
+            content:
+              "Navigate between these menus to view your personal information, cohort information, and internship-related information."
+          title:
+            "Account"
+          content:
+            "Access all your personal information and documents."
+          signature:
+            title:
+              "Signature"
+            content:
+              "Save time on internship documents by pre-filling online documents with your signature."
+          actual_signature:
+            title:
+              "Current Signature"
+            content:
+              "View your current signature here."
+      chatbot:
+        title:
+          "Chatbot"
+        content:
+          "Ask questions to the chatbot to get instant answers. Feel free to type '/' to see the list of possible actions, or choose from the screen."
+      feedback:
+        title:
+          "Report a Problem"
+        content:
+          "This is where you can report a problem to the development team."
+      courses:
+        title:
+          "Courses"
+        content:
+          "Access all available courses for each module."
+        example:
+          title:
+            "A Course"
+          content:
+            "Here, we have a course on Git."
+          resources:
+            title:
+              "Resources"
+            content:
+              "Find this icon when resources are associated with the course (files, exercises, labs)."
+          embed:
+            title:
+              "Presentation"
+            content:
+              "You have immediate access to the course from the platform."
+            resources:
+              title:
+                "Resources"
+              content:
+                "And you will find access to the resources just below."
+              give:
+                title:
+                  "Submit Homework"
+                content:
+                  "You can upload your lab in various formats (.pdf, .zip, .tar, .rar, .docx, ...) for evaluation by your referent."
+        last_courses:
+          title:
+            "Your Last Followed Courses"
+          content:
+            "Find here the courses you have recently accessed."
+        popular_courses:
+          title:
+            "Most Popular Courses"
+          content:
+            "Discover the most popular courses on the platform."
+      survey:
+        title:
+          "Satisfaction Survey"
+        content:
+          "Tell us what you think about us by answering this short questionnaire."
+        content_bis:
+          "What former trainees thought about us..."
+      modules:
+        title:
+          "Modules"
+        content:
+          "This is where the magic happens. Find all your courses sorted by module or CCP."
+        example:
+          title:
+            "A Module"
+          content:
+            "A module is a category of courses that groups similar topics."
+      mailbox:
+        title:
+          "Mailbox"
+        content:
+          "Exchange messages with your trainers and cohort mates."
+        example:
+          contacts:
+            title:
+              "Contacts"
+            content:
+              "Find here the different contacts you can communicate with."
+            cohort:
+              title:
+                "Cohort Members"
+              content:
+                "Chat with members of your cohort."
+            trainer:
+              title:
+                "Referent Trainer"
+              content:
+                "Exchange messages with your referent trainer."
+            trainees:
+              title:
+                "Other Trainees"
+              content:
+                "Chat with other trainees in your cohort."
+          conversation:
+            title:
+              "Conversations"
+            content:
+              "Find all your conversations here."
+            start:
+              title:
+                "Start a Conversation"
+              content:
+                "Select an account to start the conversation."
+            messages:
+              title:
+                "Messages"
+              content:
+                "Start typing a message here..."

@@ -14,7 +14,7 @@
 
 /* Définition des couleurs */
 :root {
-    --coul-principale: #45BEEB;
+    --coul-principale: #0077bd;
     --coul-secondaire: #1A1F37;
     --coul-ternaire: #FFFFFF;
     --coul-quaternaire: #163460;
@@ -202,7 +202,7 @@ blockquote {
 
 
 /* Flash Messages */
-.alert {
+.alert-temporary {
     position: fixed;
     z-index: 1000;
     display: flex;
@@ -217,3 +217,96 @@ blockquote {
 }
 
 /* End flash Messages */
+
+.tourguide-dialog,
+.tourguide-dialog * {
+    z-index: 1000000 !important;
+    color: var(--col-primary-dark);
+    background-color: var(--col-primary);
+}
+
+.tourguide-backdrop {
+    z-index: 99999 !important;
+    max-width: -webkit-fill-available;
+}
+
+#tg-dialog-progbar {
+    background-color: var(--coul-principale) !important;
+}
+
+[data-theme="dark"] .tourguide-dialog,
+[data-theme="dark"] .tourguide-dialog * {
+    color: var(--col-primary) !important;
+    background-color: var(--col-primary-dark) !important;
+}
+
+[data-theme="dark"] #tg-dialog-spinner,
+[data-theme="dark"] #tg-dialog-close-btn {
+    fill: var(--col-primary) !important;
+}
+
+.img-course {
+    width: auto;
+    /* object-fit: cover; */
+}
+
+#containerSearchResults {
+    top: auto;
+    margin-top: 3.9vh;
+    width: 24.3vw;
+    margin-right: 0.313rem;
+    right: 10.313rem;
+    background-color: var(--col-primary) !important;
+}
+
+[data-theme="dark"] #containerSearchResults {
+    background-color: var(--col-primary-dark) !important;
+}
+
+#searchResults {
+    max-height: 40vh;
+    overflow: auto;
+}
+
+@media screen and (max-width: 800px) {
+    #containerSearchResults {
+        margin-top: 0;
+        width: 24.3vw;
+        margin-right: 0.313rem;
+        right: 25.013rem;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    #containerSearchResults {
+        margin-top: 0;
+        width: 50vw;
+        margin-right: -3rem;
+        right: 10rem;
+    }
+
+    .img-course {
+        max-height: 20vh;
+    }
+}
+
+.admin-manage-imgs {
+    cursor: pointer;
+    height: 150px;
+    width: 200px;
+    display: contents;
+}
+
+.admin-manage-text {
+    word-wrap: break-word;
+}
+
+.cours-inactive,
+.quiz-inactive {
+    opacity: 0.4;
+}
+
+.cours-active,
+.quiz-active {
+    opacity: 1;
+}

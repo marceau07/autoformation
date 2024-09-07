@@ -77,11 +77,10 @@ class CourseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->innerJoin('c.trainer', 't')
             ->innerJoin('c.module', 'cm')
-            ->innerJoin('c.courseTrainees', 'ct')
-            ->innerJoin('ct.trainee', 'tr')
-            ->innerJoin('tr.cohort', 'co')
-            ->innerJoin('co.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND co.id = cc.cohort AND cc.active = 1')
-            ->addSelect('cm', 't', 'co', 'ct', 'tr')
+            ->innerJoin('c.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND cc.active = 1')
+            ->innerJoin('cc.cohort', 'co')
+            ->innerJoin('co.trainees', 'tr')
+            ->addSelect('cm', 't', 'cc', 'co', 'tr')
             ->where('tr.username = :username')
             ->setParameter('username', $userId)
             ->groupBy('cm.id')
@@ -158,25 +157,86 @@ class CourseRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get the list of courses informations
+     * Get the list of courses in a module for a trainee
      * 
      * @param string $uuid The course uuid
      * @param string $search The search term
      * @return Course[] The list of courses
      */
-    public function getCoursesInformations(string $uuid, string $search = null): array
+    function getCoursesInformationsBySector(string $courseId = null, string $search = null): array
     {
-        $qb = $this->createQueryBuilder('c')
-            ->innerJoin('c.module', 'cm')
-            ->where('cm.uuid = :uuid')
-            ->setParameter('uuid', $uuid);
-
-        if ($search !== null) {
-            $qb->andWhere('cm.label = :search OR c.title = :search OR c.keywords = :search')
-                ->setParameter('search', $search);
+        if ($courseId === null) {
+            return $this->createQueryBuilder('c')
+                ->innerJoin('c.trainer', 't')
+                ->innerJoin('c.module', 'cm')
+                ->addSelect('c', 'cm', 't')
+                ->where('c.title LIKE :search OR c.keywords LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('cm.position', 'ASC')
+                ->getQuery()
+                ->getResult();
+        } else {
+            return $this->createQueryBuilder('c')
+                ->innerJoin('c.trainer', 't')
+                ->innerJoin('c.module', 'cm')
+                ->addSelect('c', 'cm', 't')
+                ->where('cm.uuid = :courseId')
+                ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
+                ->setParameter('courseId', $courseId)
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('cm.position', 'ASC')
+                ->getQuery()
+                ->getResult();
         }
+    }
 
-        return $qb->getQuery()->getResult();
+    /**
+     * Get the list of courses in a module for a trainee
+     * 
+     * @param string $userId The trainee identifier
+     * @param string $uuid The course uuid
+     * @param string $search The search term
+     * @return Course[] The list of courses
+     */
+    function getCoursesInformationsByCohort(string $userId, string $courseId = null, string $search = null): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.trainer', 't')
+            ->innerJoin('c.module', 'cm')
+            ->innerJoin('c.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND cc.active = 1')
+            ->innerJoin('cc.cohort', 'co')
+            ->innerJoin('co.trainees', 'tr')
+            ->addSelect('c', 't', 'cm', 'cc', 'co', 'tr')
+            ->where('tr.username = :username')
+            ->andWhere('cm.uuid = :courseId')
+            ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
+            ->setParameter('username', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('cm.position', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get the list of courses in a module
+     * 
+     * @param string $uuid The course uuid
+     * @param string $search The search term
+     * @return Course[] The list of courses
+     */
+    function getCoursesInformations(string $courseId, string $search = null): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.module', 'cm')
+            ->addSelect('c', 'cm')
+            ->where('cm.uuid = :courseId')
+            ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('cm.position', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

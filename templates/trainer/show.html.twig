@@ -5,86 +5,65 @@
 {% endblock %}
 
 {% block main %}
-  <h1>Trainer</h1>
-  <a href="{{ path('app_trainer_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+  <div class="container-fluid">
+    <div class="row d-flex justify-content-around">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ is_granted('ROLE_TRAINER') ? path('app_trainer_index') : path('app_home') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Trainer</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 float-end text-end"></div>
+    </div>
 
-  <div class="table-responsive">
-    <table class="table">
-      <tbody>
-        <tr>
-          <th>Id</th>
-          <td>{{ trainer.id }}</td>
-        </tr>
-        <tr>
-          <th>Username</th>
-          <td>{{ trainer.username }}</td>
-        </tr>
-        <tr>
-          <th>LastName</th>
-          <td>{{ trainer.lastName }}</td>
-        </tr>
-        <tr>
-          <th>FirstName</th>
-          <td>{{ trainer.firstName }}</td>
-        </tr>
-        <tr>
-          <th>Roles</th>
-          <td>{{ trainer.roles ? trainer.roles|json_encode:'' }}</td>
-        </tr>
-        <tr>
-          <th>Password</th>
-          <td>{{ trainer.password }}</td>
-        </tr>
-        <tr>
-          <th>Email</th>
-          <td>{{ trainer.email }}</td>
-        </tr>
-        <tr>
-          <th>Activated</th>
-          <td>{{ trainer.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
-        </tr>
-        <tr>
-          <th>TmpCode</th>
-          <td>{{ trainer.tmpCode }}</td>
-        </tr>
-        <tr>
-          <th>TmpCodeDate</th>
-          <td>{{ trainer.tmpCodeDate ? trainer.tmpCodeDate|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Username</th>
+            <td>{{ trainer.username }}</td>
+          </tr>
+          <tr>
+            <th>LastName</th>
+            <td>{{ trainer.lastName }}</td>
+          </tr>
+          <tr>
+            <th>FirstName</th>
+            <td>{{ trainer.firstName }}</td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ trainer.email }}</td>
+          </tr>
+          {# <tr>
           <th>Signature</th>
-          <td>{% if trainer.signature is defined and trainer.signature is not empty %}
-            <img src="{{ trainer.signature }}" alt="Signature de {{ trainer.username }}">
+          <td>
+            {% if trainer.signature is defined and trainer.signature is not empty %}
+              <img src="{{ trainer.signature }}" alt="Signature de {{ trainer.username }}" />
             {% else %}
-            Pas de signature pour {{ trainer.username }}
+              Pas de signature pour {{ trainer.username }}
             {% endif %}
           </td>
-        </tr>
-        <tr>
-          <th>Uuid</th>
-          <td>{{ trainer.uuid }}</td>
-        </tr>
-        <tr>
-          <th>Role</th>
-          <td>{{ trainer.role }}</td>
-        </tr>
-        <tr>
-          <th>PhoneNumber</th>
-          <td>{{ trainer.phoneNumber }}</td>
-        </tr>
-        <tr>
-          <th>EntranceCode</th>
-          <td>{{ trainer.entranceCode }}</td>
-        </tr>
-        <tr>
-          <th>EntranceCodeDate</th>
-          <td>{{ trainer.entranceCodeDate ? trainer.entranceCodeDate|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-      </tbody>
-    </table>
+        </tr> #}
+          <tr>
+            <th>Uuid</th>
+            <td>{{ trainer.uuid }}</td>
+          </tr>
+          <tr>
+            <th>Role</th>
+            <td>{{ trainer.role }}</td>
+          </tr>
+          <tr>
+            <th>PhoneNumber</th>
+            <td>{{ trainer.phoneNumber }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <a href="{{ path('app_trainer_edit', { uuid: trainer.uuid }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
-
-  {{ include('trainer/_delete_form.html.twig') }}
+  {% if is_granted('ROLE_TRAINER') %}
+    <a href="{{ path('app_trainer_edit', { uuid: trainer.uuid }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
+    {{ include('trainer/_delete_form.html.twig') }}
+  {% endif %}
 {% endblock %}

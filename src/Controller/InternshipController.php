@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Internship;
 use App\Form\InternshipType;
 use App\Repository\InternshipRepository;
+use App\Repository\NotificationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +29,7 @@ class InternshipController extends AbstractController
     }
 
     #[Route('/new', name: 'app_internship_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Filesystem $filesystem): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, NotificationRepository $notificationRepository, Filesystem $filesystem): Response
     {
         $internship = new Internship();
         $form = $this->createForm(InternshipType::class, $internship);
@@ -52,6 +53,8 @@ class InternshipController extends AbstractController
                 $internship->getTrainee()->setDocuments(json_encode($documents));
                 $entityManager->persist($internship->getTrainee());
                 $entityManager->flush();
+
+                $notificationRepository->deleteANotification($internship->getTrainee()->getUsername(), null, 'new_internship', $internship->getTrainee()->getCohort()->getTrainer()->getId());
             } catch (Exception $e) {
                 $this->addFlash('danger', "Erreur lors de la copie de la convention de stage..." . $e->getMessage());
             }

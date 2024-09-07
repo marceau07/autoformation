@@ -26,7 +26,7 @@ class SurveyTraineeRepository extends ServiceEntityRepository
         $bdd = $this->getEntityManager()->getConnection();
 
         $query = $bdd->executeQuery(
-            'SELECT st.*, a.*, u.* FROM survey_trainee st INNER JOIN user u INNER JOIN avatar a WHERE (u.id = st.trainee_id AND st.survey_id IS NULL AND st.rate IS NULL AND a.id = u.avatar_id)', 
+            'SELECT st.*, a.*, u.* FROM survey_trainee st INNER JOIN user u INNER JOIN avatar a WHERE (u.id = st.trainee_id AND st.survey_id IS NOT NULL AND st.rate IS NOT NULL AND a.id = u.avatar_id)', 
         );
         return $query->fetchAllAssociative();
     }

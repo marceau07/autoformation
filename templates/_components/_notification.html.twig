@@ -1,5 +1,19 @@
 <li class="notification-list-item">
-  <p class="message">{{ notification.message }}</p>
+  <p class="message">
+    {% if notification.category == 'new_message' %}
+      {% if notification.link matches '/cohort/' %}
+        {{ 'notifications.new_message_cohort'|trans({ '%from_cohort%': '#' ~ notification.message }) }}
+      {% elseif notification.link matches '/trainer/' or notification.link matches '/trainee/' %}
+        {{ 'notifications.new_message'|trans({ '%from_username%': '@' ~ notification.message }) }}
+      {% endif %}
+    {% elseif notification.category == 'new_course' %}
+      {{ 'notifications.new_course'|trans({ '%course%': notification.message }) }}
+    {% elseif notification.category == 'new_internship' %}
+      {{ 'notifications.new_internship'|trans({ '%document%': notification.message }) }}
+    {% elseif notification.category == 'homework_to_do' %}
+      {{ 'notifications.new_homework'|trans({ '%course%': notification.message }) }}
+    {% endif %}
+  </p>
   <div class="item-footer">
     <span class="from"><a href="/{{ app.request.attributes.get('_locale') }}{{ notification.link }}">{{ notification.origin }}</a></span>
     <span class="date">{{ notification.date|time_ago }}</span>

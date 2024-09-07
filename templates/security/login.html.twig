@@ -18,7 +18,7 @@
       <div class="col-12">
         <form method="post">
           {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="alert alert-temporary alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
           {% endif %}
           {% for flashMessage in app.session.flashbag.get('notice') %}
             {% include '_components/_alert.html.twig' with { 'type': 'success', 'bg': 'success', 'fa': 'bell', 'message': flashMessage } %}

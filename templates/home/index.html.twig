@@ -18,12 +18,13 @@
     <div class="row">
       <div class="col-12">
         <h1 class="text-center">{{ 'home.welcome'|trans }}</h1>
+        <p class="text-center text-small">{{ 'home.welcome_small'|trans }}</p>
       </div>
     </div>
 
     {% if satisfactionSurvey and satisfactionSurvey.finish_date <= ('now'|date('Y-m-d')) %}
       <div class="row pt-5">
-        <div class="alert alert-success w-auto" role="alert">
+        <div class="alert alert-success w-auto" role="alert" id="endSurvey">
           <h4 class="alert-heading">{{ 'survey.heading'|trans }}</h4>
           <p>{{ 'survey.paragraph'|trans }}</p>
           <hr />
@@ -74,12 +75,17 @@
             <div class="splide__track">
               <ul class="splide__list">
                 {% for opinion in traineesOpinions %}
+                  {% if opinion.link starts with 'http://' or opinion.link starts with 'https://' %}
+                    {% set avatarPicked = opinion.link %}
+                  {% else %}
+                    {% set avatarPicked = asset('images/avatars/' ~ opinion.link) %}
+                  {% endif %}
                   <li class="splide__slide">
                     <div class="splide__slide__container">
                       <blockquote>
                         <p class="opacity-100">{{ opinion.answer }}</p>
                         <footer class="opacity-100">
-                          —&nbsp;<img style="border-radius: 100%;border:1px lightgrey solid;width:25px;" alt="{{ opinion.label }}" src="{{ asset('/images/avatars/' ~ opinion.link) }}" loading="lazy" />&nbsp;{{ opinion.first_name }}
+                          —&nbsp;<img style="border-radius: 100%;border:1px lightgrey solid;width:25px;" alt="{{ opinion.label }}" src="{{ avatarPicked }}" loading="lazy" />&nbsp;{{ opinion.first_name }}
                         </footer>
                       </blockquote>
                     </div>
@@ -98,4 +104,15 @@
 
 {% block js %}
   <script src="{{ asset('js/index.js') }}"></script>
+  <script>
+    $(document).ready(function () {
+      // Displaying tutorials if not already done and if the user is enabled to
+      if (localStorage.getItem('tg_tours_complete') === null && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+        tg.start('trainee-index');
+      }
+      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-end-survey-index') && $('#endSurvey').length > 0 && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+        tg.start('trainee-end-survey-index');
+      }
+    })
+  </script>
 {% endblock %}

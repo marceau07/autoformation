@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_TRAINER')]
 #[Route('/{_locale}/trainer')]
 class TrainerController extends AbstractController
 {
@@ -24,6 +23,7 @@ class TrainerController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_TRAINER')]
     #[Route('/new', name: 'app_trainer_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -52,6 +52,7 @@ class TrainerController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_TRAINER')]
     #[Route('/{uuid}/edit', name: 'app_trainer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, TrainerRepository $trainerRepository, EntityManagerInterface $entityManager, string $uuid): Response
     {
@@ -71,6 +72,7 @@ class TrainerController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_TRAINER')]
     #[Route('/{uuid}', name: 'app_trainer_delete', methods: ['POST'])]
     public function delete(Request $request, TrainerRepository $trainerRepository, EntityManagerInterface $entityManager, string $uuid): Response
     {

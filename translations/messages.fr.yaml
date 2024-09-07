@@ -1,6 +1,6 @@
 global:
   meta_title:
-    "Platforme andragogique"
+    "PAF - Plateforme d'Apprentissage et de Formation"
   meta_description:
     "Retrouvez tous vos cours et échangez avec vos formateurs et vos camarades de cohorte sur la plateforme andragogique."
   language_french:
@@ -67,6 +67,30 @@ global:
     "Oui"
   no:
     "Non"
+  courses:
+    "Cours"
+  course:
+    "Cours"
+  modules:
+    "Modules"
+  module:
+    "Module"
+  users:
+    "Utilisateurs"
+  user:
+    "Utilisateur"
+  trainees:
+    "Stagiaires"
+  trainee:
+    "Stagiaire"
+  trainers:
+    "Formateurs"
+  trainer:
+    "Formateur"
+  cohorts:
+    "Cohortes"
+  cohort:
+    "Cohorte"
     
 header:
   home:
@@ -85,7 +109,9 @@ header:
 
 home:
   welcome:
-    "Bienvenue sur la plateforme andragogique"
+    "Bienvenue sur la PAF"
+  welcome_small:
+    "Votre Plateforme d'Apprentissage et de Formation"
 
 feedback:
   title:
@@ -148,6 +174,9 @@ course:
     "Illustration de l'absence de contenu"
   made_by:
     "Réalisé par %trainer%"
+  filtered:
+    no_content:
+      "Pas de cours pour le moment avec les filtres sélectionnés, réessayez plus tard..."
 
 account:
   personal_informations: 
@@ -182,6 +211,8 @@ account:
     "Signature actuelle"
   current_signature_alt:
     "Signature de %name%"
+  not_activated:
+    "Votre compte n'est pas encore activé, veuillez contacter votre formateur pour plus d'informations."
 
 mailbox:
   welcome:
@@ -210,6 +241,8 @@ cohort:
     "Nom de la cohorte"
   acronym:
     "Acronyme de la cohorte"
+  trainer:
+    "Formateur référent"
   key_dates:
     "Vos dates clés"
   training_start_date:
@@ -242,9 +275,70 @@ footer:
     "Politique de confidentialité"
 
 chatbot:
+  welcome:
+    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?"
   placeholder:
     "Que recherchez-vous ?"
-    
+  didnt_understand:
+    "Je n'ai pas compris votre demande, veuillez reformuler."
+  keys:
+    hello:
+      "bonjour"
+    hey:
+      "hey"
+    help:
+      "aide"
+    courses:
+      "cours"
+    modules:
+      "module"
+    users:
+      "utilisateur"
+    goodbye:
+      "au revoir"
+  values:
+    hello:
+      "Bonjour ! Comment puis-je vous aider ?"
+    hey:
+      "Salut ! Comment puis-je vous aider ?"
+    help:
+      "Je suis là pour vous aider. Posez-moi une question ou tapez <code>/help</code> pour voir la liste des actions possibles."
+    courses:
+      "Tapez un mot-clé pour rechercher un cours..."
+    goodbye:
+      "Au revoir ! N'hésitez pas à revenir si vous avez besoin d'aide."
+  commands:
+    courses:
+      "Rechercher un cours"
+    help:
+      "Affiche cette aide"
+    modules:
+      "Rechercher un module"
+    users:
+      "Rechercher un utilisateur"
+
+notifications:
+  new_message:
+    "Vous avez reçu un nouveau message de la part de %from_username%"
+  new_message_cohort:
+    "Vous avez reçu un nouveau message dans %from_cohort%"
+  no_new_message:
+    "Aucun nouveau message pour le moment"
+  new_homework:
+    "Nouveau devoir dans %course%"
+  no_new_homework:
+    "Aucun nouveau devoir pour le moment"
+  new_internship:
+    "Nouveau document de stage reçu [%document%]"
+  no_new_internship:
+    "Tout est à jour pour les stages !"
+  new_course:
+    "%course% est maintenant disponible"
+  no_new_course:
+    "Aucun nouveau cours pour le moment"
+  unread_messages:
+    "Vous avez des messages non lus"
+
 administration:
   default:
     "Choisissez la catégorie à gérer ci-dessus...
@@ -254,6 +348,16 @@ administration:
       "Cours"
     create:
       "Créer un nouveau cours"
+    manage_courses:
+      "Gérer les cours"
+    manage_courses_searchbar:
+      "Rechercher un cours, un mot-clé, ..."
+    manage_courses_default_text:
+      "Veuillez sélectionner une cohorte et optionnellement: filtrer avec le statut du cours et/ou son titre et/ou mots-clés"
+    course_active:
+      "Tous les cours"
+    course_non_active:
+      "Cours non actifs"
     id:
       "Identifiant"
     title:
@@ -316,6 +420,8 @@ administration:
       "Acronyme"
     shield:
       "Blason"
+    shield_alt:
+      "Blason des %cohort%"
     documents:
       "Documents"
     start_date:
@@ -324,6 +430,8 @@ administration:
       "Date de fin"
     uuid:
       "UUID"
+    no_cohort:
+      "Pas de cohorte pour le moment, réessayez plus tard..."
   trainee:
     menu:
       "Stagiaires"
@@ -455,3 +563,151 @@ administration:
         "<b>%percentage%%</b> de réussite"
       satisfaction_percentage:
         "<b>%percentage%%</b> de satisfaction"
+
+tourguide:
+  index:
+    trainee:
+      navbar:
+        title:
+          "La navigation"
+        content:
+          "Naviguez entre les différentes sections de la plateforme grâce à la barre de navigation."
+      account:
+        replay_tutorial:
+          title:
+            "Recommencer le tutoriel"
+          content:
+            "Recommencez le tutoriel pour revoir les différentes étapes depuis le début."
+        avatar:
+          title:
+            "L'avatar"
+          content:
+            "Choisissez l'avatar duquel vous vous rapprochez."
+        informations:
+          tab:
+            title:
+              "Sous-menu"
+            content:
+              "Naviguez entre ces menus pour consulter vos informations personnelles, de cohortes et celles liées à votre stage."
+          title:
+            "Le compte"
+          content:
+            "Retrouvez toutes vos informations personnelles et vos documents."
+          signature:
+            title:
+              "La signature"
+            content:
+              "Permet de gagner du temps sur les documents de stage en pré-remplissant les documents en ligne."
+          actual_signature:
+            title:
+              "La signature actuelle"
+            content:
+              "Retrouvez ici votre signature actuelle."
+      chatbot:
+        title:
+          "Le chatbot"
+        content:
+          "Posez vos questions au chatbot pour obtenir des réponses instantanées. N'hésitez pas à taper '/' pour voir la liste des actions possibles, sinon choisissez à l'écran."
+      feedback:
+        title:
+          "Signaler un problème"
+        content:
+          "C'est ici que vous pourez signaler un problème à l'équipe de développement."
+      courses:
+        title:
+          "Les cours"
+        content:
+          "Retrouvez tous les cours disponibles pour chaque module."
+        example:
+          title:
+            "Un cours"
+          content:
+            "Ici, nous avons un cours sur Git."
+          resources:
+            title:
+              "Les ressources"
+            content:
+              "Retrouvez cette icône lorsque des ressources sont associées au cours (fichiers, exercices, TPs)."
+          embed:
+            title:
+              "La présentation"
+            content:
+              "Vous avez un accès immédiat au cours depuis la plateforme."
+            resources:
+              title:
+                "Les ressources"
+              content:
+                "Et vous trouverez l'accès aux ressources juste en dessous."
+              give:
+                title:
+                  "Rendre un devoir"
+                content:
+                  "Vous pouvez téléverser votre TP sous divers format (.pdf, .zip, .tar, .rar, .docx, ...) pour permettre votre évaluation auprès de votre référent·e."
+        last_courses:
+          title:
+            "Vos derniers cours suivis"
+          content:
+            "Retrouvez ici les cours que vous avez consulté récemment."
+        popular_courses:
+          title:
+            "Les cours les plus populaires"
+          content:
+            "Découvrez les cours les plus populaires de la plateforme."
+      survey:
+        title:
+          "Enquête de satisfaction"
+        content:
+          "Dites-nous ce que vous avez pensé de nous en répondant à ce bref questionnaire."
+        content_bis:
+          "Ce que les anciens stagiaires ont pensé de nous..."
+      modules:
+        title:
+          "Les modules"
+        content:
+          "C'est ici que la magie opère. Retrouvez tous vos cours triés par module ou CCP."
+        example:
+          title:
+            "Un module"
+          content:
+            "Un module est une catégorie de cours regroupant des thématiques similaires."
+      mailbox:
+        title:
+          "La boîte aux lettres"
+        content:
+          "Échangez avec vos formateurs et vos camarades de cohorte."
+        example:
+          contacts:
+            title:
+              "Les contacts"
+            content:
+              "Retrouvez ici les différents contacts avec qui vous pouvez échanger."
+            cohort:
+              title:
+                "Les membres de la cohorte"
+              content:
+                "Discutez avec les membres de votre cohorte."
+            trainer:
+              title:
+                "Le formateur référent"
+              content:
+                "Échangez avec votre formateur référent."
+            trainees:
+              title:
+                "Les autres stagiaires"
+              content:
+                "Parlez avec les autres stagiaires de votre cohorte."
+          conversation:
+            title:
+              "Les conversations"
+            content:
+              "Retrouvez ici toutes vos conversations."
+            start:
+              title:
+                "Démarrer une conversation"
+              content:
+                "Sélectionnez un compte pour commencer la conversation."
+            messages:
+              title:
+                "Les messages"
+              content:
+                "Commencez à taper un message ici..."

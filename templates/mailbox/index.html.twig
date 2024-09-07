@@ -13,76 +13,170 @@
 {% endblock %}
 
 {% block main %}
-  <div class="container">
-    <div class="row pb-5">
-      <div class="col-12">
-        <h1 class="text-center">{{ 'mailbox.welcome'|trans }}</h1>
-      </div>
-    </div>
-  </div>
-  {% if cohorts is defined and cohorts is not empty %}
-    <div class="container-fluid">
-      <div class="row" style="min-height: 71vh;">
-        <div class="col-2 border rounded-start height-message-scroll">
-          {% for cohort in cohorts %}
-            {% if is_granted('ROLE_TRAINER') or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
-              <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_cohort'|trans({ '%cohort%': cohort.name }) }}"><div class="row ps-1 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' bg-info' : '' }}">{{ cohort.name }}</div></a>
-              {% if app.user.id != cohort.trainer.id %}
-                <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_trainer_referent'|trans({ '%trainer%': (cohort.trainer.firstname|capitalize) ~ ' ' ~ (cohort.trainer.lastname|upper) }) }}">
-                  <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' bg-info' : '' }}">
-                    <div class="col-10 text-truncate">
-                      <img src="{{ asset('images/avatars/' ~ cohort.trainer.avatar.link) }}" style="width: 20px;" />&nbsp;({{ cohort.trainer.id }})&nbsp;{{ cohort.trainer.firstname|capitalize }}&nbsp;{{ cohort.trainer.lastname|upper }}
-                    </div>
-                    <div class="col-2">
-                      <i class="fa-solid fa-star text-success"></i>
-                    </div>
-                  </div>
-                </a>
-              {% endif %}
+  <div class="container-fluid p-0">
+    <h1 class="text-center h3 mb-3">{{ 'mailbox.welcome'|trans }}</h1>
 
-              {% if cohort.trainees is defined and cohort.trainees is not empty %}
-                {% for trainee in cohort.trainees %}
-                  {% if app.user.id != trainee.id %}
-                    <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link" title="{{ 'mailbox.chat_with'|trans({ '%trainee%': trainee.firstname|capitalize }) }} {{ trainee.lastname|upper }}">
-                      <div class="row ps-4 pt-2 pb-2{{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? ' bg-info' : '' }}">
-                        <div class="col-10 text-truncate">
-                          <img src="{{ asset('images/avatars/' ~ trainee.avatar.link) }}" style="width: 20px;" />&nbsp;({{ trainee.id }})&nbsp;{{ trainee.firstname|capitalize }}&nbsp;{{ trainee.lastname|upper }}
+    {% if cohorts is defined and cohorts is not empty %}
+      <div class="card">
+        <div class="row g-0">
+          <div class="col-12 col-lg-5 col-xl-3 border-end">
+            <div class="px-4 d-none d-md-block">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <input type="text" class="form-control my-3" placeholder="{{ 'header.search'|trans }}" disabled style="cursor:not-allowed;" />
+                </div>
+              </div>
+            </div>
+
+            <div id="liste_contacts" class="d-none d-sm-none d-md-block">
+              {% for cohort in cohorts|sort((a, b) => b.startDate <=> a.startDate) %}
+                {% if is_granted('ROLE_TRAINER') or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
+                  <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' style="background-color:var(--coul-principale);"' : '' }} title="{{ 'mailbox.chat_cohort'|trans({ '%cohort%': cohort.name }) }}">
+                    <div class="row ps-1 pt-2 pb-2">{{ cohort.name }}&nbsp;({{ cohort.trainees|length }})</div>
+                    {# <div class="badge bg-success float-end">5</div> #}
+                  </a>
+                  {% if app.user.id != cohort.trainer.id %}
+                    <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' style="background-color:var(--coul-principale);"' : '' }} title="{{ 'mailbox.chat_trainer_referent'|trans({ '%trainer%': (cohort.trainer.firstname|capitalize) ~ ' ' ~ (cohort.trainer.lastname|upper) }) }}">
+                      {# <div class="badge bg-success float-end">5</div> #}
+                      <div class="badge float-end bg-warning">
+                        <i class="fa-solid fa-certificate"></i>
+                      </div>
+                      <div class="d-flex align-items-start text-truncate">
+                        {% if cohort.trainer.avatar.link starts with 'http://' or cohort.trainer.avatar.link starts with 'https://' %}
+                          {% set avatarTrainer = cohort.trainer.avatar.link %}
+                        {% else %}
+                          {% set avatarTrainer = asset('images/avatars/' ~ cohort.trainer.avatar.link) %}
+                        {% endif %}
+                        <img src="{{ avatarTrainer }}" class="rounded-circle me-1" alt="{{ cohort.trainer.firstname|capitalize }}{{ cohort.trainer.lastname|upper }}" width="35" height="35" />
+                        <div class="flex-grow-1 ms-3">
+                          ({{ cohort.trainer.id }})&nbsp;{{ cohort.trainer.firstname|capitalize }}&nbsp;{{ cohort.trainer.lastname|upper }}<div class="small">
+                            {# <span class="fas fa-circle chat-online"></span> Online #}
+                            {# <span class="fas fa-circle chat-offline"></span> Offline #}
+                          </div>
                         </div>
                       </div>
                     </a>
                   {% endif %}
-                {% endfor %}
+
+                  {% if cohort.trainees is defined and cohort.trainees is not empty %}
+                    <span id="chat-trainees">
+                      {% for trainee in cohort.trainees|sort((a, b) => a.lastName <=> b.lastName) %}
+                        {% if app.user.id != trainee.id %}
+                          <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? 'style="background-color:var(--coul-principale);"' : '' }} title="{{ 'mailbox.chat_with'|trans({ '%trainee%': trainee.firstname|capitalize }) }} {{ trainee.lastname|upper }}">
+                            {# <div class="badge bg-success float-end">5</div> #}
+                            <div class="d-flex align-items-start text-truncate">
+                              {% if trainee.avatar.link starts with 'http://' or trainee.avatar.link starts with 'https://' %}
+                                {% set avatarTrainee = trainee.avatar.link %}
+                              {% else %}
+                                {% set avatarTrainee = asset('images/avatars/' ~ trainee.avatar.link) %}
+                              {% endif %}
+                              <img src="{{ avatarTrainee }}" class="rounded-circle me-1" alt="{{ trainee.firstname|capitalize }} {{ trainee.lastname|upper }}" width="35" height="35" />
+                              <div class="flex-grow-1 ms-3">
+                                ({{ trainee.id }})&nbsp;{{ trainee.firstname|capitalize }}&nbsp;{{ trainee.lastname|upper }}<div class="small">
+                                  {# <span class="fas fa-circle chat-online"></span> Online #}
+                                  {# <span class="fas fa-circle chat-offline"></span> Offline #}
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+            <hr class="d-block d-lg-none mt-1 mb-0" />
+          </div>
+
+          <div class="col-12 col-lg-7 col-xl-9" id="messages">
+            {% if uuid is defined and uuid is not empty %}
+              <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                <div class="d-flex align-items-center py-1">
+                  <div class="position-relative">
+                    {% if contact is defined and contact is not empty %}
+                      {% if contact.avatar.link starts with 'http://' or contact.avatar.link starts with 'https://' %}
+                        {% set avatarContact = contact.avatar.link %}
+                      {% else %}
+                        {% set avatarContact = asset('images/avatars/' ~ contact.avatar.link) %}
+                      {% endif %}
+                      <img src="{{ avatarContact }}" class="rounded-circle me-1" alt="{{ contact.firstname|capitalize }} {{ contact.lastname|upper }}" width="40" height="40" />
+                    {% elseif cohort is defined and cohort is not empty %}
+                      <img src="{{ asset('images/shields/' ~ cohort.shield) }}" class="rounded-circle me-1" alt="{{ cohort.name|upper }}" width="40" height="40" />
+                    {% endif %}
+                  </div>
+                  <div class="flex-grow-1 ps-3">
+                    {% if contact is defined and contact is not empty %}
+                      <strong>@{{ contact.firstname|capitalize }}&nbsp;{{ contact.lastname|upper }}</strong>
+                    {% elseif cohort is defined and cohort is not empty %}
+                      <strong>#{{ cohort.name|upper }}</strong>
+                    {% endif %}
+                    {# <div class="text-muted small">
+                      <em>Typing...</em>
+                    </div> #}
+                  </div>
+                </div>
+              </div>
+
+              <div class="position-relative" style="height:38rem;overflow: auto;" id="contenu">
+                <div class="chat-messages p-4">
+                  {% include '/mailbox/messages.html.twig' %}
+                </div>
+              </div>
+
+              {% if messages is defined %}
+                <form action="/send_message" method="post">
+                  <div class="flex-grow-0 py-3 px-4 border-top">
+                    <div class="input-group">
+                      <input type="hidden" name="form_origin" value="{{ cohort is defined and cohort is not empty ? 'cohort' : trainee is defined ? 'trainee' : 'trainer' }}" />
+                      <input type="hidden" name="form_sender_uuid" value="{{ app.user.uuid }}" />
+                      <input type="hidden" name="form_receiver_uuid" value="{{ uuid }}" />
+                      <input type="text" name="form_message" id="form_message" placeholder="{{ 'mailbox.start_typing_here'|trans }}" class="form-control" style="width: 77%;" autocomplete="off" />
+                      <input type="submit" class="d-none" value="Envoyer" id="form-btn-send" />
+                      <button href="#" class="btn btn-success" onclick="$('#form-btn-send').click();"><i class="fa-solid fa-paper-plane"></i>&nbsp;{{ 'global.btn_send'|trans }}</button>
+                    </div>
+                  </div>
+                </form>
               {% endif %}
+            {% else %}
+              <div>
+                <div id="contenu" class="height-message-scroll2">{{ 'mailbox.select_account'|trans }}</div>
+              </div>
             {% endif %}
-          {% endfor %}
-        </div>
-        <div class="col-10 border rounded-end text-center height-message-scroll" id="messages">
-          {% if uuid is defined and uuid is not empty %}
-            {% if contact is defined and contact is not empty %}
-              <h2 class="user-visibility">{{ 'mailbox.start_conversation'|trans }}<span class="fw-bold">{{ contact.firstname|capitalize }}&nbsp;{{ contact.lastname|upper }}</span></h2>
-            {% elseif cohort is defined and cohort is not empty %}
-              <h2 class="user-visibility">{{ 'mailbox.start_conversation'|trans }}<span class="fw-bold">{{ cohort.name|upper }}</span></h2>
-            {% endif %}
-            {% include '/mailbox/messages.html.twig' %}
-          {% else %}
-            <div id="contenu" class="height-message-scroll2">{{ 'mailbox.select_account'|trans }}</div>
-          {% endif %}
+          </div>
         </div>
       </div>
-    </div>
-  {% else %}
-    <div class="container">
-      <div class="row">{{ 'mailbox.no_account_available'|trans }}</div>
-    </div>
-  {% endif %}
+    {% else %}
+      <div class="container">
+        <div class="row">{{ 'mailbox.no_account_available'|trans }}</div>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block js %}
   <script>
-    document.querySelector('#form_message').addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        document.querySelector('.btn-success').click()
+    if (document.querySelector('#form_message')) {
+      document.querySelector('#form_message').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          document.querySelector('.btn-success').click()
+        }
+      })
+    }
+  </script>
+  <script>
+    $(document).ready(function () {
+      // Focus on input
+      $('#form_message').focus();
+      // Scroll to bottom
+      let chatElement = document.getElementById('contenu');
+      chatElement.scrollTop = chatElement.scrollHeight;
+
+      if ($('#liste_contacts a').length > 0) {
+        if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-mailbox') && {{ is_granted('ROLE_TRAINEE') ? 'true' : 'false' }}) {
+          tg.start('trainee-mailbox')
+        }
       }
     })
   </script>

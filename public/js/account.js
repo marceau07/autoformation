@@ -86,3 +86,8 @@ function sendEvaluation(input) {
         },
     });
 }
+
+function replayTutorial() {
+    localStorage.removeItem('tg_tours_complete');
+    window.location.href = '/';
+}

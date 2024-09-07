@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Avatar;
 use App\Entity\User;
 use App\Repository\AvatarRepository;
+use App\Repository\InternshipRepository;
 use App\Repository\TraineeRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
@@ -50,7 +51,6 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-    // Requirements permet de laisser la possibilité de ne pas donner de code par défaut
     #[Route(path: '/recovery', name: 'app_recovery', methods: ['GET', 'POST'])]
     public function recovery(MailerInterface $mailer, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
@@ -66,7 +66,7 @@ class SecurityController extends AbstractController
                     ->subject('Votre code temporaire de récupération de mot de passe');
                 if ($_ENV['APP_ENV'] === 'prod') {
                     $email->to($user->getEmail());
-                } elseif ($_ENV['APP_ENV'] === 'dev') {
+                } elseif ($_ENV['APP_ENV'] === 'preprod' || $_ENV['APP_ENV'] === 'dev') {
                     $email->to('contact@marceau-rodrigues.fr');
                 }
                 $email->html($this->renderView('_emails/MAIL_CODE_TMP.html.twig', [
@@ -157,7 +157,7 @@ class SecurityController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/account', name: 'app_account', methods: ["GET", "POST"])]
-    public function account(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, AvatarRepository $avatarRepository, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    public function account(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, AvatarRepository $avatarRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
     {
         $form = null;
         $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
@@ -209,7 +209,8 @@ class SecurityController extends AbstractController
             ])
             ->add('avatar', EntityType::class, [
                 'class' => Avatar::class,
-                'choice_label' => 'label', 'choice_attr' => function ($choice, string $key, mixed $value) {
+                'choice_label' => 'label',
+                'choice_attr' => function ($choice, string $key, mixed $value) {
                     // adds a class like attending_yes, attending_no, etc
                     return ['data-src' => $choice->getLink()];
                 },
@@ -250,7 +251,8 @@ class SecurityController extends AbstractController
             'trainee' => $trainee,
             'user' => $user,
             'cohort' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier()) : []),
-            'internships' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier())['documents'] : []),
+            'documents' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier())['documents'] : []),
+            'internships' => ($trainee !== null ? $internshipReposidtory->findBy(['trainee' => $trainee->getId()]) : []),
             'surveys' => [],
             'form' => $form,
         ]);

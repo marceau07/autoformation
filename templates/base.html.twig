@@ -14,8 +14,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <meta name="theme-color" content="#317EFB" />
-    <meta name="title" content="{{ 'global.meta_title'|trans }}" />
-    <meta name="description" content="{{ 'global.meta_description'|trans }}" />
+    {% block seo %}
+      <meta name="robots" content="index, follow" />
+      <meta name="title" content="{{ 'global.meta_title'|trans }}" />
+      <meta name="description" content="{{ 'global.meta_description'|trans }}">
+      <!--Seo Réseaux-->
+      <meta property="og:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:type" content=website >
+      <meta property="og:description" content="{{ 'global.meta_description'|trans }}">
+      <meta property="og:image" content="{{ asset('/images/adrar_logo.svg') }}">
+      <meta property="og:site_name" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost() }}">
+      <!--Seo Twitter-->
+      <meta property="twitter:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="twitter:type" content=website >
+      <meta property="twitter:description" content="{{ 'global.meta_description'|trans }}">
+      <meta property="twitter:image" content="{{ asset('/images/adrar_logo.svg') }}">
+      <meta name="twitter:card" content=summary >
+    {% endblock %}
+
     <title>
       {% block title %}
 
@@ -26,7 +43,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="//adrar.dev/erp/public/img/favicon-16x16.png" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.min.css" />
-    
+    <link rel="stylesheet" href="https://unpkg.com/@sjmc11/tourguidejs/dist/css/tour.min.css">
+
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}" />
     {# Permet de personnaliser les vidéos #}
     {# <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> #}
@@ -60,7 +78,7 @@
       {% block header %}
         <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_logo.svg') }}" height="100" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_epaf_logo.svg') }}" height="100" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -92,7 +110,7 @@
               </ul>
               {% if app.environment is same as("dev") %}
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
-                DEBUG
+                <li>DEBUG</li>
               </ul>
               {% endif %}
               
@@ -102,26 +120,26 @@
                     <div class="hero">
                       <div id="searchBox" class="border rounded">
                         <i class="fa-solid fa-magnifying-glass fa-lg" id="searchIcon"></i>
-                        <input type="text" class="text-white inputNav" id="searchInput" placeholder="{{ 'header.search'|trans }}" autocomplete="off" />
+                        <input type="text" class="inputNav" id="searchInput" placeholder="{{ 'header.search'|trans }}" autocomplete="off" />
                       </div>
                     </div>
                   </form>
                 </li>
                 <li>
-                  <div class="z-3 border position-absolute d-none bg-dark" style="margin-top: 3.9vh;width: 24.3vw;margin-right: 0.313rem;top: auto;right: 10.313rem;" id="containerSearchResults">
+                  <div class="z-3 border position-absolute d-none bg-dark" id="containerSearchResults">
                     <div class="d-flex flex-column mx-3 my-2" id="searchResults">
                       <div class="d-none" data-category="courses" id="searchCourses">
-                        <span class="h3">Cours</span>
+                        <span class="h3">{{ 'global.courses'|trans }}</span>
                         <div></div>
                         <hr />
                       </div>
                       <div class="d-none" data-category="trainees" id="searchTrainees">
-                        <span class="h3">Stagiaires</span>
+                        <span class="h3">{{ 'global.trainees'|trans }}</span>
                         <div></div>
                         <hr />
                       </div>
                       <div class="d-none" data-category="trainers" id="searchTrainers">
-                        <span class="h3">Formateurs</span>
+                        <span class="h3">{{ 'global.trainers'|trans }}</span>
                         <div></div>
                       </div>
                     </div>
@@ -129,12 +147,21 @@
                 </li>
                 <li class="nav-item d-flex align-items-center px-1">
                   <div class="dropdown-container">
-                    <a href="#" data-dropdown="notificationMenu" class="menu-link has-notifications circle"><i class="fa fa-md fa-bell"></i></a>
-                    <ul class="dropdown" name="notificationMenu">
+                    <a href="#" type="button" data-dropdown="notificationMenu" class="position-relative px-1">
+                      <i class="fa fa-md fa-bell"></i>
+                      {% if (notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty) 
+                        or (notificationsMessages is defined and notificationsMessages is not empty) 
+                        or (notificationsInternships is defined and notificationsInternships is not empty) 
+                        or (notificationsNewCourses is defined and notificationsNewCourses is not empty) %}
+                      <span class="position-absolute top-0 start-25 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">{{ 'notifications.unread_messages'|trans }}</span>
+                      </span>
+                      {% endif %}
+                    </a>
+                    <ul class="dropdown z-1" name="notificationMenu">
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsToDo">
                         <div class="notification-tab">
                           <i class="fa fa-list-check"></i>
-                          <h4>A faire</h4>
+                          <h6>A faire</h6>
                           <span class="label">{{ notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty ? notificationsHomeworksToDo|length : 0 }}</span>
                         </div>
                         <!-- tab -->
@@ -145,7 +172,7 @@
                             {% endfor %}
                           {% else %}
                             <li class="notification-list-item">
-                              <p class="message">Aucun devoir à rendre !</p>
+                              <p class="message">{{ 'notifications.no_new_homework'|trans }}</p>
                             </li>
                           {% endif %}
                         </ul>
@@ -153,7 +180,7 @@
                       <li class="notification-group" id="notificationsMessages">
                         <div class="notification-tab">
                           <i class="fa fa-envelope"></i>
-                          <h4>Messages</h4>
+                          <h6>Messages</h6>
                           <span class="label">{{ notificationsMessages is defined and notificationsMessages is not empty ? notificationsMessages|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -163,15 +190,35 @@
                             {% endfor %}
                           {% else %}
                             <li class="notification-list-item">
-                              <p class="message">Aucun message reçu...</p>
+                              <p class="message">{{ 'notifications.no_new_message'|trans }}</p>
                             </li>
                           {% endif %}
                         </ul>
                       </li>
+                      {% if is_granted('ROLE_TRAINER') %}
+                      <li class="notification-group" id="notificationsInternships">
+                        <div class="notification-tab">
+                          <i class="fa fa-graduation-cap"></i>
+                          <h6>Internships</h6>
+                          <span class="label">{{ notificationsInternships is defined and notificationsInternships is not empty ? notificationsInternships|length : 0 }}</span>
+                        </div>
+                        <ul class="notification-list">
+                          {% if notificationsInternships is defined and notificationsInternships is not empty %}
+                            {% for notification in notificationsInternships %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">{{ 'notifications.no_new_internship'|trans }}</p>
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </li>
+                      {% endif %}
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsCourses">
                         <div class="notification-tab">
                           <i class="fa fa-circle-info"></i>
-                          <h4>Cours</h4>
+                          <h6>Cours</h6>
                           <span class="label">{{ notificationsNewCourses is defined and notificationsNewCourses is not empty ? notificationsNewCourses|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -181,7 +228,7 @@
                             {% endfor %}
                           {% else %}
                             <li class="notification-list-item">
-                              <p class="message">Pas de nouveau cours partagé...</p>
+                              <p class="message">{{ 'notifications.no_new_course'|trans }}</p>
                             </li>
                           {% endif %}
                         </ul>
@@ -254,6 +301,7 @@
       {% endblock %}
       <div id="chatbot" class="main-card collapsed border">
         <button id="chatbot_toggle">
+          <span class="visually-hidden">chatbot</span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M15 4v7H5.17l-.59.59-.58.58V4h11m1-2H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm5 4h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1z" />
@@ -271,11 +319,17 @@
           </div>
           <span>Chatbot</span>
         </div>
-        <div class="chat-area" id="message-box"></div>
+        <div class="chat-area" id="message-box">
+          <div class="text-center">
+            <img src="{{ asset('/images/adrar_epaf_logo.svg') }}" height="125" alt="Logo de l'ADRAR">
+          </div>
+          <div class="chat-message-div"></div>
+        </div>
         <div class="line"></div>
         <div class="input-div">
           <input class="input-message" name="message" type="text" id="message" placeholder="{{ 'chatbot.placeholder'|trans }}" />
           <button class="input-send" onclick="send()">
+            <span class="visually-hidden">message</span>
             <svg style="width:24px;height:24px">
               <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
             </svg>
@@ -351,13 +405,400 @@
       {# <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script> #}
       {# Permet d'afficher le code formaté pour les cours #}
       {# <script src="{{ asset('js/prism.js') }}"></script> #}
+      <script src="https://unpkg.com/@sjmc11/tourguidejs/dist/tour.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       <script src="{{ asset('js/app.js') }}"></script>
+      <script>
+        if(typeof locale === "undefined") {
+          let locale;
+        }
+          locale = "{{ app.request.attributes.get('_locale') }}";
+      </script>
       <script src="{{ asset('js/darkMode.js') }}"></script>
       <script src="{{ asset('js/script.js') }}"></script>
       <script src="{{ asset('js/notifications.js') }}"></script>
-      <script src="{{ asset('js/chatbot.js') }}"></script>
+      {# <script src="{{ asset('js/chatbot.js') }}"></script> #}
       <script>
+        var running = false;
+        function send() {
+            if (running == true) return;
+            var msg = document.getElementById("message").value.trim();
+            if (msg == "") return;
+            running = true;
+            addMsg(msg);
+            console.log('Message sent: ' + msg);
+            //DELEAY MESSAGE RESPOSE Echo
+            window.setTimeout(addResponseMsg, 1000, msg, true);
+        }
+        function addMsg(msg) {
+            var div = document.createElement("div");
+            div.innerHTML =
+                "<span style='flex-grow:1'></span><div class='chat-message-sent'>" +
+                msg +
+                "</div>";
+            div.className = "chat-message-div";
+            document.getElementById("message-box").appendChild(div);
+            //SEND MESSAGE TO API
+            document.getElementById("message").value = "";
+            document.getElementById("message-box").scrollTop = document.getElementById(
+                "message-box"
+            ).scrollHeight;
+        }
+        function addResponseMsg(msg, ajax = false) {
+            if (ajax) {
+                var formData = new FormData();
+                formData.append("form_chatbot_message", msg);
+                $.ajax({
+                  url: "/" + locale + "/chatbot",
+                  method: "post",
+                  dataType: "json",
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function (r) {
+                    if (r.success) {
+                      let msg = r.message;
+                      var div = document.createElement("div");
+                      div.innerHTML = "<div class='chat-message-received'>" + msg + "</div>";
+                      div.className = "chat-message-div";
+                      document.getElementById("message-box").appendChild(div);
+                      document.getElementById("message-box").scrollTop = document.getElementById(
+                          "message-box"
+                      ).scrollHeight;
+                      running = false;
+                    }
+                  },
+                  error: function (e) {
+                      console.error(e.getMessage());
+                  },
+                });
+            } else {
+              var div = document.createElement("div");
+              div.innerHTML = "<div class='chat-message-received'>" + msg + "</div>";
+              div.className = "chat-message-div";
+              document.getElementById("message-box").appendChild(div);
+              document.getElementById("message-box").scrollTop = document.getElementById(
+                  "message-box"
+              ).scrollHeight;
+              running = false;
+            }
+            console.log('Message received: ' + msg);
+        }
+        document.getElementById("message").addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                send();
+            }
+        });
+        document.getElementById("chatbot_toggle").onclick = function () {
+            if (document.getElementById("chatbot").classList.contains("collapsed")) {
+              document.getElementById("chatbot").classList.remove("collapsed")
+              document.getElementById("chatbot_toggle").children[1].style.display = "none"
+              document.getElementById("chatbot_toggle").children[2].style.display = ""
+              // Default display message
+              setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username }) }}", false)
+            } else {
+                document.getElementById("chatbot").classList.add("collapsed")
+                document.getElementById("chatbot_toggle").children[1].style.display = ""
+                document.getElementById("chatbot_toggle").children[2].style.display = "none"
+            }
+        }
+      </script>
+      <script>
+        if(typeof tg === "undefined") {
+          let tg;
+        } 
         $(document).ready(function () {
+          // Gestion du TourGuide
+          if ({{ is_granted('ROLE_TRAINEE') ? 'true' : 'false' }}) {
+            const stepsTourGuideTrainee = [
+              {
+                title: "Tutoriel",
+                content: "Ce petit tutoriel a pour but de vous montrer comment fonctionne le site. Libre à vous de le passer. <br>Vous pourrez le relancer à tout moment en cliquant sur le bouton en haut à droite dans vos informations personnelles.", 
+                position: 'center', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              },
+              {
+                title: "{{ 'tourguide.index.trainee.navbar.title'|trans }}",
+                target: '#navbar',
+                content: "{{ 'tourguide.index.trainee.navbar.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              },
+              {
+                title: "{{ 'tourguide.index.trainee.feedback.title'|trans }}",
+                target: '.feedback-button',
+                content: "{{ 'tourguide.index.trainee.feedback.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              },
+              {
+                title: "{{ 'tourguide.index.trainee.courses.last_courses.title'|trans }}",
+                target: 'main .container .row:nth-of-type(3)',
+                content: "{{ 'tourguide.index.trainee.courses.last_courses.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              },
+              {
+                title: "{{ 'tourguide.index.trainee.courses.popular_courses.title'|trans }}",
+                target: 'main .container .row:nth-of-type(4)',
+                content: "{{ 'tourguide.index.trainee.courses.popular_courses.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              },
+              {
+                title: "{{ 'tourguide.index.trainee.survey.title'|trans }}",
+                target: 'main .container .row:nth-of-type(5)',
+                content: "{{ 'tourguide.index.trainee.survey.content_bis'|trans }}",
+                position: 'right', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.chatbot.title'|trans }}",
+                target: '#chatbot',
+                content: "{{ 'tourguide.index.trainee.chatbot.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-index', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.survey.title'|trans }}",
+                target: '#endSurvey',
+                content: "{{ 'tourguide.index.trainee.survey.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-end-survey-index', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.modules.title'|trans }}",
+                target: '#liste_modules',
+                content: "{{ 'tourguide.index.trainee.modules.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.modules.example.title'|trans }}",
+                target: '#liste_modules .card:nth-of-type(1)',
+                content: "{{ 'tourguide.index.trainee.modules.example.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: "{{ path('app_course', {'course': '31deef88-6dc3-4b4b-8c80-44210a4eac31'}) }}"
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.title'|trans }}",
+                target: '#liste_cours',
+                content: "{{ 'tourguide.index.trainee.courses.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.example.title'|trans }}",
+                target: '#liste_cours .card:nth-of-type(1)',
+                content: "{{ 'tourguide.index.trainee.courses.example.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.example.resources.title'|trans }}",
+                target: '#liste_cours .card:nth-of-type(1) .fa-book',
+                content: "{{ 'tourguide.index.trainee.courses.example.resources.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: "{{ path('app_embed', {'slide': '2PACX-1vSKeR0dFKWdpRfcbrD-zlwwRXaxgJnZxQSvw8UNWYpTh2DQ19vfhDLWrLz_4esmuEySbhLhF-0kYoR6'}) }}"              
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.example.embed.title'|trans }}",
+                target: 'iframe',
+                content: "{{ 'tourguide.index.trainee.courses.example.embed.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.example.embed.resources.title'|trans }}",
+                target: '#liste_ressources',
+                content: "{{ 'tourguide.index.trainee.courses.example.embed.resources.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.courses.example.embed.resources.give.title'|trans }}",
+                target: '#liste_tps .card .fa-arrow-up-from-bracket',
+                content: "{{ 'tourguide.index.trainee.courses.example.embed.resources.give.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-modules', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.title'|trans }}",
+                target: 'main .container-fluid',
+                content: "{{ 'tourguide.index.trainee.mailbox.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.example.contacts.title'|trans }}",
+                target: '#liste_contacts',
+                content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.example.conversation.title'|trans }}",
+                target: '#messages',
+                content: "{{ 'tourguide.index.trainee.mailbox.example.conversation.content'|trans }}",
+                position: 'top', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.example.contacts.cohort.title'|trans }}",
+                target: '#liste_contacts a:nth-of-type(1)',
+                content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.cohort.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainer.title'|trans }}",
+                target: '#liste_contacts a:nth-of-type(2)',
+                content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainer.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainees.title'|trans }}",
+                target: '#liste_contacts #chat-trainees',
+                content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainees.content'|trans }}",
+                position: 'right', 
+                group: 'trainee-mailbox', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.informations.tab.title'|trans }}",
+                target: '#subnavbar',
+                content: "{{ 'tourguide.index.trainee.account.informations.tab.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.replay_tutorial.title'|trans }}",
+                target: '#btn_replay_tutorial',
+                content: "{{ 'tourguide.index.trainee.account.replay_tutorial.content'|trans }}",
+                position: 'left', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.avatar.title'|trans }}",
+                target: '#liste_avatars',
+                content: "{{ 'tourguide.index.trainee.account.avatar.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.informations.title'|trans }}",
+                target: '#form_user',
+                content: "{{ 'tourguide.index.trainee.account.informations.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.informations.signature.title'|trans }}",
+                target: '#signature-pad',
+                content: "{{ 'tourguide.index.trainee.account.informations.signature.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+              {
+                title: "{{ 'tourguide.index.trainee.account.informations.actual_signature.title'|trans }}",
+                target: '#actual-signature',
+                content: "{{ 'tourguide.index.trainee.account.informations.actual_signature.content'|trans }}",
+                position: 'bottom', 
+                group: 'trainee-informations', 
+                display_modal: false, 
+                link: null
+              }, 
+            ];
+            tg = new tourguide.TourGuideClient({
+              steps: stepsTourGuideTrainee,
+              rememberStep: true,
+              prevLabel: "{{ 'global.btn_previous'|trans }}",
+              nextLabel: "{{ 'global.btn_next'|trans }}",
+              dialogClass: 'tourguide-dialog',
+              backdropClass: 'tourguide-backdrop',
+              progressBar: '#45BEEB', 
+              hidePrev: true // Avoid to show the previous button which is buggy with the modal
+            });
+            tg.onBeforeStepChange(()=>{
+              return new Promise((resolve, reject) => {
+                if(tg.tourSteps[tg.activeStep].link !== null) {
+                  window.location.href = tg.tourSteps[tg.activeStep].link;
+                } 
+                return resolve(true);
+                {# else {
+                  return reject()
+                } #}
+              });
+            }); 
+            tg.onAfterStepChange(()=>{
+              return new Promise((resolve, reject) => { 
+                if (tg.tourSteps[tg.activeStep].display_modal === true) {
+                  $('#modalFeedback').modal("show");
+                } else if (tg.tourSteps[tg.activeStep].display_modal === false) {
+                  $('#modalFeedback').modal("hide");
+                }
+                return resolve(true);
+                {# else {
+                  return reject()
+                } #}
+              });
+            }); 
+          }
+
           $('#searchInput').on('keyup', () => {
             if ($('#searchInput').val().length >= 3) {
               $.ajax({
@@ -388,7 +829,7 @@
                   if (r.trainees.length > 0) {
                     $('#searchResults #searchTrainees').removeClass('d-none')
                     r.trainees.forEach((trainee) => {
-                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + "[20"+ trainee.username.slice(-2) + "] " + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}{% if is_granted("ROLE_TRAINER") %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
                     })
                   } else {
                     $('#searchResults #searchTrainees').addClass('d-none')

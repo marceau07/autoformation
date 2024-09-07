@@ -8,54 +8,80 @@
     color: var(--col-primary);
 }
 
-.fake-link:hover div {
+.fake-link:hover {
     background-color: var(--col-primary-dark);
     color: var(--col-primary);
+    filter: contrast(1.2);
 }
 
-[data-theme="dark"] .fake-link:hover div {
+[data-theme="dark"] .fake-link:hover {
+    background-color: var(--coul-principale);
+    color: var(--col-primary);
+    filter: contrast(1.7);
+}
+
+.chat-message-right>div:nth-of-type(2) {
     background-color: var(--coul-principale);
     color: var(--col-primary);
 }
 
-.height-message-scroll {
-    overflow-y: auto;
-    max-height: calc(100vh - 300px);
-}
-
-.height-message-scroll2 {
-    overflow-y: auto;
-    max-height: 80%;
-}
-
-.msg {
-    padding: 0.25rem 0.75rem;
-    border: 2px solid #FFF;
-    border-radius: 5px;
-    display: block;
-    width: fit-content;
-    margin: 0.5rem;
-}
-
-.msg-sender {
-    background-color: var(--coul-principale);
-    color: var(--col-primary);
-}
-
-.msg-receiver {
+.chat-message-left>div:nth-of-type(2) {
     background-color: var(--col-primary);
     color: var(--col-primary-dark);
 }
 
-.user-visibility input,
-.user-visibility a,
-.session-visibility input,
-.session-visibility a {
-    position: absolute;
-    bottom: 6.2rem;
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 800px;
 }
 
-.user-visibility a,
-.session-visibility a {
-    right: 1.5vw;
+.chat-message-left,
+.chat-message-right {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.chat-message-left {
+    margin-right: auto;
+}
+
+.chat-message-right {
+    flex-direction: row-reverse;
+    margin-left: auto;
+}
+
+.py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.px-4 {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}
+
+.flex-grow-0 {
+    flex-grow: 0 !important;
+}
+
+.border-top {
+    border-top: 1px solid #dee2e6 !important;
+}
+
+.list-group-item {
+    padding: 0.25rem 1.5rem;
+}
+
+#liste_contacts {
+    max-height: 68vh;
+    overflow-y: auto;
+}
+
+.chat-offline::before {
+    color: #e4606d;
+}
+
+.chat-online::before {
+    color: #34ce57;
 }

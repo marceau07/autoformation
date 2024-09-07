@@ -25,3 +25,17 @@
     </div>
   </div>
 {% endblock %}
+
+{% block js %}
+  <script>
+  $(document).ready(function () {
+    if($('#liste_cours .card').length > 0) {
+      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-modules') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+        tg.group = 'trainee-modules';
+        tg.activeStep = 2;
+        tg.refresh();
+      }
+    }
+  });
+</script>
+{% endblock %}

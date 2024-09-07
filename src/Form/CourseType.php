@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Course;
 use App\Entity\CourseModule;
+use App\Entity\Trainer;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,9 +27,9 @@ class CourseType extends AbstractType
                 'choice_label' => 'label',
             ])
             ->add('trainer', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => function (User $user) {
-                    return $user->getLastName() . ' ' . $user->getFirstName();
+                'class' => Trainer::class,
+                'choice_label' => function (Trainer $trainer) {
+                    return $trainer->getLastName() . ' ' . $trainer->getFirstName();
                 },
             ]);
     }

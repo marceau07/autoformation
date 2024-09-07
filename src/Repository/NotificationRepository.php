@@ -21,6 +21,20 @@ class NotificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Notification::class);
     }
 
+    public function deleteANotification(string $origin = null, string $cohort_uuid = null, string $category, int $user_id): void
+    {
+        $this->createQueryBuilder('n')
+            ->delete()
+            ->where('n.user = :user_id')
+            ->andWhere(($origin !== null ? 'n.origin = :origin' : 'n.link LIKE :cohort_uuid'))
+            ->andWhere('n.category = :category')
+            ->setParameter('user_id', $user_id)
+            ->setParameter(($origin !== null ? 'origin' : 'cohort_uuid'), ($origin !== null ? $origin : '%' . $cohort_uuid . '%'))
+            ->setParameter('category', $category)
+            ->getQuery()
+            ->execute();
+    }
+
     //    /**
     //     * @return Notification[] Returns an array of Notification objects
     //     */

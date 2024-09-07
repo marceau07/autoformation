@@ -12,10 +12,15 @@
         <div class="row pb-5" id="liste_modules">
           {% if listModules is defined and listModules is not empty %}
             {% for value in listModules %}
-              <div class="col-xs-1 col-md-6 col-lg-3 mb-3">
+              {% if value.module.illustration starts with 'http://' or value.module.illustration starts with 'https://' %}
+                {% set illustration = value.module.illustration %}
+              {% else %}
+                {% set illustration = asset('images/' ~ value.module.illustration) %}
+              {% endif %}
+              <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-12 mb-3">
                 <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}" class="text-black">
                   <div class="card">
-                    <span class="card-img-top"><img class="img-course" alt="Illustration {{ value.module.label }}" src="{{ asset('/images/' ~ value.module.illustration) }}" loading="lazy" /></span>
+                    <span class="card-img-top text-center"><img class="img-course" alt="Illustration {{ value.module.label }}" src="{{ illustration }}" loading="lazy" /></span>
                     <div class="card-body">
                       <p class="card-title h5 text-decoration-underline">{{ value.module.label|upper }}</p>
                     </div>
@@ -30,4 +35,16 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+  $(document).ready(function () {
+    if($('#liste_modules .card').length > 0) {
+      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-modules') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+        tg.start('trainee-modules');
+      }
+    }
+  });
+</script>
 {% endblock %}

@@ -54,8 +54,9 @@
                   <td>{{ trainer.roles ? trainer.roles|json_encode:'' }}</td>
                   <td>{{ trainer.email }}</td>
                   <td>{{ trainer.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
-                  <td>{% if trainer.signature is defined and trainer.signature is not empty %}
-                    <img src="{{ trainer.signature }}" alt="Signature de {{ trainer.username }}">
+                  <td>
+                    {% if trainer.signature is defined and trainer.signature is not empty %}
+                      <img src="{{ trainer.signature }}" height="100" width="150" alt="Signature de {{ trainer.username }}">
                     {% else %}
                     {{ 'administration.trainer.no_signature'|trans({'%trainer%': trainer.username}) }}
                     {% endif %}
@@ -80,22 +81,24 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_trainers').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
-      }
-    });
+    {% if trainers is defined and trainers is not empty %}
+      $('#list_trainers').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
   });
 </script>
 {% endblock %}

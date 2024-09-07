@@ -33,6 +33,7 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
             'feedbackCategories' => $this->globalDataService->getFeedbackCategories(),
             'notificationsHomeworksToDo' => $this->globalDataService->getNotificationsHomeworksToDo($this->getCurrentUser()),
             'notificationsMessages' => $this->globalDataService->getNotificationsMessages($this->getCurrentUser()),
+            'notificationsInternships' => $this->globalDataService->getNotificationsInternships($this->getCurrentUser()),
             'notificationsNewCourses' => $this->globalDataService->getNotificationsNewCourses($this->getCurrentUser()),
         ];
     }

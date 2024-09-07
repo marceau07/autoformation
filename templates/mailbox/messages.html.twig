@@ -1,37 +1,24 @@
-<div id="contenu" class="height-message-scroll2">
-  {% if messages is defined and messages is not empty %}
-    {% for message in messages %}
-      <div class="msg {{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'msg-sender ms-auto' : 'msg-receiver me-auto' }}">
-        <div class="text-{{ cohort is defined and cohort is not empty ? 'start' : 'end' }} small opacity-75">
-          {% if cohort is defined and cohort is not empty and message.sendTrainer is not empty %}
-            {{ message.sendTrainer.firstname|capitalize }}&nbsp;{{ message.sendTrainer.lastname|first|upper }}.&nbsp;
-          {% elseif cohort is defined and cohort is not empty and message.sendTrainee is not empty %}
-            {{ message.sendTrainee.firstname|capitalize }}&nbsp;{{ message.sendTrainee.lastname|first|upper }}.&nbsp;
-          {% endif %}
-          {{ message.date|time_ago }}
-        </div>
-        <p class="text-start">
-          <img src="{{ asset('images/avatars/' ~ message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link) }}" alt="Avatar de l'utilisateur" width="25" />
-          &nbsp;{{ message.content }}
-        </p>
+{% if messages is defined and messages is not empty %}
+  {% for message in messages %}
+    <div class="chat-message-{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'right mb-4' : 'left pb-4' }} pb-4">
+      <div>
+        {% if message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link starts with 'http://' or message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link starts with 'https://' %}
+          {% set avatarUser = message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link %}
+        {% else %}
+          {% set avatarUser = asset('images/avatars/' ~ message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link) %}
+        {% endif %}
+        <img src="{{ avatarUser }}" class="rounded-circle me-1" alt="{{ message.sendTrainer.firstName ?? message.sendTrainee.firstName }} {{ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}" width="40" height="40" />
+        <div class="text-muted small text-nowrap mt-2">{{ message.date|time_ago }}</div>
       </div>
-    {% endfor %}
-  {% else %}
-    <div>
-      <dotlottie-player src="https://lottie.host/42d43b29-1cd3-43c6-b2d9-77c963210dd0/ahpeOAtfF5.json" style="height: 40vh;" background="transparent" speed="1" loop="true" autoplay="true"></dotlottie-player>
-      <p>{{ 'mailbox.no_content'|trans }}</p>
+      <div class="flex-shrink-1 rounded py-2 px-3 mx-3 me-3">
+        <div class="fw-bold mb-1">{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'You' : message.sendTrainer.firstName ?? message.sendTrainee.firstName ~ ' ' ~ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}</div>{{ message.content }}
+      </div>
     </div>
-  {% endif %}
-</div>
-{% if messages is defined %}
-  <div class="user-visibility cohort-visibility">
-    <form action="/send_message" method="post">
-      <input type="hidden" name="form_origin" value="{{ cohort is defined and cohort is not empty ? 'cohort' : trainee is defined ? 'trainee' : 'trainer' }}" />
-      <input type="hidden" name="form_sender_uuid" value="{{ app.user.uuid }}" />
-      <input type="hidden" name="form_receiver_uuid" value="{{ uuid }}" />
-      <input type="text" name="form_message" id="form_message" placeholder="{{ 'mailbox.start_typing_here'|trans }}" class="form-control" style="width: 77%;" autocomplete="off" />
-      <input type="submit" class="d-none" value="Envoyer" id="form-btn-send" />
-      <a href="#" class="btn btn-success" onclick="$('#form-btn-send').click();"><i class="fa-solid fa-paper-plane"></i>&nbsp;{{ 'global.btn_send'|trans }}</a>
-    </form>
+  {% endfor %}
+{% else %}
+  <div class="text-center">
+    <dotlottie-player src="https://lottie.host/42d43b29-1cd3-43c6-b2d9-77c963210dd0/ahpeOAtfF5.json" style="height: 40vh;" background="transparent" speed="1" loop="true" autoplay="true"></dotlottie-player>
+    <p>{{ 'mailbox.no_content'|trans }}</p>
   </div>
 {% endif %}
+<span class="d-none" id="go_to_bottom"></span>

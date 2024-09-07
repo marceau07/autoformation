@@ -17,7 +17,7 @@
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
           <a role="button" class="btn btn-primary" href="{{ path('app_course_new') }}">{{ 'global.btn_add'|trans }}</a>
-          {# <button role="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalManagecours" onclick="showModalManagecours();">Gérer les cours</button> #}
+          <button role="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalManagecours">{{ 'administration.course.manage_courses'|trans }}</button>
         </div>
         <div>
           <table class="table table-bordered table-striped display responsive nowrap" id="list_courses">
@@ -59,27 +59,103 @@
       </div>
     </div>
   </div>
+
+  
+  <div class="modal modal-xl fade" id="modalManagecours" data-bs-backdrop="static" tabindex="-1" aria-labelledby="modalManagecoursTitle" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <div class="container">
+                      <div class="row">
+                          <h5 class="modal-title w-auto" id="modalManagecoursTitle">{{ 'administration.course.manage_courses'|trans }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          &nbsp;
+                      </div>
+                      <div class="row">
+                          <div class="col-3">
+                              <select name="form_filter_cohort" id="form_filter_cohort" class="form-select" onchange="fetchCourses();">
+                                <option disabled selected>Choisir une cohorte</option>
+                                {% for cohort in trainerCohorts %}
+                                  <option value="{{ cohort.id }}">{{ cohort.name }}</option>
+                                {% endfor %}
+                              </select>
+                          </div>
+                          <div class="col-3">
+                              <label for="form_active_cours">
+                                  <input type="checkbox" name="form_active_cours" id="form_active_cours" onchange="fetchCourses();">
+                                  {{ 'administration.course.course_non_active'|trans }} / {{ 'administration.course.course_active'|trans }}
+                              </label>
+                          </div>
+                          <div class="col">
+                              <input type="text" name="form_search_cours" id="form_search_cours" placeholder="{{ 'administration.course.manage_courses_searchbar'|trans }}" class="form-control" onkeyup="fetchCourses();">
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                        <span>{{ 'administration.course.manage_courses_default_text'|trans }}</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
 {% endblock %}
 
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_courses').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+    {% if courses is defined and courses is not empty %}
+      $('#list_courses').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
+  });
+
+  function fetchCourses() {
+    var cohort_id = $("#form_filter_cohort").val();
+    var active_cours = $("#form_active_cours").is(":checked") ? 1 : 0;
+    var search_cours = $("#form_search_cours").val();
+
+    $.ajax({
+      url: "/" + locale + "/course/cohort/fetch/" + cohort_id + "/active/" + active_cours + "/search/" + search_cours,
+      method: "post",
+      success: function(r) {
+        $("#modalManagecours .modal-body .container-fluid").html(r);
       }
     });
-  });
+  }
+
+  function updateStatusCourse(cours_id, id_cohort) {
+    var cours_active = ($("#cours_" + cours_id + "_" + id_cohort + " span > span").hasClass("cours-active") ? 0 : 1);
+
+    $.ajax({
+        url: "/" + locale + "/course/cohort/" + cours_id + "/" + id_cohort + "/update",
+        method: "post",
+        data: {
+            cours_id: cours_id,
+            id_cohort: id_cohort,
+            cours_active: cours_active
+        },
+        success: function(r) {
+          $("#cours_" + cours_id + "_" + id_cohort + " span > span").toggleClass("cours-active cours-inactive");
+        }
+    });
+  }
 </script>
 {% endblock %}

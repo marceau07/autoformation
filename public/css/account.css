@@ -17,4 +17,34 @@
     background-color: #FFFFFF;
     border: 1px solid #000000;
     border-radius: 10px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.shield_picture {
+    width: auto;
+    max-height: 20vh;
+    /* object-fit: cover; */
+}
+
+@media only screen and (min-width: 640px) {
+    .img-profile {
+        width: 100px;
+        height: 100px;
+    }
+
+    .shield_picture {
+        max-height: 20vh;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .img-profile {
+        width: 100px;
+        height: 100px;
+    }
+
+    .shield_picture {
+        max-height: 30vh;
+    }
 }

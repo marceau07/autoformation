@@ -90,7 +90,7 @@ class MessageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    # TODO: Make this method retieving only the messages that are not readed for the current user in the current conversation 
+    # TODO: Make this method retrieving only the messages that are not readed for the current user in the current conversation 
     public function makeMessageReaded(int $idMessage)
     {
         return $this->createQueryBuilder('m')

@@ -21,7 +21,7 @@ class FaqType extends AbstractType
             ->add('priority')
             ->add('sector', EntityType::class, [
                 'class' => Sector::class,
-                'choice_label' => 'id',
+                'choice_label' => 'label',
             ])
         ;
     }

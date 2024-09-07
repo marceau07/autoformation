@@ -61,7 +61,7 @@
               </tr>
             {% else %}
               <tr>
-                <td colspan="14">{{ 'administration.prosprect.no_prospect'|trans }}</td>
+                <td colspan="14">{{ 'administration.prospect.no_prospect'|trans }}</td>
               </tr>
             {% endfor %}
             </tbody>
@@ -75,22 +75,24 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_prospects').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
-      }
-    });
+    {% if prospects is defined and prospects is not empty %}
+      $('#list_prospects').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
   });
 </script>
 {% endblock %}

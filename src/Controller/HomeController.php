@@ -2,17 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Feedback;
-use App\Entity\TraineeResource;
-use App\Repository\CourseModuleRepository;
+use App\Entity\SurveyTrainee;
 use App\Repository\CourseRepository;
 use App\Repository\FaqRepository;
 use App\Repository\CohortRepository;
-use App\Repository\CourseCohortRepository;
 use App\Repository\CourseTraineeRepository;
-use App\Repository\FeedbackCategoryRepository;
-use App\Repository\FeedbackRepository;
 use App\Repository\MessageRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\SurveyRepository;
 use App\Repository\SurveyTraineeRepository;
 use App\Repository\TraineeRepository;
@@ -48,13 +44,6 @@ class HomeController extends AbstractController
         }
     }
 
-    // // TODO: vérifier la faisabi
-    // #[Route('/updateSessionFilter', name: '_update_session_filter', methods: "POST", condition: "request.isXmlHttpRequest()")]
-    // public function updateSessionFilter(Request $request): Response
-    // {
-    //     return new JsonResponse(['test' => 'OK'], 200);
-    // }
-
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/modules', name: 'app_modules', methods: "GET")]
     public function modules(CourseRepository $courseRepository): Response
@@ -70,20 +59,24 @@ class HomeController extends AbstractController
     #[Route('/course/read/{course}/{search}', name: 'app_course', methods: "GET")]
     public function course(CourseRepository $courseRepository, string $course, string $search = null): Response
     {
+        $listCourses = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesInformationsBySector($course, $search) : $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), $course, $search));
+
         return $this->render('course/course.html.twig', [
-            'listCourses' => $courseRepository->getCoursesInformations($course, $search)
+            'listCourses' => $listCourses
         ]);
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/embed/{slide}', name: 'app_embed', methods: "GET")]
-    public function embed(CourseRepository $courseRepository, TraineeRepository $traineeRepository, TraineeResourceRepository $traineeResourceRepository, string $slide): Response
+    public function embed(CourseRepository $courseRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, TraineeResourceRepository $traineeResourceRepository, NotificationRepository $notificationRepository, string $slide): Response
     {
         $tps = array();
         if ($this->isGranted('ROLE_TRAINEE') === true) {
+            $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
             $traineeRepository->updateCourseVisitors($slide);
             $traineeRepository->updateCourseFollowed($slide, $this->getUser()->getUserIdentifier());
             $tps = $traineeResourceRepository->findByTrainee($this->getUser()->getUserIdentifier());
+            $notificationRepository->deleteANotification("[" . $courseRepository->getCourseInformations($slide)->getModule()->getLabel() . "]", null, "new_course", $currentUser->getId());
         }
 
         return $this->render('course/embed.html.twig', [
@@ -112,14 +105,12 @@ class HomeController extends AbstractController
     #[Route('/admin', name: 'app_admin_dashboard', methods: "GET")]
     public function adminDashboard(): Response
     {
-
-
         return $this->render('home/admin.html.twig', []);
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/mailbox/', name: 'app_mailbox', methods: "GET")]
-    public function mailbox(CohortRepository $cohortRepository, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    public function mailbox(CohortRepository $cohortRepository, TraineeRepository $traineeRepository): Response
     {
         return $this->render('mailbox/index.html.twig', [
             'cohorts' => ($this->isGranted('ROLE_TRAINER') ? $cohortRepository->findAll() : [$traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()]),
@@ -128,10 +119,17 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/mailbox/cohort/{uuid}', name: 'app_mailbox_cohort', methods: "GET")]
-    public function mailboxCohort(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, string $uuid = null): Response
+    public function mailboxCohort(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, NotificationRepository $notificationRepository, string $uuid = null): Response
     {
         $cohort = $cohortRepository->findOneBy(["uuid" => $uuid]);
         $messages = $messageRepository->getMessagesBetweenTraineesAndCohort($cohort->getUuid());
+
+        $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
+        foreach ($messages as $message) {
+            if ($message->getCohort() !== null && $message->getTrainer() === null && $message->getTrainee() === null) {
+                $notificationRepository->deleteANotification(null, $cohort->getUuid(), "new_message", $currentUser->getId());
+            }
+        }
 
         return $this->render('mailbox/index.html.twig', [
             'cohorts' => ($this->isGranted('ROLE_TRAINER') ? $cohortRepository->findAll() : [$traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()]),
@@ -143,7 +141,7 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/mailbox/trainee/{uuid}', name: 'app_mailbox_trainee', methods: "GET")]
-    public function mailboxTrainee(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, string $uuid = null): Response
+    public function mailboxTrainee(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, NotificationRepository $notificationRepository, string $uuid = null): Response
     {
         $user = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
         if ($uuid == $user->getUuid()) {
@@ -159,6 +157,13 @@ class HomeController extends AbstractController
             $messages = $messageRepository->getMessagesBetweenTrainees($currentUser->getUuid(), $contact->getUuid());
         }
 
+        foreach ($messages as $message) {
+            if ($message->getTrainer() !== null && $message->getTrainer()->getId() == $currentUser->getId() || $message->getTrainee() !== null && $message->getTrainee()->getId() == $currentUser->getId()) {
+                $messageRepository->makeMessageReaded($message->getId());
+                $notificationRepository->deleteANotification($contact->getUsername(), null, "new_message", $currentUser->getId());
+            }
+        }
+
         return $this->render('mailbox/index.html.twig', [
             'cohorts' => ($this->isGranted('ROLE_TRAINER') ? $cohortRepository->findAll() : [$traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()]),
             'contact' => $contact,
@@ -170,7 +175,7 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/mailbox/trainer/{uuid}', name: 'app_mailbox_trainer', methods: "GET")]
-    public function mailboxTrainer(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, string $uuid = null): Response
+    public function mailboxTrainer(CohortRepository $cohortRepository, MessageRepository $messageRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, NotificationRepository $notificationRepository, string $uuid = null): Response
     {
         $user = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
         if ($uuid == $user->getUuid()) {
@@ -189,6 +194,7 @@ class HomeController extends AbstractController
         foreach ($messages as $message) {
             if ($message->getTrainer() !== null && $message->getTrainer()->getId() == $currentUser->getId() || $message->getTrainee() !== null && $message->getTrainee()->getId() == $currentUser->getId()) {
                 $messageRepository->makeMessageReaded($message->getId());
+                $notificationRepository->deleteANotification($contact->getUsername(), null, "new_message", $currentUser->getId());
             }
         }
 
@@ -205,9 +211,9 @@ class HomeController extends AbstractController
     public function faq(FaqRepository $faqRepository, TraineeRepository $traineeRepository, TrainerRepository $trainerRepository): Response
     {
         $sectorId = null;
-        if($this->isGranted('ROLE_TRAINEE') === true) {
+        if ($this->isGranted('ROLE_TRAINEE') === true) {
             $sectorId = $traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])->getCohort()->getTrainer()->getSector()->getId();
-        } elseif($this->isGranted('ROLE_TRAINER') === true) {
+        } elseif ($this->isGranted('ROLE_TRAINER') === true) {
             $sectorId = $trainerRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])->getSector()->getId();
         }
 
@@ -234,10 +240,26 @@ class HomeController extends AbstractController
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
-    #[Route('/survey', name: 'app_survey', methods: "GET")]
-    public function survey(SurveyRepository $surveyRepository): Response
+    #[Route('/survey', name: 'app_survey', methods: ["GET", "POST"])]
+    public function survey(SurveyRepository $surveyRepository, EntityManagerInterface $entityManager): Response
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // TODO: Save survey
+            // foreach($_POST as $key => $value) {
+            //     if (strpos($key, 'questionnaire_id_') !== false) {
+            //         $surveyTrainee = new SurveyTrainee();
+            //     }
+            //     $surveyTrainee->setTrainee($this->getUser());
+            //     $surveyTrainee->setSurvey($surveyRepository->findOneBy(["id" => explode('_', $key)[2]]));
+            //     $surveyTrainee->setRate($value);
+            //     $surveyTrainee->setAnswer($value);
+            //     $entityManager->persist($surveyTrainee);
+            // }
+            // $entityManager->flush();
 
+            $this->addFlash('notice', 'Merci pour votre participation !');
+            return $this->redirectToRoute('app_home');
+        }
         return $this->render('survey/index.html.twig', [
             'questions' => $surveyRepository->findAll()
         ]);
@@ -250,17 +272,20 @@ class HomeController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $search = $request->request->get('q');
 
-            $courses = $courseRepository->searchCourses($search);
+            // $courses = $courseRepository->searchCourses($search);
+            $courses = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesInformationsBySector(null, $search) : $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), null, $search));
+
             $trainees = $traineeRepository->searchTrainees($search);
             $trainers = $trainerRepository->searchTrainers($search);
             return $this->json(
                 [
                     'success' => true,
+                    // 'courses' => json_decode($serializer->serialize($courses, 'json', ['groups' => ['course_search']]), true), // TODO: Fix this to fetch only courses in sector/allowed courses
                     'courses' => json_decode($serializer->serialize($courses, 'json', ['groups' => ['course_search']]), true),
                     'trainees' => json_decode($serializer->serialize($trainees, 'json', ['groups' => ['trainee_search']]), true),
                     'trainers' => json_decode($serializer->serialize($trainers, 'json', ['groups' => ['trainer_search']]), true),
                 ],
-                status: 200
+                status: Response::HTTP_OK
             );
         }
         return $this->json(

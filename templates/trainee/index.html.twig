@@ -51,8 +51,14 @@
                   <td>{{ trainee.email }}</td>
                   <td>{{ trainee.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
                   <td>{{ trainee.tmpCode }}</td>
-                  <td>{% if trainee.signature is defined and trainee.signature is not empty %}
-                    <img src="{{ trainee.signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
+                  <td>
+                    {% if trainee.signature is defined and trainee.signature is not empty %}    
+                      {% if trainee.signature starts with 'http://' or trainee.signature starts with 'https://' %}
+                        {% set signature = trainee.signature %}
+                      {% else %}
+                        {% set signature = asset('images/avatars/' ~ trainee.signature) %}
+                      {% endif %}
+                      <img src="{{ signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
                     {% else %}
                     {{ 'administration.trainee.no_signature'|trans({'%trainee%': trainee.username}) }}
                     {% endif %}
@@ -61,32 +67,33 @@
                   <td>
                     {% if trainee.documents is defined and trainee.documents is not empty %}
                       {% set documents = trainee.documents|json_decode %} 
-                      {% for internship in documents.internships %}
-                        <div>
-                          {% if internship.id is defined and internship.internship_id is empty and internship.agreement == 0 %}
-                          <a href="{{ path('pdf_generate', { element: 'internship-agreement' }) }}" target="_blank">Générer la convention</a>
-                          {% elseif internship.id is defined and internship.internship_id is empty and internship.agreement == 2 %}
-                          <a href="/internships/tmp/Convention_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser la convention</a>
-                          {% endif %}
-                        </div>
-                        
-                        <div>
-                          {% if internship.id is defined and internship.id is empty and internship.certificate == 0 %}
-                          <a href="{{ path('pdf_generate', { element: 'internship-certificate' }) }}" target="_blank">Générer l'attestation</a>
-                          {% elseif internship.id is defined and internship.id is empty and internship.certificate == 2 %}
-                          <a href="/internships/tmp/Attestation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'attestation</a>
-                          {% endif %}
-                        </div>
-                        
-                        <div>
-                          {% if internship.id is defined and internship.id is empty and internship.evaluation == 0 %}
-                          <a href="{{ path('pdf_generate', { element: 'internship-evaluation' }) }}" target="_blank">Générer l'évaluation</a>
-                          {% elseif internship.id is defined and internship.id is empty and internship.evaluation == 2 %}
-                          <a href="/internships/tmp/Evaluation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'évaluation</a>
-                          {% endif %}
-                        </div>
-                        
-                      {% endfor %}
+                      {% if documents.internships is defined and documents.internships is not empty %}
+                        {% for internship in documents.internships %}
+                          <div>
+                            {% if internship.id is defined and internship.internship_id is empty and internship.agreement == 0 %}
+                            <a href="{{ path('pdf_generate', { element: 'internship-agreement' }) }}" target="_blank">Générer la convention</a>
+                            {% elseif internship.id is defined and internship.internship_id is empty and internship.agreement == 2 %}
+                            <a href="/internships/tmp/Convention_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser la convention</a>
+                            {% endif %}
+                          </div>
+                          
+                          <div>
+                            {% if internship.id is defined and internship.id is empty and internship.certificate == 0 %}
+                            <a href="{{ path('pdf_generate', { element: 'internship-certificate' }) }}" target="_blank">Générer l'attestation</a>
+                            {% elseif internship.id is defined and internship.id is empty and internship.certificate == 2 %}
+                            <a href="/internships/tmp/Attestation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'attestation</a>
+                            {% endif %}
+                          </div>
+                          
+                          <div>
+                            {% if internship.id is defined and internship.id is empty and internship.evaluation == 0 %}
+                            <a href="{{ path('pdf_generate', { element: 'internship-evaluation' }) }}" target="_blank">Générer l'évaluation</a>
+                            {% elseif internship.id is defined and internship.id is empty and internship.evaluation == 2 %}
+                            <a href="/internships/tmp/Evaluation_de_stage_{{ trainee.lastName|upper ~ '_' ~ trainee.firstName|capitalize }}.pdf" target="_blank">Réviser l'évaluation</a>
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
                     {% else %}
                       {{ 'administration.trainee.no_document'|trans }}
                     {% endif %}
@@ -110,22 +117,24 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_trainees').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
-      }
-    });
+    {% if trainees is defined and trainees is not empty %}
+      $('#list_trainees').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
   });
 </script>
 {% endblock %}

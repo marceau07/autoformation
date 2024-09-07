@@ -43,7 +43,7 @@ class TraineeRepository extends ServiceEntityRepository
         $bdd = $this->getEntityManager()->getConnection();
 
         $query = $bdd->executeQuery(
-            'SELECT s.* FROM user u INNER JOIN trainee t INNER JOIN cohort s WHERE (u.username=:username AND u.id = t.id AND t.cohort_id = s.id)',
+            'SELECT s.*, u2.* FROM user u INNER JOIN trainee t INNER JOIN cohort s INNER JOIN trainer tr INNER JOIN user u2 WHERE (u.username=:username AND u.id = t.id AND t.cohort_id = s.id AND tr.id = s.trainer_id AND u2.id = tr.id);',
             ['username' => $idUser]
         );
         return $query->fetchAssociative();

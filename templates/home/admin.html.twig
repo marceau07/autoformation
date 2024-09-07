@@ -52,45 +52,5 @@
               });
           },
       });
-
-    function showModalManagecours() {
-        // if(document.querySelector('input[name="form_search_cours"]').value !== "") {
-        $.ajax({
-            url: "#",
-            method: "post",
-            data: {
-                show_modal_manage_cours: 1,
-                cours_actifs: document.querySelector('input[name="form_active_cours"]').checked,
-                id_cohort: document.querySelector('#form_filter_cohort').value,
-                search: document.querySelector('input[name="form_search_cours"]').value
-            },
-            success: function(r) {
-                $("#modalManagecours .modal-content .modal-body").html(r);
-            }
-        });
-        // } else {
-        //     $("#modalManagecours .modal-content .modal-body").html("<p>Effectuez une recherche (mot-clé ou titre)...</p>");
-        // }
-    }
-
-    function updateStatusCourse(cours_id, id_cohort) {
-        var cours_active = ($("#cours_" + cours_id + "_" + id_cohort + " span > span").hasClass("cours-active") ? 0 : 1);
-
-        $.ajax({
-            url: "/api/v1/course-cohort/" + cours_id + "/" + id_cohort,
-            method: "post",
-            data: {
-                update_status_cours: 1,
-                cours_id: cours_id,
-                id_cohort: id_cohort,
-                cours_active: cours_active
-            },
-            success: function(r) {
-                if (r == "ok") {
-                    $("#cours_" + cours_id + "_" + id_cohort + " span > span").toggleClass("cours-active cours-inactive");
-                }
-            }
-        });
-    }
   </script>
 {% endblock %}

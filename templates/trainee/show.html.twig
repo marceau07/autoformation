@@ -38,7 +38,7 @@
       </tr>
       <tr>
         <th>Activated</th>
-        <td>{{ trainee.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
+        <td>{{ trainee.activated ? 'global.yes'|trans:'global.no'|trans }}</td>
       </tr>
       <tr>
         <th>TmpCode</th>
@@ -51,7 +51,11 @@
       <tr>
         <th>Signature</th>
         <td>
-          <img src="{{ trainee.signature }}" alt="Signature de {{ (trainee.firstName|capitalize) ~ ' ' ~ (trainee.lastName|upper) }}" />
+          {% if trainee.signature is defined and trainee.signature is not empty %}
+            <img src="{{ trainee.signature }}" alt="Signature de {{ (trainee.firstName|capitalize) ~ ' ' ~ (trainee.lastName|upper) }}" />
+          {% else %}
+            Pas de signature pour {{ trainee.username }}
+          {% endif %}
         </td>
       </tr>
       <tr>

@@ -43,15 +43,35 @@
                   <td>{{ cohort.id }}</td>
                   <td>{{ cohort.name }}</td>
                   <td>{{ cohort.acronym }}</td>
-                  <td>{{ cohort.shield }}</td>
-                  <td>{{ cohort.documents|json_decode }}</td>
+                  <td class="text-center">
+                    {% if cohort.shield is defined and cohort.shield is not empty %}
+                      {% if cohort.shield starts with 'http://' or cohort.shield starts with 'https://' %}
+                        {% set shield = cohort.shield %}
+                      {% else %}
+                        {% set shield = asset('images/shields/' ~ cohort.shield) %}
+                      {% endif %}
+                      <img src="{{ shield }}" height="150" alt="{{ 'administration.cohort.shield_alt'|trans({'%cohort%': cohort.name}) }}">
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% set documents = cohort.documents|json_decode|json_decode %}
+                    {% if documents.internships is defined and documents.internships is not empty %}
+                      <ul>
+                      {% for internship in documents.internships %}
+                        <li>{{ internship.label }}: {{ internship.start_date|date('d/m/Y') }} - {{ internship.finish_date|date('d/m/Y') }} | {{ internship.duration }}h</li>
+                      {% endfor %}
+                      </ul>
+                    {% else %}
+                      {{ 'administration.cohort.no_documents'|trans }}  
+                    {% endif %}
+                  </td>
                   <td>{{ cohort.startDate ? cohort.startDate|date('Y-m-d') : '' }}</td>
                   <td>{{ cohort.finishDate ? cohort.finishDate|date('Y-m-d') : '' }}</td>
                   <td>{{ cohort.uuid }}</td>
                 </tr>
               {% else %}
                 <tr>
-                  <td colspan="9">no records found</td>
+                  <td colspan="9">{{ administration.cohort.no_cohort|trans }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -65,22 +85,24 @@
 {% block js %}
 <script>
   $(document).ready(function() {
-    $('#list_cohorts').DataTable({
-      "destroy": true,
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      // "scrollX": true, // If you want horizontal scrolling, and not responsive
-      "responsive": {
-        "details": true // If you want to show details in a responsive way
-      },
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
-      }
-    });
+    {% if cohorts is defined and cohorts is not empty %}
+      $('#list_cohorts').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
   });
 </script>
 {% endblock %}

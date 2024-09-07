@@ -36,7 +36,7 @@
     </div>
   </div>
   <iframe class="pt-5" src="https://docs.google.com/presentation/d/e/{{ course.link }}/embed?start=true&delayms=120000" frameborder="0" style="width:100%;height:50vh;" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-  <div class="container">
+  <div class="container" id="liste_ressources">
     <div class="row">
       {% if listResources is defined and listResources is not empty %}
         <div class="col-12">
@@ -44,12 +44,12 @@
           <div class="row pb-3">
             {% for resource in listResources %}
               {% set link = '' %}
-              {% if resource.link is defined and resource.link is not empty %}
+              {% if resource.record_link is defined and resource.record_link is not empty %}
                 {% set link = path('app_download', { filename: resource.recordLink }) %}
               {% else %}
                 {% set link = resource.link %}
               {% endif %}
-              <div class="col-xs-1 col-lg-2 col-xl-3 my-2">
+              <div class="col-sm-12 col-md-4 col-lg-2 col-xl-3 col-12 my-2">
                 <a target="_blank" href="{{ link }}" class="text-black text-decoration-none">
                   <div class="card">
                     <div class="card-body">
@@ -70,10 +70,10 @@
           <h2>Les exercices</h2>
           <div class="row pb-3">
             {% for exercise in listExercises %}
-              <div class="col-xs-1 col-lg-2 col-xl-3">
+              <div class="col-sm-12 col-md-4 col-lg-2 col-xl-3 col-12">
                 <a target="_blank" href="{{ exercise.link }}" class="text-black text-decoration-none">
                   <div class="card">
-                    <span class="card-img-top"><img src="{{ asset('/images/homeworks.svg') }}" alt="Illustration devoirs à la maison" /></span>
+                    <span class="card-img-top text-center"><img src="{{ asset('/images/homeworks.svg') }}" alt="Illustration devoirs à la maison" /></span>
                     <div class="card-body">
                       <h6 class="card-title text-decoration-underline">{{ exercise.title }}</h6>
                       <small>{{ exercise.resume }}</small>
@@ -88,14 +88,14 @@
       {% endif %}
 
       {% if listTps is defined and listTps is not empty %}
-        <div class="col-12">
+        <div class="col-12" id="liste_tps">
           <h2>Les TPs</h2>
           <div class="row pb-5">
             {% for tp in listTps %}
-              <div class="col-xs-1 col-lg-3 col-xl-4">
+              <div class="col-sm-12 col-md-4 col-lg-3 col-xl-4 col-12" id="tp_{{ course.id ~ '_' ~ tp.id }}">
                 <a target="_blank" href="{{ tp.link }}" class="text-black text-decoration-none">
                   <div class="card">
-                    <span class="card-img-top" alt="Illustration devoirs à la maison">
+                    <span class="card-img-top text-center" alt="Illustration devoirs à la maison">
                       {% if is_granted('ROLE_USER') %}
                         {% if is_granted('ROLE_TRAINEE') %}
                           {% set html = '' %}
@@ -118,7 +118,7 @@
                     </span>
                     <div class="card-body">
                       <h6 class="card-title text-decoration-underline">{{ tp.title }}</h6>
-                      <small>{{ tp.resume }}</small>
+                      <small>{{ tp.resume|raw }}</small>
                     </div>
                   </div>
                 </a>
@@ -177,4 +177,13 @@
 
 {% block js %}
   <script src="{{ asset('js/embed.js') }}"></script>
+  <script>
+  $(document).ready(function () {
+    if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-modules') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+      tg.group = 'trainee-modules';
+      tg.activeStep = 5;
+      tg.refresh();
+    }
+  });
+</script>
 {% endblock %}

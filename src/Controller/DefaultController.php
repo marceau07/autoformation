@@ -5,15 +5,12 @@ namespace App\Controller;
 use App\Entity\Feedback;
 use App\Entity\Message;
 use App\Entity\Notification;
-use App\Entity\Trainee;
 use App\Entity\TraineeResource;
 use App\Repository\CohortRepository;
-use App\Repository\CourseRepository;
 use App\Repository\CourseResourceRepository;
-use App\Repository\CourseTraineeRepository;
 use App\Repository\FeedbackCategoryRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\TraineeRepository;
-use App\Repository\TraineeResourceRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,8 +20,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DefaultController extends AbstractController
 {
@@ -57,6 +54,68 @@ class DefaultController extends AbstractController
         );
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/{_locale}/chatbot', name: 'app_chatbot', methods: "POST")]
+    public function chatbot(TranslatorInterface $translator, Request $request): Response
+    {
+        $userMessage = strtolower(trim($request->request->get('form_chatbot_message')));
+
+        if (substr($userMessage, 0, 1) === "/") {
+            $userMessage = substr($userMessage, 1);
+            switch ($userMessage) {
+                case "help":
+                default:
+                    $response = '<ul>
+                                    <li><code>/' . $translator->trans('chatbot.keys.courses') . '&nbsp;{uuid|keywords}</code><p><small>' . $translator->trans('chatbot.commands.courses') . '</small></p></li>
+                                    <li><code>/' . $translator->trans('chatbot.keys.modules') . '&nbsp;{uuid|keywords}</code><p><small>' . $translator->trans('chatbot.commands.modules') . '</small></p></li>
+                                    <li><code>/' . $translator->trans('chatbot.keys.users') . '&nbsp;{uuid|username}</code><p><small>' . $translator->trans('chatbot.commands.users') . '</small></p></li>
+                                </ul>';
+                    break;
+            }
+        } else {
+            $responses = [
+                $translator->trans('chatbot.keys.hello', [], null, $request->getLocale()) => $translator->trans('chatbot.values.hello', [], null, $request->getLocale()),
+                $translator->trans('chatbot.keys.hey', [], null, $request->getLocale()) => $translator->trans('chatbot.values.hey', [], null, $request->getLocale()),
+                $translator->trans('chatbot.keys.help', [], null, $request->getLocale()) => $translator->trans('chatbot.values.help', [], null, $request->getLocale()),
+                $translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) => $translator->trans('chatbot.values.courses', [], null, $request->getLocale()),
+                $translator->trans('chatbot.keys.goodbye', [], null, $request->getLocale()) => $translator->trans('chatbot.values.goodbye', [], null, $request->getLocale()),
+            ];
+
+            $response = $translator->trans('chatbot.didnt_understand', [], null, $request->getLocale());
+
+            $closest = null;
+            $shortest = -1;
+
+            foreach ($responses as $keyword => $botResponse) {
+                $lev = levenshtein($keyword, strtolower($userMessage));
+
+                if ($lev == 0) {
+                    $closest = $keyword;
+                    $shortest = 0;
+                    break;
+                }
+
+                if ($lev <= $shortest || $shortest < 0) {
+                    $closest = $keyword;
+                    $shortest = $lev;
+                }
+            }
+
+            if ($closest !== null && $shortest < 5) { // You can set the threshold to define how "close" it needs to be
+                $response = $responses[$closest];
+            }
+        }
+
+        return $this->json(
+            [
+                'success' => true,
+                'message' => $response,
+            ],
+            status: Response::HTTP_OK
+        );
+    }
+
+    // TODO: Manage the good internship for the document
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_agreement', name: 'app_send_agreement', methods: "POST")]
     public function sendAgreement(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
@@ -76,6 +135,16 @@ class DefaultController extends AbstractController
                             $documents['internships'][0]['agreement'] = 2;
                             $trainee->setDocuments(json_encode($documents));
                             $entityManager->persist($trainee);
+
+                            $notification = new Notification();
+                            $notification->setOrigin($this->getUser()->getUserIdentifier());
+                            $notification->setMessage("convention");
+                            $notification->setLink("/../internships/tmp/" . $nomFichier);
+                            $notification->setCategory("new_internship");
+                            $notification->setDate(new \DateTimeImmutable());
+                            $notification->setUser($trainee->getCohort()->getTrainer());
+                            $entityManager->persist($notification);
+
                             $entityManager->flush();
                         } catch (FileException $e) {
                             $this->addFlash('danger', 'Erreur lors de l\'envoi de la convention: ' . $e->getMessage());
@@ -139,6 +208,16 @@ class DefaultController extends AbstractController
                             $documents['internships'][0]['certificate'] = 2;
                             $trainee->setDocuments(json_encode($documents));
                             $entityManager->persist($trainee);
+
+                            $notification = new Notification();
+                            $notification->setOrigin($this->getUser()->getUserIdentifier());
+                            $notification->setMessage("attestation");
+                            $notification->setLink("/../internships/tmp/" . $nomFichier);
+                            $notification->setCategory("new_internship");
+                            $notification->setDate(new \DateTimeImmutable());
+                            $notification->setUser($trainee->getCohort()->getTrainer());
+                            $entityManager->persist($notification);
+
                             $entityManager->flush();
                         } catch (FileException $e) {
                             $this->addFlash('danger', 'Erreur lors de l\'envoi de l\'attestation de stage: ' . $e->getMessage());
@@ -203,6 +282,16 @@ class DefaultController extends AbstractController
                             $documents['internships'][0]['evaluation'] = 2;
                             $trainee->setDocuments(json_encode($documents));
                             $entityManager->persist($trainee);
+
+                            $notification = new Notification();
+                            $notification->setOrigin($this->getUser()->getUserIdentifier());
+                            $notification->setMessage("evaluation");
+                            $notification->setLink("/../internships/tmp/" . $nomFichier);
+                            $notification->setCategory("new_internship");
+                            $notification->setDate(new \DateTimeImmutable());
+                            $notification->setUser($trainee->getCohort()->getTrainer());
+                            $entityManager->persist($notification);
+
                             $entityManager->flush();
                         } catch (FileException $e) {
                             $this->addFlash('danger', 'Erreur lors de l\'envoi de l\'évaluation: ' . $e->getMessage());
@@ -256,7 +345,7 @@ class DefaultController extends AbstractController
         $notificationNewMessage->setDate(new \DateTimeImmutable());
         $notificationNewMessage->setCategory("new_message");
         $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
-        $notificationNewMessage->setMessage("Vous avez reçu un nouveau message de la part de @" . $this->getUser()->getUserIdentifier());
+        $notificationNewMessage->setMessage($this->getUser()->getUserIdentifier());
 
         $message = new Message();
         $message->setContent($request->request->get('form_message'));
@@ -282,7 +371,7 @@ class DefaultController extends AbstractController
                 $notificationNewMessage->setCategory("new_message");
                 $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
                 $notificationNewMessage->setUser($cohortTrainee);
-                $notificationNewMessage->setMessage("Vous avez reçu un nouveau message dans #" . $cohort->getName());
+                $notificationNewMessage->setMessage($cohort->getName());
                 $notificationNewMessage->setLink($this->generateUrl('app_mailbox_cohort', ['uuid' => $cohort->getUuid()]), true);
                 $entityManager->persist($notificationNewMessage);
             }
@@ -316,7 +405,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_tp', name: 'app_send_tp', methods: "POST")]
-    public function sendTp(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, CourseResourceRepository $courseResourceRepository, UserRepository $userRepository, TraineeRepository $traineeRepository): Response
+    public function sendTp(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, CourseResourceRepository $courseResourceRepository, NotificationRepository $notificationRepository, UserRepository $userRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -332,10 +421,14 @@ class DefaultController extends AbstractController
                             $this->addFlash('notice', 'Travail envoyé');
                             $traineeResource = new TraineeResource();
                             $traineeResource->setLabel($nomFichier);
-                            $traineeResource->setCourseResource($courseResourceRepository->find($request->request->get('tp_id')));
+                            $courseResource = $courseResourceRepository->find($request->request->get('tp_id'));
+                            $traineeResource->setCourseResource($courseResource);
                             $traineeResource->setTrainee($this->getUser());
                             $entityManager->persist($traineeResource);
                             $entityManager->flush();
+
+                            $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
+                            $notificationRepository->deleteANotification($courseResource->getCourse()->getModule()->getLabel(), null, "homework_to_do", $currentUser->getId());
                         } catch (FileException $e) {
                             $this->addFlash('danger', 'Erreur lors de l\'envoi du travail: ' . $e->getMessage());
                         }

@@ -30,8 +30,8 @@ handleClickDropdown = function (e) {
   var anchorOffset = $(e.currentTarget).offset();
 
   dropdown.css({
-    'right': containerWidth / 2 + 'rem',
-    'top': containerWidth / 1.8 + 'rem'
+    'right': containerWidth / 1.6 + 'rem',
+    'top': containerWidth / 2.8 + 'rem'
   });
 };
 
