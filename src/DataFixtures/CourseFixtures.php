@@ -3,55 +3,45 @@
 namespace App\DataFixtures;
 
 use App\Entity\Course;
-use App\Entity\CourseModule;
-use App\Entity\Trainer;
-use App\Repository\CourseModuleRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class CourseFixtures extends Fixture
+class CourseFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const COURSE_REFERENCE_TAG = 'course-';
+    public const NB_COURSE = 200;
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
 
-        
-        for($i = 0; $i < 10; $i++) {
-            $trainer = new Trainer();
-            $trainer->setUsername($faker->userName());
-            $trainer->setPassword($faker->password());
-            $trainer->setFirstname($faker->firstName());
-            $trainer->setLastname($faker->lastName());
-            $trainer->setEmail($faker->email());
-            $trainer->setActivated($faker->boolean(75));
-            $trainer->setRoles(["ROLE_TRAINER"]);
-            $manager->persist($trainer);
-            $this->setReference("trainer-" . $i, $trainer);
+        for ($i = 0; $i < self::NB_COURSE; $i++) {
+            $course = new Course();
+            $course->setTitle($faker->title());
+            $course->setSynopsis($faker->paragraph());
+            // Generate a random number of keywords separated by commas with $faker
+            $keywords = $faker->words(rand(1, 50));
+            $course->setKeywords(implode(';', $keywords));
+            $course->setLink("2PACK-" . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
+            $course->setPosition(rand(0, self::NB_COURSE));
+            $course->setModule($this->getReference(CourseModuleFixtures::COURSE_MODULE_REFERENCE_TAG . rand(0, CourseModuleFixtures::NB_COURSE_MODULE - 1)));
+            $course->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1)));
+            $course->setVisitors(rand(0, 10000));
+
+            $manager->persist($course);
+            $this->addReference(self::COURSE_REFERENCE_TAG . $i, $course);
         }
-        
-        for ($i = 0; $i < 10; $i++) {
-            $module = new CourseModule();
-            $module->setLabel($faker->sentence(2));
-            $module->setIllustration("not_found_404.svg");
-            $module->setPosition($faker->numberBetween(1, 10));
-            $module->setUuid($faker->uuid());
-            $manager->persist($module);
-            $this->setReference("module-" . $i, $module);
-            for ($j = 0; $j < mt_rand(1, 13); $j++) {
-                $course = new Course();
-                $course->setTitle($faker->sentence(3));
-                $course->setSynopsis($faker->paragraph(2));
-                $course->setKeywords($faker->words(5, true));
-                $course->setLink("2PACX-".$faker->uuid());
-                $course->setPosition($faker->numberBetween(1, 10));
-                $course->setModule($module);
-                $course->setTrainer($this->getReference("trainer-" . mt_rand(0, 9)));
-                $course->setVisitors(mt_rand(0, 1000));
-                $manager->persist($course);
-                $this->setReference("course-" . $j, $course);
-            }
-        }
+
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            CourseModuleFixtures::class,
+            TrainerFixtures::class
+        ];
     }
 }
