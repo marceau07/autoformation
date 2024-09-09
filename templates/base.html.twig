@@ -516,6 +516,7 @@
                 content: "Ce petit tutoriel a pour but de vous montrer comment fonctionne le site. Libre à vous de le passer. <br>Vous pourrez le relancer à tout moment en cliquant sur le bouton en haut à droite dans vos informations personnelles.", 
                 position: 'center', 
                 group: 'trainee-index', 
+                order: 0,
                 display_modal: false, 
                 link: null
               },
@@ -524,7 +525,8 @@
                 target: '#navbar',
                 content: "{{ 'tourguide.index.trainee.navbar.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 1,
                 display_modal: false, 
                 link: null
               },
@@ -533,7 +535,8 @@
                 target: '.feedback-button',
                 content: "{{ 'tourguide.index.trainee.feedback.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 2,
                 display_modal: false, 
                 link: null
               },
@@ -542,7 +545,8 @@
                 target: 'main .container .row:nth-of-type(3)',
                 content: "{{ 'tourguide.index.trainee.courses.last_courses.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 3,
                 display_modal: false, 
                 link: null
               },
@@ -551,7 +555,8 @@
                 target: 'main .container .row:nth-of-type(4)',
                 content: "{{ 'tourguide.index.trainee.courses.popular_courses.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 4,
                 display_modal: false, 
                 link: null
               },
@@ -560,7 +565,8 @@
                 target: 'main .container .row:nth-of-type(5)',
                 content: "{{ 'tourguide.index.trainee.survey.content_bis'|trans }}",
                 position: 'right', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 5,
                 display_modal: false, 
                 link: null
               }, 
@@ -569,7 +575,8 @@
                 target: '#chatbot',
                 content: "{{ 'tourguide.index.trainee.chatbot.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-index', 
+                group: 'trainee-index',  
+                order: 6,
                 display_modal: false, 
                 link: null
               }, 
@@ -578,7 +585,8 @@
                 target: '#endSurvey',
                 content: "{{ 'tourguide.index.trainee.survey.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-end-survey-index', 
+                group: 'trainee-end-survey-index',  
+                order: 0,
                 display_modal: false, 
                 link: null
               }, 
@@ -587,7 +595,8 @@
                 target: '#liste_modules',
                 content: "{{ 'tourguide.index.trainee.modules.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 0,
                 display_modal: false, 
                 link: null
               }, 
@@ -596,7 +605,8 @@
                 target: '#liste_modules .card:nth-of-type(1)',
                 content: "{{ 'tourguide.index.trainee.modules.example.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 1,
                 display_modal: false, 
                 link: "{{ path('app_course', {'course': '31deef88-6dc3-4b4b-8c80-44210a4eac31'}) }}"
               }, 
@@ -605,7 +615,8 @@
                 target: '#liste_cours',
                 content: "{{ 'tourguide.index.trainee.courses.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 2,
                 display_modal: false, 
                 link: null
               }, 
@@ -614,7 +625,8 @@
                 target: '#liste_cours .card:nth-of-type(1)',
                 content: "{{ 'tourguide.index.trainee.courses.example.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 3,
                 display_modal: false, 
                 link: null
               }, 
@@ -623,7 +635,8 @@
                 target: '#liste_cours .card:nth-of-type(1) .fa-book',
                 content: "{{ 'tourguide.index.trainee.courses.example.resources.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 4,
                 display_modal: false, 
                 link: "{{ path('app_embed', {'slide': '2PACX-1vSKeR0dFKWdpRfcbrD-zlwwRXaxgJnZxQSvw8UNWYpTh2DQ19vfhDLWrLz_4esmuEySbhLhF-0kYoR6'}) }}"              
               }, 
@@ -632,7 +645,8 @@
                 target: 'iframe',
                 content: "{{ 'tourguide.index.trainee.courses.example.embed.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 5,
                 display_modal: false, 
                 link: null
               }, 
@@ -641,7 +655,8 @@
                 target: '#liste_ressources',
                 content: "{{ 'tourguide.index.trainee.courses.example.embed.resources.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 6,
                 display_modal: false, 
                 link: null
               }, 
@@ -650,7 +665,8 @@
                 target: '#liste_tps .card .fa-arrow-up-from-bracket',
                 content: "{{ 'tourguide.index.trainee.courses.example.embed.resources.give.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-modules', 
+                group: 'trainee-modules',  
+                order: 7,
                 display_modal: false, 
                 link: null
               }, 
@@ -659,7 +675,8 @@
                 target: 'main .container-fluid',
                 content: "{{ 'tourguide.index.trainee.mailbox.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 0,
                 display_modal: false, 
                 link: null
               }, 
@@ -668,7 +685,8 @@
                 target: '#liste_contacts',
                 content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 1,
                 display_modal: false, 
                 link: null
               }, 
@@ -677,7 +695,8 @@
                 target: '#messages',
                 content: "{{ 'tourguide.index.trainee.mailbox.example.conversation.content'|trans }}",
                 position: 'top', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 2,
                 display_modal: false, 
                 link: null
               }, 
@@ -686,7 +705,8 @@
                 target: '#liste_contacts a:nth-of-type(1)',
                 content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.cohort.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 3,
                 display_modal: false, 
                 link: null
               }, 
@@ -695,7 +715,8 @@
                 target: '#liste_contacts a:nth-of-type(2)',
                 content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainer.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 4,
                 display_modal: false, 
                 link: null
               }, 
@@ -704,7 +725,8 @@
                 target: '#liste_contacts #chat-trainees',
                 content: "{{ 'tourguide.index.trainee.mailbox.example.contacts.trainees.content'|trans }}",
                 position: 'right', 
-                group: 'trainee-mailbox', 
+                group: 'trainee-mailbox',  
+                order: 5,
                 display_modal: false, 
                 link: null
               }, 
@@ -713,7 +735,8 @@
                 target: '#subnavbar',
                 content: "{{ 'tourguide.index.trainee.account.informations.tab.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 0,
                 display_modal: false, 
                 link: null
               }, 
@@ -722,7 +745,8 @@
                 target: '#btn_replay_tutorial',
                 content: "{{ 'tourguide.index.trainee.account.replay_tutorial.content'|trans }}",
                 position: 'left', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 1,
                 display_modal: false, 
                 link: null
               }, 
@@ -731,7 +755,8 @@
                 target: '#liste_avatars',
                 content: "{{ 'tourguide.index.trainee.account.avatar.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 2,
                 display_modal: false, 
                 link: null
               }, 
@@ -740,7 +765,8 @@
                 target: '#form_user',
                 content: "{{ 'tourguide.index.trainee.account.informations.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 3,
                 display_modal: false, 
                 link: null
               }, 
@@ -749,7 +775,8 @@
                 target: '#signature-pad',
                 content: "{{ 'tourguide.index.trainee.account.informations.signature.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 4,
                 display_modal: false, 
                 link: null
               }, 
@@ -758,7 +785,8 @@
                 target: '#actual-signature',
                 content: "{{ 'tourguide.index.trainee.account.informations.actual_signature.content'|trans }}",
                 position: 'bottom', 
-                group: 'trainee-informations', 
+                group: 'trainee-informations',  
+                order: 5,
                 display_modal: false, 
                 link: null
               }, 
