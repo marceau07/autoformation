@@ -310,3 +310,10 @@ blockquote {
 .quiz-active {
     opacity: 1;
 }
+
+iframe {
+    border: 1px solid #282a3a;
+    border-radius: 10px;
+    width: 100%;
+    height: calc(100vh - 232px);
+}
