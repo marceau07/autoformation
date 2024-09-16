@@ -22,14 +22,14 @@
       <meta property="og:title" content="{{ 'global.meta_title'|trans }}">
       <meta property="og:type" content=website >
       <meta property="og:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="og:image" content="{{ asset('/images/adrar_logo.svg') }}">
+      <meta property="og:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
       <meta property="og:site_name" content="{{ 'global.meta_title'|trans }}">
       <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost() }}">
       <!--Seo Twitter-->
       <meta property="twitter:title" content="{{ 'global.meta_title'|trans }}">
       <meta property="twitter:type" content=website >
       <meta property="twitter:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="twitter:image" content="{{ asset('/images/adrar_logo.svg') }}">
+      <meta property="twitter:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
       <meta name="twitter:card" content=summary >
     {% endblock %}
 
@@ -38,9 +38,10 @@
 
       {% endblock %}&nbsp;- {{ 'global.meta_title'|trans }}
     </title>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="//adrar.dev/erp/public/img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="//adrar.dev/erp/public/img/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon-32x32.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon-16x16.png') }}" />
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/@sjmc11/tourguidejs/dist/css/tour.min.css">
@@ -78,7 +79,7 @@
       {% block header %}
         <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_epaf_logo.svg') }}" height="100" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -321,7 +322,7 @@
         </div>
         <div class="chat-area" id="message-box">
           <div class="text-center">
-            <img src="{{ asset('/images/adrar_epaf_logo.svg') }}" height="125" alt="Logo de l'ADRAR">
+            <img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR">
           </div>
           <div class="chat-message-div"></div>
         </div>
