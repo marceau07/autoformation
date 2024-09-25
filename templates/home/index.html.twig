@@ -83,7 +83,7 @@
                   <li class="splide__slide">
                     <div class="splide__slide__container">
                       <blockquote>
-                        <p class="opacity-100">{{ opinion.answer }}</p>
+                        <p class="opacity-100">{{ opinion.answer|raw }}</p>
                         <footer class="opacity-100">
                           —&nbsp;<img style="border-radius: 100%;border:1px lightgrey solid;width:25px;" alt="{{ opinion.label }}" src="{{ avatarPicked }}" loading="lazy" />&nbsp;{{ opinion.first_name }}
                         </footer>
