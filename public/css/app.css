@@ -128,7 +128,7 @@ blockquote {
 }
 
 [data-theme="dark"] body {
-    background-color: transparent !important;
+    background-color: #121212 !important;
 }
 
 [data-theme="dark"] h1 {
