@@ -5,40 +5,54 @@
 {% endblock %}
 
 {% block main %}
-  <a href="{{ path('app_faq_index') }}" class="btn btn-success">back to list</a>
+  <div class="container-fluid">
+    <div class="row flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_faq_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Faq n°{{ faq.id }}</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 text-end">
+        <a href="{{ path('app_faq_edit', { id: faq.id }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
+      </div>
+    </div>
 
-  <a href="{{ path('app_faq_edit', { id: faq.id }) }}" class="btn btn-warning">edit</a>
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Id</th>
+              <td>{{ faq.id }}</td>
+            </tr>
+            <tr>
+              <th>Theme</th>
+              <td>{{ faq.theme }}</td>
+            </tr>
+            <tr>
+              <th>Title</th>
+              <td>{{ faq.title }}</td>
+            </tr>
+            <tr>
+              <th>Content</th>
+              <td>{{ faq.content }}</td>
+            </tr>
+            <tr>
+              <th>Visibility</th>
+              <td>{{ faq.visibility ? 'global.yes'|trans:'global.no'|trans }}</td>
+            </tr>
+            <tr>
+              <th>Priority</th>
+              <td>{{ faq.priority }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <h1 class="text-center">Faq n°{{ faq.id }}</h1>
-
-  <table class="table">
-    <tbody>
-      <tr>
-        <th>Id</th>
-        <td>{{ faq.id }}</td>
-      </tr>
-      <tr>
-        <th>Theme</th>
-        <td>{{ faq.theme }}</td>
-      </tr>
-      <tr>
-        <th>Title</th>
-        <td>{{ faq.title }}</td>
-      </tr>
-      <tr>
-        <th>Content</th>
-        <td>{{ faq.content }}</td>
-      </tr>
-      <tr>
-        <th>Visibility</th>
-        <td>{{ faq.visibility ? 'global.yes'|trans : 'global.no'|trans }}</td>
-      </tr>
-      <tr>
-        <th>Priority</th>
-        <td>{{ faq.priority }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  {{ include('faq/_delete_form.html.twig') }}
+    <div class="row">
+      <div class="col-12">{{ include('faq/_delete_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}

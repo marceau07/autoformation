@@ -6,6 +6,7 @@
 parameters:
     homeworks_directory: '%kernel.project_dir%/public/homeworks'
     internships_directory: '%kernel.project_dir%/public/internships'
+    quizzes_directory: '%kernel.project_dir%/assets/images/quizzes'
 
 services:
     App\Service\GlobalDataService:

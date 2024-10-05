@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Quiz
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid">
+    <div class="row flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_quiz_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Quiz</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 text-end">
+        <a href="{{ path('app_quiz_edit', { id: quiz.id }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Id</th>
+            <td>{{ quiz.id }}</td>
+          </tr>
+          <tr>
+            <th>Title</th>
+            <td>{{ quiz.title }}</td>
+          </tr>
+          <tr>
+            <th>Uuid</th>
+            <td>{{ quiz.uuid }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {% if quiz.quizRows is not empty %}
+      <div class="row">
+        <h2>Questions</h2>
+        <a href="{{ path('app_quiz_row_new', { id: quiz.id }) }}"><i class="fas fa-add"></i></a>
+        <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_quiz_themes">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Question</th>
+              <th>Quiz_type</th>
+              <th>Timer</th>
+              <th>Score</th>
+              <th>Hint</th>
+              <th>answer_explanation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for question in quiz.quizRows %}
+              <tr>
+                <td>
+                  <a href="{{ path('app_quiz_row_show', { id: question.id }) }}"><i class="fas fa-eye"></i></a>
+                  <a href="{{ path('app_quiz_row_edit', { id: question.id }) }}"><i class="fas fa-pen"></i></a>
+                </td>
+                <td>{{ question.question }}</td>
+                <td>{{ question.quizType.name }}</td>
+                <td>{{ question.timer }}</td>
+                <td>{{ question.score }}</td>
+                <td>{{ question.hint }}</td>
+                <td>{{ question.answerExplanation }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="7">no records found</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    {{ include('quiz/_delete_form.html.twig') }}
+  </div>
+{% endblock %}

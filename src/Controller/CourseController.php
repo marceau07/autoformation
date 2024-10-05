@@ -29,11 +29,15 @@ class CourseController extends AbstractController
     #[Route('/', name: 'app_course_index', methods: ['GET'])]
     public function index(CourseRepository $courseRepository, TrainerRepository $trainerRepository, UserRepository $userRepository, CourseCohortRepository $courseCohortRepository): Response
     {
-        $trainer = $trainerRepository->find($userRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getId());
-
+        $trainers = $trainerRepository->findBy(['sector' => $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getSector()]);
+        $cohorts = [];
+        foreach ($trainers as $trainer) {
+            $cohorts = array_merge($cohorts, $trainer->getCohorts()->toArray());
+        }
+        
         return $this->render('course/index.html.twig', [
             'courses' => $courseRepository->findAll(),
-            'trainerCohorts' => $trainer->getCohorts(), // TODO: retourner la liste des cohortes actives du secteur
+            'trainerCohorts' => $cohorts,
             'courseCohorts' => $courseCohortRepository->findAll(),
         ]);
     }

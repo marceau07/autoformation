@@ -4,9 +4,32 @@ global:
   meta_description:
     "Access all your courses and interact with your trainers and cohort mates on the andragogical platform."
   language_french:
-    "French"
+    text: "French"
+    code: "fr"
   language_english:
-    "English"
+    text: "English"
+    code: "en"
+  exceptions:
+    403:
+      title:
+        "Access denied"
+      message:
+        "You do not have the necessary permissions to access this page."
+    404:
+      title:
+        "Page not found"
+      message:
+        "The page you are looking for does not exist."
+    500:
+      title:
+        "Internal server error"
+      message:
+        "An error occurred on the server, please try again later."
+    other:
+      title:
+        "An error occurred"
+      message:
+        "An error occurred, please try again later."
   btn_send:
     "Send"
   btn_save:
@@ -157,6 +180,10 @@ module:
     "No content at the moment, please try again later..."
 
 course:
+  favorite:
+    "Favorite courses"
+  no_favorite:
+    "No favorite courses at the moment, please try again later..."
   latest_courses:
     "Your latest followed courses"
   no_content_latest_courses:
@@ -182,6 +209,8 @@ account:
     "Personal Information"
   documents:
     "Documents"
+  statistics:
+    "Statistics"
   username:
     "Username"
   lastname:
@@ -212,6 +241,15 @@ account:
     "%name%'s Signature"
   not_activated:
     "Your account is not yet activated, please contact your trainer for more information."
+  graph:
+    courses:
+      text: "Courses"
+      label_one: "Courses unlocked"
+      label_two: "Courses completed"
+    homeworks:
+      text: "Homeworks"
+      label_one: "Homeworks to do"
+      label_two: "Homeworks done"
 
 mailbox:
   welcome:
@@ -275,7 +313,7 @@ footer:
 
 chatbot:
   welcome:
-    "Welcome to the chatbot! How can I assist you?"
+    "Welcome to the chatbot! How can I assist you?<br><small>Type <code>/help</code> to see the list of possible actions.</small>"
   placeholder:
     "What are you looking for?"
   didnt_understand:
@@ -380,8 +418,12 @@ administration:
   trainer:
     menu:
       "Trainers"
+    create:
+      "Create a new trainer"
     id:
       "ID"
+    activated:
+      "Active"
     lastname:
       "Last Name"
     firstname:
@@ -406,6 +448,8 @@ administration:
       "Signature"
     no_signature:
       "No signature for %trainer%"
+    sector:
+      "Sector"
     no_trainer:
       "No trainers at the moment, please try again later..."
   cohort:
@@ -423,6 +467,8 @@ administration:
       "%cohort%'s Shield"
     documents:
       "Documents"
+    no_documents: 
+      "No documents for the moment, please try again later..."
     start_date:
       "Start Date"
     finish_date:
@@ -499,6 +545,8 @@ administration:
       "Visibility"
     priority:
       "Priority"
+    sector:
+      "Sector"
     no_faq:
       "No questions at the moment, please try again later..."
   prospect:
@@ -545,8 +593,25 @@ administration:
       "Tutor Email"
     tutor_phone_number:
       "Tutor Phone Number"
+    trainee:
+      "Trainee"
+    prospect:
+      "Prospect"
     no_internship:
       "No internships at the moment, please try again later..."
+  quiz:
+    menu:
+      "Quizzes"
+    id:
+      "ID"
+    title:
+      "Title"
+    description:
+      "Description"
+    duration:
+      "Duration"
+    no_quiz:
+      "No quizzes at the moment, please try again later..."
   statistic:
     menu:
       "Statistics"

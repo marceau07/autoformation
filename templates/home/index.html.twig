@@ -16,7 +16,7 @@
 {% block main %}
   <div class="container">
     <div class="row">
-      <div class="col-12">
+      <div class="col-12 mt-3">
         <h1 class="text-center">{{ 'home.welcome'|trans }}</h1>
         <p class="text-center text-small">{{ 'home.welcome_small'|trans }}</p>
       </div>
@@ -50,7 +50,7 @@
     <div class="row pt-5 pb-5">
       <h2>{{ 'course.popular_courses'|trans }}</h2>
       <div class="col-12">
-        {% if popularCourses is not empty %}
+        {% if popularCourses is defined and popularCourses is not empty %}
           <section class="splide splide01" aria-label="{{ 'course.popular_courses'|trans }}">
             <ul class="splide__pagination"></ul>
             <div class="splide__track">
@@ -83,7 +83,7 @@
                   <li class="splide__slide">
                     <div class="splide__slide__container">
                       <blockquote>
-                        <p class="opacity-100">{{ opinion.answer }}</p>
+                        <p class="opacity-100">{{ opinion.answer|raw }}</p>
                         <footer class="opacity-100">
                           —&nbsp;<img style="border-radius: 100%;border:1px lightgrey solid;width:25px;" alt="{{ opinion.label }}" src="{{ avatarPicked }}" loading="lazy" />&nbsp;{{ opinion.first_name }}
                         </footer>
@@ -107,10 +107,9 @@
   <script>
     $(document).ready(function () {
       // Displaying tutorials if not already done and if the user is enabled to
-      if (localStorage.getItem('tg_tours_complete') === null && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-index') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
         tg.start('trainee-index');
-      }
-      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-end-survey-index') && $('#endSurvey').length > 0 && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+      } else if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-end-survey-index') && $('#endSurvey').length > 0 && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
         tg.start('trainee-end-survey-index');
       }
     })

@@ -58,8 +58,11 @@ h6 {
 
 h1 {
     font-weight: 700 !important;
-    color: var(--coul-quaternaire) !important;
     text-transform: uppercase;
+    background: linear-gradient(90deg, var(--coul-quaternaire), var(--coul-principale)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 
 .form-group .required:after {
@@ -128,11 +131,14 @@ blockquote {
 }
 
 [data-theme="dark"] body {
-    background-color: transparent !important;
+    background-color: #121212 !important;
 }
 
 [data-theme="dark"] h1 {
-    color: var(--coul-principale) !important;
+    background: linear-gradient(90deg, var(--coul-principale), var(--col-primary)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 
 [data-theme="dark"] .border-light,
@@ -316,4 +322,22 @@ iframe {
     border-radius: 10px;
     width: 100%;
     height: calc(100vh - 232px);
+}
+
+.form-security {
+    border-radius: 15px;
+    padding: 3rem;
+    margin-top: 2.5rem;
+    border: 1px solid var(--col-primary-dark);
+    background-color: var(--col-primary);
+    box-shadow: 4px 5px 16px var(--bs-blue)
+}
+
+[data-theme="dark"] .form-security {
+    border-radius: 15px;
+    padding: 3rem;
+    margin-top: 2.5rem;
+    border: 1px solid var(--col-primary);
+    background-color: var(--col-primary-dark);
+    box-shadow: 5px 11px 16px var(--bs-blue);
 }

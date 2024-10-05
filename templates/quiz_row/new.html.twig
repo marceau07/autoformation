@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New QuizRow{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div:has(> div > input.optionnal) {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row d-flex flex-start">
+            <div class="col-3 mt-2 mb-2 text-start">
+                <a href="{{ path('app_quiz_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+            </div>
+            <div class="col-6 text-center mt-2 mb-2">
+                <h1>Create new QuizRow</h1>
+            </div>
+        </div>
+        {{ include('quiz_row/_form.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            $('#quiz_row_quiz_type').on('change', (element) => {
+                $('input.optionnal_choice').each((index, element) => { 
+                    if(!$(element).hasClass('optionnal')) $(element).addClass('optionnal'); 
+                });
+                $('div .' + element.target.value).each((index, element) => { 
+                    $(element).removeClass('optionnal'); 
+                });
+            });
+        });
+    </script>
+{% endblock %}

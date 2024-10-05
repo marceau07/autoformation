@@ -115,6 +115,7 @@
               </ul>
               {% endif %}
               
+              {% if app.request.get('_locale') is defined and app.request.get('_locale') is not empty %}
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                   <form class="d-flex formIndex" role="search" action="#" method="GET" id="searchForm2">
@@ -149,13 +150,15 @@
                 <li class="nav-item d-flex align-items-center px-1">
                   <div class="dropdown-container">
                     <a href="#" type="button" data-dropdown="notificationMenu" class="position-relative px-1">
-                      <i class="fa fa-md fa-bell"></i>
                       {% if (notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty) 
                         or (notificationsMessages is defined and notificationsMessages is not empty) 
                         or (notificationsInternships is defined and notificationsInternships is not empty) 
                         or (notificationsNewCourses is defined and notificationsNewCourses is not empty) %}
+                      <i class="fa fa-md fa-bell faa-tada animated"></i>
                       <span class="position-absolute top-0 start-25 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">{{ 'notifications.unread_messages'|trans }}</span>
                       </span>
+                      {% else %}
+                      <i class="fa fa-md fa-bell"></i>
                       {% endif %}
                     </a>
                     <ul class="dropdown z-1" name="notificationMenu">
@@ -238,13 +241,13 @@
                   </div>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
+                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ (app.request.get('_locale') is same as("en") ? 'global.language_english.code'|trans : 'global.language_french.code'|trans) }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
                     <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">{{ 'global.language_french'|trans }}</a>
+                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">{{ 'global.language_french.text'|trans }}</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">{{ 'global.language_english'|trans }}</a>
+                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">{{ 'global.language_english.text'|trans }}</a>
                     </li>
                   </ul>
                 </li>
@@ -272,6 +275,7 @@
                   </ul>
                 </li>
               </ul>
+              {% endif %}
             </div>
           </div>
         </nav>
@@ -328,7 +332,7 @@
         </div>
         <div class="line"></div>
         <div class="input-div">
-          <input class="input-message" name="message" type="text" id="message" placeholder="{{ 'chatbot.placeholder'|trans }}" />
+          <input class="input-message" name="message" type="text" id="message" placeholder="{{ 'chatbot.placeholder'|trans }}" autocomplete="off" />
           <button class="input-send" onclick="send()">
             <span class="visually-hidden">message</span>
             <svg style="width:24px;height:24px">
@@ -456,19 +460,20 @@
                   contentType: false,
                   success: function (r) {
                     if (r.success) {
-                      let msg = r.message;
-                      var div = document.createElement("div");
-                      div.innerHTML = "<div class='chat-message-received'>" + msg + "</div>";
-                      div.className = "chat-message-div";
-                      document.getElementById("message-box").appendChild(div);
-                      document.getElementById("message-box").scrollTop = document.getElementById(
-                          "message-box"
-                      ).scrollHeight;
+                      r.messages.forEach((message) => {
+                        var div = document.createElement("div");
+                        div.innerHTML = "<div class='chat-message-received'>" + message + "</div>";
+                        div.className = "chat-message-div";
+                        document.getElementById("message-box").appendChild(div);
+                        document.getElementById("message-box").scrollTop = document.getElementById(
+                            "message-box"
+                        ).scrollHeight;
+                      });
                       running = false;
                     }
                   },
                   error: function (e) {
-                      console.error(e.getMessage());
+                    console.error(e.getMessage());
                   },
                 });
             } else {
@@ -495,7 +500,7 @@
               document.getElementById("chatbot_toggle").children[1].style.display = "none"
               document.getElementById("chatbot_toggle").children[2].style.display = ""
               // Default display message
-              setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username }) }}", false)
+              setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username })|raw }}", false)
             } else {
                 document.getElementById("chatbot").classList.add("collapsed")
                 document.getElementById("chatbot_toggle").children[1].style.display = ""
@@ -638,7 +643,7 @@
                 group: 'trainee-modules',  
                 order: 4,
                 display_modal: false, 
-                link: "{{ path('app_embed', {'slide': '1vSKeR0dFKWdpRfcbrD-zlwwRXaxgJnZxQSvw8UNWYpTh2DQ19vfhDLWrLz_4esmuEySbhLhF-0kYoR6'}) }}"              
+                link: "{{ path('app_embed', {'slide': '1kU91RMq87NsJ5YKlrs9yxNgudF3dr1cRPTTLSj3NHtM'}) }}"              
               }, 
               {
                 title: "{{ 'tourguide.index.trainee.courses.example.embed.title'|trans }}",
@@ -801,6 +806,19 @@
               progressBar: '#45BEEB', 
               hidePrev: true // Avoid to show the previous button which is buggy with the modal
             });
+            {% if is_granted('ROLE_TRAINEE') %}
+            localStorage.setItem('tg_tours_complete', '{{ app.user.tutorialCompleted }}');
+            {% endif %}
+            tg.onBeforeExit(async () => {
+              $.ajax({
+                url: '{{ path('app_save_completed_tutorial') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                  tours: localStorage.getItem('tg_tours_complete').toString()
+                }
+              });
+            });
             tg.onBeforeStepChange(()=>{
               return new Promise((resolve, reject) => {
                 if(tg.tourSteps[tg.activeStep].link !== null) {
@@ -847,7 +865,7 @@
                   if (r.courses.length > 0) {
                     $('#searchResults #searchCourses').removeClass('d-none')
                     r.courses.forEach((course) => {
-                      $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;' + course.title + '</div></a>')
+                      $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;[' + course.module.label + ']&nbsp;-&nbsp;' + course.title + '</div></a>')
                     })
                   } else {
                     0
@@ -884,6 +902,13 @@
             }
           })
         })
+      </script>
+      <script>
+        $(document).on('DOMContentLoaded', () => {
+          $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
+        });
       </script>
     {% endblock %}
     {% block js %}

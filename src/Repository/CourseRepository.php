@@ -200,22 +200,39 @@ class CourseRepository extends ServiceEntityRepository
      */
     function getCoursesInformationsByCohort(string $userId, string $courseId = null, string $search = null): array
     {
-        return $this->createQueryBuilder('c')
-            ->innerJoin('c.trainer', 't')
-            ->innerJoin('c.module', 'cm')
-            ->innerJoin('c.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND cc.active = 1')
-            ->innerJoin('cc.cohort', 'co')
-            ->innerJoin('co.trainees', 'tr')
-            ->addSelect('c', 't', 'cm', 'cc', 'co', 'tr')
-            ->where('tr.username = :username')
-            ->andWhere('cm.uuid = :courseId')
-            ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
-            ->setParameter('username', $userId)
-            ->setParameter('courseId', $courseId)
-            ->setParameter('search', '%' . $search . '%')
-            ->orderBy('cm.position', 'ASC')
-            ->getQuery()
-            ->getResult();
+        if($courseId === null) {
+            return $this->createQueryBuilder('c')
+                ->innerJoin('c.trainer', 't')
+                ->innerJoin('c.module', 'cm')
+                ->innerJoin('c.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND cc.active = 1')
+                ->innerJoin('cc.cohort', 'co')
+                ->innerJoin('co.trainees', 'tr')
+                ->addSelect('c', 't', 'cm', 'cc', 'co', 'tr')
+                ->where('tr.username = :username')
+                ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
+                ->setParameter('username', $userId)
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('cm.position', 'ASC')
+                ->getQuery()
+                ->getResult();
+        } else {
+            return $this->createQueryBuilder('c')
+                ->innerJoin('c.trainer', 't')
+                ->innerJoin('c.module', 'cm')
+                ->innerJoin('c.courseCohorts', 'cc', 'WITH', 'c.id = cc.course AND cc.active = 1')
+                ->innerJoin('cc.cohort', 'co')
+                ->innerJoin('co.trainees', 'tr')
+                ->addSelect('c', 't', 'cm', 'cc', 'co', 'tr')
+                ->where('tr.username = :username')
+                ->andWhere('cm.uuid = :courseId')
+                ->andWhere('c.title LIKE :search OR c.keywords LIKE :search')
+                ->setParameter('username', $userId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('cm.position', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
     }
 
     /**

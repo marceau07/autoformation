@@ -1,0 +1,22 @@
+{{ form_start(form) }}
+<div class="row">
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.quiz_type) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.quiz) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.question) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer1) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer2) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer3) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer4) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer_short_text) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer_long_text) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.timer) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.score) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.hint) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.answer_explanation) }}</div>
+</div>
+<div class="row">
+  <div class="col-12 mt-2 text-end">
+    <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+  </div>
+</div>
+{{ form_end(form) }}

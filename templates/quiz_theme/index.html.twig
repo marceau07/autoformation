@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QuizTheme index{% endblock %}
+
+{% block main %}
+    <div class="container-fluid mb-3">
+        <div>
+        {% include '_components/_subnavbar.html.twig' with { 
+            'choosenElement': "quiz"
+            } 
+        %}
+        </div>
+    
+        <div class="tab-content">
+        <div class="tab-pane container-fluid active">
+            <div class="mt-2 mb-2">
+            <a role="button" class="btn btn-primary" href="{{ path('app_quiz_theme_new') }}">{{ 'global.btn_add'|trans }}</a>
+            </div>
+            <div>
+                <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_quiz_themes">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Id</th>
+                            <th>Illustration</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for quiz_theme in quiz_themes %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('app_quiz_theme_show', {'id': quiz_theme.id}) }}">show</a>
+                                <a href="{{ path('app_quiz_theme_edit', {'id': quiz_theme.id}) }}">edit</a>
+                            </td>
+                            <td>{{ quiz_theme.id }}</td>
+                            <td>
+                            {% set ext = quiz_theme.illustration|split('.')[1] %}
+                            {% if ext in ["mp4"] %}
+                                <video height="100" src="{{ asset('images/quizzes/' ~ quiz_theme.illustration) }}" alt="{{ quiz_theme.illustration }}" autoplay muted loop></video>
+                            {% elseif ext in ["webm", "gif", "png", "jpg", "jpeg"] %}
+                                <img height="100" src="{{ asset('images/quizzes/' ~ quiz_theme.illustration) }}" alt="{{ quiz_theme.illustration }}">
+                            {% else %}
+                                {{ quiz_theme.illustration }}                
+                            {% endif %}                
+                            </td>
+                            <td class="text-center align-content-center">
+                                <div class="mx-auto" style="height:30px;width:30px;background-color:{{ quiz_theme.color }};border-radius:30px;"></div>
+                                {{ quiz_theme.color }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    {% if quiz_themes is defined and quiz_themes is not empty %}
+      $('#list_quiz_themes').DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "columnDefs": [{ "width": '10%', "targets": [0, 1] },{ "width": '25%', "targets": [2] },{ "width": 'auto', "targets": [3] }],
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    {% endif %}
+  });
+</script>
+{% endblock %}

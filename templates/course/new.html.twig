@@ -5,9 +5,18 @@
 {% endblock %}
 
 {% block main %}
-  <h1>{{ 'administration.course.create'|trans }}</h1>
+  <div class="container-fluid">
+    <div class="row d-flex flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_course_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>{{ 'administration.course.create'|trans }}</h1>
+      </div>
+    </div>
 
-  <a href="{{ path('app_course_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
-
-  {{ include('course/_form.html.twig') }}
+    <div class="row">
+      <div class="col-12">{{ include('course/_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}

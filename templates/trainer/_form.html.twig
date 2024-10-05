@@ -1,4 +1,17 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.username, { label: 'administration.trainer.username'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.lastName, { label: 'administration.trainer.lastname'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.firstName, { label: 'administration.trainer.firstname'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.email, { label: 'administration.trainer.email'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.role, { label: 'administration.trainer.role'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.phoneNumber, { label: 'administration.trainer.phone_number'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.sector, { label: 'administration.trainer.sector'|trans }) }}</div>
+        <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.activated, { label: 'administration.trainer.activated'|trans }) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-12 mt-2 text-end">
+            <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+        </div>
+    </div>
 {{ form_end(form) }}

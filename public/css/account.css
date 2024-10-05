@@ -27,6 +27,13 @@
     /* object-fit: cover; */
 }
 
+canvas {
+    max-width: 300px; /* Fixer une largeur maximale */
+    max-height: 300px; /* Fixer une hauteur maximale */
+    width: 100%; /* S'adapter à la taille du conteneur */
+    height: auto; /* Hauteur ajustée automatiquement */
+}
+
 @media only screen and (min-width: 640px) {
     .img-profile {
         width: 100px;

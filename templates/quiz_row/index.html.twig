@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QuizRow index{% endblock %}
+
+{% block body %}
+    <h1>QuizRow index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Uuid</th>
+                <th>Question</th>
+                <th>Answer1</th>
+                <th>Answer2</th>
+                <th>Answer3</th>
+                <th>Answer4</th>
+                <th>Answer_short_text</th>
+                <th>Answer_long_text</th>
+                <th>Quiz_type</th>
+                <th>Timer</th>
+                <th>Score</th>
+                <th>Hint</th>
+                <th>Answer_explanation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quiz_row in quiz_rows %}
+            <tr>
+                <td>{{ quiz_row.id }}</td>
+                <td>{{ quiz_row.uuid }}</td>
+                <td>{{ quiz_row.question }}</td>
+                <td>{{ quiz_row.answer1 }}</td>
+                <td>{{ quiz_row.answer2 }}</td>
+                <td>{{ quiz_row.answer3 }}</td>
+                <td>{{ quiz_row.answer4 }}</td>
+                <td>{{ quiz_row.answerShortText }}</td>
+                <td>{{ quiz_row.answerLongText }}</td>
+                <td>{{ quiz_row.quizType }}</td>
+                <td>{{ quiz_row.timer }}</td>
+                <td>{{ quiz_row.score }}</td>
+                <td>{{ quiz_row.hint }}</td>
+                <td>{{ quiz_row.answerExplanation }}</td>
+                <td>
+                    <a href="{{ path('app_quiz_row_show', {'id': quiz_row.id}) }}">show</a>
+                    <a href="{{ path('app_quiz_row_edit', {'id': quiz_row.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quiz_row_new') }}">Create new</a>
+{% endblock %}

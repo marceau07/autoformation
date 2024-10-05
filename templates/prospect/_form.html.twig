@@ -1,4 +1,21 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.name, { label: 'administration.prospect.name'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.siren, { label: 'administration.prospect.siren'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.nic, { label: 'administration.prospect.nic'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.number, { label: 'administration.prospect.address_number'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.street, { label: 'administration.prospect.address_street'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.additional_address, { label: 'administration.prospect.address_additional_information'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.postal_code, { label: 'administration.prospect.address_zipcode'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.city, { label: 'administration.prospect.address_city'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.country, { label: 'administration.prospect.address_country'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.email, { label: 'administration.prospect.email'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.phone_number, { label: 'administration.prospect.phone_number'|trans }) }}</div>
+    <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.phone_number_bis, { label: 'administration.prospect.phone_number_bis'|trans }) }}</div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2 text-end">
+        <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+    </div>
+</div>
 {{ form_end(form) }}

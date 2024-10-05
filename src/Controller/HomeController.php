@@ -11,6 +11,7 @@ use App\Repository\MessageRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\SurveyRepository;
 use App\Repository\SurveyTraineeRepository;
+use App\Repository\TraineeCourseFavoriteRepository;
 use App\Repository\TraineeRepository;
 use App\Repository\TraineeResourceRepository;
 use App\Repository\TrainerRepository;
@@ -68,7 +69,7 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/embed/{slide}', name: 'app_embed', methods: "GET")]
-    public function embed(CourseRepository $courseRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, TraineeResourceRepository $traineeResourceRepository, NotificationRepository $notificationRepository, string $slide): Response
+    public function embed(CourseRepository $courseRepository, TraineeCourseFavoriteRepository $traineeCourseFavoriteRepository, TraineeRepository $traineeRepository, UserRepository $userRepository, TraineeResourceRepository $traineeResourceRepository, NotificationRepository $notificationRepository, string $slide): Response
     {
         $tps = array();
         if ($this->isGranted('ROLE_TRAINEE') === true) {
@@ -81,6 +82,7 @@ class HomeController extends AbstractController
 
         return $this->render('course/embed.html.twig', [
             'course' => $courseRepository->getCourseInformations($slide),
+            'courseInFavorites' => ($this->isGranted('ROLE_TRAINEE') ? $traineeCourseFavoriteRepository->findOneBy(['course' => $courseRepository->findOneBy(['link' => $slide]), 'trainee' => $traineeRepository->find($currentUser->getId())]) : false),
             'traineeResources' => $tps
         ]);
     }

@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Prospect{% endblock %}
+{% block title %}
+  New Prospect
+{% endblock %}
 
-{% block body %}
-    <h1>Create new Prospect</h1>
+{% block main %}
+  <div class="container-fluid">
+    <div class="row d-flex flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_prospect_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>{{ 'administration.prospect.create'|trans }}</h1>
+      </div>
+    </div>
 
-    {{ include('prospect/_form.html.twig') }}
-
-    <a href="{{ path('app_prospect_index') }}">back to list</a>
+    <div class="row">
+      <div class="col-12">{{ include('prospect/_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}

@@ -5,11 +5,19 @@
 {% endblock %}
 
 {% block main %}
-  <h1>Edit Prospect</h1>
+  <div class="container-fluid">
+    <div class="row flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_prospect_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Edit Prospect</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 text-end">{{ include('prospect/_delete_form.html.twig') }}</div>
+    </div>
 
-  {{ include('prospect/_form.html.twig', { button_label: 'Update' }) }}
-
-  <a href="{{ path('app_prospect_index') }}" class="btn btn-success">back to list</a>
-
-  {{ include('prospect/_delete_form.html.twig') }}
+    <div class="row">
+      <div class="col-12">{{ include('prospect/_form.html.twig', { button_label: 'global.btn_save'|trans }) }}</div>
+    </div>
+  </div>
 {% endblock %}
