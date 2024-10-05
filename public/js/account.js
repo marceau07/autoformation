@@ -88,6 +88,15 @@ function sendEvaluation(input) {
 }
 
 function replayTutorial() {
-    localStorage.removeItem('tg_tours_complete');
-    window.location.href = '/';
+    $.ajax({
+        url: '/save_completed_tutorial',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            tours: ''
+        }, 
+        success: function (r) {
+            document.location.reload();
+        },
+    });
 }
