@@ -4,9 +4,13 @@
   FAQ
 {% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('/css/faq.css') }}">
+{% endblock %}
+
 {% block main %}
   <div class="container-fluid">
-    <div class="row p-5 bg-primary">
+    <div class="row p-5" id="faq_block">
       <div class="col-12">
         <h1 class="text-white">Foire aux Questions</h1>
       </div>

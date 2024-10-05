@@ -58,8 +58,11 @@ h6 {
 
 h1 {
     font-weight: 700 !important;
-    color: var(--coul-quaternaire) !important;
     text-transform: uppercase;
+    background: linear-gradient(90deg, var(--coul-quaternaire), var(--coul-principale)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 
 .form-group .required:after {
@@ -132,7 +135,10 @@ blockquote {
 }
 
 [data-theme="dark"] h1 {
-    color: var(--coul-principale) !important;
+    background: linear-gradient(90deg, var(--coul-principale), var(--col-primary)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 
 [data-theme="dark"] .border-light,
