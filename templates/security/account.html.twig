@@ -34,12 +34,20 @@
         </li>
         {% if is_granted('ROLE_TRAINEE') %}
         <li class="nav-item">
+          <a class="nav-link text-dark" data-bs-toggle="tab" href="#favorite-courses">{{ 'course.favorite'|trans }}</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link text-dark" data-bs-toggle="tab" href="#cohort-informations">{{ 'cohort.informations'|trans }}</a>
         </li>
         {% endif %}
         <li class="nav-item">
           <a class="nav-link text-dark" data-bs-toggle="tab" href="#documents">{{ 'account.documents'|trans }}</a>
         </li>
+        {% if is_granted('ROLE_TRAINEE') %}
+        <li class="nav-item">
+          <a class="nav-link text-dark" data-bs-toggle="tab" href="#statistics">{{ 'account.statistics'|trans }}</a>
+        </li>
+        {% endif %}
       </ul>
 
       <!-- Tab panes -->
@@ -132,6 +140,31 @@
             </div>
           </div>
         </div>
+
+        <div class="tab-pane container-fluid fade" id="favorite-courses">
+          {% if is_granted('ROLE_TRAINEE') and trainee is defined and trainee is not empty %}
+          <div class="container">
+            <div class="row mt-3">
+              <div class="col-12">
+                <h2>{{ 'course.favorite'|trans }}</h2>
+              </div>
+              {% if trainee.traineeCourseFavorites is defined and trainee.traineeCourseFavorites is not empty %}
+                <div class="col-12">
+                  {% for favorite in trainee.traineeCourseFavorites %}
+                    {% set course = favorite.course %}
+                    {{ include("_components/_card.html.twig", {isSummary: true}) }}
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="col-6">
+                  <p>{{ 'course.no_favorite'|trans }}</p>
+                </div>
+              {% endif %}
+            </div>
+          </div> 
+          {% endif %}
+        </div>
+
         <div class="tab-pane container-fluid fade" id="cohort-informations">
             {% if is_granted('ROLE_TRAINEE') and trainee is defined and trainee is not empty %}
             <div class="container">
@@ -350,6 +383,24 @@
             </div>
           {% endif %}
         </div>
+        
+        <div class="tab-pane container-fluid fade" id="statistics">
+            {% if is_granted('ROLE_TRAINEE') and trainee is defined and trainee is not empty %}
+            <div class="container">
+              <div class="row mt-3">
+                <div class="col-12 col-md-6 d-flex flex-column">
+                  <h2>{{ 'account.graph.courses.text'|trans }}</h2>
+                  <canvas id="opened-courses"></canvas>
+                </div>
+                <div class="col-12 col-md-6 d-flex flex-column">
+                  <h2>{{ 'account.graph.homeworks.text'|trans }}</h2>
+                  <canvas id="homework-returned"></canvas>
+                </div>
+              </div>
+            </div> 
+            {% endif %}
+        </div>
+
       </div>
     </div>
   </div>
@@ -357,6 +408,73 @@
 
 {% block js %}
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  {% if is_granted('ROLE_TRAINEE') %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctxOpenedCourses = document.getElementById('opened-courses').getContext('2d');
+    new Chart(ctxOpenedCourses, 
+      {
+        type: 'pie',
+        data: {
+          labels: [
+            '{{ "account.graph.courses.label_one"|trans }}',
+            '{{ "account.graph.courses.label_two"|trans }}',
+          ],
+          datasets: [{
+            label: 'TPs',
+            data: [{{ graphDataCourses.value_one }}, {{ graphDataCourses.value_two }}],
+            backgroundColor: [
+              'rgb(247, 17, 137)',
+              'rgb(0, 118, 189)',
+            ],
+            hoverOffset: 4
+          }]
+        }, 
+        options: {
+          responsive: true,  // Désactiver la réactivité si tu veux utiliser des dimensions fixes
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      }
+    );
+    
+    const ctxHomeworkReturned = document.getElementById('homework-returned').getContext('2d');
+    new Chart(ctxHomeworkReturned, 
+      {
+        type: 'doughnut',
+        data: {
+          labels: [
+            '{{ "account.graph.homeworks.label_one"|trans }}',
+            '{{ "account.graph.homeworks.label_two"|trans }}',
+            // 'TP corrigés',
+          ],
+          datasets: [{
+            label: 'TPs',
+            data: [{{ graphDataHomeworks.value_one }}, {{ graphDataHomeworks.value_two }}],
+            backgroundColor: [
+              'rgb(247, 147, 30)',
+              'rgb(78, 166, 130)',
+              // 'rgb(99, 76, 168)',
+            ],
+            hoverOffset: 4
+          }]
+        }, 
+        options: {
+          responsive: true,  // Désactiver la réactivité si tu veux utiliser des dimensions fixes
+          maintainAspectRatio: false,  // Permet de redimensionner sans garder le ratio fixe
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      }
+    );
+  </script>
+  {% endif %}
   <script src="{{ asset('js/account.js') }}"></script>
   <script>
     $(document).ready(function () {

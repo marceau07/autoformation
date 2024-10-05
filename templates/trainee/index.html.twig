@@ -52,13 +52,8 @@
                   <td>{{ trainee.activated ? 'global.yes'|trans : 'global.no'|trans }}</td>
                   <td>{{ trainee.tmpCode }}</td>
                   <td>
-                    {% if trainee.signature is defined and trainee.signature is not empty %}    
-                      {% if trainee.signature starts with 'http://' or trainee.signature starts with 'https://' %}
-                        {% set signature = trainee.signature %}
-                      {% else %}
-                        {% set signature = asset('images/avatars/' ~ trainee.signature) %}
-                      {% endif %}
-                      <img src="{{ signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
+                    {% if trainee.signature is defined and trainee.signature is not empty %} 
+                      <img src="{{ trainee.signature }}" style="width: 10.5rem;" alt="Signature de {{ trainee.username }}">
                     {% else %}
                     {{ 'administration.trainee.no_signature'|trans({'%trainee%': trainee.username}) }}
                     {% endif %}

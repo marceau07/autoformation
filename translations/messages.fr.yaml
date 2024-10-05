@@ -4,9 +4,32 @@ global:
   meta_description:
     "Retrouvez tous vos cours et échangez avec vos formateurs et vos camarades de cohorte sur la plateforme andragogique."
   language_french:
-    "Français"
+    text: "Français"
+    code: "fr"
   language_english:
-    "Anglais"
+    text: "Anglais"
+    code: "en"
+  exceptions:
+    403:
+      title:
+        "Accès refusé"
+      content:
+        "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+    404:
+      title:
+        "Page introuvable"
+      content:
+        "La page que vous recherchez n'existe pas."
+    500:
+      title:
+        "Erreur interne"
+      content:
+        "Une erreur interne est survenue, veuillez réessayer plus tard."
+    other:
+      title:
+        "Erreur"
+      content:
+        "Une erreur est survenue, veuillez réessayer plus tard."
   btn_send:
     "Envoyer"
   btn_save:
@@ -158,6 +181,10 @@ module:
     "Pas de contenu pour le moment, réessayez plus tard..."
 
 course:
+  favorite:
+    "Cours favoris"
+  no_favorite:
+    "Pas de cours favoris pour le moment, réessayez plus tard..."
   latest_courses:
     "Vos derniers cours suivis"
   no_content_latest_courses:
@@ -183,6 +210,8 @@ account:
     "Informations personnelles"
   documents:
     "Documents"
+  statistics:
+    "Statistiques"
   username:
     "Nom d'utilisateur"
   lastname:
@@ -213,6 +242,15 @@ account:
     "Signature de %name%"
   not_activated:
     "Votre compte n'est pas encore activé, veuillez contacter votre formateur pour plus d'informations."
+  graph:
+    courses:
+      text: "Cours"
+      label_one: "Cours à voir"
+      label_two: "Cours vus"
+    homeworks:
+      text: "Devoirs"
+      label_one: "Devoirs à rendre"
+      label_two: "Devoirs rendus"
 
 mailbox:
   welcome:
@@ -276,7 +314,7 @@ footer:
 
 chatbot:
   welcome:
-    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?"
+    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Taoez <code>/aide</code> pour lister les actions possibles.</small>"
   placeholder:
     "Que recherchez-vous ?"
   didnt_understand:
@@ -381,8 +419,12 @@ administration:
   trainer:
     menu:
       "Formateurs"
+    create:
+      "Créer un nouveau formateur"
     id:
       "Identifiant"
+    activated:
+      "Actif"
     lastname:
       "Nom de famille"
     firstname:
@@ -407,6 +449,8 @@ administration:
       "Signature"
     no_signature:
       "Pas de signature pour %trainer%"
+    sector:
+      "Secteur"
     no_trainer:
       "Pas de formateur pour le moment, réessayez plus tard..."
   cohort:
@@ -424,6 +468,8 @@ administration:
       "Blason des %cohort%"
     documents:
       "Documents"
+    no_documents: 
+      "Pas de documents renseignés pour le moment"
     start_date:
       "Date de début"
     finish_date:
@@ -500,6 +546,8 @@ administration:
       "Visibilité"
     priority:
       "Priorité"
+    sector:
+      "Secteur"
     no_faq:
       "Pas de question pour le moment, réessayez plus tard..."
   prospect:
@@ -546,8 +594,25 @@ administration:
       "Email du tuteur"
     tutor_phone_number:
       "Numéro de téléphone du tuteur"
+    trainee:
+      "Stagiaire"
+    prospect:
+      "Prospect"
     no_internship:
       "Pas de stage pour le moment, réessayez plus tard..."
+  quiz:
+    menu:
+      "Quiz"
+    id:
+      "Identifiant"
+    title:
+      "Titre"
+    description:
+      "Description"
+    questions:
+      "Questions"
+    no_quiz:
+      "Pas de quiz pour le moment, réessayez plus tard..."
   statistic:
     menu:
       "Statistiques"

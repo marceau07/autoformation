@@ -44,6 +44,9 @@ class Message
     #[ORM\Column]
     private ?bool $readed = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    private ?self $original_message = null;
+
     public function __construct(bool $readed = false)
     {
         $this->readed = $readed;
@@ -146,6 +149,18 @@ class Message
     public function setReaded(bool $readed): static
     {
         $this->readed = $readed;
+
+        return $this;
+    }
+
+    public function getOriginalMessage(): ?self
+    {
+        return $this->original_message;
+    }
+
+    public function setOriginalMessage(?self $original_message): static
+    {
+        $this->original_message = $original_message;
 
         return $this;
     }

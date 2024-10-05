@@ -128,7 +128,7 @@ blockquote {
 }
 
 [data-theme="dark"] body {
-    background-color: transparent !important;
+    background-color: #121212 !important;
 }
 
 [data-theme="dark"] h1 {
@@ -316,4 +316,22 @@ iframe {
     border-radius: 10px;
     width: 100%;
     height: calc(100vh - 232px);
+}
+
+.form-security {
+    border-radius: 15px;
+    padding: 3rem;
+    margin-top: 2.5rem;
+    border: 1px solid var(--col-primary-dark);
+    background-color: var(--col-primary);
+    box-shadow: 4px 5px 16px var(--bs-blue)
+}
+
+[data-theme="dark"] .form-security {
+    border-radius: 15px;
+    padding: 3rem;
+    margin-top: 2.5rem;
+    border: 1px solid var(--col-primary);
+    background-color: var(--col-primary-dark);
+    box-shadow: 5px 11px 16px var(--bs-blue);
 }

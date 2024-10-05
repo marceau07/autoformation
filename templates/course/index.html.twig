@@ -76,7 +76,9 @@
                               <select name="form_filter_cohort" id="form_filter_cohort" class="form-select" onchange="fetchCourses();">
                                 <option disabled selected>Choisir une cohorte</option>
                                 {% for cohort in trainerCohorts %}
+                                  {% if cohort.finishDate|date('Y-m-d') > 'now'|date('Y-m-d') %}
                                   <option value="{{ cohort.id }}">{{ cohort.name }}</option>
+                                  {% endif %}
                                 {% endfor %}
                               </select>
                           </div>

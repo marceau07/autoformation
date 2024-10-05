@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Edit QuizTheme
+{% endblock %}
+
+{% block main %}
+  <div class="row justify-content-around">
+    <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_quiz_theme_index') }}" class="btn btn-success">back to list</a>
+    </div>
+    <div class="col-6 text-center mt-2 mb-2">
+        <h1>Edit QuizTheme</h1>
+    </div>
+    <div class="col-3 mt-2 mb-2 float-end text-end">
+        {{ include('quiz_theme/_delete_form.html.twig') }}
+    </div>
+  </div>
+  <div class="row">
+    {{ include('quiz_theme/_form.html.twig', { button_label: 'Update' }) }}
+  </div>
+{% endblock %}

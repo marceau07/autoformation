@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Avatar;
 use App\Entity\User;
 use App\Repository\AvatarRepository;
+use App\Repository\CourseCohortRepository;
+use App\Repository\CourseTraineeRepository;
 use App\Repository\InternshipRepository;
 use App\Repository\TraineeRepository;
+use App\Repository\TraineeResourceRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -157,7 +160,7 @@ class SecurityController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/account', name: 'app_account', methods: ["GET", "POST"])]
-    public function account(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, AvatarRepository $avatarRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    public function account(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, CourseTraineeRepository $courseTraineeRepository, CourseCohortRepository $courseCohortRepository, TraineeResourceRepository $traineeResourceRepository, AvatarRepository $avatarRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
     {
         $form = null;
         $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
@@ -245,6 +248,24 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_account');
         }
 
+        // Récupération des informations pour les graphiques
+        $graphDataCourses = [];
+        $graphDataHomeworks = [];
+        if($this->isGranted('ROLE_TRAINEE')) {
+            $graphDataCourses['value_two'] = sizeof($courseTraineeRepository->findBy(['trainee' => $trainee->getId()]));
+            $graphDataCourses['value_one'] = sizeof($courseCohortRepository->findBy(['cohort' => $trainee->getCohort()->getId()])) - $graphDataCourses['value_two'];
+            $graphDataHomeworks['value_one'] = 0;
+            $graphDataHomeworks['value_two'] = 0;
+            foreach($trainee->getCohort()->getCourseCohorts() as $courseUnlocked) {
+                $graphDataHomeworks['value_one'] += sizeof($courseUnlocked->getCourse()->getCourseResources());
+                foreach($courseUnlocked->getCourse()->getCourseResources() as $resource) {
+                    $graphDataHomeworks['value_two'] += sizeof($traineeResourceRepository->findBy(['trainee' => $trainee->getId(), 'courseResource' => $resource->getId()]));
+                }
+            }
+            $graphDataHomeworks['value_one'] = $graphDataHomeworks['value_one'] - $graphDataHomeworks['value_two'];
+        }
+        
+
         return $this->render('security/account.html.twig', [
             'avatars' => $avatarRepository->findAll(),
             'trainer' => $trainer,
@@ -255,6 +276,8 @@ class SecurityController extends AbstractController
             'internships' => ($trainee !== null ? $internshipReposidtory->findBy(['trainee' => $trainee->getId()]) : []),
             'surveys' => [],
             'form' => $form,
+            'graphDataCourses' => $graphDataCourses,
+            'graphDataHomeworks' => $graphDataHomeworks,
         ]);
     }
 }

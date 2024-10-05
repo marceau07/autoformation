@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QuizRow{% endblock %}
+
+{% block body %}
+    <h1>QuizRow</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quiz_row.id }}</td>
+            </tr>
+            <tr>
+                <th>Uuid</th>
+                <td>{{ quiz_row.uuid }}</td>
+            </tr>
+            <tr>
+                <th>Question</th>
+                <td>{{ quiz_row.question }}</td>
+            </tr>
+            <tr>
+                <th>Answer1</th>
+                <td>{{ quiz_row.answer1 }}</td>
+            </tr>
+            <tr>
+                <th>Answer2</th>
+                <td>{{ quiz_row.answer2 }}</td>
+            </tr>
+            <tr>
+                <th>Answer3</th>
+                <td>{{ quiz_row.answer3 }}</td>
+            </tr>
+            <tr>
+                <th>Answer4</th>
+                <td>{{ quiz_row.answer4 }}</td>
+            </tr>
+            <tr>
+                <th>Answer_short_text</th>
+                <td>{{ quiz_row.answerShortText }}</td>
+            </tr>
+            <tr>
+                <th>Answer_long_text</th>
+                <td>{{ quiz_row.answerLongText }}</td>
+            </tr>
+            <tr>
+                <th>Quiz_type</th>
+                <td>{{ quiz_row.quizType }}</td>
+            </tr>
+            <tr>
+                <th>Timer</th>
+                <td>{{ quiz_row.timer }}</td>
+            </tr>
+            <tr>
+                <th>Score</th>
+                <td>{{ quiz_row.score }}</td>
+            </tr>
+            <tr>
+                <th>Hint</th>
+                <td>{{ quiz_row.hint }}</td>
+            </tr>
+            <tr>
+                <th>Answer_explanation</th>
+                <td>{{ quiz_row.answerExplanation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quiz_row_index') }}">back to list</a>
+
+    <a href="{{ path('app_quiz_row_edit', {'id': quiz_row.id}) }}">edit</a>
+
+    {{ include('quiz_row/_delete_form.html.twig') }}
+{% endblock %}

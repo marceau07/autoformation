@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+<div class="row">
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.name) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.illustration) }}</div>
+  <div class="col-sm-12 col-md-3 col-lg-2 form-group">{{ form_row(form.color) }}</div>
+  {# Ajouter la "preview" du rendu #}
+</div>
+<div class="row">
+    <div class="col-12 mt-2 text-end">
+        <button class="btn btn-warning">{{ button_label|default('global.btn_save'|trans) }}</button>
+    </div>
+</div>
+{{ form_end(form) }}
