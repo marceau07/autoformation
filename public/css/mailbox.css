@@ -42,13 +42,8 @@
     flex-shrink: 0;
 }
 
-.chat-message-left {
-    margin-right: auto;
-}
-
 .chat-message-right {
     flex-direction: row-reverse;
-    margin-left: auto;
 }
 
 .py-3 {
@@ -84,4 +79,20 @@
 
 .chat-online::before {
     color: #34ce57;
+}
+
+/* Hide the reply icon by default */
+div[class^="chat-message-"] .fa-reply {
+    display: none;
+}
+
+/* Display the reply icon when hovering over the chat message row */
+.chat-message-right:hover .fa-reply,
+.chat-message-left:hover .fa-reply {
+    display: inline-block;
+    cursor: pointer;
+}
+
+div[id^="msg-"] {
+    transition: background-color 1s;
 }

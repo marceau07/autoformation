@@ -23,7 +23,7 @@
             <div class="px-4 d-none d-md-block">
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
-                  <input type="text" class="form-control my-3" placeholder="{{ 'header.search'|trans }}" disabled style="cursor:not-allowed;" />
+                  <input type="text" class="form-control my-3" placeholder="{{ 'header.search'|trans }}" id="search_contact" onkeyup="filterContacts();" />
                 </div>
               </div>
             </div>
@@ -120,6 +120,7 @@
 
               <div class="position-relative" style="height:38rem;overflow: auto;" id="contenu">
                 <div class="chat-messages p-4">
+                  {# TODO: coder la fonctionnalité "répondre à un message" #}
                   {% include '/mailbox/messages.html.twig' %}
                 </div>
               </div>
@@ -127,7 +128,9 @@
               {% if messages is defined %}
                 <form action="/send_message" method="post">
                   <div class="flex-grow-0 py-3 px-4 border-top">
+                    <p id="form_original_content" class="d-none"></p>
                     <div class="input-group">
+                      <input type="hidden" name="form_original_message" id="form_original_message" value="0" />
                       <input type="hidden" name="form_origin" value="{{ cohort is defined and cohort is not empty ? 'cohort' : trainee is defined ? 'trainee' : 'trainer' }}" />
                       <input type="hidden" name="form_sender_uuid" value="{{ app.user.uuid }}" />
                       <input type="hidden" name="form_receiver_uuid" value="{{ uuid }}" />
@@ -139,8 +142,8 @@
                 </form>
               {% endif %}
             {% else %}
-              <div>
-                <div id="contenu" class="height-message-scroll2">{{ 'mailbox.select_account'|trans }}</div>
+              <div class="mt-2 mx-3">
+                <div id="contenu" class="height-message-scroll2 text-center">{{ 'mailbox.select_account'|trans }}</div>
               </div>
             {% endif %}
           </div>
@@ -178,6 +181,47 @@
           tg.start('trainee-mailbox')
         }
       }
-    })
+
+    });
+
+    function filterContacts() {
+      // Récupérer la valeur saisie dans l'input
+      const filter = document.getElementById('search_contact').value.toLowerCase();
+      
+      // Récupérer tous les éléments de la liste des contacts
+      const contacts = document.querySelectorAll('#liste_contacts .fake-link');
+
+      // Boucle sur chaque contact pour vérifier s'il correspond au filtre
+      contacts.forEach(contact => {
+        // Récupérer le texte du nom et prénom à partir de l'attribut title
+        const title = contact.getAttribute('title').toLowerCase();
+        
+        // Si le titre correspond à la saisie, on affiche le contact, sinon on le masque
+        if (title.includes(filter)) {
+          contact.style.display = ''; // Affiche l'élément
+        } else {
+          contact.style.display = 'none'; // Masque l'élément
+        }
+      });
+    }
+
+    function replyTo(element) {
+      const id = element.getAttribute('data-message');
+      const message = element.getAttribute('data-content');
+      const from = element.getAttribute('data-from');
+      document.getElementById('form_original_message').value = id;
+      document.getElementById('form_original_content').innerHTML = "&ldquo;&nbsp;" + message + "&nbsp;&bdquo; - " + from;
+      document.getElementById('form_original_content').classList.remove('d-none');
+      document.getElementById('form_message').focus();
+    }
+
+    function goToMessage(id) {
+      // document.getElementById('msg-' + id).scrollIntoView();
+      $('#msg-' + id).css('background-color', '#ffff0045');
+      // Remove background color after 5 seconds
+      setTimeout(() => {
+        $('#msg-' + id).css('background-color', '');
+      }, 3000);
+    }
   </script>
 {% endblock %}
