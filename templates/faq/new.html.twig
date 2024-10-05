@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Faq{% endblock %}
+{% block title %}
+  New Faq
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Faq</h1>
+  <div class="container-fluid">
+    <div class="row d-flex flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_faq_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>{{ 'administration.faq.create'|trans }}</h1>
+      </div>
+    </div>
 
-    {{ include('faq/_form.html.twig') }}
-
-    <a href="{{ path('app_faq_index') }}">back to list</a>
+    <div class="row">
+      <div class="col-12">{{ include('faq/_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}

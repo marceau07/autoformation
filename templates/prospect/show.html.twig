@@ -1,70 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Prospect{% endblock %}
+{% block title %}
+  Prospect
+{% endblock %}
 
-{% block body %}
-    <h1>Prospect</h1>
+{% block main %}
+  <div class="container-fluid">
+    <div class="row flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_prospect_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Prospect</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 text-end">
+        <a href="{{ path('app_prospect_edit', { id: prospect.id }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
+      </div>
+    </div>
 
-    <table class="table">
-        <tbody>
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ prospect.id }}</td>
+              <th>Id</th>
+              <td>{{ prospect.id }}</td>
             </tr>
             <tr>
-                <th>Name</th>
-                <td>{{ prospect.name }}</td>
+              <th>Name</th>
+              <td>{{ prospect.name }}</td>
             </tr>
             <tr>
-                <th>Siren</th>
-                <td>{{ prospect.siren }}</td>
+              <th>Siren</th>
+              <td>{{ prospect.siren }}</td>
             </tr>
             <tr>
-                <th>Nic</th>
-                <td>{{ prospect.nic }}</td>
+              <th>Nic</th>
+              <td>{{ prospect.nic }}</td>
             </tr>
             <tr>
-                <th>Number</th>
-                <td>{{ prospect.number }}</td>
+              <th>Number</th>
+              <td>{{ prospect.number }}</td>
             </tr>
             <tr>
-                <th>Street</th>
-                <td>{{ prospect.street }}</td>
+              <th>Street</th>
+              <td>{{ prospect.street }}</td>
             </tr>
             <tr>
-                <th>Additional_address</th>
-                <td>{{ prospect.additionalAddress }}</td>
+              <th>Additional_address</th>
+              <td>{{ prospect.additionalAddress }}</td>
             </tr>
             <tr>
-                <th>Postal_code</th>
-                <td>{{ prospect.postalCode }}</td>
+              <th>Postal_code</th>
+              <td>{{ prospect.postalCode }}</td>
             </tr>
             <tr>
-                <th>City</th>
-                <td>{{ prospect.city }}</td>
+              <th>City</th>
+              <td>{{ prospect.city }}</td>
             </tr>
             <tr>
-                <th>Country</th>
-                <td>{{ prospect.country }}</td>
+              <th>Country</th>
+              <td>{{ prospect.country }}</td>
             </tr>
             <tr>
-                <th>Email</th>
-                <td>{{ prospect.email }}</td>
+              <th>Email</th>
+              <td>{{ prospect.email }}</td>
             </tr>
             <tr>
-                <th>Phone_number</th>
-                <td>{{ prospect.phoneNumber }}</td>
+              <th>Phone_number</th>
+              <td>{{ prospect.phoneNumber }}</td>
             </tr>
             <tr>
-                <th>Phone_number_bis</th>
-                <td>{{ prospect.phoneNumberBis }}</td>
+              <th>Phone_number_bis</th>
+              <td>{{ prospect.phoneNumberBis }}</td>
             </tr>
-        </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-    <a href="{{ path('app_prospect_index') }}">back to list</a>
-
-    <a href="{{ path('app_prospect_edit', {'id': prospect.id}) }}">edit</a>
-
-    {{ include('prospect/_delete_form.html.twig') }}
+    <div class="row">
+      <div class="col-12">{{ include('prospect/_delete_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}

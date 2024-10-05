@@ -32,6 +32,10 @@ class TrainerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $username = strtolower($trainer->getFirstName()[0]) . strtolower($trainer->getLastName()) . date('y');
+            // TODO: Check if username already exists
+            $trainer->setUsername($username);
+            // TODO: Generate password (3 words, separated by a comma and a number)
             $entityManager->persist($trainer);
             $entityManager->flush();
 

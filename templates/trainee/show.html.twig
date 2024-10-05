@@ -5,93 +5,108 @@
 {% endblock %}
 
 {% block main %}
-  <a href="{{ path('app_trainee_index') }}" class="btn btn-success">Retour sur la liste</a>
+  <div class="container-fluid">
+    <div class="row flex-start">
+      <div class="col-3 mt-2 mb-2 text-start">
+        <a href="{{ path('app_trainee_index') }}" class="btn btn-success">{{ 'global.btn_back'|trans }}</a>
+      </div>
+      <div class="col-6 text-center mt-2 mb-2">
+        <h1>Vue sur {{ trainee.username }}</h1>
+      </div>
+      <div class="col-3 mt-2 mb-2 text-end">
+        <a href="{{ path('app_trainee_edit', { uuid: trainee.uuid }) }}" class="btn btn-warning">{{ 'global.btn_edit'|trans }}</a>
+      </div>
+    </div>
 
-  <a href="{{ path('app_trainee_edit', { uuid: trainee.uuid }) }}" class="btn btn-warning">Éditer <em>{{ trainee.username }}</em></a>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-responsive">
+          <tbody>
+            <tr>
+              <th>Id</th>
+              <td>{{ trainee.id }}</td>
+            </tr>
+            <tr>
+              <th>Username</th>
+              <td>{{ trainee.username }}</td>
+            </tr>
+            <tr>
+              <th>LastName</th>
+              <td>{{ trainee.lastName }}</td>
+            </tr>
+            <tr>
+              <th>FirstName</th>
+              <td>{{ trainee.firstName }}</td>
+            </tr>
+            <tr>
+              <th>Roles</th>
+              <td>{{ trainee.roles ? trainee.roles|json_encode:'' }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ trainee.email }}</td>
+            </tr>
+            <tr>
+              <th>Activated</th>
+              <td>{{ trainee.activated ? 'global.yes'|trans:'global.no'|trans }}</td>
+            </tr>
+            <tr>
+              <th>TmpCode</th>
+              <td>{{ trainee.tmpCode }}</td>
+            </tr>
+            <tr>
+              <th>TmpCodeDate</th>
+              <td>{{ trainee.tmpCodeDate ? trainee.tmpCodeDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+              <th>Signature</th>
+              <td>
+                {% if trainee.signature is defined and trainee.signature is not empty %}
+                  <img src="{{ trainee.signature }}" alt="Signature de {{ (trainee.firstName|capitalize) ~ ' ' ~ (trainee.lastName|upper) }}" />
+                {% else %}
+                  Pas de signature pour {{ trainee.username }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>Uuid</th>
+              <td>{{ trainee.uuid }}</td>
+            </tr>
+            <tr>
+              <th>Documents</th>
+              <td>{{ trainee.documents }}</td>
+            </tr>
+            <tr>
+              <th>Diploma</th>
+              <td>{{ trainee.diploma }}</td>
+            </tr>
+          </tbody>
+        </table>
 
-  <h1 class="text-center">Vue sur {{ trainee.username }}</h1>
-  <table class="table table-responsive">
-    <tbody>
-      <tr>
-        <th>Id</th>
-        <td>{{ trainee.id }}</td>
-      </tr>
-      <tr>
-        <th>Username</th>
-        <td>{{ trainee.username }}</td>
-      </tr>
-      <tr>
-        <th>LastName</th>
-        <td>{{ trainee.lastName }}</td>
-      </tr>
-      <tr>
-        <th>FirstName</th>
-        <td>{{ trainee.firstName }}</td>
-      </tr>
-      <tr>
-        <th>Roles</th>
-        <td>{{ trainee.roles ? trainee.roles|json_encode:'' }}</td>
-      </tr>
-      <tr>
-        <th>Email</th>
-        <td>{{ trainee.email }}</td>
-      </tr>
-      <tr>
-        <th>Activated</th>
-        <td>{{ trainee.activated ? 'global.yes'|trans:'global.no'|trans }}</td>
-      </tr>
-      <tr>
-        <th>TmpCode</th>
-        <td>{{ trainee.tmpCode }}</td>
-      </tr>
-      <tr>
-        <th>TmpCodeDate</th>
-        <td>{{ trainee.tmpCodeDate ? trainee.tmpCodeDate|date('Y-m-d H:i:s') : '' }}</td>
-      </tr>
-      <tr>
-        <th>Signature</th>
-        <td>
-          {% if trainee.signature is defined and trainee.signature is not empty %}
-            <img src="{{ trainee.signature }}" alt="Signature de {{ (trainee.firstName|capitalize) ~ ' ' ~ (trainee.lastName|upper) }}" />
-          {% else %}
-            Pas de signature pour {{ trainee.username }}
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <th>Uuid</th>
-        <td>{{ trainee.uuid }}</td>
-      </tr>
-      <tr>
-        <th>Documents</th>
-        <td>{{ trainee.documents }}</td>
-      </tr>
-      <tr>
-        <th>Diploma</th>
-        <td>{{ trainee.diploma }}</td>
-      </tr>
-    </tbody>
-  </table>
+        <h2>Travaux rendus</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Cours</th>
+              <th>Lien exercice</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for resource in trainee.traineeResources %}
+              <tr>
+                <td>{{ resource.courseResource.course.title }}</td>
+                <td>
+                  <a href="/homeworks/{{ trainee.username }}/{{ resource.label }}" target="_blank">{{ resource.label }}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <h2>Travaux rendus</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Cours</th>
-        <th>Lien exercice</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for resource in trainee.traineeResources %}
-        <tr>
-          <td>{{ resource.courseResource.course.title }}</td>
-          <td>
-            <a href="/homeworks/{{ trainee.username }}/{{ resource.label }}" target="_blank">{{ resource.label }}</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  {{ include('trainee/_delete_form.html.twig') }}
+    <div class="row">
+      <div class="col-12">{{ include('trainee/_delete_form.html.twig') }}</div>
+    </div>
+  </div>
 {% endblock %}
