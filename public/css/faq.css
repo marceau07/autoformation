@@ -1,0 +1,7 @@
+#faq_block {
+    background-color: #6f48a5;
+}
+
+[data-theme="dark"] #faq_block {
+    background-color: #6f48a559;
+}
