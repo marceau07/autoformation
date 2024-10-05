@@ -20,7 +20,7 @@ final class Version20240927113333 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE trainee ADD tutorial_completed VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE trainee ADD tutorial_completed VARCHAR(255) NOT NULL DEFAULT ""');
     }
 
     public function down(Schema $schema): void
