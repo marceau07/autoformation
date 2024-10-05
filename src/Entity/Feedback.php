@@ -17,7 +17,7 @@ class Feedback
     private ?int $id = null;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private ?string $weight = null;
+    private ?int $weight = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedback')]
     #[ORM\JoinColumn(nullable: false)]
@@ -38,12 +38,12 @@ class Feedback
         return $this->id;
     }
 
-    public function getWeight(): ?string
+    public function getWeight(): ?int
     {
         return $this->weight;
     }
 
-    public function setWeight(string $weight): static
+    public function setWeight(int $weight): static
     {
         $this->weight = $weight;
 

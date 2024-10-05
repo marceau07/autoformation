@@ -45,6 +45,15 @@ class Trainee extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Internship::class, mappedBy: 'trainee')]
     private Collection $internships;
 
+    /**
+     * @var Collection<int, TraineeCourseFavorite>
+     */
+    #[ORM\OneToMany(targetEntity: TraineeCourseFavorite::class, mappedBy: 'trainee', orphanRemoval: true)]
+    private Collection $traineeCourseFavorites;
+
+    #[ORM\Column(length: 255)]
+    private ?string $tutorial_completed = null;
+
     public function __construct()
     {
         $roles = $this->getRoles();
@@ -54,6 +63,7 @@ class Trainee extends User implements UserInterface
         $this->surveyTrainees = new ArrayCollection();
         $this->traineeResources = new ArrayCollection();
         $this->internships = new ArrayCollection();
+        $this->traineeCourseFavorites = new ArrayCollection();
     }
 
     public function getPasswordSave(): ?string
@@ -246,6 +256,48 @@ class Trainee extends User implements UserInterface
                 $internship->setTrainee(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TraineeCourseFavorite>
+     */
+    public function getTraineeCourseFavorites(): Collection
+    {
+        return $this->traineeCourseFavorites;
+    }
+
+    public function addTraineeCourseFavorite(TraineeCourseFavorite $traineeCourseFavorite): static
+    {
+        if (!$this->traineeCourseFavorites->contains($traineeCourseFavorite)) {
+            $this->traineeCourseFavorites->add($traineeCourseFavorite);
+            $traineeCourseFavorite->setTrainee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraineeCourseFavorite(TraineeCourseFavorite $traineeCourseFavorite): static
+    {
+        if ($this->traineeCourseFavorites->removeElement($traineeCourseFavorite)) {
+            // set the owning side to null (unless already changed)
+            if ($traineeCourseFavorite->getTrainee() === $this) {
+                $traineeCourseFavorite->setTrainee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTutorialCompleted(): ?string
+    {
+        return $this->tutorial_completed;
+    }
+
+    public function setTutorialCompleted(?string $tutorial_completed): static
+    {
+        $this->tutorial_completed = $tutorial_completed;
 
         return $this;
     }

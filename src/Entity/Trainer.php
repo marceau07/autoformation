@@ -31,6 +31,12 @@ class Trainer extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Cohort::class, mappedBy: 'trainer')]
     private Collection $cohorts;
 
+    /**
+     * @var Collection<int, Quiz>
+     */
+    #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'trainer', orphanRemoval: true)]
+    private Collection $quizzes;
+
     public function __construct()
     {
         $roles = $this->getRoles();
@@ -38,6 +44,7 @@ class Trainer extends User implements UserInterface
         $this->setRoles($roles);
         $this->courses = new ArrayCollection();
         $this->cohorts = new ArrayCollection();
+        $this->quizzes = new ArrayCollection();
     }
 
     public function getRole(): ?string
@@ -142,6 +149,36 @@ class Trainer extends User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($cohort->getTrainer() === $this) {
                 $cohort->setTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quiz>
+     */
+    public function getQuizzes(): Collection
+    {
+        return $this->quizzes;
+    }
+
+    public function addQuiz(Quiz $quiz): static
+    {
+        if (!$this->quizzes->contains($quiz)) {
+            $this->quizzes->add($quiz);
+            $quiz->setTrainer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuiz(Quiz $quiz): static
+    {
+        if ($this->quizzes->removeElement($quiz)) {
+            // set the owning side to null (unless already changed)
+            if ($quiz->getTrainer() === $this) {
+                $quiz->setTrainer(null);
             }
         }
 

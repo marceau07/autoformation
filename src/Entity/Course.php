@@ -60,11 +60,18 @@ class Course
     #[ORM\OneToMany(targetEntity: CourseResource::class, mappedBy: 'course')]
     private Collection $courseResources;
 
+    /**
+     * @var Collection<int, TraineeCourseFavorite>
+     */
+    #[ORM\OneToMany(targetEntity: TraineeCourseFavorite::class, mappedBy: 'course')]
+    private Collection $traineeCourseFavorites;
+
     public function __construct()
     {
         $this->courseCohorts = new ArrayCollection();
         $this->courseTrainees = new ArrayCollection();
         $this->courseResources = new ArrayCollection();
+        $this->traineeCourseFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -252,6 +259,36 @@ class Course
             // set the owning side to null (unless already changed)
             if ($courseResource->getCourse() === $this) {
                 $courseResource->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TraineeCourseFavorite>
+     */
+    public function getTraineeCourseFavorites(): Collection
+    {
+        return $this->traineeCourseFavorites;
+    }
+
+    public function addTraineeCourseFavorite(TraineeCourseFavorite $traineeCourseFavorite): static
+    {
+        if (!$this->traineeCourseFavorites->contains($traineeCourseFavorite)) {
+            $this->traineeCourseFavorites->add($traineeCourseFavorite);
+            $traineeCourseFavorite->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraineeCourseFavorite(TraineeCourseFavorite $traineeCourseFavorite): static
+    {
+        if ($this->traineeCourseFavorites->removeElement($traineeCourseFavorite)) {
+            // set the owning side to null (unless already changed)
+            if ($traineeCourseFavorite->getCourse() === $this) {
+                $traineeCourseFavorite->setCourse(null);
             }
         }
 
