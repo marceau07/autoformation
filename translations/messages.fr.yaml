@@ -314,7 +314,7 @@ footer:
 
 chatbot:
   welcome:
-    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Taoez <code>/aide</code> pour lister les actions possibles.</small>"
+    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Tapez <code>/aide</code> pour lister les actions possibles.</small>"
   placeholder:
     "Que recherchez-vous ?"
   didnt_understand:
