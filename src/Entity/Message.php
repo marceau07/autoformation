@@ -47,6 +47,12 @@ class Message
     #[ORM\ManyToOne(targetEntity: self::class)]
     private ?self $original_message = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $document = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mime_type = null;
+
     public function __construct(bool $readed = false)
     {
         $this->readed = $readed;
@@ -161,6 +167,30 @@ class Message
     public function setOriginalMessage(?self $original_message): static
     {
         $this->original_message = $original_message;
+
+        return $this;
+    }
+
+    public function getDocument(): ?string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?string $document): static
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mime_type;
+    }
+
+    public function setMimeType(?string $mime_type): static
+    {
+        $this->mime_type = $mime_type;
 
         return $this;
     }

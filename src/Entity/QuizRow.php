@@ -4,9 +4,10 @@ namespace App\Entity;
 
 use App\Config\QuizType;
 use App\Repository\QuizRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
@@ -19,29 +20,23 @@ class QuizRow
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid')]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $uuid = null;
 
     #[ORM\Column(length: 255)]
     private ?string $question = null;
 
     #[ORM\Column(length: 75, nullable: true)]
-    private ?string $answer1 = null;
+    private ?string $option1 = null;
 
     #[ORM\Column(length: 75, nullable: true)]
-    private ?string $answer2 = null;
+    private ?string $option2 = null;
 
     #[ORM\Column(length: 75, nullable: true)]
-    private ?string $answer3 = null;
+    private ?string $option3 = null;
 
     #[ORM\Column(length: 75, nullable: true)]
-    private ?string $answer4 = null;
-
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $answer_short_text = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $answer_long_text = null;
+    private ?string $option4 = null;
 
     #[ORM\Column(enumType: QuizType::class)]
     private ?QuizType $quiz_type = null;
@@ -62,9 +57,19 @@ class QuizRow
     #[ORM\JoinColumn(nullable: false)]
     private ?Quiz $quiz = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $answer = null;
+
+    /**
+     * @var Collection<int, UserQuiz>
+     */
+    #[ORM\OneToMany(targetEntity: UserQuiz::class, mappedBy: 'quiz_row')]
+    private Collection $userQuizzes;
+
     public function __construct()
     {
         $this->uuid = new UuidV7();
+        $this->userQuizzes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,74 +101,50 @@ class QuizRow
         return $this;
     }
 
-    public function getAnswer1(): ?string
+    public function getOption1(): ?string
     {
-        return $this->answer1;
+        return $this->option1;
     }
 
-    public function setAnswer1(?string $answer1): static
+    public function setOption1(?string $option1): static
     {
-        $this->answer1 = $answer1;
+        $this->option1 = $option1;
 
         return $this;
     }
 
-    public function getAnswer2(): ?string
+    public function getOption2(): ?string
     {
-        return $this->answer2;
+        return $this->option2;
     }
 
-    public function setAnswer2(?string $answer2): static
+    public function setOption2(?string $option2): static
     {
-        $this->answer2 = $answer2;
+        $this->option2 = $option2;
 
         return $this;
     }
 
-    public function getAnswer3(): ?string
+    public function getOption3(): ?string
     {
-        return $this->answer3;
+        return $this->option3;
     }
 
-    public function setAnswer3(?string $answer3): static
+    public function setOption3(?string $option3): static
     {
-        $this->answer3 = $answer3;
+        $this->option3 = $option3;
 
         return $this;
     }
 
-    public function getAnswer4(): ?string
+    public function getOption4(): ?string
     {
-        return $this->answer4;
+        return $this->option4;
     }
 
-    public function setAnswer4(?string $answer4): static
+    public function setOption4(?string $option4): static
     {
-        $this->answer4 = $answer4;
-
-        return $this;
-    }
-
-    public function getAnswerShortText(): ?string
-    {
-        return $this->answer_short_text;
-    }
-
-    public function setAnswerShortText(?string $answer_short_text): static
-    {
-        $this->answer_short_text = $answer_short_text;
-
-        return $this;
-    }
-
-    public function getAnswerLongText(): ?string
-    {
-        return $this->answer_long_text;
-    }
-
-    public function setAnswerLongText(?string $answer_long_text): static
-    {
-        $this->answer_long_text = $answer_long_text;
+        $this->option4 = $option4;
 
         return $this;
     }
@@ -236,6 +217,48 @@ class QuizRow
     public function setQuiz(?Quiz $quiz): static
     {
         $this->quiz = $quiz;
+
+        return $this;
+    }
+
+    public function getAnswer(): ?string
+    {
+        return $this->answer;
+    }
+
+    public function setAnswer(?string $answer): static
+    {
+        $this->answer = $answer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserQuiz>
+     */
+    public function getUserQuizzes(): Collection
+    {
+        return $this->userQuizzes;
+    }
+
+    public function addUserQuiz(UserQuiz $userQuiz): static
+    {
+        if (!$this->userQuizzes->contains($userQuiz)) {
+            $this->userQuizzes->add($userQuiz);
+            $userQuiz->setQuizRow($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserQuiz(UserQuiz $userQuiz): static
+    {
+        if ($this->userQuizzes->removeElement($userQuiz)) {
+            // set the owning side to null (unless already changed)
+            if ($userQuiz->getQuizRow() === $this) {
+                $userQuiz->setQuizRow(null);
+            }
+        }
 
         return $this;
     }

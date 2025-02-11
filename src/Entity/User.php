@@ -66,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['trainee_search', 'trainer_search'])]
     private ?Avatar $avatar = null;
 
-    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', cascade: ["persist"])]
     private Collection $notifications;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -115,6 +115,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $phoneNumber = null;
 
+    /**
+     * @var Collection<int, UserQuiz>
+     */
+    #[ORM\OneToMany(targetEntity: UserQuiz::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userQuizzes;
+
     public function __construct()
     {
         $this->activated = true;
@@ -127,6 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->received_messages_trainee = new ArrayCollection();
         $uuid = new UuidV7();
         $this->uuid = $uuid->toString();
+        $this->userQuizzes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -204,6 +211,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // Méthode pour vérifier si un rôle spécifique est présent
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->roles, true);
+    }
+    
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -240,7 +253,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActivated(): bool
+    public function getActivated(): bool
     {
         return $this->activated;
     }
@@ -530,6 +543,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(?string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserQuiz>
+     */
+    public function getUserQuizzes(): Collection
+    {
+        return $this->userQuizzes;
+    }
+
+    public function addUserQuiz(UserQuiz $userQuiz): static
+    {
+        if (!$this->userQuizzes->contains($userQuiz)) {
+            $this->userQuizzes->add($userQuiz);
+            $userQuiz->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserQuiz(UserQuiz $userQuiz): static
+    {
+        if ($this->userQuizzes->removeElement($userQuiz)) {
+            // set the owning side to null (unless already changed)
+            if ($userQuiz->getUser() === $this) {
+                $userQuiz->setUser(null);
+            }
+        }
 
         return $this;
     }

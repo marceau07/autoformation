@@ -66,12 +66,20 @@ class Course
     #[ORM\OneToMany(targetEntity: TraineeCourseFavorite::class, mappedBy: 'course')]
     private Collection $traineeCourseFavorites;
 
+    /**
+     * @var Collection<int, Sandbox>
+     */
+    #[ORM\OneToMany(targetEntity: Sandbox::class, mappedBy: 'course')]
+    private Collection $sandboxes;
+
     public function __construct()
     {
         $this->courseCohorts = new ArrayCollection();
         $this->courseTrainees = new ArrayCollection();
         $this->courseResources = new ArrayCollection();
         $this->traineeCourseFavorites = new ArrayCollection();
+        $this->sandboxes = new ArrayCollection();
+        $this->visitors = 0;
     }
 
     public function getId(): ?int
@@ -289,6 +297,41 @@ class Course
             // set the owning side to null (unless already changed)
             if ($traineeCourseFavorite->getCourse() === $this) {
                 $traineeCourseFavorite->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return '[' . $this->getModule()->getLabel() . '] - ' . $this->getTitle();
+    }
+
+    /**
+     * @return Collection<int, Sandbox>
+     */
+    public function getSandboxes(): Collection
+    {
+        return $this->sandboxes;
+    }
+
+    public function addSandbox(Sandbox $sandbox): static
+    {
+        if (!$this->sandboxes->contains($sandbox)) {
+            $this->sandboxes->add($sandbox);
+            $sandbox->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSandbox(Sandbox $sandbox): static
+    {
+        if ($this->sandboxes->removeElement($sandbox)) {
+            // set the owning side to null (unless already changed)
+            if ($sandbox->getCourse() === $this) {
+                $sandbox->setCourse(null);
             }
         }
 

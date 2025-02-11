@@ -3,7 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\QuizShareRepository;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
@@ -21,13 +30,13 @@ class QuizShare
     #[ORM\JoinColumn(nullable: false)]
     private ?Quiz $quiz = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $start_date = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $finish_date = null;
 
-    #[ORM\Column(type: 'uuid')]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $uuid = null;
 
     public function __construct()
@@ -86,5 +95,33 @@ class QuizShare
         $this->uuid = $uuid;
 
         return $this;
+    }
+
+    public function getQrCode(): string
+    {
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data("https://" . $_SERVER['SERVER_NAME'] . "/fr/quiz/redirect/" . $this->uuid)
+            // ->data("paf://quiz/" . $this->uuid) // Fonctionne mais conflit avec certaines applications
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(ErrorCorrectionLevel::Quartile)
+            ->margin(10)
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->logoPath(($this->isAvailable() ? 'assets/images/adrar_epa_logo_w_bg-5711b70db1d30a73d629b99c345bf989.png' : 'assets/images/lock-86937728444f01bc906bf2302329ffb4.png'))
+            ->logoResizeToWidth(70)
+            ->logoPunchoutBackground(false)
+            ->labelText($this->quiz->getTitle())
+            ->labelFont(new NotoSans(20))
+            ->labelAlignment(LabelAlignment::Center)
+            ->validateResult(false)
+            ->build();
+        return $result->getDataUri();
+    }
+
+    public function isAvailable(): bool
+    {
+        $now = new DateTimeImmutable();
+        return (is_null($this->getStartDate()) || $this->getStartDate() <= $now) || (is_null($this->getFinishDate()) || $this->getFinishDate() >= $now);
     }
 }

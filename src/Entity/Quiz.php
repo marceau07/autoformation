@@ -5,8 +5,8 @@ namespace App\Entity;
 use App\Repository\QuizRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
@@ -37,12 +37,16 @@ class Quiz
     #[ORM\OneToMany(targetEntity: QuizShare::class, mappedBy: 'quiz', orphanRemoval: true)]
     private Collection $quizShares;
 
-    #[ORM\Column(type: 'uuid')]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $uuid = null;
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trainer $trainer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'quizzes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CourseModule $module = null;
 
     public function __construct()
     {
@@ -160,6 +164,18 @@ class Quiz
     public function setTrainer(?Trainer $trainer): static
     {
         $this->trainer = $trainer;
+
+        return $this;
+    }
+
+    public function getModule(): ?CourseModule
+    {
+        return $this->module;
+    }
+
+    public function setModule(?CourseModule $module): static
+    {
+        $this->module = $module;
 
         return $this;
     }

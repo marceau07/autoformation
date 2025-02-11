@@ -37,6 +37,18 @@ class Trainer extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'trainer', orphanRemoval: true)]
     private Collection $quizzes;
 
+    /**
+     * @var Collection<int, Calendar>
+     */
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'trainer')]
+    private Collection $calendars;
+
+    /**
+     * @var Collection<int, Sandbox>
+     */
+    #[ORM\OneToMany(targetEntity: Sandbox::class, mappedBy: 'author')]
+    private Collection $sandboxes;
+
     public function __construct()
     {
         $roles = $this->getRoles();
@@ -45,6 +57,8 @@ class Trainer extends User implements UserInterface
         $this->courses = new ArrayCollection();
         $this->cohorts = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
+        $this->sandboxes = new ArrayCollection();
     }
 
     public function getRole(): ?string
@@ -179,6 +193,71 @@ class Trainer extends User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($quiz->getTrainer() === $this) {
                 $quiz->setTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setTrainer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getTrainer() === $this) {
+                $calendar->setTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sandbox>
+     */
+    public function getSandboxes(): Collection
+    {
+        return $this->sandboxes;
+    }
+
+    public function addSandboxes(Sandbox $sandbox): static
+    {
+        if (!$this->sandboxes->contains($sandbox)) {
+            $this->sandboxes->add($sandbox);
+            $sandbox->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSandbox(Sandbox $sandbox): static
+    {
+        if ($this->sandboxes->removeElement($sandbox)) {
+            // set the owning side to null (unless already changed)
+            if ($sandbox->getAuthor() === $this) {
+                $sandbox->setAuthor(null);
             }
         }
 

@@ -247,4 +247,9 @@ class Prospect
     {
         return $this->number . ' ' . $this->street . ' ' . $this->additional_address;
     }
+
+    public function __toString()
+    {
+        return $this->name . ' - ' . $this->siren . $this->nic . ' - ' . $this->city;
+    }
 }

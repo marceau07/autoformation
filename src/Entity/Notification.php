@@ -31,7 +31,7 @@ class Notification
     #[ORM\Column(length: 100)]
     private ?string $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\ManyToOne(inversedBy: 'notifications', cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
