@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240929134404 extends AbstractMigration
+final class Version20241204131819 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,12 @@ final class Version20240929134404 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE quiz ADD trainer_id INT NOT NULL');
-        $this->addSql('ALTER TABLE quiz ADD CONSTRAINT FK_A412FA92FB08EDF6 FOREIGN KEY (trainer_id) REFERENCES trainer (id)');
-        $this->addSql('CREATE INDEX IDX_A412FA92FB08EDF6 ON quiz (trainer_id)');
+        $this->addSql('CREATE TABLE site_settings (id INT AUTO_INCREMENT NOT NULL, maintenance_mode TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE quiz DROP FOREIGN KEY FK_A412FA92FB08EDF6');
-        $this->addSql('DROP INDEX IDX_A412FA92FB08EDF6 ON quiz');
-        $this->addSql('ALTER TABLE quiz DROP trainer_id');
+        $this->addSql('DROP TABLE site_settings');
     }
 }

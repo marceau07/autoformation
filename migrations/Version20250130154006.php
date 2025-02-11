@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240927092019 extends AbstractMigration
+final class Version20250130154006 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20240927092019 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE UNIQUE INDEX unique_trainee_course ON trainee_course_favorite (trainee_id, course_id)');
+        $this->addSql('ALTER TABLE changelog CHANGE version version VARCHAR(13) NOT NULL, CHANGE content content VARCHAR(255) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX unique_trainee_course ON trainee_course_favorite');
+        $this->addSql('ALTER TABLE changelog CHANGE version version VARCHAR(8) NOT NULL, CHANGE content content LONGTEXT NOT NULL');
     }
 }
