@@ -2,8 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Cohort;
 use App\Entity\Internship;
 use App\Entity\Message;
+use App\Entity\Trainee;
+use App\Entity\Trainer;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -26,11 +29,17 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
             $isMessageForSession = $faker->boolean(27);
             $isMessageForTrainer = $faker->boolean(60);
 
-            $message->setSendTrainee(!$isSendByATrainer ? $this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1))) : null);
-            $message->setSendTrainer($isSendByATrainer ? $this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1)) : null);
-            $message->setTrainee(!$isMessageForSession && !$isMessageForTrainer ? $this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1))) : null);
-            $message->setTrainer(!$isMessageForSession && $isMessageForTrainer ? $this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1)) : null);
-            $message->setCohort($isMessageForSession && !$isMessageForTrainer ? $this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . rand(0, CohortFixtures::NB_COHORT - 1)) : null);
+            $message->setSendTrainee(!$isSendByATrainer ? 
+              $this->getReference(
+                TraineeFixtures::TRAINEE_REFERENCE_TAG . rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1)), Trainer::class) : null);
+            $message->setSendTrainer($isSendByATrainer ? 
+              $this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1), Trainer::class) : null);
+            $message->setTrainee(!$isMessageForSession && !$isMessageForTrainer ? 
+              $this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1)), Trainee::class) : null);
+            $message->setTrainer(!$isMessageForSession && $isMessageForTrainer ? 
+              $this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1), Trainer::class) : null);
+            $message->setCohort($isMessageForSession && !$isMessageForTrainer ? 
+              $this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . rand(0, CohortFixtures::NB_COHORT - 1), Cohort::class) : null);
             $message->setContent($faker->text(250));
             $message->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
             $message->setReaded($faker->boolean(90));
@@ -41,7 +50,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             CohortFixtures::class, 

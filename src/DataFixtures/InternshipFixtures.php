@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Internship;
+use App\Entity\Prospect;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -29,8 +30,8 @@ class InternshipFixtures extends Fixture implements DependentFixtureInterface
             $usedCombinations[] = $combination;
 
             $internship = new Internship();
-            $internship->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex));
-            $internship->setProspect($this->getReference(ProspectFixtures::PROSPECT_REFERENCE_TAG . $prospectIndex));
+            $internship->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex, Internship::class));
+            $internship->setProspect($this->getReference(ProspectFixtures::PROSPECT_REFERENCE_TAG . $prospectIndex, Prospect::class));
             $internship->setTutorLastName($faker->lastName());
             $internship->setTutorFirstName($faker->firstName());
             $internship->setTutorEmail($faker->unique()->email());  
@@ -42,7 +43,7 @@ class InternshipFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             ProspectFixtures::class, 

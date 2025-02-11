@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Avatar;
+use App\Entity\Cohort;
 use App\Entity\Trainee;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -28,7 +30,7 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
             $trainee->setPasswordSave(password_hash($sPassword, PASSWORD_BCRYPT, ['cost' => 12]));
             $trainee->setDocuments('{}');
             $trainee->setDiploma(rand(-7, 1));
-            $trainee->setCohort($this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . rand(0, CohortFixtures::NB_COHORT - 1)));
+            $trainee->setCohort($this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . rand(0, CohortFixtures::NB_COHORT - 1), Cohort::class));
             $trainee->setUsername($faker->unique()->userName());
             $trainee->setPassword(password_hash($sPassword, PASSWORD_BCRYPT, ['cost' => 12]));
             $trainee->setLastName($faker->lastName());
@@ -38,7 +40,7 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
             $bIsTemporaryBlocked = (rand(0, 20) == 20);
             $trainee->setTmpCode($bIsTemporaryBlocked ? rand(100000, 999999) : null);
             $trainee->setTmpCodeDate($bIsTemporaryBlocked ? DateTimeImmutable::createFromMutable($faker->dateTimeBetween('+1 week', '+2 week')) : null);
-            $trainee->setAvatar($this->getReference(AvatarFixtures::AVATAR_REFERENCE_TAG . rand(0, AvatarFixtures::NB_AVATAR - 1)));
+            $trainee->setAvatar($this->getReference(AvatarFixtures::AVATAR_REFERENCE_TAG . rand(0, AvatarFixtures::NB_AVATAR - 1), Avatar::class));
             // $trainee->setSignature($sPassword);
             $trainee->setSignature($faker->imageUrl(300, 300, 'signature'));
             $trainee->setUuid($faker->unique()->uuid());
@@ -51,7 +53,7 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             AvatarFixtures::class,

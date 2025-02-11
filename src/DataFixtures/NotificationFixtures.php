@@ -2,7 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Course;
+use App\Entity\Message;
 use App\Entity\Notification;
+use App\Entity\Trainee;
+use App\Entity\Trainer;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -24,9 +28,9 @@ class NotificationFixtures extends Fixture implements DependentFixtureInterface
             $isACourse = $faker->boolean(35);
             $isAHomework = $faker->boolean(27);
             $isATrainer = $faker->boolean(40);
-            $course = $this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . rand(0, CourseFixtures::NB_COURSE - 1));
-            $courseResource = $this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . rand(0, CourseFixtures::NB_COURSE - 1));
-            $message = $this->getReference(MessageFixtures::MESSAGE_REFERENCE_TAG . rand(0, MessageFixtures::NB_MESSAGE - 1));
+            $course = $this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . rand(0, CourseFixtures::NB_COURSE - 1), Course::class);
+            $courseResource = $this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . rand(0, CourseFixtures::NB_COURSE - 1), Course::class);
+            $message = $this->getReference(MessageFixtures::MESSAGE_REFERENCE_TAG . rand(0, MessageFixtures::NB_MESSAGE - 1), Message::class);
 
             $notification->setOrigin($faker->text(150));
             $notification->setMessage($isACourse ? $course->getModule()->getLabel() : ($isAHomework ? $courseResource->getTitle() : $message->getContent()));
@@ -37,7 +41,7 @@ class NotificationFixtures extends Fixture implements DependentFixtureInterface
             );
             $notification->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
             $notification->setCategory($isACourse ? 'new_course' : ($isAHomework ? 'homework_to_do' : 'new_message'));
-            $notification->setUser($this->getReference(TraineeFixtures::USER_REFERENCE_TAG . rand(0, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1))));
+            $notification->setUser($this->getReference(TraineeFixtures::USER_REFERENCE_TAG . rand(0, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1)), Trainee::class));
 
             $manager->persist($notification);
             $this->addReference(self::NOTIFICATION_REFERENCE_TAG . $i, $notification);
@@ -45,7 +49,7 @@ class NotificationFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             MessageFixtures::class,

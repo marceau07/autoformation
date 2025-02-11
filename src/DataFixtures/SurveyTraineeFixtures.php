@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Survey;
 use App\Entity\SurveyTrainee;
+use App\Entity\Trainee;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -28,8 +30,8 @@ class SurveyTraineeFixtures extends Fixture implements DependentFixtureInterface
             $usedCombinations[] = $combination;
 
             $st = new SurveyTrainee();
-            $st->setSurvey($this->getReference(SurveyFixtures::SURVEY_REFERENCE_TAG . $surveyIndex));
-            $st->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex));
+            $st->setSurvey($this->getReference(SurveyFixtures::SURVEY_REFERENCE_TAG . $surveyIndex, Survey::class));
+            $st->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex, Trainee::class));
             $st->setRate(rand(0, 5));
             $st->setAnswer($faker->text(250));
 
@@ -39,7 +41,7 @@ class SurveyTraineeFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             SurveyFixtures::class,

@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Course;
+use App\Entity\CourseModule;
+use App\Entity\Trainer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -26,8 +28,8 @@ class CourseFixtures extends Fixture implements DependentFixtureInterface
             $course->setKeywords(implode(';', $keywords));
             $course->setLink("2PACK-" . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
             $course->setPosition(rand(0, self::NB_COURSE));
-            $course->setModule($this->getReference(CourseModuleFixtures::COURSE_MODULE_REFERENCE_TAG . rand(0, CourseModuleFixtures::NB_COURSE_MODULE - 1)));
-            $course->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1)));
+            $course->setModule($this->getReference(CourseModuleFixtures::COURSE_MODULE_REFERENCE_TAG . rand(0, CourseModuleFixtures::NB_COURSE_MODULE - 1), CourseModule::class));
+            $course->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1), Trainer::class));
             $course->setVisitors(rand(0, 10000));
 
             $manager->persist($course);
@@ -37,7 +39,7 @@ class CourseFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             CourseModuleFixtures::class,
