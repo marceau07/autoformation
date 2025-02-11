@@ -1,6 +1,6 @@
 global:
   meta_title:
-    "PAF - Learning and Training Platform"
+    "%platformName% - Learning and Training Platform"
   meta_description:
     "Access all your courses and interact with your trainers and cohort mates on the andragogical platform."
   language_french:
@@ -56,6 +56,10 @@ global:
     "Download"
   btn_upload:
     "Upload"
+  btn_export:
+    "Export"
+  btn_verify:
+    "Verify"
   day:
     " %time% day ago"
   days:
@@ -94,6 +98,8 @@ global:
     "Courses"
   course:
     "Course"
+  quiz:
+    "Quiz"
   modules:
     "Modules"
   module:
@@ -128,10 +134,16 @@ header:
     "FAQ"
   search:
     "Search..."
+  login:
+    "Log In"
+  web_platform:
+    "Web Platform"
+  mobile_application:
+    "Mobile Application"
 
 home:
   welcome:
-    "Welcome to PAF"
+    "Welcome to %platformName%"
   welcome_small:
     "Your Learning and Training Platform"
 
@@ -178,6 +190,16 @@ module:
     "Modules"
   no_content:
     "No content at the moment, please try again later..."
+
+quiz:
+  text:
+    "Quizzes"
+  no_content:
+    "No quizzes at the moment, please try again later..."
+
+sandbox:
+  created:
+    "Your sandboxes"
 
 course:
   favorite:
@@ -359,6 +381,10 @@ notifications:
     "You have received a new message from %from_username%"
   new_message_cohort:
     "You have received a new message in %from_cohort%"
+  new_changelog:
+    "New changelog available: %features%"
+  no_news:
+    "No new features at the moment"
   no_new_message:
     "No new messages at the moment"
   new_homework:
@@ -380,6 +406,21 @@ administration:
   default:
     "Choose the category to manage above...
     You can add, edit, or delete items in this category."
+  privacy:
+    menu:
+      "Privacy"
+  created_sandbox:
+    menu:
+      "Sandboxes"
+  favorite_course:
+    menu:
+      "Favorite courses"
+  information_cohort:
+    menu:
+      "Cohort's Information"
+  document:
+    menu:
+      "Documents"
   course:
     menu:
       "Courses"
@@ -686,7 +727,7 @@ tourguide:
           title:
             "A Course"
           content:
-            "Here, we have a course on Git."
+            "Here, we have a course on what are the revision techniques."
           resources:
             title:
               "Resources"
@@ -775,3 +816,46 @@ tourguide:
                 "Messages"
               content:
                 "Start typing a message here..."
+
+presentation:
+  title:
+    "Presentation of %platformName%"
+  subtitle:
+    "Discover our learning platform and its mobile application"
+  platform:
+    title:
+      "The web platform"
+    description:
+      "The Learning and Training Platform (%platformName%) is a digital tool designed to facilitate your training journey. It allows you to:"
+    features:
+      - "Access your courses and educational resources"
+      - "Interact with your trainers and peers"
+      - "Track your progress"
+      - "Manage your administrative documents"
+      - "Consult your schedule"
+  mobile:
+    title:
+      "The mobile application"
+    description:
+      "Stay connected to your training wherever you are with our mobile app available on iOS and Android."
+    features:
+      - "Real-time notifications"
+      - "Quick access to courses"
+      - "Instant messaging"
+      - "Offline mode"
+    download:
+      android: "Download on Google Play"
+      ios: "Download on the App Store"
+  features:
+    courses:
+      title: "Interactive Courses"
+      description: "Access rich and varied educational content"
+    chat:
+      title: "Integrated Messaging" 
+      description: "Easily communicate with your trainers and peers"
+    documents:
+      title: "Document Management"
+      description: "Manage all your administrative documents in one place"
+    calendar:
+      title: "Dynamic Schedule"
+      description: "Consult your timetable and deadlines"

@@ -1,6 +1,6 @@
 global:
   meta_title:
-    "PAF - Plateforme d'Apprentissage et de Formation"
+    "%platformName% - Plateforme d'Apprentissage et de Formation"
   meta_description:
     "Retrouvez tous vos cours et échangez avec vos formateurs et vos camarades de cohorte sur la plateforme andragogique."
   language_french:
@@ -56,6 +56,10 @@ global:
     "Télécharger"
   btn_upload:
     "Téléverser"
+  btn_export:
+    "Exporter"
+  btn_verify:
+    "Vérifier"
   day:
     "il y a %time% jour"
   days:
@@ -94,6 +98,8 @@ global:
     "Cours"
   course:
     "Cours"
+  quiz:
+    "Quiz"
   modules:
     "Modules"
   module:
@@ -128,11 +134,16 @@ header:
     "FAQ"
   search:
     "Rechercher..."
-
+  login:
+    "Se connecter"
+  web_platform:
+    "Plateforme web"
+  mobile_application:
+    "Application mobile"
 
 home:
   welcome:
-    "Bienvenue sur la PAF"
+    "Bienvenue sur la %platformName%"
   welcome_small:
     "Votre Plateforme d'Apprentissage et de Formation"
 
@@ -179,6 +190,16 @@ module:
     "Les modules"
   no_content:
     "Pas de contenu pour le moment, réessayez plus tard..."
+
+quiz:
+  text:
+    "Quiz"
+  no_content:
+    "Pas de quiz pour le moment, réessayez plus tard..."
+
+sandbox:
+  created:
+    "Vos bacs à sable"
 
 course:
   favorite:
@@ -360,6 +381,10 @@ notifications:
     "Vous avez reçu un nouveau message de la part de %from_username%"
   new_message_cohort:
     "Vous avez reçu un nouveau message dans %from_cohort%"
+  new_changelog:
+    "Nouveau changelog disponible: %features%"
+  no_news:
+    "Aucune nouveauté pour le moment"
   no_new_message:
     "Aucun nouveau message pour le moment"
   new_homework:
@@ -381,6 +406,21 @@ administration:
   default:
     "Choisissez la catégorie à gérer ci-dessus...
     Vous pouvez ajouter, modifier ou supprimer des éléments de cette catégorie."
+  privacy:
+    menu:
+      "Informations personnelles"
+  created_sandbox:
+    menu:
+      "Bacs à sable"
+  favorite_course:
+    menu:
+      "Cours favoris"
+  information_cohort:
+    menu:
+      "Informations de la cohorte"
+  document:
+    menu:
+      "Documents"
   course:
     menu:
       "Cours"
@@ -687,7 +727,7 @@ tourguide:
           title:
             "Un cours"
           content:
-            "Ici, nous avons un cours sur Git."
+            "Ici, nous avons un cours sur les techniques de révision."
           resources:
             title:
               "Les ressources"
@@ -776,3 +816,54 @@ tourguide:
                 "Les messages"
               content:
                 "Commencez à taper un message ici..."
+
+presentation:
+  title:
+    "Présentation de la %platformName%"
+  subtitle:
+    "Découvrez notre plateforme d'apprentissage et son application mobile"
+  platform:
+    title:
+      "La plateforme web"
+    description:
+      "La Plateforme d'Apprentissage et de Formation (%platformName%) est un outil numérique conçu pour faciliter votre parcours de formation. Elle vous permet de :"
+    features:
+      - "Accéder à vos cours et ressources pédagogiques"
+      - "Échanger avec vos formateurs et camarades"
+      - "Suivre votre progression"
+      - "Gérer vos documents administratifs"
+      - "Consulter votre planning"
+  mobile:
+    title:
+      "L'application mobile"
+    description:
+      "Restez connecté à votre formation où que vous soyez grâce à notre application mobile disponible sur iOS et Android."
+    features:
+      - "Notifications en temps réel"
+      - "Accès rapide aux cours"
+      - "Messagerie instantanée"
+      - "Mode hors-ligne"
+    download:
+      android: "Télécharger sur Google Play"
+      ios: "Télécharger sur l'App Store"
+  features:
+    courses:
+      title: "Cours interactifs"
+      description: "Accédez à des contenus pédagogiques riches et variés"
+    chat:
+      title: "Messagerie intégrée" 
+      description: "Communiquez facilement avec vos formateurs et camarades"
+    documents:
+      title: "Gestion documentaire"
+      description: "Gérez tous vos documents administratifs en un seul endroit"
+    calendar:
+      title: "Planning dynamique"
+      description: "Consultez votre emploi du temps et vos échéances"
+
+messenger:
+    trainers: 'Formateurs'
+    trainees: 'Stagiaires'
+    cohort_trainees: 'Stagiaires de ma cohorte'
+    title: 'Messagerie'
+    type_message: 'Écrivez votre message...'
+    send: 'Envoyer'
