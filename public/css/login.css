@@ -1,6 +1,6 @@
 body {
-    color: var(--col-primary-dark);
-    background-color: var(--col-secondary);
+    color: var(--coul-foncee);
+    background-color: var(--coul-ternaire);
 }
 
 form input:not([type="submit"], form input[type="hidden"], form input[type="file"]),
@@ -15,6 +15,6 @@ textarea {
 }
 
 [data-theme="dark"] body {
-    color: var(--col-primary);
-    background-color: var(--col-primary-dark) !important;
+    color: var(--coul-claire);
+    background-color: var(--coul-foncee) !important;
 }

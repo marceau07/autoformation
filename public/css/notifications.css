@@ -83,7 +83,7 @@
 .dropdown-container .dropdown .notification-group .notification-tab:hover .label,
 .dropdown-container .dropdown .notification-group.expanded .notification-tab .label {
     background: var(--coul-principale);
-    border-color: var(--col-primary);
+    border-color: var(--coul-claire);
 }
 
 .dropdown-container .dropdown .notification-group .notification-list {
@@ -296,18 +296,18 @@
 }
 
 [data-theme="dark"] .dropdown-container .dropdown {
-    background: var(--col-primary-dark) !important;
-    color: var(--col-primary) !important;
+    background: var(--coul-foncee) !important;
+    color: var(--coul-claire) !important;
 }
 
 [data-theme="dark"] .dropdown-container .dropdown .notification-group {
-    border-bottom: 1px solid var(--col-primary-dark) !important;
+    border-bottom: 1px solid var(--coul-foncee) !important;
 }
 
 [data-theme="dark"] .dropdown-container .dropdown .notification-group .fa,
 [data-theme="dark"] .dropdown-container .dropdown .notification-group h6,
 [data-theme="dark"] .dropdown-container .dropdown .notification-group .label {
-    color: var(--col-primary) !important;
+    color: var(--coul-claire) !important;
 }
 
 [data-theme="dark"] .dropdown-container .dropdown .notification-group .notification-list .notification-list-item:nth-of-type(odd) {

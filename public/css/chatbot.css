@@ -16,8 +16,8 @@
 }
 
 #chatbot.main-card {
-    background: var(--col-secondary);
-    color: var(--col-secondary);
+    background: var(--coul-ternaire);
+    color: var(--coul-ternaire);
     width: 100%;
     height: calc(100% - 170px);
     margin: 0px;
@@ -28,14 +28,14 @@
     bottom: 50px;
     position: fixed;
     transition: all 0.5s;
-    border: 1px solid var(--col-secondary);
+    border: 1px solid var(--coul-ternaire);
     z-index: 1054;
 }
 
 [data-theme="dark"] #chatbot.main-card {
-    background: var(--col-primary-dark) !important;
-    color: var(--col-primary-dark) !important;
-    border: 1px solid var(--col-primary-dark) !important;
+    background: var(--coul-foncee) !important;
+    color: var(--coul-foncee) !important;
+    border: 1px solid var(--coul-foncee) !important;
 }
 
 #chatbot_toggle {
@@ -46,21 +46,21 @@
     width: 48px;
     background: var(--coul-principale);
     padding: 14px;
-    color: var(--col-secondary);
+    color: var(--coul-ternaire);
 }
 
 /* [data-theme="dark"] #chatbot_toggle {
-    color: var(--col-primary-dark) !important;
+    color: var(--coul-foncee) !important;
 } */
 
 #chatbot_toggle:hover {
-    background: var(--col-primary);
-    color: var(--col-primary-dark);
+    background: var(--coul-claire);
+    color: var(--coul-foncee);
 }
 
 [data-theme="dark"] #chatbot_toggle:hover {
-    background: var(--col-primary-dark) !important;
-    color: var(--col-secondary) !important;
+    background: var(--coul-foncee) !important;
+    color: var(--coul-ternaire) !important;
 }
 
 #chatbot .line {
@@ -79,7 +79,7 @@
 }
 
 [data-theme="dark"] #chatbot .line {
-    background-color: var(--col-primary-dark) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .main-title>div {
@@ -90,18 +90,18 @@
 }
 
 #chatbot .main-title svg {
-    color: var(--col-secondary) !important;
+    color: var(--coul-ternaire) !important;
     height: 24px;
     margin: auto;
 }
 
 #chatbot .main-title>span {
     margin: auto auto auto 8px;
-    color: var(--col-secondary) !important;
+    color: var(--coul-ternaire) !important;
 }
 
 [data-theme="dark"] #chatbot .main-title>span {
-    color: var(--col-secondary) !important;
+    color: var(--coul-ternaire) !important;
 }
 
 #chatbot .chat-area {
@@ -111,11 +111,11 @@
     padding: 16px;
     display: flex;
     flex-direction: column;
-    background-color: var(--col-secondary);
+    background-color: var(--coul-ternaire);
 }
 
 [data-theme="dark"] #chatbot .chat-area {
-    background-color: var(--col-primary-dark) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .input-message {
@@ -143,11 +143,11 @@
 }
 
 #chatbot .input-send:hover {
-    background: var(--col-secondary);
+    background: var(--coul-ternaire);
 }
 
 [data-theme="dark"] #chatbot .input-send:hover {
-    background: var(--col-primary-dark) !important;
+    background: var(--coul-foncee) !important;
 }
 
 #chatbot .input-send svg {
@@ -167,16 +167,16 @@
     animation-iteration-count: 1;
     animation-timing-function: ease-in;
     animation-duration: 100ms;
-    color: var(--col-secondary);
-    border-color: var(--col-secondary);
+    color: var(--coul-ternaire);
+    border-color: var(--coul-ternaire);
     border-radius: 8px 8px 2px 8px;
-    background-color: var(--col-primary-dark);
+    background-color: var(--coul-foncee);
 }
 
 [data-theme="dark"] #chatbot .chat-message-sent {
-    color: var(--col-secondary) !important;
-    border: 0.5px solid var(--col-secondary) !important;
-    background-color: var(--col-primary-dark) !important;
+    color: var(--coul-ternaire) !important;
+    border: 0.5px solid var(--coul-ternaire) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .chat-message-received {
@@ -186,16 +186,16 @@
     animation-iteration-count: 1;
     animation-timing-function: ease-in;
     animation-duration: 100ms;
-    color: var(--col-primary-dark);
-    border-color: var(--col-primary-dark);
+    color: var(--coul-foncee);
+    border-color: var(--coul-foncee);
     border-radius: 8px 8px 8px 2px;
-    background-color: var(--col-primary);
+    background-color: var(--coul-claire);
 }
 
 [data-theme="dark"] #chatbot .chat-message-received {
-    color: var(--col-primary-dark) !important;
-    border-color: var(--col-primary-dark) !important;
-    background-color: var(--col-secondary) !important;
+    color: var(--coul-foncee) !important;
+    border-color: var(--coul-foncee) !important;
+    background-color: var(--coul-ternaire) !important;
 }
 
 @keyframes fadeIn {
