@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ title is defined ? title : 'Création de cours' }}
+{% endblock %}
+
+{% block stylesheets %}
+  {# Optionnel : inclure des feuilles de style compilées par Webpack Encore #}
+  {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+  {# Optionnel : inclure des scripts compilés par Webpack Encore #}
+  {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-10">
+        {# Conteneur où l'application React sera montée #}
+        <div id="root"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+      window.__CANVAS_ID__ = '{{ uuid is defined and uuid is not empty ? uuid : '' }}';
+    </script>
+    {% if data is defined %}
+    <script>
+      window.__CANVAS_DATA__ = {{ data|raw }};
+    </script>
+    {% endif %}
+{% endblock %}
