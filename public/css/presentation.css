@@ -1,0 +1,51 @@
+:root {
+    --background-color: var(--coul-claire);
+    --text-color: var(--coul-foncee);
+    --primary-color: var(--coul-principale);
+    --success-color: #4ea682;
+    --card-background: #fff;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] body {
+    --background-color: var(--coul-claire);
+    --text-color: var(--coul-claire);
+    --primary-color: var(--coul-principale);
+    --success-color: #4ea682;
+    --card-background: var(--coul-foncee);
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.feature-card {
+    background: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px var(--card-shadow);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.app-stores .btn {
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+.list-unstyled li {
+    margin-bottom: 10px;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}

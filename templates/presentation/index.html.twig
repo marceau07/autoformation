@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}" hrefLang="{{ app.request.locale }}">
+  <head>
+    <script>
+      const setTheme = (theme) => {
+        theme ??= localStorage.theme || 'light'
+        document.documentElement.dataset.theme = theme
+        document.documentElement.setAttribute('data-bs-theme', theme)
+        localStorage.theme = theme
+      }
+      setTheme()
+    </script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="theme-color" content="#317EFB" />
+    <meta name="robots" content="index, follow" />
+    <meta name="title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}" />
+    <meta name="description" content="{{ 'global.meta_description'|trans }}">
+    <!--Seo Réseaux-->
+    <meta property="og:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
+    <meta property="og:type" content=website >
+    <meta property="og:description" content="{{ 'global.meta_description'|trans }}">
+    <meta property="og:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
+    <meta property="og:site_name" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
+    <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost() }}">
+    <!--Seo Twitter-->
+    <meta property="twitter:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
+    <meta property="twitter:type" content=website >
+    <meta property="twitter:description" content="{{ 'global.meta_description'|trans }}">
+    <meta property="twitter:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
+    <meta name="twitter:card" content=summary >
+
+    <title>{{ 'presentation.title'|trans({ '%platformName%': platformName }) }}&nbsp;- {{ 'global.meta_title'|trans({'%platformName%': platformName }) }}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon-32x32.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon-16x16.png') }}" />
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.min.css" />
+
+    <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/colors.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/presentation.css') }}" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    {# {{ importmap('app') }} #}
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}" id="logo_adrar" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#web_platform">{{ 'header.web_platform'|trans }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#mobile_application">{{ 'header.mobile_application'|trans }}</a>
+            </li>
+          </ul>
+          {% if app.environment is same as 'dev' %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
+              <li>DEBUG</li>
+            </ul>
+          {% endif %}
+
+          {% if app.request.get('_locale') is defined and app.request.get('_locale') is not empty %}
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') is same as('en') ? 'global.language_english.code'|trans:'global.language_french.code'|trans }}</a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
+                  <li>
+                    <a class="dropdown-item" href="{{ app.request.requestUri|replace({ '/en/': '/fr/' }) }}">{{ 'global.language_french.text'|trans }}</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{{ app.request.requestUri|replace({ '/fr/': '/en/' }) }}">{{ 'global.language_english.text'|trans }}</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link form-check form-switch" href="#">
+                    <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
+                    <label class="form-check-label" for="form_dark_mode">Dark mode</label>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn-primary border rounded" href="{{ path('app_login') }}">{{ 'header.login'|trans }}</a>
+              </li>
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <div class="container my-5">
+        <div class="text-center mb-5">
+        <h1>{{ 'presentation.title'|trans({ '%platformName%': platformName }) }}</h1>
+        <p class="lead">{{ 'presentation.subtitle'|trans }}</p>
+        </div>
+
+        <!-- Platform Section -->
+        <div class="row align-items-center mb-5">
+        <div class="col-md-6" id="web_platform">
+            <h2>{{ 'presentation.platform.title'|trans }}</h2>
+            <p>{{ 'presentation.platform.description'|trans({ '%platformName%': platformName }) }}</p>
+            <ul class="list-unstyled">
+            {% for feature in 'presentation.platform.features'|trans %}
+                <li>
+                <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <img src="{{ asset('images/platform-preview.png') }}" alt="Platform Preview" class="img-fluid rounded shadow" />
+        </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row mb-5">
+          <div class="col-md-3">
+              <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-book-open fa-3x mb-3 text-primary"></i>
+                <h3>{{ 'presentation.features.courses.title'|trans }}</h3>
+                <p>{{ 'presentation.features.courses.description'|trans }}</p>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-comments fa-3x mb-3 text-primary"></i>
+                <h3>{{ 'presentation.features.chat.title'|trans }}</h3>
+                <p>{{ 'presentation.features.chat.description'|trans }}</p>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-file-alt fa-3x mb-3 text-primary"></i>
+                <h3>{{ 'presentation.features.documents.title'|trans }}</h3>
+                <p>{{ 'presentation.features.documents.description'|trans }}</p>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-calendar-alt fa-3x mb-3 text-primary"></i>
+                <h3>{{ 'presentation.features.calendar.title'|trans }}</h3>
+                <p>{{ 'presentation.features.calendar.description'|trans }}</p>
+              </div>
+          </div>
+        </div>
+
+        <!-- Mobile App Section -->
+        <div class="row align-items-center" id="mobile_application">
+        <div class="col-md-6">
+            <img src="{{ asset('images/mobile-preview.jpg') }}" alt="Mobile App Preview" class="img-fluid rounded shadow" />
+        </div>
+        <div class="col-md-6">
+            <h2>{{ 'presentation.mobile.title'|trans }}</h2>
+            <p>{{ 'presentation.mobile.description'|trans }}</p>
+            <ul class="list-unstyled">
+            {% for feature in 'presentation.mobile.features'|trans %}
+                <li>
+                <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
+                </li>
+            {% endfor %}
+            </ul>
+            <div class="app-stores mt-4">
+            <a href="https://play.google.com/store/apps/details?id=dev.adrar.paf" target="_blank" class="btn btn-dark me-2">
+                <i class="fab fa-google-play me-2"></i>
+                {{ 'presentation.mobile.download.android'|trans }}
+            </a>
+            <a href="#" class="btn btn-dark disabled" target="_blank" style="cursor:not-allowed">
+                <i class="fab fa-apple me-2"></i>
+                {{ 'presentation.mobile.download.ios'|trans }}
+            </a>
+            </div>
+        </div>
+        </div>
+    </div>
+    <footer class="border-top border-light bg-v1-primary fixed-bottom">
+        <p class="text-center m-0">
+        &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - v.{{ app_version() ~ '.' ~ (app.environment|upper) }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
+        </p>
+    </footer>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+      if(typeof locale === "undefined") {
+          let locale;
+      }
+      locale = "{{ app.request.attributes.get('_locale') }}";
+    </script>
+    <script src="{{ asset('js/darkMode.js') }}"></script>
+  </body>
+</html>
