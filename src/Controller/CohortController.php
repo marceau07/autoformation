@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Cohort;
 use App\Form\CohortType;
 use App\Repository\CohortRepository;
+use App\Repository\ExportParameterRepository;
+use App\Service\ExcelExporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +19,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CohortController extends AbstractController
 {
     #[Route('/', name: 'app_cohort_index', methods: ['GET'])]
-    public function index(CohortRepository $cohortRepository): Response
+    public function index(CohortRepository $cohortRepository, ExportParameterRepository $parameter): Response
     {
         return $this->render('cohort/index.html.twig', [
             'cohorts' => $cohortRepository->findAll(),
+            'exportParameters' => json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true),
         ]);
     }
 
@@ -81,5 +84,26 @@ class CohortController extends AbstractController
         }
 
         return $this->redirectToRoute('app_cohort_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    #[Route('/export/', name: 'app_cohort_export', methods: ['GET'], priority: 1)]
+    public function export(Request $request, ExcelExporter $excelExporter, CohortRepository $cohortRepository, ExportParameterRepository $parameter): Response
+    {
+        $formFields = $request->query->all('form_fields');
+        if(!is_array($formFields)) {
+            $formFields = (array)[$formFields];
+        }
+
+        $data = [];
+        $i = 0;
+        foreach ($cohortRepository->findAll() as $cohort) {
+            foreach ($formFields as $field) {
+                $data[$i][] = $cohort->{'get' . ucfirst(str_replace('_', '', $field))}();
+            }
+            $i++;
+        }
+
+        // Utiliser le service pour générer le fichier Excel
+        return $excelExporter->exportData('cohort_list', json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true), $data, $formFields);
     }
 }

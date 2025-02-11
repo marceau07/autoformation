@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
 use App\Entity\Course;
 use App\Entity\Feedback;
 use App\Entity\Message;
 use App\Entity\Notification;
+use App\Entity\SiteSettings;
 use App\Entity\TraineeCourseFavorite;
+use App\Entity\TraineeInternship;
 use App\Entity\TraineeResource;
+use App\Repository\CalendarRepository;
+use App\Repository\CohortInternshipRepository;
 use App\Repository\CohortRepository;
 use App\Repository\CourseModuleRepository;
 use App\Repository\CourseRepository;
@@ -15,10 +20,13 @@ use App\Repository\CourseResourceRepository;
 use App\Repository\FeedbackCategoryRepository;
 use App\Repository\MessageRepository;
 use App\Repository\NotificationRepository;
+use App\Repository\SiteSettingsRepository;
 use App\Repository\TraineeCourseFavoriteRepository;
+use App\Repository\TraineeInternshipRepository;
 use App\Repository\TraineeRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
@@ -27,6 +35,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -40,10 +49,113 @@ class DefaultController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
+    #[Route('/css/colors.css', name: 'app_colors_css')]
+    public function themeCss(SiteSettingsRepository $siteSettingsRepository): Response
+    {
+        $siteSettings = $siteSettingsRepository->find(1);
+
+        // Si pas trouvé, on crée éventuellement un thème par défaut
+        if (!$siteSettings) {
+            $siteSettings = (new SiteSettings())
+                ->setPrimaryColor('#FF0000')
+                ->setSecondaryColor('#00FF00');
+            // Pas forcément besoin de l'enregistrer,
+            // c'est juste au cas où la BDD est vide
+        }
+
+        // Construire le contenu CSS
+        // On veut créer nos variables CSS dans ":root"
+        $cssContent = <<<CSS
+            /* Définition des couleurs */
+            :root {
+                --coul-principale: {$siteSettings->getPrimaryColor()};
+                --coul-secondaire: {$siteSettings->getSecondaryColor()};
+                --coul-ternaire: {$siteSettings->getTertiaryColor()};
+                --coul-quaternaire: {$siteSettings->getQuaternaryColor()};
+                --coul-claire: {$siteSettings->getLightenColor()};
+                --coul-foncee: {$siteSettings->getDarkenColor()};
+            }
+            CSS;
+
+        // On prépare la réponse HTTP avec le bon mime type
+        $response = new Response($cssContent);
+        $response->headers->set('Content-Type', 'text/css');
+
+        return $response;
+    }
+
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/events', name: 'app_events', methods: "GET")]
+    public function events(CalendarRepository $calendarRepository, TraineeRepository $traineeRepository, TrainerRepository $trainerRepository): JsonResponse
+    {
+        $data = [];
+        if ($this->isGranted('ROLE_TRAINEE')) {
+            $cohortId = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()->getId();
+            $events = $calendarRepository->findBy(['cohort' => $cohortId], ['startDate' => 'ASC']);
+        } elseif ($this->isGranted('ROLE_TRAINER')) {
+            $trainerId = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getId();
+            $events = $calendarRepository->findBy(['trainer' => $trainerId], ['startDate' => 'ASC']);
+        }
+
+        foreach ($events as $event) {
+            $data[] = [
+                'uuid' => $event->getUuid(),
+                'title' => $event->getTitle(),
+                'description' => $event->getDescription(),
+                'start' => $event->getStartDate()->format('Y-m-d H:i:s'),
+                'end' => $event->getFinishDate()->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[IsGranted(new Expression('is_granted("ROLE_TRAINER")'))]
+    #[Route('/events/new', name: 'app_events_add', methods: "POST")]
+    public function addEvent(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $calendar = new Calendar();
+        $calendar->setTitle($data['title']);
+        $calendar->setDescription($data['description']);
+        $startDate = new DateTimeImmutable($data['start']);
+        $calendar->setStartDate($startDate);
+        $endDate = new DateTimeImmutable($data['end']);
+        $calendar->setFinishDate($endDate);
+        $calendar->setCohort(null);
+        $calendar->setTrainer($this->getUser());
+
+        try {
+            $entityManager->persist($calendar);
+            $entityManager->flush();
+
+            $this->addFlash('success', "L'événement a bien été ajouté !");
+            return $this->json(
+                [
+                    'success' => true,
+                    'message' => "L'événement a bien été ajouté !",
+                ],
+                status: Response::HTTP_CREATED
+            );
+        } catch (\Exception $e) {
+            $this->addFlash('danger', "Erreur lors de l'ajout de l'événement...");
+        }
+        return $this->json(
+            [
+                'success' => false,
+                'message' => "Erreur lors de l'ajout de l'événement...",
+            ],
+            status: Response::HTTP_BAD_REQUEST
+        );
+    }
+
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/feedback', name: 'app_feedback', methods: "POST")]
-    public function feedback(FeedbackCategoryRepository $feedbackCategoryRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function feedback(FeedbackCategoryRepository $feedbackCategoryRepository, SiteSettingsRepository $siteSettingsRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $siteSettings = $siteSettingsRepository->find(1);
+
         $feedback = new Feedback();
         $feedback->setCategory($feedbackCategoryRepository->find($request->request->get('form_feedback_category')));
         $feedback->setAnnotation($request->request->get('form_feedback_annotation'));
@@ -60,17 +172,19 @@ class DefaultController extends AbstractController
         $owner = 'marceau07';
         $repo = $_ENV['GITHUB_PERSONAL_REPOSITORY'];
 
+        $platformName = strtoupper($siteSettings->getPlatformName());
+
         // The data for the issue (title, body, etc.)
         $data = [
-            'title' => "[PAF-" . $feedback->getId() . "_" . $_ENV['APP_ENV'] . "]",
+            'title' => "[" . $platformName . "-" . $feedback->getId() . "_" . $_ENV['APP_ENV'] . "]",
             'body' =>
-            "# [PAF-" . $feedback->getId() . "_" . $_ENV['APP_ENV'] . "] " . mb_substr(trim(preg_replace('/\s+/', '...', $feedback->getCategory()->getLabel())), 0, 200) . "\n\n"
+            "# [" . $platformName . "-" . $feedback->getId() . "_" . $_ENV['APP_ENV'] . "] " . mb_substr(trim(preg_replace('/\s+/', '...', $feedback->getCategory()->getLabel())), 0, 200) . "\n\n"
                 . $_SERVER['HTTP_USER_AGENT'] . "\n\n\n"
                 . $feedback->getAnnotation() . "\n\n"
                 . "[`link`](<" . $feedback->getLink() . ">)\n\n"
                 . "Gravity: " . $feedback->getWeight() . "/4\n\n"
                 . "Found by @" . $this->getUser()->getUserIdentifier() . "\n"
-                . "Generated by PAF",
+                . "Generated by ". $platformName,
             'assignees' => ['marceau07'],
             'labels' => [$_ENV['APP_ENV'], ($feedback->getCategory()->getLabel() == "Problème" ? "bug" : ($feedback->getCategory()->getLabel() == "Manque" ? "help wanted" : "enhancement"))]
         ];
@@ -123,15 +237,17 @@ class DefaultController extends AbstractController
                 case strpos($userMessage, $translator->trans('chatbot.keys.courses', [], null, $request->getLocale())) === 0:
                     $keywords = explode($translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) . ' ', trim($userMessage))[1];
                     $courses = $courseRepository->findOneBy(['link' => $keywords]) ?? $courseRepository->searchCourses($keywords);
-                    if(!empty($courses)) {
-                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>'.$translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords. '</b>:');
+                    if (!empty($courses)) {
+                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>' . $translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
                         foreach ($courses as $course) {
-                            array_push($closest, 
+                            array_push(
+                                $closest,
                                 '<div>
                                     <h6 class="fw-bold fs-5 ">[' . $course->getModule()->getLabel() . ']&nbsp;' . $course->getTitle() . '</h6>
                                     <p class="fs-6">' . $course->getSynopsis() . '</p>
                                     <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/embed/' . $course->getLink() . '">Consulter le cours !</a>
-                                </div>');
+                                </div>'
+                            );
                         }
                     } else {
                         $closest = ['Désolé, je n\'ai pas trouvé de cours avec les mots-clés <b>' . $keywords . '</b>...'];
@@ -139,27 +255,29 @@ class DefaultController extends AbstractController
                     break;
                 case strpos($userMessage, $translator->trans('chatbot.keys.modules', [], null, $request->getLocale())) === 0:
                     $keywords = explode($translator->trans('chatbot.keys.modules', [], null, $request->getLocale()) . ' ', trim($userMessage))[1];
-                    if($this->isGranted('ROLE_TRAINER')) {
+                    if ($this->isGranted('ROLE_TRAINER')) {
                         $courses = $courseRepository->getCoursesInformationsBySector($keywords);
-                        if(empty($courses)) {
+                        if (empty($courses)) {
                             $courses = $courseRepository->getCoursesInformationsBySector(null, $keywords);
                         }
                     } else {
                         $courses = $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), $keywords);
-                        if(empty($courses)) {
+                        if (empty($courses)) {
                             $courses = $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), null, $keywords);
                         }
                     }
-                    if(!empty($courses)) {
-                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>'.$translator->trans('chatbot.keys.modules', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords. '</b>:');
+                    if (!empty($courses)) {
+                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>' . $translator->trans('chatbot.keys.modules', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
                         $modules = [];
-                        foreach ($courses as $course) if(!in_array($course->getModule()->getId(), $modules)) {
-                            array_push($closest, 
+                        foreach ($courses as $course) if (!in_array($course->getModule()->getId(), $modules)) {
+                            array_push(
+                                $closest,
                                 '<div>
                                     <h6 class="fw-bold fs-5 ">' . $course->getModule()->getLabel() . '</h6>
                                     <img src="' . $assets->getUrl('images/' . $course->getModule()->getIllustration()) . '" title="' . $course->getModule()->getIllustration() . '">
                                     <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/course/read/' . $course->getModule()->getUuid() . '">Consulter le cours !</a>
-                                </div>');
+                                </div>'
+                            );
                         }
                     } else {
                         $closest = ['Désolé, je n\'ai pas trouvé de module avec les mots-clés <b>' . $keywords . '</b>...'];
@@ -169,13 +287,14 @@ class DefaultController extends AbstractController
                     $keywords = explode($translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . ' ', trim($userMessage))[1];
                     $trainees = $traineeRepository->searchTrainees($keywords);
                     $trainers = $trainerRepository->searchTrainers($keywords);
-                    if(!empty($trainees)) {
-                        array_push($closest, 'J\'ai trouvé ces stagiaires qui peuvent correspondre à ta demande <b>'.$translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords. '</b>:');
+                    if (!empty($trainees)) {
+                        array_push($closest, 'J\'ai trouvé ces utilisateurs qui peuvent correspondre à ta demande <b>' . $translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
                         foreach ($trainees as $trainee) {
-                            array_push($closest, 
+                            array_push(
+                                $closest,
                                 '<div>
                                     <div class="d-flex justify-content-center">
-                                        <img src="' . $assets->getUrl('images/avatars/' . $trainee->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainee->getAvatar()->getLabel() . '">
+                                        <img src="' . $assets->getUrl('../avatars/' . $trainee->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainee->getAvatar()->getLabel() . '">
                                     </div>
                                     <h6 class="fw-bold fs-5 ">' . $trainee->getFirstName() . ' ' . $trainee->getLastName() . '</h6>
                                     <p class="fs-6">' . $trainee->getCohort()->getName() . '</p>
@@ -184,15 +303,17 @@ class DefaultController extends AbstractController
                                         <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/mailbox/trainee/' . $trainee->getUuid() . '"><i class="fa-solid fa-paper-plane"></i></a>
                                         ' . ($this->isGranted('ROLE_TRAINER') ? '<a class="ms-2 btn btn-primary text-center" href="/' . $request->getLocale() . '/trainee/' . $trainee->getUuid() . '"><i class="fa-solid fa-eye"></i></a>' : '') . '
                                     </div>
-                                </div>');
+                                </div>'
+                            );
                         }
-                    } elseif(!empty($trainers)) {
-                        array_push($closest, 'J\'ai trouvé ces stagiaires qui peuvent correspondre à ta demande <b>'.$translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords. '</b>:');
+                    } elseif (!empty($trainers)) {
+                        array_push($closest, 'J\'ai trouvé ces utilisateurs qui peuvent correspondre à ta demande <b>' . $translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
                         foreach ($trainers as $trainer) {
-                            array_push($closest, 
+                            array_push(
+                                $closest,
                                 '<div>
                                     <div class="d-flex justify-content-center">
-                                        <img src="' . $assets->getUrl('images/avatars/' . $trainer->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainer->getAvatar()->getLabel() . '">
+                                        <img src="' . $assets->getUrl('../avatars/' . $trainer->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainer->getAvatar()->getLabel() . '">
                                     </div>
                                     <h6 class="fw-bold fs-5 ">[' . $trainer->getSector()->getLabel() . ']&nbsp;' . $trainer->getFirstName() . ' ' . $trainer->getLastName() . '</h6>
                                     <p class="fs-6">' . $trainer->getEmail() . '</p>
@@ -201,7 +322,8 @@ class DefaultController extends AbstractController
                                         <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/mailbox/trainer/' . $trainer->getUuid() . '"><i class="fa-solid fa-paper-plane"></i></a>
                                         ' . ($this->isGranted('ROLE_TRAINER') ? '<a class="ms-2 btn btn-primary text-center" href="/' . $request->getLocale() . '/trainer/' . $trainer->getUuid() . '"><i class="fa-solid fa-eye"></i></a>' : '') . '
                                     </div>
-                                </div>');
+                                </div>'
+                            );
                         }
                     } else {
                         $closest = ['Désolé, je n\'ai trouvé ni stagiaire, ni formateur avec les mots-clés <b>' . $keywords . '</b>...'];
@@ -271,14 +393,14 @@ class DefaultController extends AbstractController
         );
     }
 
-    // TODO: Manage the good internship for the document
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_agreement', name: 'app_send_agreement', methods: "POST")]
-    public function sendAgreement(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
+    public function sendAgreement(Request $request, EntityManagerInterface $entityManager, CohortInternshipRepository $cohortInternshipRepository, TraineeRepository $traineeRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
-
+            $uuid = $request->request->get('uuid');
+            
             if ($file) {
                 if ($file->getSize() <= 52428800) {
                     if ($file->getMimeType() == 'application/pdf' || $file->getMimeType() == 'application/x-pdf') {
@@ -287,19 +409,18 @@ class DefaultController extends AbstractController
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
                             $this->addFlash('info', 'Convention de stage envoyée');
-                            $documents = json_decode($trainee->getDocuments(), true);
-                            $documents['internships'][0]['agreement'] = 2;
-                            $trainee->setDocuments(json_encode($documents));
-                            $entityManager->persist($trainee);
 
-                            $notification = new Notification();
-                            $notification->setOrigin($this->getUser()->getUserIdentifier());
-                            $notification->setMessage("convention");
-                            $notification->setLink("/../internships/tmp/" . $nomFichier);
-                            $notification->setCategory("new_internship");
-                            $notification->setDate(new \DateTimeImmutable());
-                            $notification->setUser($trainee->getCohort()->getTrainer());
-                            $entityManager->persist($notification);
+                            $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
+                            $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
+                            if($internship == null) {
+                                $internship = new TraineeInternship();
+                                $internship->setTrainee($trainee);
+                                $internship->setAgreementLink($nomFichier);
+                                $internship->setCohortInternship($period);
+                            } else {
+                                $internship->setAgreement(1);
+                            }
+                            $entityManager->persist($internship);
 
                             $entityManager->flush();
                         } catch (FileException $e) {
@@ -347,10 +468,11 @@ class DefaultController extends AbstractController
     }
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_certificate', name: 'app_send_certificate', methods: "POST")]
-    public function sendCertificate(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
+    public function sendCertificate(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
+            $uuid = $request->request->get('uuid');
 
             if ($file) {
                 if ($file->getSize() <= 52428800) {
@@ -360,19 +482,11 @@ class DefaultController extends AbstractController
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
                             $this->addFlash('info', 'Attestation de stage envoyée');
-                            $documents = json_decode($trainee->getDocuments(), true);
-                            $documents['internships'][0]['certificate'] = 2;
-                            $trainee->setDocuments(json_encode($documents));
-                            $entityManager->persist($trainee);
-
-                            $notification = new Notification();
-                            $notification->setOrigin($this->getUser()->getUserIdentifier());
-                            $notification->setMessage("attestation");
-                            $notification->setLink("/../internships/tmp/" . $nomFichier);
-                            $notification->setCategory("new_internship");
-                            $notification->setDate(new \DateTimeImmutable());
-                            $notification->setUser($trainee->getCohort()->getTrainer());
-                            $entityManager->persist($notification);
+                            
+                            $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
+                            $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
+                            $internship->setCertificate(0);
+                            $entityManager->persist($internship);
 
                             $entityManager->flush();
                         } catch (FileException $e) {
@@ -421,10 +535,11 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_evaluation', name: 'app_send_evaluation', methods: "POST")]
-    public function sendEvaluation(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
+    public function sendEvaluation(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
+            $uuid = $request->request->get('uuid');
 
             if ($file) {
                 if ($file->getSize() <= 52428800) {
@@ -434,19 +549,11 @@ class DefaultController extends AbstractController
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
                             $this->addFlash('info', 'Évaluation de stage envoyée');
-                            $documents = json_decode($trainee->getDocuments(), true);
-                            $documents['internships'][0]['evaluation'] = 2;
-                            $trainee->setDocuments(json_encode($documents));
+                            
+                            $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
+                            $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
+                            $internship->setEvaluation(0);
                             $entityManager->persist($trainee);
-
-                            $notification = new Notification();
-                            $notification->setOrigin($this->getUser()->getUserIdentifier());
-                            $notification->setMessage("evaluation");
-                            $notification->setLink("/../internships/tmp/" . $nomFichier);
-                            $notification->setCategory("new_internship");
-                            $notification->setDate(new \DateTimeImmutable());
-                            $notification->setUser($trainee->getCohort()->getTrainer());
-                            $entityManager->persist($notification);
 
                             $entityManager->flush();
                         } catch (FileException $e) {
@@ -498,15 +605,17 @@ class DefaultController extends AbstractController
     public function sendMessage(Request $request, UserRepository $userRepository, CohortRepository $cohortRepository, MessageRepository $messageRepository, EntityManagerInterface $entityManager): Response
     {
         $notificationNewMessage = new Notification();
-        $notificationNewMessage->setDate(new \DateTimeImmutable());
+        $notificationNewMessage->setDate(new DateTimeImmutable());
         $notificationNewMessage->setCategory("new_message");
         $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
         $notificationNewMessage->setMessage($this->getUser()->getUserIdentifier());
 
         $message = new Message();
         $message->setContent($request->request->get('form_message'));
-        $message->setDate(new \DateTimeImmutable());
-        if($request->request->get('form_original_message') !== null && !empty($request->request->get('form_original_message'))) {
+        $message->setDate(new DateTimeImmutable());
+        $message->setDocument(null);
+        $message->setMimeType(null);
+        if ($request->request->get('form_original_message') !== null && !empty($request->request->get('form_original_message'))) {
             $message->setOriginalMessage($messageRepository->find($request->request->get('form_original_message')));
         } else {
             $message->setOriginalMessage(null);
@@ -529,13 +638,14 @@ class DefaultController extends AbstractController
             $cohortTrainees = $cohort->getTrainees();
             foreach ($cohortTrainees as $cohortTrainee) {
                 $notificationNewMessage = new Notification();
-                $notificationNewMessage->setDate(new \DateTimeImmutable());
+                $notificationNewMessage->setDate(new DateTimeImmutable());
                 $notificationNewMessage->setCategory("new_message");
                 $notificationNewMessage->setOrigin($this->getUser()->getUserIdentifier());
                 $notificationNewMessage->setUser($cohortTrainee);
                 $notificationNewMessage->setMessage($cohort->getName());
                 $notificationNewMessage->setLink($this->generateUrl('app_mailbox_cohort', ['uuid' => $cohort->getUuid()]), true);
                 $entityManager->persist($notificationNewMessage);
+                $entityManager->flush();
             }
         } elseif ((!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "trainee")) {
             $trainee = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
@@ -550,7 +660,18 @@ class DefaultController extends AbstractController
         }
         $message->setContent($request->request->get('form_message'));
 
+        if(!empty($_FILES['form_file'])) {
+            $file = $_FILES['form_file'];
+            $file['name'] = $file['name'] . uniqid() . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            if(move_uploaded_file($file['tmp_name'], $this->getParameter('messages_directory') . '/' . $file['name'])) {
+                $message->setDocument($file['name']);
+                $message->setMimeType($file['type']);
+            } else {
+                $this->addFlash('danger', 'Erreur lors de l\'envoi du fichier...');
+            }
+        }
         $entityManager->persist($message);
+        $entityManager->flush();
         $entityManager->persist($notificationNewMessage);
         $entityManager->flush();
 
@@ -661,13 +782,13 @@ class DefaultController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $course = $courseRepository->findOneBy(['link' => $course]);
-            if($course instanceof Course) {
+            if ($course instanceof Course) {
                 $favorite = new TraineeCourseFavorite();
                 $favorite->setCourse($course);
                 $favorite->setTrainee($traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]));
                 $entityManager->persist($favorite);
                 $entityManager->flush();
-                $this->addFlash('notice', "Le cours a été supprimé de vos favoris !");          
+                $this->addFlash('notice', "Le cours a été supprimé de vos favoris !");
                 return $this->json(
                     [
                         'success' => true,
@@ -701,7 +822,7 @@ class DefaultController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $course = $courseRepository->findOneBy(['link' => $course]);
-            if($course instanceof Course) {
+            if ($course instanceof Course) {
                 $favorite = $traineeCourseFavoriteRepository->findOneBy(["course" => $course, "trainee" => $traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])]);
                 $entityManager->remove($favorite);
                 $entityManager->flush();

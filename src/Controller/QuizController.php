@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_TRAINER')]
+// #[IsGranted('ROLE_TRAINER')]
 #[Route('/{_locale}/quiz')]
 final class QuizController extends AbstractController
 {
@@ -73,11 +73,19 @@ final class QuizController extends AbstractController
     #[Route('/{id}', name: 'app_quiz_delete', methods: ['POST'])]
     public function delete(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$quiz->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quiz->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($quiz);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_quiz_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/redirect/{uuid}', name: 'app_quiz_redirection', methods: ['GET'])]
+    public function redirection(string $uuid): Response
+    {
+        return $this->render('quiz/redirect.html.twig', [
+            'uuid' => $uuid,
+        ]);
     }
 }

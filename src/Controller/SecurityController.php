@@ -5,33 +5,31 @@ namespace App\Controller;
 use App\Entity\Avatar;
 use App\Entity\User;
 use App\Repository\AvatarRepository;
+use App\Repository\CohortInternshipRepository;
 use App\Repository\CourseCohortRepository;
 use App\Repository\CourseTraineeRepository;
 use App\Repository\InternshipRepository;
+use App\Repository\TraineeInternshipRepository;
 use App\Repository\TraineeRepository;
 use App\Repository\TraineeResourceRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Config\FrameworkConfig;
 
 #[Route(path: '/{_locale}')]
 class SecurityController extends AbstractController
@@ -276,6 +274,204 @@ class SecurityController extends AbstractController
             'internships' => ($trainee !== null ? $internshipReposidtory->findBy(['trainee' => $trainee->getId()]) : []),
             'surveys' => [],
             'form' => $form,
+            'graphDataCourses' => $graphDataCourses,
+            'graphDataHomeworks' => $graphDataHomeworks,
+        ]);
+    }
+
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/account/privacy', name: 'app_account_privacy_index', methods: ["GET", "POST"])]
+    public function privacy(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, AvatarRepository $avatarRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    {
+        $form = null;
+        $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $trainee = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $user = ($trainer !== null ? $trainer : $trainee);
+        $form = $this->createFormBuilder($user)
+            ->add('username', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+            ])
+            ->add('lastName', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+            ])
+            ->add('firstName', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+            ])
+            ->add('password', PasswordType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => false,
+                'mapped' => false
+            ])
+            ->add('email', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+            ])
+            ->add('phoneNumber', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => false
+            ])
+            ->add('signature', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => false,
+            ])
+            ->add('avatar', EntityType::class, [
+                'class' => Avatar::class,
+                'choice_label' => 'label',
+                'choice_attr' => function ($choice, string $key, mixed $value) {
+                    // adds a class like attending_yes, attending_no, etc
+                    return ['data-src' => $choice->getLink()];
+                },
+                'attr' => [
+                    'class' => 'form-select',
+                ],
+                'required' => true,
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-success',
+                    'label' => 'S\'inscrire'
+                ]
+            ])->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData() !== null && !empty($form->get('password')->getData())) {
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('password')->getData()
+                    )
+                );
+            }
+            $this->addFlash(
+                'notice',
+                'Vos changements ont bien été sauvegardés !'
+            );
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('account/privacy.html.twig', [
+            'avatars' => $avatarRepository->findAll(),
+            'trainer' => $trainer,
+            'trainee' => $trainee,
+            'user' => $user,
+            'surveys' => [],
+            'form' => $form,
+        ]);
+    }
+    
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/account/favorite-course', name: 'app_account_favorite_course_index', methods: ["GET", "POST"])]
+    public function favoriteCourse(TraineeRepository $traineeRepository): Response
+    {
+        $trainee = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        
+        return $this->render('account/favoriteCourse.html.twig', [
+            'trainee' => $trainee,
+        ]);
+    }
+    
+    #[IsGranted(new Expression('is_granted("ROLE_TRAINER")'))]
+    #[Route('/account/created-sandbox', name: 'app_account_created_sandbox_index', methods: ["GET", "POST"])]
+    public function createdSandbox(TrainerRepository $trainerRepository): Response
+    {
+        $sandboxes = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getSandboxes();
+        
+        return $this->render('account/createdSandbox.html.twig', [
+            'sandboxes' => $sandboxes,
+        ]);
+    }
+    
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/account/information-cohort', name: 'app_account_information_cohort_index', methods: ["GET", "POST"])]
+    public function informationCohort(TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    {
+        $form = null;
+        $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $trainee = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $user = ($trainer !== null ? $trainer : $trainee);        
+
+        return $this->render('account/informationCohort.html.twig', [
+            'trainer' => $trainer,
+            'trainee' => $trainee,
+            'user' => $user,
+            'cohort' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier()) : []),
+            'form' => $form,
+        ]);
+    }
+    
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/account/document', name: 'app_account_document_index', methods: ["GET", "POST"])]
+    public function document(CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    {
+        $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $trainee = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $user = ($trainer !== null ? $trainer : $trainee);        
+
+        return $this->render('account/document.html.twig', [
+            'trainer' => $trainer,
+            'trainee' => $trainee,
+            'user' => $user,
+            'cohort' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier()) : []),
+            'documents' => ($trainee !== null ? $traineeRepository->getCohortsInformations($trainee->getUserIdentifier())['documents'] : []),
+            'internships' => ($trainee !== null ? $internshipReposidtory->findBy(['trainee' => $trainee->getId()]) : []),
+            'internships_periods' => ($trainee !== null ? $cohortInternshipRepository->findBy(['cohort' => $trainee->getCohort()]) : []),
+            'internships_trainee' => ($trainee !== null ? $traineeInternshipRepository->findBy(['trainee' => $trainee]) : []),
+            // 'internships' => ($trainee !== null ? $traineeInternshipRepository->findBy(['trainee' => $trainee->getId()]) : []),
+        ]);
+    }
+    
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/account/statistic', name: 'app_account_statistic_index', methods: ["GET", "POST"])]
+    public function statistic(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, CourseTraineeRepository $courseTraineeRepository, CourseCohortRepository $courseCohortRepository, TraineeResourceRepository $traineeResourceRepository, AvatarRepository $avatarRepository, InternshipRepository $internshipReposidtory, TrainerRepository $trainerRepository, TraineeRepository $traineeRepository): Response
+    {
+        $trainer = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $trainee = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        $user = ($trainer !== null ? $trainer : $trainee);
+
+        // Récupération des informations pour les graphiques
+        $graphDataCourses = [];
+        $graphDataHomeworks = [];
+        if($this->isGranted('ROLE_TRAINEE')) {
+            $graphDataCourses['value_two'] = sizeof($courseTraineeRepository->findBy(['trainee' => $trainee->getId()]));
+            $graphDataCourses['value_one'] = sizeof($courseCohortRepository->findBy(['cohort' => $trainee->getCohort()->getId()])) - $graphDataCourses['value_two'];
+            $graphDataHomeworks['value_one'] = 0;
+            $graphDataHomeworks['value_two'] = 0;
+            foreach($trainee->getCohort()->getCourseCohorts() as $courseUnlocked) {
+                foreach($courseUnlocked->getCourse()->getCourseResources() as $resource) {
+                    if($resource->getType() === 'tp') {
+                        $graphDataHomeworks['value_one']++;
+                        $graphDataHomeworks['value_two'] += sizeof($traineeResourceRepository->findBy(['trainee' => $trainee->getId(), 'courseResource' => $resource->getId()]));
+                    }
+                }
+            }
+            $graphDataHomeworks['value_one'] = $graphDataHomeworks['value_one'] - $graphDataHomeworks['value_two'];
+        }
+        
+
+        return $this->render('account/statistic.html.twig', [
+            'trainer' => $trainer,
+            'trainee' => $trainee,
+            'user' => $user,
             'graphDataCourses' => $graphDataCourses,
             'graphDataHomeworks' => $graphDataHomeworks,
         ]);

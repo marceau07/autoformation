@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Trainer;
 use App\Form\TrainerType;
+use App\Repository\ExportParameterRepository;
 use App\Repository\TrainerRepository;
+use App\Service\ExcelExporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +18,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class TrainerController extends AbstractController
 {
     #[Route('/', name: 'app_trainer_index', methods: ['GET'])]
-    public function index(TrainerRepository $trainerRepository): Response
+    public function index(TrainerRepository $trainerRepository, ExportParameterRepository $parameter): Response
     {
         return $this->render('trainer/index.html.twig', [
             'trainers' => $trainerRepository->findAll(),
+            'exportParameters' => json_decode($parameter->findOneBy(['dtype' => 'trainer'])->getField(), true),
         ]);
     }
 
@@ -87,5 +90,27 @@ class TrainerController extends AbstractController
         }
 
         return $this->redirectToRoute('app_trainer_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[isGranted('ROLE_TRAINER')]
+    #[Route('/export/', name: 'app_trainer_export', methods: ['GET'], priority: 1)]
+    public function export(Request $request, ExcelExporter $excelExporter, TrainerRepository $trainerRepository, ExportParameterRepository $parameter): Response
+    {
+        $formFields = $request->query->all('form_fields');
+        if(!is_array($formFields)) {
+            $formFields = (array)[$formFields];
+        }
+
+        $data = [];
+        $i = 0;
+        foreach ($trainerRepository->findAll() as $trainer) {
+            foreach ($formFields as $field) {
+                $data[$i][] = $trainer->{'get' . ucfirst($field)}();
+            }
+            $i++;
+        }
+
+        // Utiliser le service pour générer le fichier Excel
+        return $excelExporter->exportData('trainer_list', json_decode($parameter->findOneBy(['dtype' => 'trainer'])->getField(), true), $data, $formFields);
     }
 }

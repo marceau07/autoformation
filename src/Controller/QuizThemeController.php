@@ -39,7 +39,7 @@ final class QuizThemeController extends AbstractController
                     if ($file->getMimeType() == 'image/jpeg' || $file->getMimeType() == 'image/png' || $file->getMimeType() == 'image/gif' || $file->getMimeType() == 'video/mp4') {
                         $nomFichier = strtolower($quizTheme->getName()) . '.' . $file->guessExtension();
                         try {
-                            $file->move($this->getParameter('quizzes_directory'), $nomFichier);
+                            $file->move($this->getParameter('quiz_themes_directory'), $nomFichier);
                             $quizTheme->setIllustration($nomFichier);
                             $this->addFlash('info', 'Thème créé avec succès');
                         } catch (FileException $e) {

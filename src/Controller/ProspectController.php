@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Prospect;
 use App\Form\ProspectType;
+use App\Repository\ExportParameterRepository;
 use App\Repository\ProspectRepository;
+use App\Service\ExcelExporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +19,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProspectController extends AbstractController
 {
     #[Route('/', name: 'app_prospect_index', methods: ['GET'])]
-    public function index(ProspectRepository $prospectRepository): Response
+    public function index(ProspectRepository $prospectRepository, ExportParameterRepository $parameter): Response
     {
         return $this->render('prospect/index.html.twig', [
             'prospects' => $prospectRepository->findAll(),
+            'exportParameters' => json_decode($parameter->findOneBy(['dtype' => 'prospect'])->getField(), true),
         ]);
     }
 
@@ -79,5 +82,26 @@ class ProspectController extends AbstractController
         }
 
         return $this->redirectToRoute('app_prospect_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    #[Route('/export/', name: 'app_prospect_export', methods: ['GET'], priority: 1)]
+    public function export(Request $request, ExcelExporter $excelExporter, ProspectRepository $prospectRepository, ExportParameterRepository $parameter): Response
+    {
+        $formFields = $request->query->all('form_fields');
+        if(!is_array($formFields)) {
+            $formFields = (array)[$formFields];
+        }
+
+        $data = [];
+        $i = 0;
+        foreach ($prospectRepository->findAll() as $prospect) {
+            foreach ($formFields as $field) {
+                $data[$i][] = $prospect->{'get' . ucfirst(str_replace('_', '', $field))}();
+            }
+            $i++;
+        }
+
+        // Utiliser le service pour générer le fichier Excel
+        return $excelExporter->exportData('prospect_list', json_decode($parameter->findOneBy(['dtype' => 'prospect'])->getField(), true), $data, $formFields);
     }
 }

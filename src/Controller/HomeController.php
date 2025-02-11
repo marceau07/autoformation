@@ -6,9 +6,12 @@ use App\Entity\SurveyTrainee;
 use App\Repository\CourseRepository;
 use App\Repository\FaqRepository;
 use App\Repository\CohortRepository;
+use App\Repository\CourseModuleRepository;
 use App\Repository\CourseTraineeRepository;
 use App\Repository\MessageRepository;
 use App\Repository\NotificationRepository;
+use App\Repository\QuizRepository;
+use App\Repository\QuizShareRepository;
 use App\Repository\SurveyRepository;
 use App\Repository\SurveyTraineeRepository;
 use App\Repository\TraineeCourseFavoriteRepository;
@@ -16,7 +19,15 @@ use App\Repository\TraineeRepository;
 use App\Repository\TraineeResourceRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,7 +41,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class HomeController extends AbstractController
 {
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
-    #[Route('/', name: 'app_home', methods: "GET")]
+    #[Route('/home', name: 'app_home', methods: "GET")]
     public function home(TraineeRepository $traineeRepository, CourseRepository $courseRepository, CourseTraineeRepository $courseTraineeRepository, SurveyTraineeRepository $surveyTraineeRepository): Response
     {
         if ($this->isGranted('ROLE_USER') === true) {
@@ -49,21 +60,53 @@ class HomeController extends AbstractController
     #[Route('/modules', name: 'app_modules', methods: "GET")]
     public function modules(CourseRepository $courseRepository): Response
     {
+        $listModulesBasics = ($this->isGranted('ROLE_USER') ? [$courseRepository->findOneBy(['module' => 1])]: []);
         $listModules = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesModulesBySector($this->getUser()->getUserIdentifier()) : $courseRepository->getCoursesModulesByCohort($this->getUser()->getUserIdentifier()));
 
         return $this->render('course/module.html.twig', [
-            'listModules' => $listModules
+            'listModules' => array_merge($listModulesBasics, $listModules)
         ]);
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/course/read/{course}/{search}', name: 'app_course', methods: "GET")]
-    public function course(CourseRepository $courseRepository, string $course, string $search = null): Response
+    public function course(CourseRepository $courseRepository, CourseModuleRepository $courseModuleRepository, QuizRepository $quizRepository, QuizShareRepository $quizShareRepository, string $course, string $search = null): Response
     {
         $listCourses = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesInformationsBySector($course, $search) : $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), $course, $search));
 
+        $listQuizzes = [];
+        $quiz_visible = [];
+        $quizzes = $courseModuleRepository->findOneBy(['uuid' => $course])->getQuizzes();
+        $shared = $quizShareRepository->findAll();
+        foreach ($quizzes as $quiz) {
+            foreach ($shared as $value) {
+                if ($value->getQuiz()->getId() === $quiz->getId()) {
+                    if (!in_array($value->getQuiz()->getId(), $quiz_visible)) {
+                        $quiz_visible[] = $value->getQuiz()->getId();
+                        $listQuizzes[] = $value;
+                    }
+                }
+            }
+        }
+
         return $this->render('course/course.html.twig', [
-            'listCourses' => $listCourses
+            'listCourses' => $listCourses,
+            'listQuizzes' => $listQuizzes
+        ]);
+    }
+
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/quiz/launch/{uuid}', name: 'app_quiz', methods: "GET")]
+    public function quiz(QuizShareRepository $quizShareRepository, string $uuid): Response
+    {
+        $quiz = null;
+        $theQuiz = $quizShareRepository->findOneBy(['uuid' => $uuid]);
+        if ($theQuiz->isAvailable()) {
+            $quiz = $theQuiz;
+        }
+
+        return $this->render('quiz/launch.html.twig', [
+            'quiz' => $quiz,
         ]);
     }
 
