@@ -6,7 +6,8 @@
 parameters:
     homeworks_directory: '%kernel.project_dir%/public/homeworks'
     internships_directory: '%kernel.project_dir%/public/internships'
-    quizzes_directory: '%kernel.project_dir%/assets/images/quizzes'
+    quiz_themes_directory: '%kernel.project_dir%/public/quiz-themes'
+    messages_directory: '%kernel.project_dir%/public/messages/'
 
 services:
     App\Service\GlobalDataService:
@@ -14,7 +15,9 @@ services:
             $entityManager: '@doctrine.orm.entity_manager'
             $security: '@security.helper'
             $translator: '@translator'
-
+    App\EventListener\CheckMaintenanceListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
             
     # default configuration for services in *this* file
     _defaults:
