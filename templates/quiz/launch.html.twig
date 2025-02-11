@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Quiz
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('/css/faq.css') }}" />
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid">
+    <div class="row p-5" id="quizzes_block">
+      <div class="col-12">
+        <h1 class="text-white">[{{ quiz.quiz.title }}] Quiz {{ quiz.quiz.module.label }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <pre>{{ dump(quiz.quiz) }}</pre>for<div class="container pt-5">{{ quiz.quiz.title }}</div>
+{% endblock %}

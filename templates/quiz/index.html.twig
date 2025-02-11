@@ -5,7 +5,7 @@
 {% block main %}
     <div class="container-fluid mb-3">
         <div>
-            {% include '_components/_subnavbar.html.twig' with {'choosenElement': "quiz"} %}
+            {% include '_components/_subnavbarAdmin.html.twig' with {'choosenElement': "quiz"} %}
         </div>
     
         <div class="tab-content">
@@ -31,6 +31,7 @@
                                     <a href="{{ path('app_quiz_show', { id: quiz.id }) }}"><i class="fas fa-eye"></i></a>
                                     <a href="{{ path('app_quiz_edit', { id: quiz.id }) }}"><i class="fas fa-pen"></i></a>
                                     <a href="{{ path('app_quiz_row_new', { id: quiz.id }) }}"><i class="fas fa-add"></i></a>
+                                    <a href="{{ path('app_quiz_share_new', { id: quiz.id }) }}"><i class="fa-solid fa-link"></i></a>
                                 </td>
                                 <td>{{ quiz.id }}</td>
                                 <td>{{ quiz.title }}</td>
