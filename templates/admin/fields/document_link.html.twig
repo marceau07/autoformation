@@ -1,0 +1,38 @@
+{% set trainee = entity.instance.trainee %}
+{% set tmpDir = 'internships/tmp/' %}
+{% set permanentDir = 'internships/' ~ trainee.username ~ '/' %}
+
+{% set file = '' %}
+{% set isTempFile = true %}
+{% if field.customOptions.get('file') == 'agreement' %}
+  {% if entity.instance.agreement is same as false and ((tmpDir ~ 'Convention_de_stage_' ~ (trainee.lastName|upper) ~ '_' ~ (trainee.firstName|capitalize) ~ '.pdf')|ondisk) %}
+    {% set file = 'Convention_de_stage' %}
+  {% elseif entity.instance.agreement is same as true and ((permanentDir ~ 'Convention_de_stage_' ~ entity.instance.agreementLink ~ '.pdf')|ondisk) %}
+    {% set isTempFile = false %}
+    {% set file = 'Convention_de_stage_' ~ entity.instance.agreementLink %}
+  {% endif %}
+{% elseif field.customOptions.get('file') == 'certificate' %}
+  {% if entity.instance.certificate is same as false and ((tmpDir ~ 'Attestation_de_stage_' ~ (trainee.lastName|upper) ~ '_' ~ (trainee.firstName|capitalize) ~ '.pdf')|ondisk) %}
+    {% set file = 'Attestation_de_stage' %}
+  {% elseif entity.instance.certificate is same as true and ((permanentDir ~ 'Attestation_de_stage_' ~ entity.instance.certificateLink ~ '.pdf')|ondisk) %}
+    {% set isTempFile = false %}
+    {% set file = 'Attestation_de_stage_' ~ entity.instance.certificateLink %}
+  {% endif %}
+{% elseif field.customOptions.get('file') == 'evaluation' %}
+  {% if entity.instance.evaluation is same as false and ((tmpDir ~ 'Evaluation_de_stage_' ~ (trainee.lastName|upper) ~ '_' ~ (trainee.firstName|capitalize) ~ '.pdf')|ondisk) %}
+    {% set file = 'Evaluation_de_stage' %}
+  {% elseif entity.instance.evaluation is same as true and ((permanentDir ~ 'Evaluation_de_stage_' ~ entity.instance.evaluationLink ~ '.pdf')|ondisk) %}
+    {% set isTempFile = false %}
+    {% set file = 'Evaluation_de_stage_' ~ entity.instance.evaluationLink %}
+  {% endif %}
+{% endif %}
+
+{% if file is not empty %}
+  {% if isTempFile %}
+    <a href="{{ asset(tmpDir ~ file ~ '_' ~ (trainee.lastName|upper) ~ '_' ~ (trainee.firstName|capitalize) ~ '.pdf') }}" class="btn btn-warning" target="_blank">{{ 'global.btn_verify'|trans }}</a>
+  {% else %}
+    <a href="{{ asset(permanentDir ~ '/' ~ file ~ '.pdf') }}" class="btn btn-primary" target="_blank">{{ 'global.btn_download'|trans }}</a>
+  {% endif %}
+{% else %}
+  <a href="{{ path('pdf_generate', { element: 'internship-' ~ field.customOptions.get('file'), trainee: trainee.username }) }}" target="_blank" class="btn btn-light disabled">{{ 'global.btn_download'|trans }}</a>
+{% endif %}
