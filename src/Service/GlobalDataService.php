@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\FeedbackCategory;
 use App\Entity\Notification;
+use App\Entity\SiteSettings;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GlobalDataService
@@ -27,6 +28,12 @@ class GlobalDataService
         return $this->entityManager->getRepository(Notification::class)->findBy(['category' => 'homework_to_do', 'user' => $user], ['date' => 'DESC']);
     }
 
+    public function getNotificationsNews()
+    {
+        // return $this->entityManager->getRepository(CourseResource::class)->findAll();
+        return $this->entityManager->getRepository(Notification::class)->findBy(['category' => 'new_features'], ['date' => 'DESC']);
+    }
+
     public function getNotificationsMessages($user)
     {
         // return $this->entityManager->getRepository(Message::class)->findAll();
@@ -41,5 +48,20 @@ class GlobalDataService
     public function getNotificationsNewCourses($user)
     {
         return $this->entityManager->getRepository(Notification::class)->findBy(['category' => 'new_course', 'user' => $user], ['date' => 'DESC']);
+    }
+
+    public function getPlatformName()
+    {
+        return strtoupper($this->entityManager->getRepository(SiteSettings::class)->find(1)->getPlatformName());
+    }
+
+    public function getPlatformLogoName()
+    {
+        return $this->entityManager->getRepository(SiteSettings::class)->find(1)->getLogoName();
+    }
+
+    public function getPlatformLogoPath()
+    {
+        return $this->entityManager->getRepository(SiteSettings::class)->find(1)->getLogoPath();
     }
 }
