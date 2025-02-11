@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\CourseModule;
 use App\Entity\Quiz;
 use App\Entity\QuizTheme;
 use App\Entity\Trainer;
@@ -36,6 +37,13 @@ class QuizType extends AbstractType
                 'choice_label' => function (Trainer $trainer) {
                     return $trainer->getLastName() . ' ' . $trainer->getFirstName();
                 },
+            ])
+            ->add('module', EntityType::class, [
+                'label' => 'Module',
+                'required' => true,
+                'attr' => ['class' => 'form-select'],
+                'class' => CourseModule::class,
+                'choice_label' => 'label',
             ])
         ;
     }

@@ -23,35 +23,25 @@ class QuizRowType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('answer1', TextType::class, [
-                'label' => 'Answer 1',
+            ->add('option1', TextType::class, [
+                'label' => 'Option 1',
                 'required' => false,
                 'attr' => ['class' => 'form-control optionnal optionnal_choice unique_choice multiple_choice'],
             ])
-            ->add('answer2', TextType::class, [
-                'label' => 'Answer 2',
+            ->add('option2', TextType::class, [
+                'label' => 'Option 2',
                 'required' => false,
                 'attr' => ['class' => 'form-control optionnal optionnal_choice unique_choice multiple_choice'],
             ])
-            ->add('answer3', TextType::class, [
-                'label' => 'Answer 3',
+            ->add('option3', TextType::class, [
+                'label' => 'Option 3',
                 'required' => false,
                 'attr' => ['class' => 'form-control optionnal optionnal_choice unique_choice multiple_choice'],
             ])
-            ->add('answer4', TextType::class, [
-                'label' => 'Answer 4',
+            ->add('option4', TextType::class, [
+                'label' => 'Option 4',
                 'required' => false,
                 'attr' => ['class' => 'form-control optionnal optionnal_choice unique_choice multiple_choice'],
-            ])
-            ->add('answer_short_text', TextType::class, [
-                'label' => 'Answer Short Text',
-                'required' => false,
-                'attr' => ['class' => 'form-control optionnal optionnal_choice short_answer'],
-            ])
-            ->add('answer_long_text', TextType::class, [
-                'label' => 'Answer Long Text',
-                'required' => false,
-                'attr' => ['class' => 'form-control optionnal optionnal_choice long_answer'],
             ])
             ->add('quiz_type', EnumType::class, [
                 'label' => 'Quiz Type',
