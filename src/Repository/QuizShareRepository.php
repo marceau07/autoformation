@@ -8,6 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<QuizShare>
+ *
+ * @method QuizShare|null find($id, $lockMode = null, $lockVersion = null)
+ * @method QuizShare|null findOneBy(array $criteria, array $orderBy = null)
+ * @method QuizShare[]    findAll()
+ * @method QuizShare[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class QuizShareRepository extends ServiceEntityRepository
 {

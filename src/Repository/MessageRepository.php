@@ -102,6 +102,19 @@ class MessageRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * Récupérer les conversations récentes pour un utilisateur donné.
+     */
+    public function findRecentConversations($user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.send_trainer = :user OR m.send_trainee = :user OR m.trainee = :user OR m.trainer = :user')
+            ->setParameter('user', $user)
+            ->orderBy('m.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Message[] Returns an array of Message objects
     //     */
