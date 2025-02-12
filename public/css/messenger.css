@@ -1,0 +1,81 @@
+.contacts-list {
+    border-right: 1px solid #dee2e6;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.chat-container {
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.message {
+    margin-bottom: 1rem;
+    max-width: 70%;
+}
+
+.message.sent {
+    margin-left: auto;
+}
+
+.message.received {
+    margin-right: auto;
+}
+
+.message-content {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+
+.message.sent .message-content {
+    background-color: #007bff;
+    color: white;
+}
+
+.message.received .message-content {
+    background-color: #e9ecef;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.message-input {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.contacts-list h5 {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.unread-count {
+    float: right;
+    display: none;
+}
+
+.unread-count:not(:empty) {
+    display: inline-block;
+}
+
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-item.active {
+    background-color: #e9ecef;
+}
