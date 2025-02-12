@@ -25,7 +25,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->isActivated()) {
+        if (!$user->getActivated()) {
             $message = $this->translator->trans('account.not_activated');
             throw new CustomUserMessageAccountStatusException($message);
         }
