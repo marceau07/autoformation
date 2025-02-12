@@ -4,10 +4,11 @@
   {% set illustration = asset('images/' ~ course.module.illustration) %}
 {% endif %}
 
-<li class="splide__slide">
+<li class="splide__slide shimmer-container">
   <a title="{{ 'course.made_by'|trans({ '%trainer%': (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
     <div class="splide__slide__container">
-      <img class="img-course" alt="Illustration {{ course.title }}" src="{{ illustration }}" loading="lazy" />
+      <div class="shimmer"></div>
+      <img class="img-course shimmer-image" alt="Illustration {{ course.title }}" data-src="{{ illustration }}" loading="lazy" />
       <div>
         <span>{{ course.title }}</span>
       </div>

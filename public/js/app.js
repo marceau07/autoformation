@@ -36,3 +36,28 @@ function sendFeedback() {
     $('#form_feedback')[0].reset();
     $('#modalFeedback').modal('hide');
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Sélectionner tous les conteneurs d'images
+    document.querySelectorAll(".shimmer-container").forEach(container => {
+        const img = container.querySelector("img");
+        const shimmer = container.querySelector(".shimmer");
+
+        console.log(img.getAttribute("data-src"));
+
+        // Charger l'image dynamiquement pour éviter le problème de cache
+        const newImage = new Image();
+        newImage.src = img.getAttribute("data-src");
+
+        newImage.onload = function () {
+            img.src = newImage.src; // Assigner l'image chargée
+            shimmer.style.display = "none"; // Cacher le shimmer
+            img.classList.remove("d-none"); // Afficher l'image
+        };
+
+        newImage.onerror = function () {
+            console.error("Erreur lors du chargement de l'image :", newImage.src);
+            shimmer.style.display = "none"; // Cacher le shimmer en cas d'échec
+        };
+    });
+});
