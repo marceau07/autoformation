@@ -347,7 +347,7 @@ const SandboxComponent = () => {
           <div
             style={{
               position: 'fixed',
-              bottom: 10,
+              bottom: 45,
               left: 10,
               background: 'rgba(255, 255, 255, 0.9)',
               padding: '10px',
@@ -414,7 +414,7 @@ const SandboxComponent = () => {
           </div>
         )
       }
-    </div >
+    </div>
   );
 };
 
