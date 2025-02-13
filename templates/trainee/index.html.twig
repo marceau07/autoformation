@@ -7,7 +7,7 @@
 {% block main %}
   <div class="container-fluid mb-3">
     <div>
-      {% include '_components/_subnavbar.html.twig' with { 
+      {% include '_components/_subnavbarAdmin.html.twig' with { 
         'choosenElement': "trainee"
         } 
       %}
@@ -17,6 +17,7 @@
       <div class="tab-pane container-fluid active">
         <div class="mt-2 mb-2">
           <a role="button" class="btn btn-primary" href="{{ path('app_trainee_new') }}">{{ 'global.btn_add'|trans }}</a>
+          <a role="button" data-bs-toggle="modal" data-bs-target="#modalExport" href="#" class="btn btn-success"><i class="fa-solid fa-file-export"></i>&nbsp;{{ 'global.btn_export'|trans }}</a>
         </div>
         <div>
           <table class="table table-bordered table-striped display responsive nowrap" style="margin: 0 auto;" id="list_trainees">
@@ -107,6 +108,7 @@
       </div>
     </div>
   </div>
+  {% include '_components/_modalExport.html.twig' with {'urlPath': 'app_trainee_export', 'fields': exportParameters} %}
 {% endblock %}
 
 {% block js %}
