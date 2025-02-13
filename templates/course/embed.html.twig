@@ -33,15 +33,15 @@
       {% elseif is_granted('ROLE_TRAINEE') %}
         <div class="col-3 mt-2 mb-2 float-end text-end">
           {% if courseInFavorites is defined and courseInFavorites == true %}
-          <i class="fa-solid fa-heart fa-xl text-danger" style="cursor:pointer;vertical-align:text-bottom;" onclick="removeCourseFromFavorites();"></i>
+            <i class="fa-solid fa-heart fa-xl text-danger" style="cursor:pointer;vertical-align:text-bottom;" onclick="removeCourseFromFavorites();"></i>
           {% else %}
-          <i class="fa-regular fa-heart fa-xl" style="cursor:pointer;vertical-align:text-bottom;" onclick="addCourseToFavorites();"></i>
+            <i class="fa-regular fa-heart fa-xl" style="cursor:pointer;vertical-align:text-bottom;" onclick="addCourseToFavorites();"></i>
           {% endif %}
         </div>
       {% endif %}
     </div>
   </div>
-  <iframe src="https://docs.google.com/presentation/d/{{ course.link }}/embed?start=true&delayms=120000" frameborder="0" width="749" height="1280" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  <iframe src="https://docs.google.com/presentation/d/{{ course.link starts with '2PACX-' ? 'e/' ~ course.link : course.link }}/embed?start=true&delayms=120000" frameborder="0" width="749" height="1280" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
   <div class="container" id="liste_ressources">
     <div class="row">
       {% if listResources is defined and listResources is not empty %}
