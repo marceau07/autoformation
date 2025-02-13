@@ -1,0 +1,15 @@
+{% if is_granted('ROLE_TRAINER') %}
+  {% set elements = ['privacy', 'document', 'created_sandbox'] %}
+{% elseif is_granted('ROLE_TRAINEE') %}
+  {% set elements = ['privacy', 'favorite_course', 'information_cohort', 'document', 'statistic'] %}
+{% endif %}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="subnavbarAccount">
+  {% for element in elements %}
+    <li class="nav-item">
+      {# By default, the nav-link element gets also: data-bs-toggle="tab" #}
+      <a class="nav-link {{ element == choosenElement ? 'active' : '' }}" href="{{ path('app_account_' ~ (element|lower) ~ '_index') }}">{{ ('administration.' ~ element ~ '.menu')|trans }}</a>
+    </li>
+  {% endfor %}
+</ul>

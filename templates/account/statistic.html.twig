@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Statistiques
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/account.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+  {% if is_granted('ROLE_TRAINEE') %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbarAccount.html.twig' with { 'choosenElement': "statistic" } %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active" id="statistics">
+        {% if is_granted('ROLE_TRAINEE') and trainee is defined and trainee is not empty %}
+          <div class="container">
+            <div class="row mt-3">
+              <div class="col-12 col-md-6 d-flex flex-column">
+                <h2>{{ 'account.graph.courses.text'|trans }}</h2>
+                <canvas id="opened-courses"></canvas>
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column">
+                <h2>{{ 'account.graph.homeworks.text'|trans }}</h2>
+                <canvas id="homework-returned"></canvas>
+              </div>
+            </div>
+          </div> 
+        {% endif %}  
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  {% if is_granted('ROLE_TRAINEE') %}
+  <script>
+    var ctxOpenedCourses = document.getElementById('opened-courses').getContext('2d');
+    new Chart(ctxOpenedCourses, 
+      {
+        type: 'pie',
+        data: {
+          labels: [
+            '{{ "account.graph.courses.label_one"|trans }}',
+            '{{ "account.graph.courses.label_two"|trans }}',
+          ],
+          datasets: [{
+            label: 'TPs',
+            data: [{{ graphDataCourses.value_one }}, {{ graphDataCourses.value_two }}],
+            backgroundColor: [
+              'rgb(247, 17, 137)',
+              'rgb(0, 118, 189)',
+            ],
+            hoverOffset: 4
+          }]
+        }, 
+        options: {
+          responsive: true,  // Désactiver la réactivité si tu veux utiliser des dimensions fixes
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      }
+    );
+    
+    var ctxHomeworkReturned = document.getElementById('homework-returned').getContext('2d');
+    new Chart(ctxHomeworkReturned, 
+      {
+        type: 'doughnut',
+        data: {
+          labels: [
+            '{{ "account.graph.homeworks.label_one"|trans }}',
+            '{{ "account.graph.homeworks.label_two"|trans }}',
+            // 'TP corrigés',
+          ],
+          datasets: [{
+            label: 'TPs',
+            data: [{{ graphDataHomeworks.value_one }}, {{ graphDataHomeworks.value_two }}],
+            backgroundColor: [
+              'rgb(247, 147, 30)',
+              'rgb(78, 166, 130)',
+              // 'rgb(99, 76, 168)',
+            ],
+            hoverOffset: 4
+          }]
+        }, 
+        options: {
+          responsive: true,  // Désactiver la réactivité si tu veux utiliser des dimensions fixes
+          maintainAspectRatio: false,  // Permet de redimensionner sans garder le ratio fixe
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      }
+    );
+  </script>
+  {% endif %}
+  <script src="{{ asset('js/account.js') }}"></script>
+{% endblock %}

@@ -17,7 +17,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12 mt-3">
-        <h1 class="text-center">{{ 'home.welcome'|trans }}</h1>
+        <h1 class="text-center">{{ 'home.welcome'|trans({ '%platformName%': platformName }) }}</h1>
         <p class="text-center text-small">{{ 'home.welcome_small'|trans }}</p>
       </div>
     </div>
@@ -78,7 +78,7 @@
                   {% if opinion.link starts with 'http://' or opinion.link starts with 'https://' %}
                     {% set avatarPicked = opinion.link %}
                   {% else %}
-                    {% set avatarPicked = asset('images/avatars/' ~ opinion.link) %}
+                    {% set avatarPicked = asset('../avatars/' ~ opinion.link) %}
                   {% endif %}
                   <li class="splide__slide">
                     <div class="splide__slide__container">

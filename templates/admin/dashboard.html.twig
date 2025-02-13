@@ -1,0 +1,141 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block head_stylesheets %}
+  {{ parent() }}
+  {# Inclure Bootstrap via CDN #}
+  <link rel="stylesheet" href="{{ asset('css/colors.css') }}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQm1g2eSfzz/nWGO8PYKnOczW5p7TuTWn6BzDfDdvCs5QezMOO5xjD8t" crossorigin="anonymous" />
+{% endblock %}
+
+{% block body_javascript %}
+  {{ parent() }}
+  {# Inclure Bootstrap JS via CDN #}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-whXKfiXyCbM5JO/6LJoEafJm1q3uHk5ocZRbqI13EhW7i92KmkQyswU9zMmI/58s" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="col-12">
+      <div class="row">
+        <h1 class="text-center">Dashboard</h1>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
+            <div class="pt-3 px-3 h5">Gestion des cohortes</div>
+            <hr />
+            <div class="pb-3 px-3">
+              <div class="row">
+                <div class="col-6">
+                  <div class="h6">Les cohortes actives</div>
+                </div>
+                <div class="col-6">
+                  <div class="h6">Les cohortes à venir</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 overflow-auto" style="height:18vh;">
+                  <div class="h-100 p-2">
+                    {% if activeCohorts is defined and activeCohorts is not empty %}
+                      {% for cohort in activeCohorts %}
+                        <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                        <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
+                      {% endfor %}
+                    {% else %}
+                      <span>Aucune cohorte en cours de formation.</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="row overflow-auto" style="height:8vh;">
+                    <div class="h-100 p-2">
+                      {% if incomingCohorts is defined and incomingCohorts is not empty %}
+                        {% for cohort in incomingCohorts %}
+                          <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                          <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
+                        {% endfor %}
+                      {% else %}
+                        <span>Aucune cohorte à venir.</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="h6">Les cohortes sorties</div>
+                  <div class="row overflow-auto" style="height:5vh;">
+                    <div class="h-100 p-2">
+                      {% if unactiveCohorts is defined and unactiveCohorts is not empty %}
+                        {% for cohort in unactiveCohorts %}
+                          <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                          <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
+                        {% endfor %}
+                      {% else %}
+                        <span>Aucune cohorte précédente.</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-6">
+          <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
+            <div class="pt-3 px-3 h5">Gestion des stages</div>
+            <hr />
+            <div class="pb-3 px-3">
+              <div class="row">
+                <div class="col-12 overflow-auto" style="height:22vh;">
+                  <div class="h-100 p-2">
+                    {% if activeCohorts is defined and activeCohorts is not empty %}
+                      {% for cohort in activeCohorts %}
+                        {% set cohort_documents = cohort.documents|json_decode|json_decode %}
+                        <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b></span>
+                        {% for internship in cohort_documents.internships %}
+                          <div class="ps-3">
+                            <span>{{ internship.label }} - {{ internship.start_date|date('d/m/Y') }} au {{ internship.finish_date|date('d/m/Y') }}</span>
+                          </div>
+                        {% endfor %}
+                      {% endfor %}
+                    {% else %}
+                      <span>Aucun stage en cours.</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
+            <div class="pt-3 px-3 h5">Notifications</div>
+            <hr />
+            <div class="pb-3 px-3">
+              <div class="row">
+                <div class="col-12 overflow-auto" style="height:22vh;">
+                  <div class="h-100 p-2">
+                    {% if (notificationsMessages is defined and notificationsMessages is not empty) or (notificationsInternships is defined and notificationsInternships is not empty) %}
+                      {% set notifications = notificationsMessages|merge(notificationsInternships) %}
+                      {% for notification in notifications %}
+                        {% if notification.category == 'new_message' %}
+                          <p>
+                            <i class="fa-solid fa-envelope"></i>&nbsp;Nouveau message reçu de la part de {{ notification.origin }}
+                          </p>
+                        {% elseif notification.category == 'new_internship' %}
+                          <p>
+                            <i class="fa-solid fa-file"></i>&nbsp;&nbsp;Nouveau document de stage reçu de {{ notification.origin }} concernant: {{ notification.message }}
+                          </p>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
