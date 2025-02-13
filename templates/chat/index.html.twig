@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChatController!{% endblock %}
+
+{% block body %}
+<div class="container" id="messages">
+    <article>{>Test Message}</article>
+    <article>{>Test Message}</article>
+    <article>{>Test Message}</article>
+    <article>{>Test Message}</article>
+    <article>{>Test Message}</article>
+
+</div>
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button>Envoyer</button>
+{{ form_end(form) }}
+{% endblock %}

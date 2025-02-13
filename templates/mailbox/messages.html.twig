@@ -6,7 +6,7 @@
         {% if message.originalMessage.sendTrainer.avatar.link ?? message.originalMessage.sendTrainee.avatar.link starts with 'http://' or message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link starts with 'https://' %}
           {% set avatarUser = message.originalMessage.sendTrainer.avatar.link ?? message.originalMessage.sendTrainee.avatar.link %}
         {% else %}
-          {% set avatarUser = asset('images/avatars/' ~ message.originalMessage.sendTrainer.avatar.link ?? message.originalMessage.sendTrainee.avatar.link) %}
+          {% set avatarUser = asset('../avatars/' ~ message.originalMessage.sendTrainer.avatar.link ?? message.originalMessage.sendTrainee.avatar.link) %}
         {% endif %}
         <img src="{{ avatarUser }}" class="rounded-circle ms-3" alt="{{ message.originalMessage.sendTrainer.firstName ?? message.originalMessage.sendTrainee.firstName }} {{ message.originalMessage.sendTrainer.lastName ?? message.originalMessage.sendTrainee.lastName }}" width="20" height="20" />
         <span class="fw-600">@{{ message.originalMessage.sendTrainer.id ?? null == app.user.id or message.originalMessage.sendTrainee.id ?? null == app.user.id ? 'You' : message.originalMessage.sendTrainer.username ?? message.originalMessage.sendTrainee.username }}</span>
@@ -18,14 +18,29 @@
         {% if message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link starts with 'http://' or message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link starts with 'https://' %}
           {% set avatarUser = message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link %}
         {% else %}
-          {% set avatarUser = asset('images/avatars/' ~ message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link) %}
+          {% set avatarUser = asset('../avatars/' ~ message.sendTrainer.avatar.link ?? message.sendTrainee.avatar.link) %}
         {% endif %}
         <img src="{{ avatarUser }}" class="rounded-circle me-1" alt="{{ message.sendTrainer.firstName ?? message.sendTrainee.firstName }} {{ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}" width="40" height="40" />
       </div>
       <div class="flex-shrink-1 rounded py-2 px-3 mx-3 me-3">
-        <div class="fw-bold mb-1">{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'You' : message.sendTrainer.firstName ?? message.sendTrainee.firstName ~ ' ' ~ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}</div>{{ message.content }}<div class="small text-nowrap mt-2">{{ message.date|time_ago }}</div>
+        <div class="fw-bold mb-1">{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'You' : message.sendTrainer.firstName ?? message.sendTrainee.firstName ~ ' ' ~ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}</div>
+        {{ message.content|linkify|raw }}
+        {% if message.document is defined and message.document is not empty %}
+          <div class="pt-1">
+            {% if message.mimeType starts with 'image/' %}
+              <img class="img-thumbnail" style="height: 250px;" src="{{ asset('messages/' ~ message.document) }}" />
+            {% elseif message.mimeType starts with 'video/' %}
+              <video style="height: 250px;" controls>
+                <source src="{{ asset('messages/' ~ message.document) }}" type="{{ message.mimeType }}" />
+              </video>
+            {% else %}
+              <a class="border rounded px-1 py-2" style="background-color:var(--coul-principale);" href="{{ asset('messages/' ~ message.document) }}">{{ message.document }}</a>
+            {% endif %}
+          </div>
+        {% endif %}
+        <div class="small text-nowrap mt-2">{{ message.date|time_ago }}</div>
       </div>
-      <div data-message="{{ message.id }}" data-content="{{ message.content|raw }}" data-from="{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'You' : message.sendTrainer.firstName ?? message.sendTrainee.firstName ~ ' ' ~ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}" onclick="replyTo(this);">
+      <div data-message="{{ message.id }}" data-content="{{ message.content|raw }}" data-media="{{ message.document }}" data-from="{{ message.sendTrainer.id ?? null == app.user.id or message.sendTrainee.id ?? null == app.user.id ? 'You' : message.sendTrainer.firstName ?? message.sendTrainee.firstName ~ ' ' ~ message.sendTrainer.lastName ?? message.sendTrainee.lastName }}" onclick="replyTo(this);">
         <i class="fa-solid fa-reply"></i>
       </div>
     </div>
