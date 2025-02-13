@@ -16,27 +16,27 @@
     <meta name="theme-color" content="#317EFB" />
     {% block seo %}
       <meta name="robots" content="index, follow" />
-      <meta name="title" content="{{ 'global.meta_title'|trans }}" />
+      <meta name="title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}" />
       <meta name="description" content="{{ 'global.meta_description'|trans }}">
       <!--Seo Réseaux-->
-      <meta property="og:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="og:type" content=website >
       <meta property="og:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="og:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
-      <meta property="og:site_name" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
+      <meta property="og:site_name" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost() }}">
       <!--Seo Twitter-->
-      <meta property="twitter:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="twitter:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="twitter:type" content=website >
       <meta property="twitter:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="twitter:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
+      <meta property="twitter:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
       <meta name="twitter:card" content=summary >
     {% endblock %}
 
     <title>
       {% block title %}
 
-      {% endblock %}&nbsp;- {{ 'global.meta_title'|trans }}
+      {% endblock %}&nbsp;- {{ 'global.meta_title'|trans({'%platformName%': platformName }) }}
     </title>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon-32x32.png') }}" />
@@ -51,6 +51,7 @@
     {# <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> #}
     {# Permet d'afficher le code formaté pour les cours #}
     {# <link rel="stylesheet" href="{{ asset('css/prism.css') }}" /> #}
+    <link rel="stylesheet" href="{{ asset('css/colors.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/feedback.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/notifications.css') }}" />
@@ -61,17 +62,18 @@
 
     {# <link rel="stylesheet" href="//cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" /> #}
     {% block stylesheets %}
-
+      {{ encore_entry_link_tags('app') }}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {# <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> #}
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.0/af-2.7.0/r-3.0.2/datatables.min.js"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
     {% block javascripts %}
-      {% block importmap %}
+        {{ encore_entry_script_tags('app') }}
+      {# {% block importmap %}
         {{ importmap('app') }}
-      {% endblock %}
+      {% endblock %} #}
     {% endblock %}
   </head>
   <body>
@@ -79,7 +81,7 @@
       {% block header %}
         <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}" id="logo_adrar" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -91,7 +93,7 @@
                 </li>
                 {% if is_granted('ROLE_TRAINER') %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">{{ 'header.administration'|trans }}</a>
+                    <a class="nav-link" href="{{ path('admin') }}">{{ 'header.administration'|trans }}</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
@@ -151,6 +153,7 @@
                   <div class="dropdown-container">
                     <a href="#" type="button" data-dropdown="notificationMenu" class="position-relative px-1">
                       {% if (notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty) 
+                        or (notificationsNews is defined and notificationsNews is not empty) 
                         or (notificationsMessages is defined and notificationsMessages is not empty) 
                         or (notificationsInternships is defined and notificationsInternships is not empty) 
                         or (notificationsNewCourses is defined and notificationsNewCourses is not empty) %}
@@ -162,6 +165,25 @@
                       {% endif %}
                     </a>
                     <ul class="dropdown z-1" name="notificationMenu">
+                      <li class="notification-group" id="notificationsNews">
+                        <div class="notification-tab">
+                          <i class="fa fa-square-poll-vertical"></i>
+                          <h6>Nouveautés</h6>
+                          <span class="label">{{ notificationsNews is defined and notificationsNews is not empty ? notificationsNews|length : 0 }}</span>
+                        </div>
+                        <!-- tab -->
+                        <ul class="notification-list">
+                          {% if notificationsNews is defined and notificationsNews is not empty %}
+                            {% for notification in notificationsNews %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">{{ 'notifications.no_news'|trans }}</p>
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </li>
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsToDo">
                         <div class="notification-tab">
                           <i class="fa fa-list-check"></i>
@@ -255,7 +277,7 @@
                   <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.firstName|capitalize }}&nbsp;{{ app.user.lastName|upper }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_user">
                     <li>
-                      <a class="dropdown-item" href="{{ path('app_account') }}">Modifier mes informations</a>
+                      <a class="dropdown-item" href="{{ path('app_account_privacy_index') }}">Modifier mes informations</a>
                     </li>
                     <li>
                       <a class="dropdown-item nav-link form-check form-switch" href="#">
@@ -300,7 +322,7 @@
       {% block footer %}
         <footer class="border-top border-light bg-v1-primary fixed-bottom">
           <p class="text-center m-0">
-            &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
+            &copy; 2022 - {{ 'now'|date('Y') }} {{ platformName }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
           </p>
         </footer>
       {% endblock %}
@@ -326,7 +348,7 @@
         </div>
         <div class="chat-area" id="message-box">
           <div class="text-center">
-            <img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR">
+            <img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}">
           </div>
           <div class="chat-message-div"></div>
         </div>
@@ -613,7 +635,7 @@
                 group: 'trainee-modules',  
                 order: 1,
                 display_modal: false, 
-                link: "{{ path('app_course', {'course': '31deef88-6dc3-4b4b-8c80-44210a4eac31'}) }}"
+                link: "{{ path('app_course', {'course': '9b8e2dec-aaab-493f-a691-c2c5f92aa782'}) }}"
               }, 
               {
                 title: "{{ 'tourguide.index.trainee.courses.title'|trans }}",
@@ -643,7 +665,7 @@
                 group: 'trainee-modules',  
                 order: 4,
                 display_modal: false, 
-                link: "{{ path('app_embed', {'slide': '1kU91RMq87NsJ5YKlrs9yxNgudF3dr1cRPTTLSj3NHtM'}) }}"              
+                link: "{{ path('app_embed', {'slide': '2PACX-1vS1fqRHqPke4F_m70pDAqmJNntPHgGXCL7Jd-GX4JdsTeMpdYEgPmbBWV1kYvqgEz98Z6pAIygV6VVT'}) }}"              
               }, 
               {
                 title: "{{ 'tourguide.index.trainee.courses.example.embed.title'|trans }}",

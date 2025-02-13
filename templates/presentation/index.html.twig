@@ -181,7 +181,7 @@
     </div>
     <footer class="border-top border-light bg-v1-primary fixed-bottom">
         <p class="text-center m-0">
-        &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - v.{{ app_version() ~ '.' ~ (app.environment|upper) }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
+        &copy; 2022 - {{ 'now'|date('Y') }} {{ platformName }} - v.{{ app_version() ~ '.' ~ (app.environment|upper) }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
         </p>
     </footer>
     <script src="{{ asset('js/app.js') }}"></script>
