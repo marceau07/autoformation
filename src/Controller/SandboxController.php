@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Sandbox;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class SandboxController extends AbstractController
 {
@@ -17,10 +19,11 @@ final class SandboxController extends AbstractController
      * Enregistre un canevas envoyé depuis le front-end.
      * @uuid est un identifiant unique généré par le front-end, optionnel.
      */
+    #[IsGranted('ROLE_TRAINER')]
     #[Route('/sandbox/save/{uuid?}', name: 'sandbox_save', methods: ['POST'])]
     public function saveSandbox(?string $uuid, Request $request, SandboxRepository $sandboxRepository, EntityManagerInterface $em): JsonResponse
     {
-        if(isset($uuid)) {
+        if (isset($uuid)) {
             $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
         } else {
             $sandbox = new Sandbox();
@@ -47,11 +50,11 @@ final class SandboxController extends AbstractController
     }
 
     /**
-     * Récupère un canevas par son identifiant.
+     * Récupère un canevas par son identifiant pour modification.
      *
      */
-    #[Route('/sandbox/{uuid}', name: 'sandbox_get', methods: ['GET'])]
-    public function getSandbox(string $uuid, SandboxRepository $sandboxRepository): Response
+    #[Route('/{_locale}/sandbox/{uuid}/edit', name: 'sandbox_edit', methods: ['GET'])]
+    public function editSandbox(string $uuid, SandboxRepository $sandboxRepository): Response
     {
         $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
 
@@ -65,7 +68,28 @@ final class SandboxController extends AbstractController
             'uuid' => $sandbox->getUuid()
         ]);
     }
-    
+
+    /**
+     * Récupère un canevas par son identifiant pour affichage.
+     *
+     */
+    #[Route('/{_locale}/sandbox/{uuid}', name: 'sandbox_show', methods: ['GET'])]
+    public function showSandbox(string $uuid, SandboxRepository $sandboxRepository): Response
+    {
+        $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
+
+        if (!$sandbox) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Sandbox non trouvée'], 404);
+        }
+
+        return $this->render('sandbox/builder.html.twig', [
+            'title' => $sandbox->getTitle(),
+            'data' => $sandbox->getData(),
+            'uuid' => $sandbox->getUuid()
+        ]);
+    }
+
+    #[IsGranted('ROLE_TRAINER')]
     #[Route('/{_locale}/sandbox/builder', name: 'sandbox_builder', methods: "GET")]
     public function builder(): Response
     {

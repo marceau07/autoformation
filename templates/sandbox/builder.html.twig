@@ -27,12 +27,12 @@
 {% endblock %}
 
 {% block js %}
-    <script>
+  <script>
       window.__CANVAS_ID__ = '{{ uuid is defined and uuid is not empty ? uuid : '' }}';
-    </script>
-    {% if data is defined %}
+  </script>
+  {% if data is defined %}
     <script>
       window.__CANVAS_DATA__ = {{ data|raw }};
-    </script>
-    {% endif %}
+          </script>
+  {% endif %}
 {% endblock %}
