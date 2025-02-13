@@ -73,8 +73,23 @@
               <td>{{ trainee.uuid }}</td>
             </tr>
             <tr>
-              <th>Documents</th>
-              <td>{{ trainee.documents }}</td>
+              <th>Stages</th>
+              <td>
+               <ul>
+              {% for internship in trainee.traineeInternships %}
+               <li>
+                {% if internship.internship is defined and internship.internship is not empty %}
+                  {{ internship.internship.prospect.name }} {{ internship.internship.tutorLastName }} 
+                    - <a href="{{ asset('internships/' ~ trainee.username ~ '/Convention_de_stage_' ~ internship.agreementLink ~ '.pdf') }}" target="_blank">Convention</a>: {{ (internship.agreement is not null and internship.agreement == true ? '<i class="fa-solid fa-check-to-slot text-success"></i>' : (internship.agreement is not null and internship.agreement == false ? '<i class="fa-solid fa-hourglass-start text-warning"></i>' : '<i class="fa-solid fa-x text-danger"></i>'))}} | 
+                      <a href="{{ asset('internships/' ~ trainee.username ~ '/Attestation_de_stage_' ~ internship.certificateLink ~ '.pdf') }}" target="_blank">Attestation</a>: {{ (internship.certificate is not null and internship.certificate == true ? '<i class="fa-solid fa-check-to-slot text-success"></i>' : (internship.certificate is not null and internship.certificate == false ? '<i class="fa-solid fa-hourglass-start text-warning"></i>' : '<i class="fa-solid fa-x text-danger"></i>'))}} | 
+                      <a href="{{ asset('internships/' ~ trainee.username ~ '/Evaluation_de_stage_' ~ internship.evaluationLink ~ '.pdf') }}" target="_blank">Évaluation</a>: {{ (internship.evaluation is not null and internship.evaluation == true ? '<i class="fa-solid fa-check-to-slot text-success"></i>' : (internship.evaluation is not null and internship.evaluation == false ? '<i class="fa-solid fa-hourglass-start text-warning"></i>' : '<i class="fa-solid fa-x text-danger"></i>'))}}
+                {% else %}
+                  Pas de stage
+                {% endif %}
+               </li>
+              {% endfor %}
+               </ul>
+              </td>
             </tr>
             <tr>
               <th>Diploma</th>
