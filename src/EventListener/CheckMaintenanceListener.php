@@ -21,8 +21,8 @@ final class CheckMaintenanceListener
         $this->entityManager = $entityManager;
         $this->twig = $twig;
         // localhost, localhost IPV6, local ip, livebox, nordvpn
-        $this->allowedIps = ['127.0.0.1', '::1', '192.168.1.33', '192.168.1.40', '192.168.1.254', '82.65.27.189', '91.205.107.48']; // Liste des IP autorisées
-        // $this->allowedIps = ['127.0.0.1', '192.168.1.33', '192.168.1.40', '192.168.1.254', '82.65.27.189', '138.199.16.217', '92.184.100.140']; // Liste des IP autorisées
+        $this->allowedIps = ['127.0.0.1', '::1', '192.168.1.33', '192.168.1.40', '192.168.1.254', '82.64.145.2']; // Liste des IP autorisées
+        // $this->allowedIps = ['127.0.0.1', '192.168.1.33', '192.168.1.40', '192.168.1.254', '82.64.145.2', '138.199.16.217', '92.184.100.140']; // Liste des IP autorisées
     }
 
     #[AsEventListener(event: KernelEvents::REQUEST)]
@@ -39,7 +39,7 @@ final class CheckMaintenanceListener
 
         // Vérifie l'état de maintenance dans la base de données
         $settings = $this->entityManager->getRepository('App\Entity\SiteSettings')->find(1);
-        if(!$settings) {
+        if (!$settings) {
             $settings = new SiteSettings();
             $settings->setMaintenanceMode(true);
             $this->entityManager->persist($settings);
