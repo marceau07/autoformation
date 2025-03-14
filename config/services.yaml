@@ -8,6 +8,7 @@ parameters:
     internships_directory: '%kernel.project_dir%/public/internships'
     quiz_themes_directory: '%kernel.project_dir%/public/quiz-themes'
     messages_directory: '%kernel.project_dir%/public/messages/'
+    ai_url: '%env(AI_URL)%'
 
 services:
     App\Service\GlobalDataService:

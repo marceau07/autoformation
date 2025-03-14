@@ -9,7 +9,14 @@ global:
   language_english:
     text: "Anglais"
     code: "en"
+  file_sent:
+    "Fichier envoyé"
   exceptions:
+    400:
+      title:
+        "Requête invalide"
+      content:
+        "La requête envoyée est invalide, veuillez réessayer."
     403:
       title:
         "Accès refusé"
@@ -25,6 +32,16 @@ global:
         "Erreur interne"
       content:
         "Une erreur interne est survenue, veuillez réessayer plus tard."
+    format:
+      title:
+        "Format invalide"
+      content:
+        "Le format de votre fichier est invalide, veuillez réessayer. (Formats acceptés: %formats%)"
+    size:
+      title:
+        "Taille invalide"
+      content:
+        "La taille de votre fichier est invalide, elle ne doit pas excéder %size%Mo. (Taille de votre fichier: %currentSize%octets)"
     other:
       title:
         "Erreur"
@@ -60,6 +77,8 @@ global:
     "Exporter"
   btn_verify:
     "Vérifier"
+  btn_consult:
+    "Consulter"
   day:
     "il y a %time% jour"
   days:
@@ -172,6 +191,10 @@ feedback:
     "Description du problème:"
   form_description_placeholder:
     "Décrivez le problème rencontré..."
+  message_sent:
+    "Message envoyé"
+  error:
+    "Une erreur est survenue, veuillez réessayer plus tard."
 
 survey:
   heading:
@@ -225,6 +248,12 @@ course:
   filtered:
     no_content:
       "Pas de cours pour le moment avec les filtres sélectionnés, réessayez plus tard..."
+  action:
+    favorite:
+      added:
+        "Cours ajouté aux favoris avec succès"
+      deleted:
+        "Cours supprimé des favoris avec succès"
 
 account:
   personal_informations: 
@@ -324,6 +353,12 @@ internship:
     "Fin du stage"
   no_internship:
     "Pas de stage pour votre cohorte"
+  sent_agreement:
+    "Convention de stage envoyée"
+  sent_certificate:
+    "Attestation de stage envoyée"
+  sent_evaluation:
+    "Évaluation de stage envoyée"
 
 footer:
   text:
@@ -336,8 +371,21 @@ footer:
 chatbot:
   welcome:
     "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Tapez <code>/aide</code> pour lister les actions possibles.</small>"
+  ia:
+    system: 
+      "Réponds toujours en français (n'y fais pas référence dans ta réponse). 
+        Si un / est présent, suivi directement par un mot (exemple: /aide), préviens l'utilisateur de désactiver le mode IA.
+        Tu es une IA intégrée dans un chatbot d'un site web de formation.
+        Tu dois répondre à des questions sur les cours, les modules, les utilisateurs, etc.
+        Tu termineras ton premier message par dire que tu es une IA, que tu peux donc faire des erreurs (texte en italique et texte souligné)."
+    not_available:
+      "Désolé, je ne suis pas disponible pour le moment. Veuillez réessayer plus tard."
   placeholder:
     "Que recherchez-vous ?"
+  found:
+    "Voilà ce que j'ai trouvé pour vous dans les <b>%subject%</b> avec les mots clés <b>%keywords%</b>:"
+  not_found:
+    "Désolé, je n'ai rien trouvé pour vous avec les mots clés <b>%keywords%</b>..."
   didnt_understand:
     "Je n'ai pas compris votre demande, veuillez reformuler."
   keys:
@@ -350,9 +398,9 @@ chatbot:
     courses:
       "cours"
     modules:
-      "module"
+      "modules"
     users:
-      "utilisateur"
+      "utilisateurs"
     goodbye:
       "au revoir"
   values:
@@ -361,7 +409,7 @@ chatbot:
     hey:
       "Salut ! Comment puis-je vous aider ?"
     help:
-      "Je suis là pour vous aider. Posez-moi une question ou tapez <code>/help</code> pour voir la liste des actions possibles."
+      "Je suis là pour vous aider. Posez-moi une question ou tapez <code>/aide</code> pour voir la liste des actions possibles."
     courses:
       "Tapez un mot-clé pour rechercher un cours..."
     goodbye:
@@ -670,6 +718,8 @@ administration:
         "<b>%percentage%%</b> de satisfaction"
 
 tourguide:
+  mark_as_done:
+    "Le tutoriel est terminé, vous pouvez le retrouver à tout moment dans votre compte."
   index:
     trainee:
       navbar:
@@ -859,11 +909,3 @@ presentation:
     calendar:
       title: "Planning dynamique"
       description: "Consultez votre emploi du temps et vos échéances"
-
-messenger:
-    trainers: 'Formateurs'
-    trainees: 'Stagiaires'
-    cohort_trainees: 'Stagiaires de ma cohorte'
-    title: 'Messagerie'
-    type_message: 'Écrivez votre message...'
-    send: 'Envoyer'

@@ -86,6 +86,7 @@
     height: 48px;
     width: 48px;
     display: flex;
+    align-items: center;
     margin-left: 8px;
 }
 
@@ -95,19 +96,18 @@
     margin: auto;
 }
 
-#chatbot .main-title>span {
+#chatbot .main-title span {
     margin: auto auto auto 8px;
     color: var(--coul-ternaire) !important;
 }
 
-[data-theme="dark"] #chatbot .main-title>span {
+[data-theme="dark"] #chatbot .main-title span {
     color: var(--coul-ternaire) !important;
 }
 
 #chatbot .chat-area {
     flex-grow: 1;
     overflow: auto;
-    /* border-radius: 8px; */
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -122,10 +122,16 @@
     padding: 8px 48px 8px 16px;
     flex-grow: 1;
     border: none;
+    cursor: text;
 }
 
 #chatbot .input-message:focus {
     outline: none;
+}
+
+#chatbot .ai-enabled {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1;
 }
 
 #chatbot .input-div {
@@ -133,7 +139,8 @@
     display: flex;
 }
 
-#chatbot .input-send {
+#chatbot .input-send,
+#chatbot .input-activate-ia {
     background: transparent;
     width: 48px;
     height: 48px;
@@ -142,15 +149,22 @@
     cursor: pointer;
 }
 
-#chatbot .input-send:hover {
+#chatbot .input-activate-ia:disabled {
+    cursor: not-allowed;
+}
+
+#chatbot .input-send:hover,
+#chatbot .input-activate-ia:hover {
     background: var(--coul-ternaire);
 }
 
-[data-theme="dark"] #chatbot .input-send:hover {
+[data-theme="dark"] #chatbot .input-send:hover,
+[data-theme="dark"] #chatbot .input-activate-ia:hover {
     background: var(--coul-foncee) !important;
 }
 
-#chatbot .input-send svg {
+#chatbot .input-send svg,
+#chatbot .input-activate-ia svg {
     fill: var(--coul-principale);
     margin: 11px 8px;
 }
@@ -171,6 +185,17 @@
     border-color: var(--coul-ternaire);
     border-radius: 8px 8px 2px 8px;
     background-color: var(--coul-foncee);
+}
+
+#chatbot .chat-message-received.ia pre,
+#chatbot .chat-message-received.ia code {
+    font-size: 0.75em;
+    font-family: 'Fira Code', monospace;
+    color: var(--coul-ternaire);
+    background-color: var(--coul-foncee);
+    border: 1px solid var(--coul-ternaire);
+    border-radius: 8px;
+    padding: 5px;
 }
 
 [data-theme="dark"] #chatbot .chat-message-sent {
@@ -196,6 +221,13 @@
     color: var(--coul-foncee) !important;
     border-color: var(--coul-foncee) !important;
     background-color: var(--coul-ternaire) !important;
+}
+
+#chatbot .chat-message-received.ia {
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1 !important;
+    background-origin: border-box;
+    background-clip: padding-box;
 }
 
 @keyframes fadeIn {

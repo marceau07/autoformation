@@ -37,6 +37,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -84,6 +85,9 @@ class DefaultController extends AbstractController
         return $response;
     }
 
+    /**
+     * WIP
+     */
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/events', name: 'app_events', methods: "GET")]
     public function events(CalendarRepository $calendarRepository, TraineeRepository $traineeRepository, TrainerRepository $trainerRepository): JsonResponse
@@ -110,6 +114,9 @@ class DefaultController extends AbstractController
         return $this->json($data);
     }
 
+    /**
+     * WIP
+     */
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER")'))]
     #[Route('/events/new', name: 'app_events_add', methods: "POST")]
     public function addEvent(Request $request, EntityManagerInterface $entityManager): JsonResponse
@@ -152,7 +159,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/feedback', name: 'app_feedback', methods: "POST")]
-    public function feedback(FeedbackCategoryRepository $feedbackCategoryRepository, SiteSettingsRepository $siteSettingsRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function feedback(TranslatorInterface $translator, FeedbackCategoryRepository $feedbackCategoryRepository, SiteSettingsRepository $siteSettingsRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $siteSettings = $siteSettingsRepository->find(1);
 
@@ -205,20 +212,30 @@ class DefaultController extends AbstractController
 
         // Execute the request
         $response = curl_exec($ch);
+        $message = '';
         if (!$response) {
-            $message_bis = 'Error:' . curl_error($ch);
+            $message = 'Error:' . curl_error($ch);
         } else {
-            $message_bis = 'Response:' . $response;
+            $message = 'Response:' . $response;
         }
 
         // Close the cURL session
         curl_close($ch);
 
+        if (!empty($message_bis)) {
+            $this->addFlash('error', $translator->trans('global.error', [], null, $request->getLocale()));
+            return $this->json(
+                [
+                    'success' => false,
+                    'message' => $message,
+                ],
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+        $this->addFlash('info', $translator->trans('global.message_sent', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => true,
-                'message' => "Votre message a bien été envoyé !",
-                'message_bis' => $message_bis,
             ],
             status: Response::HTTP_OK
         );
@@ -238,19 +255,19 @@ class DefaultController extends AbstractController
                     $keywords = explode($translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) . ' ', trim($userMessage))[1];
                     $courses = $courseRepository->findOneBy(['link' => $keywords]) ?? $courseRepository->searchCourses($keywords);
                     if (!empty($courses)) {
-                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>' . $translator->trans('chatbot.keys.courses', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
+                        array_push($closest, $translator->trans('chatbot.found', ['%subject%' => $translator->trans('chatbot.keys.courses', [], null, $request->getLocale()), '%keywords%' => $keywords], null, $request->getLocale()));
                         foreach ($courses as $course) {
                             array_push(
                                 $closest,
                                 '<div>
                                     <h6 class="fw-bold fs-5 ">[' . $course->getModule()->getLabel() . ']&nbsp;' . $course->getTitle() . '</h6>
                                     <p class="fs-6">' . $course->getSynopsis() . '</p>
-                                    <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/embed/' . $course->getLink() . '">Consulter le cours !</a>
+                                    <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/embed/' . $course->getLink() . '">' . $translator->trans('global.btn_consult', [], null, $request->getLocale()) . '</a>
                                 </div>'
                             );
                         }
                     } else {
-                        $closest = ['Désolé, je n\'ai pas trouvé de cours avec les mots-clés <b>' . $keywords . '</b>...'];
+                        $closest = [$translator->trans('chatbot.not_found', ['%keywords%' => $keywords], null, $request->getLocale())];
                     }
                     break;
                 case strpos($userMessage, $translator->trans('chatbot.keys.modules', [], null, $request->getLocale())) === 0:
@@ -267,7 +284,7 @@ class DefaultController extends AbstractController
                         }
                     }
                     if (!empty($courses)) {
-                        array_push($closest, 'Voilà ce que j\'ai trouvé pour vous dans les <b>' . $translator->trans('chatbot.keys.modules', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
+                        array_push($closest, $translator->trans('chatbot.found', ['%subject%' => $translator->trans('chatbot.keys.modules', [], null, $request->getLocale()), '%keywords%' => $keywords], null, $request->getLocale()));
                         $modules = [];
                         foreach ($courses as $course) if (!in_array($course->getModule()->getId(), $modules)) {
                             array_push(
@@ -275,12 +292,12 @@ class DefaultController extends AbstractController
                                 '<div>
                                     <h6 class="fw-bold fs-5 ">' . $course->getModule()->getLabel() . '</h6>
                                     <img src="' . $assets->getUrl('images/' . $course->getModule()->getIllustration()) . '" title="' . $course->getModule()->getIllustration() . '">
-                                    <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/course/read/' . $course->getModule()->getUuid() . '">Consulter le cours !</a>
+                                    <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/course/read/' . $course->getModule()->getUuid() . '">' . $translator->trans('global.btn_consult', [], null, $request->getLocale()) . '</a>
                                 </div>'
                             );
                         }
                     } else {
-                        $closest = ['Désolé, je n\'ai pas trouvé de module avec les mots-clés <b>' . $keywords . '</b>...'];
+                        $closest = [$translator->trans('chatbot.not_found', ['%keywords%' => $keywords], null, $request->getLocale())];
                     }
                     break;
                 case strpos($userMessage, $translator->trans('chatbot.keys.users', [], null, $request->getLocale())) === 0:
@@ -288,7 +305,7 @@ class DefaultController extends AbstractController
                     $trainees = $traineeRepository->searchTrainees($keywords);
                     $trainers = $trainerRepository->searchTrainers($keywords);
                     if (!empty($trainees)) {
-                        array_push($closest, 'J\'ai trouvé ces utilisateurs qui peuvent correspondre à ta demande <b>' . $translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
+                        array_push($closest, $translator->trans('chatbot.found', ['%subject%' => $translator->trans('chatbot.keys.users', [], null, $request->getLocale()), '%keywords%' => $keywords], null, $request->getLocale()));
                         foreach ($trainees as $trainee) {
                             array_push(
                                 $closest,
@@ -306,8 +323,10 @@ class DefaultController extends AbstractController
                                 </div>'
                             );
                         }
-                    } elseif (!empty($trainers)) {
-                        array_push($closest, 'J\'ai trouvé ces utilisateurs qui peuvent correspondre à ta demande <b>' . $translator->trans('chatbot.keys.users', [], null, $request->getLocale()) . '</b> avec les mots-clés <b>' . $keywords . '</b>:');
+                    }
+
+                    if (!empty($trainers)) {
+                        array_push($closest, $translator->trans('chatbot.found', ['%subject%' => $translator->trans('chatbot.keys.users', [], null, $request->getLocale()), '%keywords%' => $keywords], null, $request->getLocale()));
                         foreach ($trainers as $trainer) {
                             array_push(
                                 $closest,
@@ -325,8 +344,10 @@ class DefaultController extends AbstractController
                                 </div>'
                             );
                         }
-                    } else {
-                        $closest = ['Désolé, je n\'ai trouvé ni stagiaire, ni formateur avec les mots-clés <b>' . $keywords . '</b>...'];
+                    }
+
+                    if (empty($trainees) && empty($trainers)) {
+                        $closest = [$translator->trans('chatbot.not_found', ['%keywords%' => $keywords], null, $request->getLocale())];
                     }
                     break;
                 case $translator->trans('chatbot.keys.help', [], null, $request->getLocale()):
@@ -393,9 +414,128 @@ class DefaultController extends AbstractController
         );
     }
 
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    #[Route('/{_locale}/ai_chatbot/{message}', name: 'app_ai_chatbot', methods: ['GET'])]
+    public function streamChat($message, TranslatorInterface $translator, Request $request): Response
+    {
+        $data = [
+            'messages' => [
+                ['role' => 'system', 'content' => $translator->trans('chatbot.ia.system', [], null, $request->getLocale())],
+                ['role' => 'user', 'content' => urldecode($message)]
+            ],
+            'model' => 'llama3.1-8b-instruct',
+            'stream' => true,
+            'tool_choice' => 'none',
+            'max_tokens' => 4096,
+            'stop' => ['End'],
+            'frequency_penalty' => 0.2,
+            'presence_penalty' => 0.6,
+            'temperature' => 0.35,
+            'top_p' => 0.95,
+            'modalities' => ['text'],
+            'store' => true,
+            'metadata' => [
+                'type' => 'conversation'
+            ],
+            'logit_bias' => [],
+            'logprobs' => null,
+            'n' => 1,
+            'response_format' => ['type' => 'text'],
+            'seed' => rand(0, 99999),
+            'stream_options' => null,
+            'tools' => [
+                [
+                    'type' => 'function',
+                    'function' => [
+                        'name' => '',
+                        'parameters' => [],
+                        'strict' => null
+                    ]
+                ]
+            ],
+            'parallel_tool_calls' => null,
+        ];
+        $url = $this->getParameter("ai_url") . '/';
+        if (!$this->isCurlServerAlive($url)) {
+            $response = new StreamedResponse(function () use ($translator, $request) {
+                ob_implicit_flush(true);
+                header('Content-Type: text/event-stream');
+                header('Cache-Control: no-cache');
+                header("Access-Control-Allow-Origin: *");
+                foreach (explode(' ', $translator->trans('chatbot.ia.not_available', [], null, $request->getLocale())) as $value) {
+                    echo "data: " . $value . " \n\n";
+                    ob_flush();
+                    flush();
+                }
+                echo "data: [DONE]\n\n";
+                ob_flush();
+                flush();
+            });
+        } else {
+            $response = new StreamedResponse(function () use ($data, $url) {
+                ob_implicit_flush(true);
+                header('Content-Type: text/event-stream');
+                header('Cache-Control: no-cache');
+                header("Access-Control-Allow-Origin: *");
+
+                $url = $url . 'v1/chat/completions';
+
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $chunk) {
+                    // file_put_contents("debug_raw.txt", $chunk . "\n", FILE_APPEND);
+
+                    $cleanedData = preg_replace('/^data: /', '', trim($chunk));
+                    $json = json_decode($cleanedData, true);
+                    // file_put_contents("debug_log.txt", "Décodage JSON: " . print_r($json, true) . "\n", FILE_APPEND);
+
+                    if (isset($json['choices'][0]['delta']['content'])) {
+                        $cleanedContent = nl2br(htmlspecialchars_decode($json['choices'][0]['delta']['content'], ENT_QUOTES));
+                        echo "data: " . $cleanedContent . "\n\n";
+                        ob_flush();
+                        flush();
+                    }
+                    return strlen($chunk);
+                });
+
+                curl_exec($ch);
+                curl_close($ch);
+
+                echo "data: [DONE]\n\n";
+                ob_flush();
+                flush();
+            });
+        }
+
+        $response->headers->set('X-Accel-Buffering', 'no'); // Désactiver le buffering Nginx
+        return $response;
+    }
+
+    /**
+     * Permet de tester si le serveur est accessible
+     * 
+     * @param $url string URL du serveur à tester
+     * @return bool true si le serveur est accessible, false sinon
+     */
+    function isCurlServerAlive($url): bool
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return $result !== false && $httpCode === 200;
+    }
+
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_agreement', name: 'app_send_agreement', methods: "POST")]
-    public function sendAgreement(Request $request, EntityManagerInterface $entityManager, CohortInternshipRepository $cohortInternshipRepository, TraineeRepository $traineeRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
+    public function sendAgreement(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, CohortInternshipRepository $cohortInternshipRepository, TraineeRepository $traineeRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -408,7 +548,7 @@ class DefaultController extends AbstractController
                         $nomFichier = "Convention_de_stage_" . strtoupper(str_replace(" ", "-", $trainee->getLastName())) . "_" . ucfirst(str_replace(" ", "-", $trainee->getFirstName())) . '.' . $file->guessExtension();
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
-                            $this->addFlash('info', 'Convention de stage envoyée');
+                            $this->addFlash('info', $translator->trans('internship.sent_agreement', [], null, $request->getLocale()));
 
                             $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
                             $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
@@ -424,51 +564,50 @@ class DefaultController extends AbstractController
 
                             $entityManager->flush();
                         } catch (FileException $e) {
-                            $this->addFlash('danger', 'Erreur lors de l\'envoi de la convention: ' . $e->getMessage());
+                            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()) . " " . $e->getMessage());
                         }
                         return $this->json(
                             [
                                 'success' => true,
-                                'message' => "Le fichier a été envoyé avec succès !",
                             ],
                             status: Response::HTTP_OK
                         );
                     }
+                    $this->addFlash('danger', $translator->trans('global.exceptions.format.content', ['%formats%' => 'PDF'], null, $request->getLocale()));
                     return $this->json(
                         [
                             'success' => false,
-                            'message' => "Le fichier n'est pas un fichier PDF...",
                         ],
                         status: Response::HTTP_BAD_REQUEST
                     );
                 }
+                $this->addFlash('danger', $translator->trans('global.exceptions.size.content', ['%size%' => '50', '%currentSize%' => $file->getSize()], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => false,
-                        'message' => "Le fichier ne doit pas dépasser 50Mo... (" . $file->getSize() . " octets)",
                     ],
                     status: Response::HTTP_BAD_REQUEST
                 );
             }
+            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le fichier ne semble pas avoir été téléchargé correctement...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
     }
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_certificate', name: 'app_send_certificate', methods: "POST")]
-    public function sendCertificate(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
+    public function sendCertificate(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -481,7 +620,7 @@ class DefaultController extends AbstractController
                         $nomFichier = "Attestation_de_stage_" . strtoupper(str_replace(" ", "-", $trainee->getLastName())) . "_" . ucfirst(str_replace(" ", "-", $trainee->getFirstName())) . '.' . $file->guessExtension();
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
-                            $this->addFlash('info', 'Attestation de stage envoyée');
+                            $this->addFlash('info', $translator->trans('internship.sent_certificate', [], null, $request->getLocale()));
 
                             $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
                             $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
@@ -490,44 +629,43 @@ class DefaultController extends AbstractController
 
                             $entityManager->flush();
                         } catch (FileException $e) {
-                            $this->addFlash('danger', 'Erreur lors de l\'envoi de l\'attestation de stage: ' . $e->getMessage());
+                            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()) . " " . $e->getMessage());
                         }
                         return $this->json(
                             [
                                 'success' => true,
-                                'message' => "Le fichier a été envoyé avec succès !",
                             ],
                             status: Response::HTTP_OK
                         );
                     }
+                    $this->addFlash('danger', $translator->trans('global.exceptions.format.content', ['%formats%' => 'PDF'], null, $request->getLocale()));
                     return $this->json(
                         [
                             'success' => false,
-                            'message' => "Le fichier n'est pas un fichier PDF...",
                         ],
                         status: Response::HTTP_BAD_REQUEST
                     );
                 }
+                $this->addFlash('danger', $translator->trans('global.exceptions.size.content', ['%size%' => '50', '%currentSize%' => $file->getSize()], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => false,
-                        'message' => "Le fichier ne doit pas dépasser 50Mo... (" . $file->getSize() . " octets)",
                     ],
                     status: Response::HTTP_BAD_REQUEST
                 );
             }
+            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le fichier ne semble pas avoir été téléchargé correctement...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
@@ -535,7 +673,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_evaluation', name: 'app_send_evaluation', methods: "POST")]
-    public function sendEvaluation(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
+    public function sendEvaluation(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CohortInternshipRepository $cohortInternshipRepository, TraineeInternshipRepository $traineeInternshipRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -548,7 +686,7 @@ class DefaultController extends AbstractController
                         $nomFichier = "Evaluation_de_stage_" . strtoupper(str_replace(" ", "-", $trainee->getLastName())) . "_" . ucfirst(str_replace(" ", "-", $trainee->getFirstName())) . '.' . $file->guessExtension();
                         try {
                             $file->move($this->getParameter('internships_directory') . "/tmp", $nomFichier);
-                            $this->addFlash('info', 'Évaluation de stage envoyée');
+                            $this->addFlash('info', $translator->trans('internship.sent_evaluation', [], null, $request->getLocale()));
 
                             $period = $cohortInternshipRepository->findOneBy(['uuid' => $uuid]);
                             $internship = $traineeInternshipRepository->findOneBy(['trainee' => $trainee, 'cohort_internship' => $period]);
@@ -557,44 +695,43 @@ class DefaultController extends AbstractController
 
                             $entityManager->flush();
                         } catch (FileException $e) {
-                            $this->addFlash('danger', 'Erreur lors de l\'envoi de l\'évaluation: ' . $e->getMessage());
+                            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()) . " " . $e->getMessage());
                         }
                         return $this->json(
                             [
                                 'success' => true,
-                                'message' => "Le fichier a été envoyé avec succès !",
                             ],
                             status: Response::HTTP_OK
                         );
                     }
+                    $this->addFlash('danger', $translator->trans('global.exceptions.format.content', ['%formats%' => 'PDF'], null, $request->getLocale()));
                     return $this->json(
                         [
                             'success' => false,
-                            'message' => "Le fichier n'est pas un fichier PDF...",
                         ],
                         status: Response::HTTP_BAD_REQUEST
                     );
                 }
+                $this->addFlash('danger', $translator->trans('global.exceptions.size.content', ['%size%' => '50', '%currentSize%' => $file->getSize()], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => false,
-                        'message' => "Le fichier ne doit pas dépasser 50Mo... (" . $file->getSize() . " octets)",
                     ],
                     status: Response::HTTP_BAD_REQUEST
                 );
             }
+            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le fichier ne semble pas avoir été téléchargé correctement...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
@@ -602,7 +739,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_message', name: 'app_send_message', methods: "POST")]
-    public function sendMessage(Request $request, UserRepository $userRepository, CohortRepository $cohortRepository, MessageRepository $messageRepository, EntityManagerInterface $entityManager): Response
+    public function sendMessage(TranslatorInterface $translator, Request $request, UserRepository $userRepository, CohortRepository $cohortRepository, MessageRepository $messageRepository, EntityManagerInterface $entityManager): Response
     {
         $notificationNewMessage = new Notification();
         $notificationNewMessage->setDate(new DateTimeImmutable());
@@ -667,7 +804,7 @@ class DefaultController extends AbstractController
                 $message->setDocument($file['name']);
                 $message->setMimeType($file['type']);
             } else {
-                $this->addFlash('danger', 'Erreur lors de l\'envoi du fichier...');
+                $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
             }
         }
         $entityManager->persist($message);
@@ -688,7 +825,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_tp', name: 'app_send_tp', methods: "POST")]
-    public function sendTp(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, CourseResourceRepository $courseResourceRepository, NotificationRepository $notificationRepository, UserRepository $userRepository): Response
+    public function sendTp(TranslatorInterface $translator, Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager, CourseResourceRepository $courseResourceRepository, NotificationRepository $notificationRepository, UserRepository $userRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -720,57 +857,51 @@ class DefaultController extends AbstractController
                             $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
                             $notificationRepository->deleteANotification($courseResource->getCourse()->getModule()->getLabel(), null, "homework_to_do", $currentUser->getId());
 
-                            $this->addFlash('notice', 'Travail envoyé');
+                            $this->addFlash('notice', $translator->trans('global.file_sent', [], null, $request->getLocale()));
                             return $this->json(
                                 [
                                     'success' => true,
-                                    'message' => "Le fichier a été envoyé avec succès !",
                                 ],
                                 status: Response::HTTP_OK
                             );
                         } catch (FileException $e) {
-                            $this->addFlash('danger', 'Erreur lors de l\'envoi du travail: ' . $e->getMessage());
+                            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()) . $e->getMessage());
                         }
                         return $this->json(
                             [
                                 'success' => false,
-                                'message' => "Erreur lors de l\'envoi du travail",
                             ],
-                            status: Response::HTTP_OK
+                            status: Response::HTTP_BAD_REQUEST
                         );
                     }
-                    $this->addFlash('danger', "Le fichier n'est pas un fichier PDF...");
+                    $this->addFlash('danger', $translator->trans('global.exceptions.format.content', ['%formats%' => 'PDF'], null, $request->getLocale()));
                     return $this->json(
                         [
                             'success' => false,
-                            'message' => "Le fichier n'est pas un fichier PDF...",
                         ],
                         status: Response::HTTP_BAD_REQUEST
                     );
                 }
-                $this->addFlash('danger', "Le fichier ne doit pas dépasser 50Mo... (" . $file->getSize() . " octets)");
+                $this->addFlash('danger', $translator->trans('global.exceptions.size.content', ['%size%' => '50', '%currentSize%' => $file->getSize()], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => false,
-                        'message' => "Le fichier ne doit pas dépasser 50Mo... (" . $file->getSize() . " octets)",
                     ],
                     status: Response::HTTP_BAD_REQUEST
                 );
             }
-            $this->addFlash('danger', "Le fichier ne semble pas avoir été téléchargé correctement...");
+            $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le fichier ne semble pas avoir été téléchargé correctement...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
-        $this->addFlash('danger', "Veuillez réessayer plus tard...");
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
@@ -778,7 +909,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/save_course_to_favorites/{course}', name: 'app_add_course_favorite', methods: "POST")]
-    public function saveCourseToFavorites(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CourseRepository $courseRepository, string $course): Response
+    public function saveCourseToFavorites(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, CourseRepository $courseRepository, string $course): Response
     {
         if ($request->isXmlHttpRequest()) {
             $course = $courseRepository->findOneBy(['link' => $course]);
@@ -788,29 +919,26 @@ class DefaultController extends AbstractController
                 $favorite->setTrainee($traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]));
                 $entityManager->persist($favorite);
                 $entityManager->flush();
-                $this->addFlash('notice', "Le cours a été supprimé de vos favoris !");
+                $this->addFlash('notice', $translator->trans('course.action.favorite.added', [], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => true,
-                        'message' => "Le cours a été ajouté à vos favoris !",
                     ],
                     status: Response::HTTP_OK
                 );
             }
-            $this->addFlash('danger', "Le cours n'existe pas...");
+            $this->addFlash('danger', $translator->trans('global.exceptions.404.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le cours n'existe pas...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
-        $this->addFlash('danger', "Veuillez réessayer plus tard...");
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
@@ -818,7 +946,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/remove_course_from_favorites/{course}', name: 'app_remove_course_favorite', methods: "POST")]
-    public function removeCourseFromFavorites(Request $request, EntityManagerInterface $entityManager, TraineeCourseFavoriteRepository $traineeCourseFavoriteRepository, TraineeRepository $traineeRepository, CourseRepository $courseRepository, string $course): Response
+    public function removeCourseFromFavorites(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, TraineeCourseFavoriteRepository $traineeCourseFavoriteRepository, TraineeRepository $traineeRepository, CourseRepository $courseRepository, string $course): Response
     {
         if ($request->isXmlHttpRequest()) {
             $course = $courseRepository->findOneBy(['link' => $course]);
@@ -826,29 +954,26 @@ class DefaultController extends AbstractController
                 $favorite = $traineeCourseFavoriteRepository->findOneBy(["course" => $course, "trainee" => $traineeRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()])]);
                 $entityManager->remove($favorite);
                 $entityManager->flush();
-                $this->addFlash('notice', "Le cours a été supprimé de vos favoris !");
+                $this->addFlash('notice', $translator->trans('course.action.favorite.deleted', [], null, $request->getLocale()));
                 return $this->json(
                     [
                         'success' => true,
-                        'message' => "Le cours a été supprimé de vos favoris !",
                     ],
                     status: Response::HTTP_OK
                 );
             }
-            $this->addFlash('danger', "Le cours n'existe pas...");
+            $this->addFlash('danger', $translator->trans('global.exceptions.404.content', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => false,
-                    'message' => "Le cours n'existe pas...",
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
         }
-        $this->addFlash('danger', "Veuillez réessayer plus tard...");
+        $this->addFlash('danger', $translator->trans('global.exceptions.other.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Veuillez réessayer plus tard...",
             ],
             status: Response::HTTP_NOT_FOUND
         );
@@ -856,7 +981,7 @@ class DefaultController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
     #[Route('/save_completed_tutorial', name: 'app_save_completed_tutorial', methods: "POST")]
-    public function saveCompletedTutorial(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
+    public function saveCompletedTutorial(TranslatorInterface $translator, Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository): Response
     {
         if ($request->isXmlHttpRequest()) {
             $tutorials = $request->request->get('tours');
@@ -864,21 +989,20 @@ class DefaultController extends AbstractController
             $trainee->setTutorialCompleted($tutorials);
             $entityManager->persist($trainee);
             $entityManager->flush();
+            $this->addFlash('info', $translator->trans('tourguide.mark_as_done', [], null, $request->getLocale()));
             return $this->json(
                 [
                     'success' => true,
-                    'message' => "Le tutoriel a été marqué comme terminé !",
                 ],
                 status: Response::HTTP_OK
             );
         }
-        $this->addFlash('danger', "Une erreur s'est produite...");
+        $this->addFlash('danger', $translator->trans('global.exceptions.400.content', [], null, $request->getLocale()));
         return $this->json(
             [
                 'success' => false,
-                'message' => "Une erreur s'est produite...",
             ],
-            status: Response::HTTP_NOT_FOUND
+            status: Response::HTTP_BAD_REQUEST
         );
     }
 }

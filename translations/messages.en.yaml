@@ -9,7 +9,14 @@ global:
   language_english:
     text: "English"
     code: "en"
+  file_sent:
+    "File sent"
   exceptions:
+    400:
+      title:
+        "Bad request"
+      message:
+        "The request is invalid, please try again later."
     403:
       title:
         "Access denied"
@@ -25,6 +32,16 @@ global:
         "Internal server error"
       message:
         "An error occurred on the server, please try again later."
+    format:
+      title:
+        "Invalid file format"
+      content:
+        "Invalid file format, please try again with a valid file format. (Accepted formats: %formats%)"
+    size:
+      title:
+        "Invalid file size"
+      content:
+        "Invalid file size, please try again with a file size less than %size%MB. (Current file size: %currentSize%)"
     other:
       title:
         "An error occurred"
@@ -60,6 +77,8 @@ global:
     "Export"
   btn_verify:
     "Verify"
+  btn_consult:
+    "Consult"
   day:
     " %time% day ago"
   days:
@@ -120,6 +139,10 @@ global:
     "Cohorts"
   cohort:
     "Cohort"
+  message_sent:
+    "Message sent"
+  error:
+    "An error occurred, please try again later."
 
 header:
   home:
@@ -225,6 +248,12 @@ course:
   filtered:
     no_content:
       "No courses found, try to change your search criteria..."
+  action:
+    favorite:
+      added:
+        "Added course to favorite successfully"
+      deleted:
+        "Deleted course from favorite successfully"
 
 account:
   personal_informations:
@@ -324,6 +353,12 @@ internship:
     "Internship End"
   no_internship:
     "No internship for your cohort"
+  sent_agreement:
+    "Agreement sent"
+  sent_certificate:
+    "Certificate sent"
+  sent_evaluation:
+    "Evaluation sent"
 
 footer:
   text:
@@ -336,8 +371,21 @@ footer:
 chatbot:
   welcome:
     "Welcome to the chatbot! How can I assist you?<br><small>Type <code>/help</code> to see the list of possible actions.</small>"
+  ia:
+    system: 
+      "Always reply in English (do not refer to it in your response).
+      If a / is present, followed directly by a word (example: /help), warn the user to disable AI mode.
+      You are an AI integrated into a chatbot on a training website.
+      You have to answer questions about courses, modules, users, etc.
+      You will end your first message by stating that you are an AI, and therefore you can make mistakes (italicized text and underlined text)."
+    not_available:
+      "Sorry, the AI is not available at the moment. Please try again later."
   placeholder:
     "What are you looking for?"
+  found:
+    "Here's what I found for you in the <b>%subject%</b> with the keywords <b>%keywords%</b>:"
+  not_found:
+    "Sorry, I couldn't find anything for you with the keywords <b>%keywords%</b>..."
   didnt_understand:
     "I didn't understand your request, please rephrase."
   keys:
@@ -670,6 +718,8 @@ administration:
         "<b>%percentage%%</b> satisfaction rate"
 
 tourguide:
+  mark_as_done:
+    "Tutorial completed, you can replay it at any time from the account section."
   index:
     trainee:
       navbar:

@@ -37,6 +37,7 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
             'notificationsInternships' => $this->globalDataService->getNotificationsInternships($this->getCurrentUser()),
             'notificationsNewCourses' => $this->globalDataService->getNotificationsNewCourses($this->getCurrentUser()),
             'platformName' => $this->globalDataService->getPlatformName(),
+            'getServerAI' => $this->globalDataService->getServerAI(),
             'platformLogoName' => $this->globalDataService->getPlatformLogoName(),
             'platformLogoPath' => $this->globalDataService->getPlatformLogoPath(),
         ];

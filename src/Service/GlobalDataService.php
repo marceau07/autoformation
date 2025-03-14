@@ -6,14 +6,17 @@ use App\Entity\FeedbackCategory;
 use App\Entity\Notification;
 use App\Entity\SiteSettings;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class GlobalDataService
 {
     private $entityManager;
+    private $aiUrl;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params)
     {
         $this->entityManager = $entityManager;
+        $this->aiUrl = $params->get('ai_url');
     }
 
     public function getFeedbackCategories()
@@ -53,6 +56,11 @@ class GlobalDataService
     public function getPlatformName()
     {
         return strtoupper($this->entityManager->getRepository(SiteSettings::class)->find(1)->getPlatformName());
+    }
+
+    public function getServerAI()
+    {
+        return $this->aiUrl;
     }
 
     public function getPlatformLogoName()
