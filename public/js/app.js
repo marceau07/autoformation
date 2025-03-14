@@ -30,7 +30,7 @@ function sendFeedback() {
             }
         },
         error: function (e) {
-            console.error(e.getMessage());
+            console.error(e);
         },
     });
     $('#form_feedback')[0].reset();
