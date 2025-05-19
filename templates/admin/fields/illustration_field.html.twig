@@ -1,0 +1,16 @@
+{% trans_default_domain 'admin' %}
+
+{% if field.value %}
+  {% set extension = field.value|split('.')|last|lower %}
+  {% set basePath = field.customOptions.get('basePath') %}
+
+  {% if extension in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
+    <img src="{{ asset(basePath ~ '/' ~ field.value) }}" alt="" style="max-width: 200px; max-height: 150px;" />
+  {% elseif extension in ['mp4', 'webm'] %}
+    <video src="{{ asset(basePath ~ '/' ~ field.value) }}" style="max-width: 200px; max-height: 150px;" autoplay muted loop></video>
+  {% else %}
+    <span class="badge text-bg-danger">{{ 'admin.global.file.not_supported'|trans }}</span>
+  {% endif %}
+{% else %}
+  <span class="text-muted">{{ 'admin.global.file.no_file'|trans }}</span>
+{% endif %}

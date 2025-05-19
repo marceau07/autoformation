@@ -1,13 +1,14 @@
+{% trans_default_domain 'admin' %}
 {% set title = '' %}
 {% set color = 'light' %}
 {% set disabled = true %}
 
 {% if entity.instance.agreement == null or entity.instance.agreement == false %}
-  {% set title = "Vous devez d'abord renseigner la convention de stage" %}
+  {% set title = 'admin.pages.trainees_internships.asking_elements.missing_agreement'|trans %}
   {% set color = 'light' %}
   {% set disabled = true %}
 {% elseif entity.instance.agreement %}
-  {% set title = 'Cliquez ici pour demander les documents de stage' %}
+  {% set title = 'admin.pages.trainees_internships.asking_elements.label'|trans %}
   {% set color = 'primary' %}
   {% set disabled = false %}
 {% endif %}

@@ -1,4 +1,10 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+{# Permet a twig de récupérer le bon fichier de traduction #}
+{% trans_default_domain 'admin' %}
+
+{% block page_title %}
+  {{ ('admin.title.dashboard')|trans }}
+{% endblock %}
 
 {% block head_stylesheets %}
   {{ parent() }}
@@ -17,20 +23,20 @@
   <div class="container">
     <div class="col-12">
       <div class="row">
-        <h1 class="text-center">Dashboard</h1>
+        <h1 class="text-center">{{ 'admin.dashboard.title'|trans }}</h1>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
-            <div class="pt-3 px-3 h5">Gestion des cohortes</div>
+            <div class="pt-3 px-3 h5">{{ 'admin.dashboard.management.cohorts.label'|trans }}</div>
             <hr />
             <div class="pb-3 px-3">
               <div class="row">
                 <div class="col-6">
-                  <div class="h6">Les cohortes actives</div>
+                  <div class="h6">{{ 'admin.dashboard.management.cohorts.active.label'|trans }}</div>
                 </div>
                 <div class="col-6">
-                  <div class="h6">Les cohortes à venir</div>
+                  <div class="h6">{{ 'admin.dashboard.management.cohorts.uncoming.label'|trans }}</div>
                 </div>
               </div>
               <div class="row">
@@ -38,38 +44,38 @@
                   <div class="h-100 p-2">
                     {% if activeCohorts is defined and activeCohorts is not empty %}
                       {% for cohort in activeCohorts %}
-                        <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                        <span><b><a href="{{ path('admin_cohort_detail', { entityId: cohort.id }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
                         <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
                       {% endfor %}
                     {% else %}
-                      <span>Aucune cohorte en cours de formation.</span>
+                      <span>{{ 'admin.dashboard.management.cohorts.active.no_cohort'|trans }}</span>
                     {% endif %}
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="row overflow-auto" style="height:8vh;">
                     <div class="h-100 p-2">
-                      {% if incomingCohorts is defined and incomingCohorts is not empty %}
-                        {% for cohort in incomingCohorts %}
-                          <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                      {% if uncomingCohorts is defined and uncomingCohorts is not empty %}
+                        {% for cohort in uncomingCohorts %}
+                          <span><b><a href="{{ path('admin_cohort_detail', { entityId: cohort.id }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
                           <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
                         {% endfor %}
                       {% else %}
-                        <span>Aucune cohorte à venir.</span>
+                        <span>{{ 'admin.dashboard.management.cohorts.uncoming.no_cohort'|trans }}</span>
                       {% endif %}
                     </div>
                   </div>
                   <hr />
-                  <div class="h6">Les cohortes sorties</div>
+                  <div class="h6">{{ 'admin.dashboard.management.cohorts.inactive.label'|trans }}</div>
                   <div class="row overflow-auto" style="height:5vh;">
                     <div class="h-100 p-2">
                       {% if unactiveCohorts is defined and unactiveCohorts is not empty %}
                         {% for cohort in unactiveCohorts %}
-                          <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
+                          <span><b><a href="{{ path('admin_cohort_detail', { entityId: cohort.id }) }}">{{ cohort.name }}</a></b> - {{ cohort.startDate|date('d/m/Y') }}</span>
                           <p>{{ cohort.trainer.lastname ~ ' ' ~ cohort.trainer.firstname }}</p>
                         {% endfor %}
                       {% else %}
-                        <span>Aucune cohorte précédente.</span>
+                        <span>{{ 'admin.dashboard.management.cohorts.inactive.no_cohort'|trans }}</span>
                       {% endif %}
                     </div>
                   </div>
@@ -82,7 +88,7 @@
       <div class="row mt-3">
         <div class="col-6">
           <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
-            <div class="pt-3 px-3 h5">Gestion des stages</div>
+            <div class="pt-3 px-3 h5">{{ 'admin.dashboard.management.internships.label'|trans }}</div>
             <hr />
             <div class="pb-3 px-3">
               <div class="row">
@@ -91,15 +97,22 @@
                     {% if activeCohorts is defined and activeCohorts is not empty %}
                       {% for cohort in activeCohorts %}
                         {% set cohort_documents = cohort.documents|json_decode|json_decode %}
-                        <span><b><a href="{{ path('app_cohort_show', { uuid: cohort.uuid }) }}">{{ cohort.name }}</a></b></span>
-                        {% for internship in cohort_documents.internships %}
+                        <span><b><a href="{{ path('admin_cohort_detail', { entityId: cohort.id }) }}">{{ cohort.name }}</a></b></span>
+                        {# TODO: changer pour prendre le contenu stocké dans la bdd plutôt que dans le JSON #}
+                        {% if cohort_documents.internships is defined and cohort_documents.internships is not empty %}
+                          {% for internship in cohort_documents.internships %}
+                            <div class="ps-3">
+                              <span>{{ internship.label }} - {{ internship.start_date|date('d/m/Y') }} au {{ internship.finish_date|date('d/m/Y') }}</span>
+                            </div>
+                          {% endfor %}
+                        {% else %}
                           <div class="ps-3">
-                            <span>{{ internship.label }} - {{ internship.start_date|date('d/m/Y') }} au {{ internship.finish_date|date('d/m/Y') }}</span>
+                            <span>{{ 'admin.dashboard.management.internships.no_internship_planned'|trans }}</span>
                           </div>
-                        {% endfor %}
+                        {% endif %}
                       {% endfor %}
                     {% else %}
-                      <span>Aucun stage en cours.</span>
+                      <span>{{ 'admin.dashboard.management.internships.no_internship'|trans }}</span>
                     {% endif %}
                   </div>
                 </div>
@@ -109,7 +122,7 @@
         </div>
         <div class="col-6">
           <div class="border border-top-0" style="border-top: 5px solid var(--coul-principale) !important; height: 300px; border-radius:10px;">
-            <div class="pt-3 px-3 h5">Notifications</div>
+            <div class="pt-3 px-3 h5">{{ 'admin.dashboard.management.notifications.label'|trans }}</div>
             <hr />
             <div class="pb-3 px-3">
               <div class="row">
@@ -120,14 +133,16 @@
                       {% for notification in notifications %}
                         {% if notification.category == 'new_message' %}
                           <p>
-                            <i class="fa-solid fa-envelope"></i>&nbsp;Nouveau message reçu de la part de {{ notification.origin }}
+                            <i class="fa-solid fa-envelope"></i>&nbsp;{{ 'admin.dashboard.management.notifications.new_message'|trans({ '%from%': notification.origin }) }}
                           </p>
                         {% elseif notification.category == 'new_internship' %}
                           <p>
-                            <i class="fa-solid fa-file"></i>&nbsp;&nbsp;Nouveau document de stage reçu de {{ notification.origin }} concernant: {{ notification.message }}
+                            <i class="fa-solid fa-file"></i>{{ 'admin.dashboard.management.notifications.new_internship'|trans({ '%from%': notification.origin, '%about%': notification.message })|raw }}
                           </p>
                         {% endif %}
                       {% endfor %}
+                    {% else %}
+                      <span>{{ 'admin.dashboard.management.notifications.no_notification'|trans }}</span>
                     {% endif %}
                   </div>
                 </div>

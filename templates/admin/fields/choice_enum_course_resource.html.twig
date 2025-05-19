@@ -1,0 +1,7 @@
+{% trans_default_domain 'admin' %}
+
+{% if field.value is not null %}
+  {{ ('admin.pages.courses_resources.columns.type.options.' ~ field.value)|trans }}
+{% else %}
+  -
+{% endif %}
