@@ -45,7 +45,6 @@
     <link rel="stylesheet" href="{{ asset('css/presentation.css') }}" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    {# {{ importmap('app') }} #}
   </head>
 
   <body>
@@ -73,18 +72,15 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') is same as('en') ? 'global.language_english.code'|trans:'global.language_french.code'|trans }}</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
-                  <li>
-                    <a class="dropdown-item" href="{{ app.request.requestUri|replace({ '/en/': '/fr/' }) }}">{{ 'global.language_french.text'|trans }}</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="{{ app.request.requestUri|replace({ '/fr/': '/en/' }) }}">{{ 'global.language_english.text'|trans }}</a>
-                  </li>
+                  {% for switch in locale_switch_links() %}
+                    <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
+                  {% endfor %}
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link form-check form-switch" href="#">
+                <a class="nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
                     <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
-                    <label class="form-check-label" for="form_dark_mode">Dark mode</label>
+                    <label class="form-check-label" for="form_dark_mode">{{ 'header.personal.dark_mode'|trans }}</label>
                 </a>
               </li>
               <li class="nav-item">

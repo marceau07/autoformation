@@ -18,55 +18,17 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retrieve all messages between two users (one Trainer and one Trainee)
+     * Retrieve all messages between two users
      * 
-     * @param string $uuid      The UUID of the Trainer formatted to string
-     * @param string $uuid2     The UUID of the Trainee formatted to string
+     * @param string $uuid      The UUID of the People logged in formatted to string
+     * @param string $uuid2     The UUID of the People formatted to string
      */
-    public function getMessages(string $uuid, string $uuid2)
+    public function getMessagesBetweenPeople(string $uuid, string $uuid2)
     {
         return $this->createQueryBuilder('m')
-            ->innerJoin('App\Entity\Trainer', 't', 'WITH', 't.id = m.send_trainer OR t.id = m.trainer')
-            ->innerJoin('App\Entity\Trainee', 't2', 'WITH', 't2.id = m.send_trainee OR t2.id = m.trainee')
-            ->where('(t.uuid = :uuid AND t2.uuid = :uuid2) OR (t.uuid = :uuid2 AND t2.uuid = :uuid)')
-            ->setParameter('uuid', $uuid)
-            ->setParameter('uuid2', $uuid2)
-            ->orderBy('m.date', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Retrieve all messages between two users (both Trainers)
-     * 
-     * @param string $uuid      The UUID of the Trainer logged in formatted to string
-     * @param string $uuid2     The UUID of the Trainer formatted to string
-     */
-    public function getMessagesBetweenTrainers(string $uuid, string $uuid2)
-    {
-        return $this->createQueryBuilder('m')
-            ->leftJoin('App\Entity\Trainer', 't', 'WITH', 't.id = m.send_trainer')
-            ->leftJoin('App\Entity\Trainer', 't2', 'WITH', 't2.id = m.trainer')
-            ->where('(t.uuid = :uuid AND t2.uuid = :uuid2) OR (t.uuid = :uuid2 AND t2.uuid = :uuid)')
-            ->setParameter('uuid', $uuid)
-            ->setParameter('uuid2', $uuid2)
-            ->orderBy('m.date', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Retrieve all messages between two users (both Trainees)
-     * 
-     * @param string $uuid      The UUID of the Trainee logged in formatted to string
-     * @param string $uuid2     The UUID of the Trainee formatted to string
-     */
-    public function getMessagesBetweenTrainees(string $uuid, string $uuid2)
-    {
-        return $this->createQueryBuilder('m')
-            ->leftJoin('App\Entity\Trainee', 't', 'WITH', 't.id = m.send_trainee')
-            ->leftJoin('App\Entity\Trainee', 't2', 'WITH', 't2.id = m.trainee')
-            ->where('(t.uuid = :uuid AND t2.uuid = :uuid2) OR (t.uuid = :uuid2 AND t2.uuid = :uuid)')
+            ->leftJoin('App\Entity\User', 'u', 'WITH', 'u.id = m.send_people')
+            ->leftJoin('App\Entity\User', 'u2', 'WITH', 'u2.id = m.people')
+            ->where('(u.uuid = :uuid AND u2.uuid = :uuid2) OR (u.uuid = :uuid2 AND u2.uuid = :uuid)')
             ->setParameter('uuid', $uuid)
             ->setParameter('uuid2', $uuid2)
             ->orderBy('m.date', 'ASC')
