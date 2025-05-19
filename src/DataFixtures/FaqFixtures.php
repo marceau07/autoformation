@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Faq;
+use App\Entity\Sector;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -19,7 +20,7 @@ class FaqFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < self::NB_FAQ; $i++) {
             $faq = new Faq();
-            $faq->setSector(($faker->boolean(80)) ? $this->getReference(SectorFixtures::SECTOR_REFERENCE_TAG . rand(0, SectorFixtures::NB_SECTOR - 1)) : null);
+            $faq->setSector(($faker->boolean(80)) ? $this->getReference(SectorFixtures::SECTOR_REFERENCE_TAG . rand(0, SectorFixtures::NB_SECTOR - 1), Sector::class) : null);
             $faq->setTheme($faker->randomElement(['global', 'salle', 'cuisine', 'bureau', 'extérieur', 'parking', 'autre']));
             $faq->setTitle($faker->title());
             $faq->setContent($faker->paragraphs(3, true));
@@ -33,7 +34,7 @@ class FaqFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             SectorFixtures::class

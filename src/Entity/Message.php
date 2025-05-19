@@ -6,6 +6,7 @@ use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[Broadcast]
 class Message
@@ -21,21 +22,13 @@ class Message
     #[ORM\Column]
     private ?\DateTimeImmutable $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sent_messages_trainer')]
-    # The trainer who sent the message
-    private ?User $send_trainer = null;
+    #[ORM\ManyToOne(inversedBy: 'sent_messages_people')]
+    # The people who sent the message
+    private ?User $send_people = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sent_messages_trainee')]
-    # The trainee who sent the message
-    private ?User $send_trainee = null;
-
-    #[ORM\ManyToOne(inversedBy: 'received_messages_trainee')]
-    # The trainee who received the message
-    private ?User $trainee = null;
-
-    #[ORM\ManyToOne(inversedBy: 'received_messages_trainer')]
-    # The trainer who received the message
-    private ?User $trainer = null;
+    #[ORM\ManyToOne(inversedBy: 'received_messages_people')]
+    # The people who received the message
+    private ?User $people = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     # The cohort to which the message belongs
@@ -46,6 +39,12 @@ class Message
 
     #[ORM\ManyToOne(targetEntity: self::class)]
     private ?self $original_message = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $document = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $mime_type = null;
 
     public function __construct(bool $readed = false)
     {
@@ -81,50 +80,26 @@ class Message
         return $this;
     }
 
-    public function getSendTrainer(): ?User
+    public function getSendPeople(): ?User
     {
-        return $this->send_trainer;
+        return $this->send_people;
     }
 
-    public function setSendTrainer(?User $send_trainer): static
+    public function setSendPeople(?User $send_people): static
     {
-        $this->send_trainer = $send_trainer;
+        $this->send_people = $send_people;
 
         return $this;
     }
 
-    public function getSendTrainee(): ?User
+    public function getPeople(): ?User
     {
-        return $this->send_trainee;
+        return $this->people;
     }
 
-    public function setSendTrainee(?User $send_trainee): static
+    public function setPeople(?User $people): static
     {
-        $this->send_trainee = $send_trainee;
-
-        return $this;
-    }
-
-    public function getTrainee(): ?User
-    {
-        return $this->trainee;
-    }
-
-    public function setTrainee(?User $trainee): static
-    {
-        $this->trainee = $trainee;
-
-        return $this;
-    }
-
-    public function getTrainer(): ?User
-    {
-        return $this->trainer;
-    }
-
-    public function setTrainer(?User $trainer): static
-    {
-        $this->trainer = $trainer;
+        $this->people = $people;
 
         return $this;
     }
@@ -161,6 +136,30 @@ class Message
     public function setOriginalMessage(?self $original_message): static
     {
         $this->original_message = $original_message;
+
+        return $this;
+    }
+
+    public function getDocument(): ?string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?string $document): static
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mime_type;
+    }
+
+    public function setMimeType(?string $mime_type): static
+    {
+        $this->mime_type = $mime_type;
 
         return $this;
     }

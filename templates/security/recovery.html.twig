@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Regénération d'un code d'accès temporaire
+  {{ 'recovery.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -10,10 +10,10 @@
 
 {% block body %}
   <div class="container justify-content-center d-flex">
-    <div class="row form-security">
+    <div class="row form-security mx-2 p-4">
       <div class="col-12 text-center">
-        <img src="{{ asset('/images/adrar_epa_logo.webp') }}" alt="Logo de l'ADRAR" width="150" />
-        <h1 class="h3 mt-5 font-weight-700">Regénération d'un code d'accès temporaire</h1>
+        <img src="{{ asset('/website/' ~ platformLogoPath) }}" alt="{{ platformLogoName }}" width="150" />
+        <h1 class="h3 mt-5 font-weight-700">{{ 'recovery.title'|trans }}</h1>
       </div>
       <div class="col-12">
         <form method="post">
@@ -28,13 +28,13 @@
           {% endfor %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('recovery') }}" />
           <div>
-            <label for="form_forgotten_username" class="text-white">Nom d'utilisateur associé à la démarche</label>
+            <label for="form_forgotten_username">{{ 'recovery.username'|trans }}</label>
             <input type="text" name="form_forgotten_username" placeholder="johndoe{{ "now"|date('y') }}">
           </div>
           <p>
-            Là par erreur et vous avez un compte ? <a class="link link-opacity-75 link-opacity-100-hover" href="{{ path('app_login') }}">Connectez-vous !</a>
+            {{ 'signup.return'|trans({'%path%': path('app_login')})|raw }}
           </p>
-          <button class="btn btn-lg btn-primary w-100" type="submit">Récupérer</button>
+          <button class="btn btn-lg btn-primary w-100" type="submit">{{ 'global.btn_retrieve'|trans }}</button>
         </form>
       </div>
     </div>

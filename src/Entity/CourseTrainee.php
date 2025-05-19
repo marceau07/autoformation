@@ -6,6 +6,7 @@ use App\Repository\CourseTraineeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CourseTraineeRepository::class)]
 #[ORM\UniqueConstraint(name: "unique_course_trainee", columns: ["course_id", "trainee_id"])]
 #[Broadcast]

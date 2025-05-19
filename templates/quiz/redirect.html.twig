@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ 'quiz.redirect.title'|trans }}</title>
+    <script type="text/javascript">
+      window.onload = function () {
+        // Redirige vers le schéma personnalisé
+        window.location.href = 'paf://quiz/{{ uuid }}'
+      
+        // Si l'application n'est pas ouverte au bout de 2 secondes, redirige vers le store ou une autre page.
+        setTimeout(function () {
+          window.location.href = 'https://play.google.com/store/apps/details?id=dev.adrar.paf&pcampaignid=web_share'
+        }, 2000)
+      }
+    </script>
+  </head>
+  <body>
+    <p>{{ 'quiz.redirect.content'|trans }}</p>
+  </body>
+</html>

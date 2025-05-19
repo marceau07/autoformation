@@ -16,10 +16,10 @@
 
 .feedback-button:hover {
     cursor: pointer;
-    color: var(--col-primary-dark);
-    background-color: var(--col-primary);
-    border: 1px solid var(--col-primary-dark);
+    color: var(--coul-foncee);
+    background-color: var(--coul-claire);
+    border: 1px solid var(--coul-foncee);
 }
 [data-theme="dark"] .feedback-button:hover {
-    border: 1px solid var(--col-primary) !important;
+    border: 1px solid var(--coul-claire) !important;
 }

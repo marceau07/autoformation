@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: SectorRepository::class)]
 #[Broadcast]
 class Sector
@@ -27,15 +28,15 @@ class Sector
     private Collection $faqs;
 
     /**
-     * @var Collection<int, Trainer>
+     * @var Collection<int, Responsible>
      */
-    #[ORM\OneToMany(targetEntity: Trainer::class, mappedBy: 'sector')]
-    private Collection $trainers;
+    #[ORM\OneToMany(targetEntity: Responsible::class, mappedBy: 'sector')]
+    private Collection $responsibles;
 
     public function __construct()
     {
         $this->faqs = new ArrayCollection();
-        $this->trainers = new ArrayCollection();
+        $this->responsibles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,32 +99,37 @@ class Sector
     }
 
     /**
-     * @return Collection<int, Trainer>
+     * @return Collection<int, Responsible>
      */
-    public function getTrainers(): Collection
+    public function getResponsibles(): Collection
     {
-        return $this->trainers;
+        return $this->responsibles;
     }
 
-    public function addTrainer(Trainer $trainer): static
+    public function addResponsible(Responsible $responsible): static
     {
-        if (!$this->trainers->contains($trainer)) {
-            $this->trainers->add($trainer);
-            $trainer->setSector($this);
+        if (!$this->responsibles->contains($responsible)) {
+            $this->responsibles->add($responsible);
+            $responsible->setSector($this);
         }
 
         return $this;
     }
 
-    public function removeTrainer(Trainer $trainer): static
+    public function removeResponsible(Responsible $responsible): static
     {
-        if ($this->trainers->removeElement($trainer)) {
+        if ($this->responsibles->removeElement($responsible)) {
             // set the owning side to null (unless already changed)
-            if ($trainer->getSector() === $this) {
-                $trainer->setSector(null);
+            if ($responsible->getSector() === $this) {
+                $responsible->setSector(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->label;
     }
 }

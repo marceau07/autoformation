@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CohortRepository::class)]
 #[Broadcast]
 class Cohort
@@ -56,6 +57,18 @@ class Cohort
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'cohort')]
     private Collection $messages;
 
+    /**
+     * @var Collection<int, Calendar>
+     */
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'cohort')]
+    private Collection $calendars;
+
+    /**
+     * @var Collection<int, CohortInternship>
+     */
+    #[ORM\OneToMany(targetEntity: CohortInternship::class, mappedBy: 'cohort')]
+    private Collection $cohortInternships;
+
     public function __construct()
     {
         $this->courseCohorts = new ArrayCollection();
@@ -63,6 +76,8 @@ class Cohort
         $this->messages = new ArrayCollection();
         $uuid = new UuidV7();
         $this->uuid = $uuid->toString();
+        $this->calendars = new ArrayCollection();
+        $this->cohortInternships = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -250,6 +265,71 @@ class Cohort
             // set the owning side to null (unless already changed)
             if ($message->getCohort() === $this) {
                 $message->setCohort(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setCohort($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getCohort() === $this) {
+                $calendar->setCohort(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CohortInternship>
+     */
+    public function getCohortInternships(): Collection
+    {
+        return $this->cohortInternships;
+    }
+
+    public function addCohortInternship(CohortInternship $cohortInternship): static
+    {
+        if (!$this->cohortInternships->contains($cohortInternship)) {
+            $this->cohortInternships->add($cohortInternship);
+            $cohortInternship->setCohort($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCohortInternship(CohortInternship $cohortInternship): static
+    {
+        if ($this->cohortInternships->removeElement($cohortInternship)) {
+            // set the owning side to null (unless already changed)
+            if ($cohortInternship->getCohort() === $this) {
+                $cohortInternship->setCohort(null);
             }
         }
 

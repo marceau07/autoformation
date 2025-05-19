@@ -60,6 +60,7 @@ class CourseRepository extends ServiceEntityRepository
             ->addSelect('cm', 't')
             ->where('t.username = :username')
             ->setParameter('username', $userId)
+            ->andWhere('c.module != 1')
             ->groupBy('cm.id')
             ->orderBy('cm.position', 'ASC')
             ->getQuery()
@@ -83,6 +84,7 @@ class CourseRepository extends ServiceEntityRepository
             ->addSelect('cm', 't', 'cc', 'co', 'tr')
             ->where('tr.username = :username')
             ->setParameter('username', $userId)
+            ->andWhere('c.module != 1')
             ->groupBy('cm.id')
             ->orderBy('cm.position', 'ASC')
             ->getQuery()
@@ -159,11 +161,11 @@ class CourseRepository extends ServiceEntityRepository
     /**
      * Get the list of courses in a module for a trainee
      * 
-     * @param string $uuid The course uuid
-     * @param string $search The search term
+     * @param ?string $uuid The course uuid
+     * @param ?string $search The search term
      * @return Course[] The list of courses
      */
-    function getCoursesInformationsBySector(string $courseId = null, string $search = null): array
+    function getCoursesInformationsBySector(?string $courseId = null, ?string $search = null): array
     {
         if ($courseId === null) {
             return $this->createQueryBuilder('c')
@@ -194,13 +196,13 @@ class CourseRepository extends ServiceEntityRepository
      * Get the list of courses in a module for a trainee
      * 
      * @param string $userId The trainee identifier
-     * @param string $uuid The course uuid
-     * @param string $search The search term
+     * @param ?string $uuid The course uuid
+     * @param ?string $search The search term
      * @return Course[] The list of courses
      */
-    function getCoursesInformationsByCohort(string $userId, string $courseId = null, string $search = null): array
+    function getCoursesInformationsByCohort(string $userId, ?string $courseId = null, ?string $search = null): array
     {
-        if($courseId === null) {
+        if ($courseId === null) {
             return $this->createQueryBuilder('c')
                 ->innerJoin('c.trainer', 't')
                 ->innerJoin('c.module', 'cm')
@@ -239,10 +241,10 @@ class CourseRepository extends ServiceEntityRepository
      * Get the list of courses in a module
      * 
      * @param string $uuid The course uuid
-     * @param string $search The search term
+     * @param ?string $search The search term
      * @return Course[] The list of courses
      */
-    function getCoursesInformations(string $courseId, string $search = null): array
+    function getCoursesInformations(string $courseId, ?string $search = null): array
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.module', 'cm')
@@ -287,6 +289,28 @@ class CourseRepository extends ServiceEntityRepository
             ->setParameter('username', $userId)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAllUniqueKeywords(): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.keywords')
+            ->where('c.keywords IS NOT NULL');
+
+        $result = $qb->getQuery()->getResult();
+
+        $all = [];
+        foreach ($result as $row) {
+            $clefs = explode(';', $row['keywords'] ?? '');
+            foreach ($clefs as $mot) {
+                $mot = trim($mot);
+                if ($mot !== '') {
+                    $all[] = $mot;
+                }
+            }
+        }
+
+        return array_unique($all);
     }
 
     //    /**

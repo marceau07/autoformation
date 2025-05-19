@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ 'account.personal_informations'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/account.css') }}" />
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbarAccount.html.twig' with { 
+        'choosenElement': "privacy"
+        } 
+      %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active" id="privacy-informations">
+        <div>
+            {% if is_granted('ROLE_TRAINEE') %}
+            <div class="row position-relative justify-content-end">
+              <div class="col-md-1 col-sm-2 position-absolute ms-auto mt-2">
+                <button class="btn btn-primary btn-lg" id="btn_replay_tutorial" title="Relire le tutoriel" onclick="replayTutorial();"><i class="fa-solid fa-person-chalkboard fa-fade"></i></button>
+              </div>
+            </div>
+            {% endif %}
+            <div class="row">
+              <div class="col-12 text-center">
+                <input type="hidden" value="{{ user.avatar.id }}" />
+                {% if user.avatar.link starts with 'http://' or user.avatar.link starts with 'https://' %}
+                  {% set pickedAvatar = user.avatar.link %}
+                {% else %}
+                  {% set pickedAvatar = asset('../avatars/' ~ user.avatar.link) %}
+                {% endif %}
+                <img class="img-fluid rounded m-5 img-profile" src="{{ pickedAvatar }}" alt="{{ 'account.avatar_alt'|trans({'%name%': user.avatar.label}) }}" />
+              </div>
+              <div class="col-12 text-center" id="liste_avatars">
+                {% if avatars is defined and avatars is not empty %}
+                  {% for avatar in avatars %}
+                    {% if avatar.link starts with 'http://' or avatar.link starts with 'https://' %}
+                        {% set img = avatar.link %}
+                    {% else %}
+                        {% set img = asset('../avatars/' ~ avatar.link) %}
+                    {% endif %}
+                    <img onclick="changerAvatar(this);" data-id="{{ avatar.id }}" class="img-fluid rounded me-2 mb-5 img-preview {{ avatar.id == user.avatar.id ? 'img-selected' : '' }}" src="{{ img }}" alt="{{ 'account.avatar_alt'|trans({'%name%': avatar.label}) }}" />
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <div class="col-12" id="form_user">
+                {{ form_start(form, { method: 'POST' }) }}
+                <div class="row">
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.username, { label: "account.username" }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.lastName, { label: 'account.lastname' }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.firstName, { label: 'account.firstname' }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.password, { label: 'account.password' }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.email, { label: 'account.email' }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group">{{ form_row(form.phoneNumber, { label: 'account.phone_number' }) }}</div>
+                  </div>
+                  <div class="col-6 col-sm-3 d-none">
+                    <div class="form-group">{{ form_row(form.avatar, { label: 'account.avatar' }) }}</div>
+                  </div>
+                </div>
+                <div class="row py-2">
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group d-none">{{ form_row(form.signature, { label: 'account.signature' }) }}</div>
+                    <div class="form-group">
+                      <span class="pt-2">{{ 'account.draw_signature'|trans }}</span>
+                      <canvas class="box-signature" id="signature-pad" width="auto" style="touch-action: none;"></canvas>
+                    </div>
+                    <span>
+                      <button id="approve-signature" class="btn btn-success" type="button" title="{{ 'account.approve_signature'|trans }}"><i class="fa fa-check"></i></button>
+                      <button id="clear-signature" class="btn btn-danger" type="button" title="{{ 'account.discard_signature'|trans }}"><i class="fa fa-times"></i></button>
+                    </span>
+                  </div>
+                  {% if user.signature is defined and user.signature is not empty %}
+                    <div class="col-6 col-sm-3">
+                      <div class="form-group">
+                        <span>{{ 'account.current_signature_text'|trans }}</span>
+                        <div>
+                          <img class="box-signature" id="actual-signature" src="{{ user.signature }}" alt="{{ 'account.current_signature_alt'|trans({'%name%': user.lastName ~ ' ' ~ user.firstName}) }}" />
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="row float-end my-3">
+                  <div class="form-group">{{ form_row(form.save, { label: 'global.btn_save', label_attr: { class: 'btn btn-dark' } }) }}</div>
+                </div>
+
+                {{ form_end(form) }}
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="{{ asset('js/account.js') }}"></script>
+  <script>
+    $(document).ready(function () {
+      accountPrivacy();
+      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-informations') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+        tg.start('trainee-informations');
+      }
+    });
+  </script>
+{% endblock %}

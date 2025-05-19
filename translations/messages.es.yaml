@@ -1,0 +1,796 @@
+global:
+  meta_title:
+    "%platformName% - Plataforma de aprendizaje y formación"
+  meta_description:
+    "Accede a todos tus cursos e interactúa con tus formadores y compañeros de cohorte en la plataforma andragógica."
+  language_french:
+    text: "Francés"
+    code: "fr"
+  language_english:
+    text: "Inglés"
+    code: "en"
+  language_spanish:
+    text: "Español"
+    code: "es"
+  file_sent:
+    "Archivo enviado"
+  file_not_found:
+    "Archivo no encontrado"
+  date_format:
+    short: "d/m/Y"
+    long: "d/m/Y H:i:s"
+  exceptions:
+    400:
+      title:
+        "Solicitud incorrecta"
+      message:
+        "La solicitud no se pudo procesar debido a un error del cliente."
+    403:
+      title:
+        "Acceso denegado"
+      message:
+        "No tienes permiso para acceder a esta página."
+    404:
+      title:
+        "Página no encontrada"
+      message:
+        "The page you are looking for does not exist."
+    500:
+      title:
+        "Error interno del servidor"
+      message:
+        "Se produjo un error interno en el servidor. Por favor, inténtalo de nuevo más tarde."
+    format:
+      title:
+        "Formato de archivo no válido"
+      content:
+        "Formato de archivo no válido. Inténtelo de nuevo con un formato válido. (Formatos aceptados: %formats%)"
+    size:
+      title:
+        "Tamaño de archivo no válido"
+      content:
+        "Tamaño de archivo no válido. Inténtelo de nuevo con un tamaño de archivo inferior a %size%MB. (Tamaño de archivo actual: %currentSize%)"
+    other:
+      title:
+        "Error"
+      message:
+        "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
+  confirm_delete:
+    "¿Estás seguro de que quieres eliminar este artículo?"
+  btn_send:
+    "Enviar"
+  btn_save:
+    "Guardar"
+  btn_cancel:
+    "Cancelar"
+  btn_delete:
+    "Eliminar"
+  btn_edit:
+    "Editar"
+  btn_add:
+    "Agregar"
+  btn_back:
+    "Volver"
+  btn_next:
+    "Siguiente"
+  btn_previous:
+    "Anterior"
+  btn_confirm:
+    "Confirmar"
+  btn_close:
+    "Cerrar"
+  btn_download:
+    "Descargar"
+  btn_upload:
+    "Subir"
+  btn_export:
+    "Exportar"
+  btn_verify:
+    "Verificar"
+  btn_consult:
+    "Consultar"
+  btn_retrieve: 
+    "Recuperar"
+  btn_login: 
+    "Iniciar sesión"
+  day:
+    "Hace %time% días"
+  days:
+    "Hace %time% días"
+  week:
+    "Hace %time% semana"
+  weeks:
+    "Hace %time% semanas"
+  month:
+    "Hace %time% mese"
+  months:
+    "Hace %time% meses"
+  year:
+    "Hace %time% año"
+  years:
+    "Hace %time% años"
+  hour:
+    "Hace %time% hora"
+  hours:
+    "Hace %time% horas"
+  minute:
+    "Hace %time% minuto"
+  minutes:
+    "Hace %time% minutos"
+  second:
+    "Hace %time% segundo"
+  seconds:
+    "Hace %time% segundos"
+  now:
+    "Ahora"
+  yes:
+    "Sí"
+  no:
+    "No"
+  "true":
+    "Verdadero"
+  "false":
+    "Falso"
+  courses:
+    "Cursos"
+  course:
+    "Curso"
+  quiz:
+    "Cuestionario"
+  modules:
+    "Módulos"
+  module:
+    "Módulo"
+  users:
+    "Usarios"
+  user:
+    "Usuario"
+  trainees:
+    "Aprendices"
+  trainee:
+    "Aprendiz"
+  trainers:
+    "Formadores"
+  trainer:
+    "Formador"
+  coordinators:
+    "Coordinadores"
+  coordinator:
+    "Coordinador"
+  responsibles:
+    "Responsables"
+  responsible:
+    "Responsable"
+  cohorts:
+    "Cohortes"
+  cohort:
+    "Cohorte"
+  message_sent:
+    "Mensaje enviado"
+  error:
+    "Se produjo un error, inténtelo de nuevo más tarde."
+
+header:
+  home:
+    "Hogar"
+  modules:
+    "Módulos"
+  administration:
+    "Administración"
+  mailbox:
+    "Bandeja de entrada"
+  faq:
+    "Preguntas frecuentes"
+  search:
+    "Buscar..."
+  search_no_result:
+    "No se encontraron resultados"
+  login:
+    "Iniciar sesión"
+  web_platform:
+    "Plataforma web"
+  mobile_application:
+    "Aplicación móvil"
+  notifications: 
+    news: "Novedades"
+    to_do: "Por hacer"
+    messages: "Mensajes"
+    courses: "Cursos"
+    internships: "Pasantías"
+  personal:
+    modify: "Modificar mi cuenta"
+    dark_mode: "Modo oscuro"
+    exit_impersonation: "Salir de la suplantación"
+    logout: "Cerrar sesión"
+
+home:
+  welcome:
+    "Bienvenido a %platformName% !"
+  welcome_small:
+    "Su plataforma de aprendizaje y formación"
+  current_calendar:
+    "Calendario actual"
+  no_content_calendar:
+    "No eventos en el calendario por el momento, por favor inténtelo de nuevo más tarde..."
+
+feedback:
+  title:
+    "Reportar un problema"
+  form_link:
+    "Link to the page where the problem occurred:"
+  form_category:
+    "Categoría del problema:"
+  form_category_placeholder:
+    "Seleccione una categoría..."
+  form_weight:
+    "Peso del problema:"
+  form_weight_placeholder:
+    "Seleccione un peso..."
+  form_weight_light:
+    "Baja importancia"
+  form_weight_medium:
+    "Importancia media"
+  form_weight_heavy:
+    "Alta importancia"
+  form_weight_critical:
+    "Crítica"
+  form_description:
+    "Descripción del problema:"
+  form_description_placeholder:
+    "Describa el problema..."
+
+survey:
+  heading:
+    "Encuesta de satisfacción"
+  intro:
+    "Gracias por tomarse el tiempo para responder este cuestionario.<br /><small>Los campos marcados con (<span class='required'>*</span>) son obligatorios.</small>"
+  paragraph:
+    "Su opinión es importante para nosotros. Por favor, comparta sus comentarios sobre su experiencia con nosotros."
+  answer:
+    "Su respuesta"
+  review:
+    "Su opinión"
+  emojis:
+    very_satisfied:
+      "Muy satisfecho"
+    satisfied:
+      "Satisfecho"
+    neutral:
+      "Neutral"
+    unsatisfied:
+      "Insatisfecho"
+    very_unsatisfied:
+      "Muy insatisfecho"
+  commentary:
+    "Comentario"
+  no_content:
+    "No comentarios por el momento, por favor inténtelo de nuevo más tarde..."
+  no_questions:
+    "No preguntas por el momento, por favor inténtelo de nuevo más tarde..."
+
+module:
+  text:
+    "Módulos"
+  no_content:
+    "No módulos por el momento, por favor inténtelo de nuevo más tarde..."
+
+quiz:
+  text:
+    "Cuestionarios"
+  no_content:
+    "No cuestionarios por el momento, por favor inténtelo de nuevo más tarde..."
+  illustration_no_content_alt:
+    "Ilustración de no contenido"
+  launcher:
+    title:
+      "[%module%] - %level%"
+    author:
+      "Autor : %trainer%"
+    theme:
+      illustration:
+        "Ilustración del tema %theme%"
+    question:
+      "%pregunta% (Pregunta %índice%/%total%)"
+    textarea:
+      placeholder:
+        long: "Aquí tienes tu larga respuesta..."
+        short: "Aquí tienes tu respuesta corta..."
+  redirect:
+    title:
+      "Redireccionando a la aplicación móvil..."
+    message:
+      "Se le redirigirá a la aplicación móvil para realizar el cuestionario."
+
+sandbox:
+  builder:
+    title:
+      "Constructor de Sandbox"
+  created:
+    "Tus areneros"
+  not_found:
+    "No se encontró ninguna zona de pruebas, inténtelo de nuevo más tarde..."
+
+course:
+  favorite:
+    "Cursos favoritos"
+  no_favorite:
+    "No cursos favoritos por el momento, por favor inténtelo de nuevo más tarde..."
+  latest_courses:
+    "Últimos cursos seguidos"
+  no_content_latest_courses:
+    "No cursos seguidos por el momento, por favor inténtelo de nuevo más tarde..."
+  popular_courses:
+    "Cursos populares"
+  no_content_popular_courses:
+    "No cursos populares por el momento, por favor inténtelo de nuevo más tarde..."
+  text:
+    "Cursos %module%"
+  no_content:
+    "No cursos por el momento, por favor inténtelo de nuevo más tarde..."
+  illustration_no_content_alt:
+    "Ilustración de no contenido"
+  made_by:
+    "Creado por %trainer%"
+  filtered:
+    no_content:
+      "No cursos filtrados por el momento, por favor inténtelo de nuevo más tarde..."
+  action:
+    favorite:
+      added:
+        "Curso añadido a favoritos con éxito"
+      deleted:
+        "Curso eliminado de favoritos con éxito"
+
+embed:
+  resources: "Recursos"
+  exercises: "Ejercicios"
+  tps: "TPs"
+
+account:
+  personal_informations:
+    "Información personal"
+  documents:
+    "Documentos"
+  statistics:
+    "Estadísticas"
+  username:
+    "Nombre de usuario"
+  lastname:
+    "Apellido"
+  firstname:
+    "Nombre"
+  password:
+    "Contraseña"
+  email:
+    "Correo electrónico"
+  phone_number:
+    "Número de teléfono"
+  avatar:
+    "Avatar"
+  avatar_alt:
+    "%name% Avatar"
+  signature:
+    "Firma"
+  draw_signature:
+    "Dibujar su firma"
+  approve_signature:
+    "Aprobar su firma"
+  discard_signature:
+    "Descartar su firma"
+  current_signature_text:
+    "Su firma actual"
+  current_signature_alt:
+    "%name% firma"
+  not_activated:
+    "Tu cuenta aún no está activada, por favor contacta a tu entrenador para más información."
+  graph:
+    title:
+      "Estadísticas"
+    courses:
+      text: "Cursos"
+      label_one: "Cursos desbloqueados"
+      label_two: "Cursos completados"
+    homeworks:
+      text: "Tareas"
+      label_one: "Tareas asignadas"
+      label_two: "Tareas entregadas"
+
+faq:
+  title:
+    "Preguntas frecuentes"
+  no_content:
+    "No preguntas frecuentes por el momento, por favor inténtelo de nuevo más tarde..."
+  no_theme:
+    "No temas por el momento, por favor inténtelo de nuevo más tarde..."
+  global:
+    "Preguntas frecuentes"
+
+mailbox:
+  title:
+    "Bandeja de entrada"
+  welcome:
+    "Bienvenido a tu buzón de correo"
+  chat_cohort:
+    "Chatea con los miembros de %cohort%"
+  chat_trainer_referent:
+    "Intercambio con referente %trainer%"
+  chat_coordinator:
+    "Intercambio con %coordinator%"
+  chat_responsible:
+    "Intercambio con %responsible%"
+  chat_with:
+    "Chatea con %trainee%"
+  start_conversation:
+    "Iniciar una conversación"
+  select_account:
+    "Seleccione una cuenta para iniciar la conversación..."
+  no_content:
+    "No mensajes por el momento, por favor inténtelo de nuevo más tarde..."
+  start_typing_here:
+    "Escriba su mensaje aquí..."
+  no_account_available:
+    "No cuentas disponibles por el momento, por favor inténtelo de nuevo más tarde..."
+  sender:
+    you:
+      "Tú"
+  groups:
+    administration:
+      "Administración"
+
+cohort:
+  informations:
+    "Información de la cohorte"
+  name:
+    "Nombre de la cohorte"
+  acronym:
+    "Acrónimo de la cohorte"
+  trainer:
+    "Entrenador"
+  key_dates:
+    "Fechas clave"
+  training_start_date:
+    "Fecha de inicio de la formación"
+  training_end_date:
+    "Fecha de finalización de la formación"
+  shield:
+    "Escudo"
+  no_shield:
+    "No escudo para tu cohorte"
+  no_information:
+    "No información para tu cohorte"
+
+internship:
+  internships:
+    "Pasantías"
+  begin_internship:
+    "Inicio de prácticas"
+  end_internship:
+    "Fin de la pasantía"
+  no_internship:
+    "No pasantías por el momento, por favor inténtelo de nuevo más tarde..."
+  sent_agreement:
+    "Acuerdo enviado"
+  sent_certificate:
+    "Certificado enviado"
+  sent_evaluation:
+    "Evaluación enviada"
+
+footer:
+  text:
+    "Sitio desarrollado por"
+  legal_notices:
+    "Aviso legal"
+  privacy_policy:
+    "Política de privacidad"
+
+chatbot:
+  welcome:
+    "¡Bienvenido al chatbot! ¿Cómo puedo ayudarte?<br><small>Escribe <code>/ayuda</code> para ver la lista de posibles acciones.</small>"
+  ia:
+    system: 
+      "Responda siempre en español (no haga referencia a él en su respuesta). 
+      Si hay un / seguido directamente de una palabra (ejemplo: /ayuda), advierte al usuario que desactive el modo AI. 
+      Eres una IA integrada en un chatbot en un sitio web de capacitación. 
+      Debes responder preguntas sobre cursos, módulos, usuarios, etc. 
+      Terminarás tu primer mensaje indicando que eres una IA y, por lo tanto, puedes cometer errores (texto en cursiva y texto subrayado)."
+    not_available:
+      "Lo siento, no puedo ayudarte con eso."
+  placeholder:
+    "Escribe tu mensaje aquí..."
+  found:
+    "Esto es lo que encontré para ti en <b>%subject%</b> con las palabras clave <b>%keywords%</b>:"
+  not_found:
+    "Lo siento, no pude encontrar nada para usted con las palabras clave <b>%keywords%</b>..."
+  didnt_understand:
+    "Lo siento, no entendí tu pregunta. ¿Podrías reformularla?"
+  keys:
+    hello:
+      "hola"
+    hey:
+      "ey"
+    help:
+      "ayuda"
+    courses:
+      "cursos"
+    modules:
+      "módulos"
+    users:
+      "usuarios"
+    goodbye:
+      "adiós"
+  values:
+    hello:
+      "Hola! ¿Cómo puedo ayudarte?"
+    hey:
+      "¡Hola! ¿Cómo puedo ayudarte?"
+    help:
+      "Estoy aquí para ayudarte. Hazme una pregunta o escribe <code>/help</code> para ver la lista de posibles acciones."
+    courses:
+      "Escriba una palabra clave para buscar un curso..."
+    goodbye:
+      "¡Adiós! No dudes en volver si necesitas ayuda."
+  commands:
+    courses:
+      "Buscar un curso"
+    help:
+      "Mostrar esta ayuda"
+    modules:
+      "Buscar un módulo"
+    users:
+      "Buscar un usuario"
+
+notifications:
+  new_message:
+    "Has recibido un nuevo mensaje de %from_username%"
+  new_message_cohort:
+    "Has recibido un nuevo mensaje en %from_cohort%"
+  new_changelog:
+    "Nuevo registro de cambios disponible: %features%"
+  no_news:
+    "No hay novedades por el momento"
+  no_new_message:
+    "No hay nuevos mensajes por el momento"
+  new_homework:
+    "Nueva tarea en %course%"
+  no_new_homework:
+    "No hay nuevas tareas por el momento"
+  new_internship:
+    "Prácticas del nuevo documento [%document%]"
+  no_new_internship:
+    "Todo está actualizado"
+  new_course:
+    "Nuevo curso en %module%"
+  no_new_course:
+    "No hay nuevos cursos por el momento"
+  unread_messages:
+    "Tienes mensajes sin leer"
+
+tourguide:
+  mark_as_done:
+    "Tutorial completado, puedes volver a reproducirlo en cualquier momento desde la sección de cuenta."
+  index:
+    trainee:
+      start:
+        title:
+          "Tutorial"
+        content:
+          "¡Bienvenido al tutorial!<br>Te guiaremos a través de las diferentes secciones de la plataforma.<br>Podrás reproducir este tutorial en cualquier momento desde la sección de cuenta."
+      navbar:
+        title:
+          "Barra de navegación"
+        content:
+          "Esta es la barra de navegación, donde puedes acceder a todas las secciones de la plataforma."
+      account:
+        replay_tutorial:
+          title:
+            "Reproducir el tutorial"
+          content:
+            "Puedes reproducir el tutorial en cualquier momento desde aquí."
+        avatar:
+          title:
+            "Avatar"
+          content:
+            "Elige el avatar que te represente."
+        informations:
+          tab:
+            title:
+              "Submenú"
+            content:
+              "Navegue entre estos menús para ver su información personal, información de cohorte e información relacionada con la pasantía.""
+          title:
+            "Cuenta"
+          content:
+            "Accede a toda tu información personal y documentos."
+          signature:
+            title:
+              "Firma"
+            content:
+              "Ahorre tiempo en los documentos de pasantía rellenando previamente los documentos en línea con su firma."
+          actual_signature:
+            title:
+              "Su firma actual"
+            content:
+              "Aquí está su firma actual."
+      chatbot:
+        title:
+          "Chatbot"
+        content:
+          "Haz preguntas al chatbot para obtener respuestas instantáneas. Escribe "/" para ver la lista de acciones posibles o elige una opción en la pantalla."
+      feedback:
+        title:
+          "Reportar un problema"
+        content:
+          "Aquí es donde puedes informar un problema al equipo de desarrollo."
+      courses:
+        title:
+          "Cursos"
+        content:
+          "Aquí es donde puedes encontrar todos tus cursos."
+        example:
+          title:
+            "Un curso"
+          content:
+            "Un curso es un conjunto de recursos y actividades que te permiten aprender un tema específico."
+          resources:
+            title:
+              "Recursos"
+            content:
+              "Aquí es donde puedes encontrar todos los recursos relacionados con el curso."
+          embed:
+            title:
+              "Presentación"
+            content:
+              "Tienes acceso inmediato al curso desde la plataforma."
+            resources:
+              title:
+                "Recursos"
+              content:
+                "Y el acceso a los recursos lo encontrarás justo debajo."
+              give:
+                title:
+                  "Entregar tarea"
+                content:
+                  "Puedes subir tu laboratorio en varios formatos (.pdf, .zip, .tar, .rar, .docx, ...) para que sea evaluado por tu referente."
+        last_courses:
+          title:
+            "Últimos cursos"
+          content:
+            "Descubre los últimos cursos que has seguido."
+        popular_courses:
+          title:
+            "Cursos populares"
+          content:
+            "Descubre los cursos más populares entre los estudiantes."
+      survey:
+        title:
+          "Encuesta de satisfacción"
+        content:
+          "Aquí es donde puedes responder a la encuesta de satisfacción."
+        content_bis:
+          "Gracias por tomarte el tiempo para responder a esta encuesta. Tu opinión es importante para nosotros."
+      modules:
+        title:
+          "Módulos"
+        content:
+          "Aquí es donde surge la magia. Encuentra todos tus cursos ordenados por módulo o CCP."
+        example:
+          title:
+            "Un módulo"
+          content:
+            "Un módulo es un conjunto de cursos relacionados entre sí."
+      mailbox:
+        title:
+          "Bandeja de entrada"
+        content:
+          "Aquí es donde puedes encontrar todos tus mensajes."
+        example:
+          contacts:
+            title:
+              "Contactos"
+            content:
+              "Aquí es donde puedes encontrar todos tus contactos."
+            cohort:
+              title:
+                "Miembros de la cohorte"
+              content:
+                "Chatea con los miembros de tu cohorte."
+            trainer:
+              title:
+                "Entrenador referente"
+              content:
+                "Chatea con tu entrenador referente."
+            trainees:
+              title:
+                "Compañeros de formación"
+              content:
+                "Chatea con tus compañeros de formación."
+          conversation:
+            title:
+              "Conversaciones"
+            content:
+              "Aquí es donde puedes encontrar todas tus conversaciones."
+            start:
+              title:
+                "Iniciar una conversación"
+              content:
+                "Inicia una conversación con un miembro de tu cohorte."
+            messages:
+              title:
+                "Mensajes"
+              content:
+                "Comience a escribir un mensaje aquí..."
+
+event:
+  new:
+    title:
+      "Nuevo evento"
+    description:
+      "Crea un nuevo evento"
+  added: "Evento añadido exitosamente"
+  error: "Se produjo un error al agregar el evento, inténtelo nuevamente más tarde."
+
+presentation:
+  title:
+    "Presentación de %platformName%"
+  subtitle:
+    "Descubre nuestra plataforma de aprendizaje y su aplicación móvil"
+  platform:
+    title:
+      "La plataforma web"
+    description:
+      "La Plataforma de Aprendizaje y Capacitación (%platformName%) es una herramienta digital diseñada para facilitar tu proceso de formación. Te permite:"
+    features:
+      - "Accede a tus cursos y recursos educativos"
+      - "Interactúa con tus entrenadores y compañeros"
+      - "Sigue tu progreso"
+      - "Gestiona tus documentos administrativos"
+      - "Consulta tu horario"
+  mobile:
+    title:
+      "La aplicación móvil"
+    description:
+      "Mantente conectado a tu entrenamiento donde quiera que estés con nuestra aplicación móvil disponible en iOS y Android."
+    features:
+      - "Notificaciones en tiempo real"
+      - "Acceso rápido a los cursos"
+      - "Mensajería instantánea"
+      - "Modo sin conexión"
+    download:
+      android: "Descargar en Google Play"
+      ios: "Descargar en la App Store"
+  features:
+    courses:
+      title: "Cursos interactivos"
+      description: "Acceda a contenido educativo rico y variado"
+    chat:
+      title: "Mensajería integrada" 
+      description: "Comuníquese fácilmente con sus entrenadores y compañeros"
+    documents:
+      title: "Gestión de documentos"
+      description: "Gestiona todos tus documentos administrativos en un solo lugar"
+    calendar:
+      title: "Horario dinámico"
+      description: "Consulta tu horario y plazos"
+login:
+  title: "Acceso"
+  welcome: "¡Bienvenido nuevamente a %platformName%!"
+  username: "Nombre de usuario"
+  password: "Contraseña"
+  remember_me: "Acuérdate de mí"
+  forgot_password: "¿Olvidaste tu contraseña? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>¡Genera una nueva!</a>"
+recovery:
+  title: "Recuperación de contraseña"
+  username: "Nombre de usuario vinculado a su cuenta"
+  return: "¿Aquí por error? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>¡Iniciar sesión!</a>"
+code:
+  title: "Utilice un código temporal"
+  input: "Código recibido (6 dígitos)"
+  return: "¿Aquí por error? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>¡Iniciar sesión!</a>"
+signup:
+  title: "Cambiar tu contraseña"
+  welcome: "¡Bienvenido nuevamente a %platformName%!"
+  new_password: "Nueva contraseña"
+  return: "¿Aquí por error? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>¡Iniciar sesión!</a>"
+  btn_new_password: "Cambiar mi contraseña"
+changelogs:
+  title: "Registros de cambios"

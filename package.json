@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
+    "@symfony/webpack-encore": "^5.0.1",
+    "webpack-notifier": "^1.15.0"
+  },
+  "dependencies": {
+    "core-js": "^3.40.0",
+    "konva": "^9.3.18",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.0.2"
+  },
+  "scripts": {
+    "dev": "encore dev",
+    "dev-server": "encore dev-server",
+    "build": "encore production"
+  }
+}

@@ -1,0 +1,41 @@
+title: "Privacy Policy"
+h1: "Website Privacy Policy %serverName%"
+articles:
+  - title: "Privacy Policy"
+    content: |
+      The Educational Platform website is owned by Marceau Rodrigues, which is the data controller of your personal data.
+
+      We have adopted this Privacy Policy, which sets out how we process the information collected by Marceau Rodrigues, and also explains the reasons why we collect certain personal data about you. Therefore, you should read this Privacy Policy before using the Marceau Rodrigues website.
+
+      We take care of your personal data and are committed to ensuring its confidentiality and security.
+  - title: "Personal information we collect:"
+    content: |
+      When you visit Marceau Rodrigues, we automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some of the cookies that are installed on your device. Additionally, as you browse the Site, we collect information about the individual web pages or products that you view, what websites or search terms referred you to the Site, and information about how you interact with the Site. We refer to this automatically-collected information as "Device Information." In addition, we may collect the personal data you provide to us (including, but not limited to, first and last name, address, payment information, etc.) during registration in order to perform the contract.
+  - title: "Why do we process your data?"
+    content: |
+      Our top priority is the security of customer data, and as such, we may only process minimal user data to the extent absolutely necessary to maintain the website. Automatically collected information is used solely to identify potential cases of abuse and to compile statistical information regarding website usage. This statistical information is not otherwise aggregated in a way that would identify a particular user of the system. You can visit the website without telling us who you are or revealing any information by which someone could identify you as a specific, identifiable individual. However, if you wish to use certain features of the website, or if you wish to receive our newsletter or provide other details by filling out a form, you may provide us with personal data, such as your email address, first name, last name, city of residence, organization, and telephone number. You can choose not to provide us with your personal data, but then you may not be able to take advantage of certain features of the website. For example, you will not be able to receive our newsletter or contact us directly from the website. Users who are unsure what information is required are encouraged to contact us at marceaurodrigues@adrar-formation.com.
+  - title: "Your rights:"
+    content: |
+      If you are a European resident, you have the following rights related to your personal data:
+
+      The right to be informed.
+      The right of access.
+      The right to rectification.
+      The right to erasure.
+      The right to restrict processing.
+      The right to data portability.
+      The right to object.
+      Rights related to automated decision-making and profiling.
+      If you would like to exercise this right, please contact us using the details below. Additionally, if you are a European resident, we note that we are processing your information in order to fulfill contracts we might have with you (for example, if you make an order through the Site), or otherwise to pursue our legitimate business interests listed above. Additionally, please note that your information may be transferred outside of Europe, including to Canada and the United States.
+  - title: "Links to other websites:"
+    content: |
+      Our website may contain links to other websites that are not owned or controlled by us. Please be aware that we are not responsible for these other websites or the privacy practices of third parties. We encourage you to be aware when you leave our website and to read the privacy statements of each and every website that may collect personal information.
+  - title: "Information security:"
+    content: |
+      We secure the information you provide on computer servers in a controlled, secure environment, protected from unauthorized access, use, or disclosure. We maintain reasonable administrative, technical, and physical safeguards to protect against unauthorized access, use, modification, and disclosure of personal data in its control and custody. However, no data transmission over the Internet or any wireless network can be guaranteed.
+  - title: "Legal Disclosure:"
+    content: |
+      We will disclose any information we collect, use or receive if required or permitted to do so by law, such as to comply with a subpoena or similar legal process, and when we believe in good faith that disclosure is necessary to protect our rights, your safety or the safety of others, investigate fraud, or respond to a government request.
+  - title: "Contact information:"
+    content: |
+      If you would like to contact us to further understand this policy or if you would like to contact us regarding any matter relating to individual rights and your personal information, you can send an email to marceaurodrigues@adrar-formation.com.

@@ -1,0 +1,47 @@
+{% extends '@EasyAdmin/crud/index.html.twig' %}
+
+{% block configured_javascripts %}
+  {{ parent() }}
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+  {# Le script pour ouvrir/charger la modale dynamiquement #}
+  <script>
+    function fetchData(contentUrl) {
+      const modal = document.getElementById('exampleModal')
+      const modalContent = document.getElementById('exampleModalContent')
+      if (contentUrl) {
+        fetch(contentUrl)
+          .then((response) => response.text())
+          .then((html) => {
+            modalContent.innerHTML = html
+            modal.style.display = 'block'
+          })
+      } else {
+        modal.style.display = 'block'
+      }
+    }
+  </script>
+{% endblock %}
+
+{% block main %}
+  {{ parent() }}
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{ 'admin.pages.cohorts.modal.title' }}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'global.btn_close'|trans }}"></button>
+        </div>
+        <div class="modal-body">
+          <div id="exampleModalContent"></div>
+        </div>
+        <div class="modal-footer">
+          {# TODO: récupérer les colonnes selectionnées seulement (voir admin/fields/export_modal_content.html.twig) #}
+          <a class="btn btn-primary" href="{{ path('app_cohort_export') }}" target="_blank">{{ 'global.btn_download'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

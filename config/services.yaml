@@ -4,22 +4,36 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    courses_directory: '%kernel.project_dir%/public/courses'
     homeworks_directory: '%kernel.project_dir%/public/homeworks'
     internships_directory: '%kernel.project_dir%/public/internships'
-    quizzes_directory: '%kernel.project_dir%/assets/images/quizzes'
+    quiz_themes_directory: '%kernel.project_dir%/public/quizzes-themes'
+    messages_directory: '%kernel.project_dir%/public/messages/'
+    ai_url: '%env(AI_URL)%'
+    app.available_locales:
+        fr: 'global.language_french.text'
+        en: 'global.language_english.text'
+        es: 'global.language_spanish.text'
 
 services:
+    App\Service\LocaleService:
+    App\Twig\LocaleSwitcherExtension:
+        tags: [twig.extension]
     App\Service\GlobalDataService:
         arguments:
             $entityManager: '@doctrine.orm.entity_manager'
             $security: '@security.helper'
             $translator: '@translator'
-
+    App\EventListener\CheckMaintenanceListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
             
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $locales: '%app.available_locales%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

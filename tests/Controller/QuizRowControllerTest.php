@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Quiz;
+use App\Entity\QuizType;
 use App\Entity\QuizRow;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -50,12 +52,10 @@ final class QuizRowControllerTest extends WebTestCase
         $this->client->submitForm('Save', [
             'quiz_row[uuid]' => 'Testing',
             'quiz_row[question]' => 'Testing',
-            'quiz_row[answer1]' => 'Testing',
-            'quiz_row[answer2]' => 'Testing',
-            'quiz_row[answer3]' => 'Testing',
-            'quiz_row[answer4]' => 'Testing',
-            'quiz_row[answer_short_text]' => 'Testing',
-            'quiz_row[answer_long_text]' => 'Testing',
+            'quiz_row[option1]' => 'Testing',
+            'quiz_row[option2]' => 'Testing',
+            'quiz_row[option3]' => 'Testing',
+            'quiz_row[option4]' => 'Testing',
             'quiz_row[quiz_type]' => 'Testing',
             'quiz_row[timer]' => 'Testing',
             'quiz_row[score]' => 'Testing',
@@ -75,18 +75,16 @@ final class QuizRowControllerTest extends WebTestCase
         $fixture = new QuizRow();
         $fixture->setUuid('My Title');
         $fixture->setQuestion('My Title');
-        $fixture->setAnswer1('My Title');
-        $fixture->setAnswer2('My Title');
-        $fixture->setAnswer3('My Title');
-        $fixture->setAnswer4('My Title');
-        $fixture->setAnswer_short_text('My Title');
-        $fixture->setAnswer_long_text('My Title');
-        $fixture->setQuiz_type('My Title');
-        $fixture->setTimer('My Title');
-        $fixture->setScore('My Title');
-        $fixture->setHint('My Title');
-        $fixture->setAnswer_explanation('My Title');
-        $fixture->setQuiz('My Title');
+        $fixture->setOption1('My Title');
+        $fixture->setOption2('My Title');
+        $fixture->setOption3('My Title');
+        $fixture->setOption4('My Title');
+        $fixture->setQuizType($this->manager->getRepository(QuizType::class)->findAll()[0]);
+        $fixture->setTimer(60);
+        $fixture->setScore(10);
+        $fixture->setHint('My Hint');
+        $fixture->setAnswerExplanation('My Explanation');
+        $fixture->setQuiz($this->manager->getRepository(Quiz::class)->findAll()[0]);
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -105,17 +103,15 @@ final class QuizRowControllerTest extends WebTestCase
         $fixture = new QuizRow();
         $fixture->setUuid('Value');
         $fixture->setQuestion('Value');
-        $fixture->setAnswer1('Value');
-        $fixture->setAnswer2('Value');
-        $fixture->setAnswer3('Value');
-        $fixture->setAnswer4('Value');
-        $fixture->setAnswer_short_text('Value');
-        $fixture->setAnswer_long_text('Value');
-        $fixture->setQuiz_type('Value');
+        $fixture->setOption1('Value');
+        $fixture->setOption2('Value');
+        $fixture->setOption3('Value');
+        $fixture->setOption4('Value');
+        $fixture->setQuizType('Value');
         $fixture->setTimer('Value');
         $fixture->setScore('Value');
         $fixture->setHint('Value');
-        $fixture->setAnswer_explanation('Value');
+        $fixture->setAnswerExplanation('Value');
         $fixture->setQuiz('Value');
 
         $this->manager->persist($fixture);
@@ -126,10 +122,10 @@ final class QuizRowControllerTest extends WebTestCase
         $this->client->submitForm('Update', [
             'quiz_row[uuid]' => 'Something New',
             'quiz_row[question]' => 'Something New',
-            'quiz_row[answer1]' => 'Something New',
-            'quiz_row[answer2]' => 'Something New',
-            'quiz_row[answer3]' => 'Something New',
-            'quiz_row[answer4]' => 'Something New',
+            'quiz_row[option1]' => 'Something New',
+            'quiz_row[option2]' => 'Something New',
+            'quiz_row[option3]' => 'Something New',
+            'quiz_row[option4]' => 'Something New',
             'quiz_row[answer_short_text]' => 'Something New',
             'quiz_row[answer_long_text]' => 'Something New',
             'quiz_row[quiz_type]' => 'Something New',
@@ -146,12 +142,10 @@ final class QuizRowControllerTest extends WebTestCase
 
         self::assertSame('Something New', $fixture[0]->getUuid());
         self::assertSame('Something New', $fixture[0]->getQuestion());
-        self::assertSame('Something New', $fixture[0]->getAnswer1());
-        self::assertSame('Something New', $fixture[0]->getAnswer2());
-        self::assertSame('Something New', $fixture[0]->getAnswer3());
-        self::assertSame('Something New', $fixture[0]->getAnswer4());
-        self::assertSame('Something New', $fixture[0]->getAnswer_short_text());
-        self::assertSame('Something New', $fixture[0]->getAnswer_long_text());
+        self::assertSame('Something New', $fixture[0]->getOption1());
+        self::assertSame('Something New', $fixture[0]->getOption2());
+        self::assertSame('Something New', $fixture[0]->getOption3());
+        self::assertSame('Something New', $fixture[0]->getOption4());
         self::assertSame('Something New', $fixture[0]->getQuiz_type());
         self::assertSame('Something New', $fixture[0]->getTimer());
         self::assertSame('Something New', $fixture[0]->getScore());
@@ -166,17 +160,15 @@ final class QuizRowControllerTest extends WebTestCase
         $fixture = new QuizRow();
         $fixture->setUuid('Value');
         $fixture->setQuestion('Value');
-        $fixture->setAnswer1('Value');
-        $fixture->setAnswer2('Value');
-        $fixture->setAnswer3('Value');
-        $fixture->setAnswer4('Value');
-        $fixture->setAnswer_short_text('Value');
-        $fixture->setAnswer_long_text('Value');
-        $fixture->setQuiz_type('Value');
+        $fixture->setOption1('Value');
+        $fixture->setOption2('Value');
+        $fixture->setOption3('Value');
+        $fixture->setOption4('Value');
+        $fixture->setQuizType('Value');
         $fixture->setTimer('Value');
         $fixture->setScore('Value');
         $fixture->setHint('Value');
-        $fixture->setAnswer_explanation('Value');
+        $fixture->setAnswerExplanation('Value');
         $fixture->setQuiz('Value');
 
         $this->manager->persist($fixture);

@@ -6,6 +6,7 @@ use App\Repository\SurveyTraineeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Cache(usage: "READ_ONLY", region: "read_only")]
 #[ORM\Entity(repositoryClass: SurveyTraineeRepository::class)]
 #[ORM\UniqueConstraint(name: "unique_survey_trainee", columns: ["survey_id", "trainee_id"])]
 class SurveyTrainee

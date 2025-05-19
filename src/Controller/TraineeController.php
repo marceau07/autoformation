@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Trainee;
-use App\Form\TraineeType;
+use App\Repository\ExportParameterRepository;
 use App\Repository\TraineeRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ExcelExporter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,70 +15,24 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/{_locale}/trainee')]
 class TraineeController extends AbstractController
 {
-    #[Route('/', name: 'app_trainee_index', methods: ['GET'])]
-    public function index(TraineeRepository $traineeRepository): Response
+    #[Route('/export/', name: 'app_trainee_export', methods: ['GET'], priority: 1)]
+    public function export(Request $request, ExcelExporter $excelExporter, TraineeRepository $traineeRepository, ExportParameterRepository $parameter): Response
     {
-        return $this->render('trainee/index.html.twig', [
-            'trainees' => $traineeRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_trainee_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $trainee = new Trainee();
-        $form = $this->createForm(TraineeType::class, $trainee);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($trainee);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_trainee_index', [], Response::HTTP_SEE_OTHER);
+        $formFields = $request->query->all('form_fields');
+        if (!is_array($formFields)) {
+            $formFields = (array)[$formFields];
         }
 
-        return $this->render('trainee/new.html.twig', [
-            'trainee' => $trainee,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{uuid}', name: 'app_trainee_show', methods: ['GET'])]
-    public function show(TraineeRepository $traineeRepository, string $uuid): Response
-    {
-        return $this->render('trainee/show.html.twig', [
-            'trainee' => $traineeRepository->findOneBy(['uuid' => $uuid]),
-        ]);
-    }
-
-    #[Route('/{uuid}/edit', name: 'app_trainee_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, TraineeRepository $traineeRepository, string $uuid): Response
-    {
-        $trainee = $traineeRepository->findOneBy(['uuid' => $uuid]);
-        $form = $this->createForm(TraineeType::class, $trainee);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_trainee_index', [], Response::HTTP_SEE_OTHER);
+        $data = [];
+        $i = 0;
+        foreach ($traineeRepository->findAll() as $trainee) {
+            foreach ($formFields as $field) {
+                $data[$i][] = $trainee->{'get' . ucfirst($field)}();
+            }
+            $i++;
         }
 
-        return $this->render('trainee/edit.html.twig', [
-            'trainee' => $trainee,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{uuid}', name: 'app_trainee_delete', methods: ['POST'])]
-    public function delete(Request $request, TraineeRepository $traineeRepository, EntityManagerInterface $entityManager, string $uuid): Response
-    {
-        $trainee = $traineeRepository->findOneBy(['uuid' => $uuid]);
-        if ($this->isCsrfTokenValid('delete' . $trainee->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($trainee);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_trainee_index', [], Response::HTTP_SEE_OTHER);
+        // Utiliser le service pour générer le fichier Excel
+        return $excelExporter->exportData('trainee_list', json_decode($parameter->findOneBy(['dtype' => 'trainee'])->getField(), true), $data, $formFields);
     }
 }

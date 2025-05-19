@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Cohort;
+use App\Entity\Course;
 use App\Entity\CourseCohort;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -27,8 +29,8 @@ class CourseCohortFixtures extends Fixture implements DependentFixtureInterface
             $usedCombinations[] = $combination;
 
             $cc = new CourseCohort();
-            $cc->setCohort($this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . $cohortIndex));
-            $cc->setCourse($this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . $courseIndex));
+            $cc->setCohort($this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . $cohortIndex, Cohort::class));
+            $cc->setCourse($this->getReference(CourseFixtures::COURSE_REFERENCE_TAG . $courseIndex, Course::class));
             $cc->setActive($faker->boolean(70));
             
             $manager->persist($cc);
@@ -38,7 +40,7 @@ class CourseCohortFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             CohortFixtures::class,

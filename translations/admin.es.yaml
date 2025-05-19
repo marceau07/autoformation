@@ -1,0 +1,422 @@
+Trainee: "Aprendiz"
+Trainer: "Entrenador"
+Coordinator: "Coordinador"
+Responsible: "Responsable"
+Sector: "Sector"
+Avatar: "Avatar"
+Survey: "Encuesta"
+SurveyTrainee: "Aprendiz de encuesta"
+Cohort: "Cohorte"
+CourseModule: "Módulo"
+Course: "Curso"
+CourseResource: "Recursos del curso"
+TraineeResource: "Recurso del aprendiz"
+CourseCohort: "Curso de cohorte"
+Sandbox: "Sandbox"
+Quiz: "Cuestionario"
+QuizRow: "Cuestionario"
+QuizShare: "Cuestionario compartido"
+QuizTheme: "Tema del cuestionario"
+UserQuiz: "Cuestionario del usuario"
+CohortInternship: "Cohorte de prácticas"
+Prospect: "Perspectiva"
+Internship: "Prácticas"
+TraineeInternship: "Prácticas del aprendiz"
+SiteSettings: "Configuración del sitio"
+ExportParameter: "Parámetro de exportación"
+Notification: "Notificación"
+Faq: "FAQ"
+
+admin:
+  title: 
+    dashboard: 
+      "Panel"
+  global:
+    file:
+      not_supported: "Tipo de archivo no compatible."
+      no_file: "No hay ningún archivo seleccionado"
+    language_french:
+      text: "Francés"
+      code: "fr"
+    language_english:
+      text: "Inglés"
+      code: "en"
+    language_spanish:
+      text: "Español"
+      code: "es"
+  menu:
+    language:
+      label: "Idioma"
+    profile: "Mi perfil"
+    settings: "Configuración"
+    dashboard: "Panel"
+    users: 
+      label: "Usuarios"
+      users: "Usuarios"
+      trainees: "Aprendices"
+      trainers: "Entrenadores"
+      coordinators: "Coordinadores"
+      responsibles: "Responsables"
+      sectors: "Sectores"
+      avatars: "Avatares"
+      surveys: "Encuestas"
+      surveys_trainees: "Encuestas de aprendices"
+    courses:
+      label: "Cursos"
+      cohorts: "Cohortes"
+      modules: "Módulos"
+      lessons: "Lecciones"
+      resources: "Recursos"
+      trainees_resources: "Recursos de aprendices"
+      shared: "Compartido"
+      sandboxes: "Sandbox"
+    quizzes:
+      label: "Cuestionarios"
+      questions: "Preguntas"
+      shared: "Compartido"
+      theme: "Tema"
+      answers: "Respuestas"
+    internships: 
+      label: "Prácticas"
+      cohorts: "Cohortes"
+      prospects: "Perspectivas"
+      trainees: "Aprendices"
+    other: "Otros"
+    application: "Aplicación"
+    export_parameters: "Parámetros de exportación"
+    notifications: "Notificaciones"
+    q_and_A: "Preguntas y respuestas"
+    back: "Atrás a %app_name%"
+    logout: "Cerrar sesión"
+  dashboard:
+    title: "Panel de administración"
+    management:
+      cohorts:
+        label: "Gestión de cohortes"
+        active: 
+          label: "Cohortes activas"
+          no_cohort: "No hay cohortes activas."
+        uncoming: 
+          label: "Cohortes próximas"
+          no_cohort: "No cohortes próximas."
+        inactive: 
+          label: "Cohortes inactivas"
+          no_cohort: "No cohortes inactivas."
+      internships:
+        label: "Gestión de prácticas"
+        no_internship_planned: "No prácticas planificadas."
+        no_internship: "No prácticas."
+      notifications:
+        label: "Notificaciones"
+        new_messages: "Nuevos mensajes de %from%."
+        new_internship: "&nbsp;&nbsp;Nuevo documento de prácticas de %from% a proposito de %about%."
+        no_notification: "No hay notificaciones."
+  choices:
+    diploma:
+      "null": "Sin diploma"
+      no_diploma: "Sin diploma"
+      partial_1: "Diploma parcial (CCP1)"
+      partial_2: "Diploma parcial (CCP2)"
+      partial_3: "Diploma parcial (CCP3)"
+      didnt_show_up: "No se presentó"
+      graduated: "Graduado"
+  pages:
+    avatars:
+      columns:
+        id: "Identificador"
+        label: "Etiqueta"
+        link: "Enlace"
+    users:
+      title: "Usuarios"
+      btn_add: "Crear un usuario"
+      columns:
+        id: "Identificador"
+        username: "Nombre de usuario"
+        roles: "Roles"
+        password: "Contraseña"
+        last_name: "Apellido"
+        first_name: "Nombre"
+        email: "Correo electrónico"
+        activated: "Activado"
+        tmp_code: "Código de inicio de sesión temporal"
+        tmp_code_date: "Fecha de caducidad del código temporal"
+        dtype: "Tipo"
+        avatar: "Avatar"
+        signature: "Firma"
+        uuid: "UUID"
+        phone_number: "Número de teléfono"
+      no_user: "No hay usuario."
+    trainees:
+      title: "Aprendices"
+      btn_add: "Crear un aprendiz"
+      columns:
+        password_save: "Contraseña guardada"
+        diploma: "Diploma"
+        cohort: "Cohorte"
+        tutorial_completed: "Tutorial completado"
+      no_trainee: "No hay aprendiz."
+    trainers:
+      title: "Entrenadores"
+      btn_add: "Crear un entrenador"
+      columns:
+        role: "Role"
+        entrance_code: "Código de entrada"
+        entrance_code_date: "Fecha de caducidad del código de entrada"
+        coordinator: "Coordinador"
+      no_responsible: "No responsable."
+    coordinators:
+      title: "Coordinadores"
+      btn_add: "Crear un coordinador"
+      columns:
+        role: "Role"
+        entrance_code: "Código de entrada"
+        entrance_code_date: "Fecha de caducidad del código de entrada"
+        responsible: "Responsable"
+      no_coordinator: "No coordinador."
+    responsibles:
+      title: "Responsables"
+      btn_add: "Crear un responsable"
+      columns:
+        role: "Role"
+        entrance_code: "Código de entrada"
+        entrance_code_date: "Fecha de caducidad del código de entrada"
+        sector: "Sector"
+      no_responsible: "No responsable."
+    cohorts:
+      export: "Exportar"
+      columns:
+        id: "Identificador"
+        trainer: "Entrenador"
+        name: "Nombre"
+        acronym: "Acrónimo"
+        shield: "Escudo"
+        start_date: "Fecha de inicio"
+        finish_date: "Fecha de finalización"
+        uuid: "UUID"
+    modules:
+      columns:
+        id: "Identificador"
+        label: "Nombre"
+        position: "Posición"
+        uuid: "UUID"
+        illustration: "Ilustración"
+    courses:
+      columns:
+        id: "Identificador"
+        title: "Título"
+        synopsis: "Sinopsis"
+        keywords: "Palabras clave"
+        link: "Enlace"
+        position: "Posición"
+        module: "Módulo"
+        trainer: "Autor"
+        visitors: "Visitantes"
+    courses_shared:
+      columns:
+        id: "Identificador"
+        course: "[Módulo] Curso"
+        cohort: "Cohorte"
+        active: "Activo"
+    quizzes:
+      columns:
+        id: "Identificador"
+        theme: "Tema"
+        title: "Título"
+        uuid: "UUID"
+        trainer: "Autor"
+        module: "Módulo"
+    quizzes_rows:
+      columns:
+        id: "Identificador"
+        quiz: "Prueba"
+        uuid: "UUID"
+        question: "Pregunta"
+        quiz_type: 
+          label: "Tipo"
+          options:
+            default: "Por defecto"
+            long_answer: "Respuesta larga"
+            short_answer: "Respuesta corta"
+            unique_choice: "Elección única"
+            multiple_choice: "Opción múltiple"
+            true_false: "Verdadero/Falso"
+        timer: "Temporizador"
+        score: "Puntaje"
+        hint: "Pista"
+        answer_explanation: "Explicación de la respuesta"
+        options:
+          1: "Opción 1"
+          2: "Opción 2"
+          3: "Opción 3"
+          4: "Opción 4"
+        answer: "Respuesta"
+    quizzes_shared:
+      columns:
+        id: "Identificador"
+        quiz: "[Módulo] Cuestionario"
+        start_date: "Fecha de inicio"
+        finish_date: "Fecha de finalización"
+        uuid: "UUID"
+    quizzes_themes:
+      columns:
+        id: "Identificador"
+        illustration: "Ilustración"
+        color: "Color"
+        name: "Nombre"
+    quizzes_users:
+      columns:
+        id: "Identificador"
+        user: "Usuario"
+        quiz_row: "Cuestionario"
+        real_answer: "Respuesta real"
+        answer: "Respuesta"
+        finish_date: "Fecha de finalización"
+    cohorts_internships:
+      columns:
+        id: "Identificador"
+        label: "Nombre"
+        start_date: "Fecha de inicio"
+        finish_date: "Fecha de finalización"
+        duration: "Duración"
+        cohort: "Cohorte"
+        uuid: "UUID"
+    prospects_internships:
+      columns:
+        id: "Identificador"
+        name: "Nombre"
+        siren: "SIREN"
+        nic: "NIC"
+        number: "Número"
+        street: "Calle"
+        postal_code: "Código Postal"
+        city: "Ciudad"
+        country: "País"
+        additional_address: "Dirección adicional"
+        email: "Correo electrónico"
+        phone_number: "Número de teléfono"
+        phone_number_bis: "Número de teléfono (BIS)"
+    internships:
+      columns:
+        id: "Identificador"
+        trainee: "Aprendiz"
+        prospect: "Prospecto"
+        tutor_last_name: "Apellido del tutor"
+        tutor_first_name: "Nombre del tutor"
+        tutor_email: "Correo electrónico del tutor"
+        tutor_phone_number: "Número de teléfono del tutor"
+    trainees_internships:
+      asking_elements:
+        missing_agreement: "Falta el acuerdo."
+        label: "Haga clic aquí para recuperar documentos."
+      columns:
+        id: "Identificador"
+        internship: "Prácticas"
+        trainee: "Aprendiz"
+        agreement: "Acuerdo"
+        agreement_link: "Enlace del acuerdo"
+        certificate: "Certificado"
+        certificate_link: "Enlace del certificado"
+        evaluation: "Evaluación"
+        evaluation_link: "Enlace de evaluación"
+        cohort_internship: "Cohorte de prácticas"
+    site_settings:
+      columns:
+        id: "Identificador"
+        maintenance_mode: "Modo de mantenimiento"
+        logo_path: "Enlace del logotipo"
+        logo_name: "Nombre del logotipo"
+        platform_name: "Nombre de la plataforma"
+        primary_color: "Color primario"
+        secondary_color: "Color secundario"
+        tertiary_color: "Color terciario"
+        quaternary_color: "Color cuaternario"
+        lighten_color: "Aclarar el color"
+        darken_color: "Oscurecer el color"
+    notifications:
+      columns:
+        id: "Identificador"
+        origin: "Origen"
+        message: "Mensaje"
+        link: "Enlace"
+        date: "Fecha"
+        category: 
+          label: "Categoría"
+          options:
+            homework_to_do: "Tarea por hacer"
+            new_course: "Nuevo curso"
+            new_features: "Nuevas funciones"
+            new_internship: "Nuevo documento de prácticas"
+            new_message: "Nuevo mensaje"
+        user: "Usuario"
+    q_and_a:
+      columns:
+        id: "Identificador"
+        sector: "Sector"
+        theme: "Tema"
+        title: "Título"
+        content: "Contenido"
+        visibility: "Visibilidad"
+        priority: "Prioridad"
+    courses_resources:
+      columns:
+        id: "Identificador"
+        course: "Curso"
+        title: "Título"
+        resume: "Resumen"
+        link: "Enlace"
+        type: 
+          label: "Tipo"
+          options:
+            other: "Otro"
+            exercise: "Ejercicio"
+            tp: "TP"
+        record: "Registro"
+        record_link: "Enlace del registro"
+    export_parameters:
+      columns:
+        id: "Identificador"
+        dtype: 
+          label: "Tipo"
+          options:
+            user: "Usuario"
+            trainee: "Aprendiz"
+            trainer: "Entrenador"
+            coordinator: "Coordinador"
+            responsible: "Responsable"
+            cohort: "Cohorte"
+            prospect: "Prospecto"
+            internship: "Prácticas"
+        field: "Campo"
+    sectors:
+      columns:
+        id: "Identificador"
+        label: "Nombre"
+        logo: "Logo"
+    sandboxes:
+      columns:
+        id: "Identificador"
+        course: "Curso"
+        author: "Autor"
+        title: "Título"
+        data: "Datos"
+        created_at: "Fecha de creación"
+        uuid: "UUID"
+        slide: "Diapositiva"
+    surveys:
+      columns:
+        id: "Identificador"
+        question: "Pregunta"
+        resume: "Resumen"
+    surveys_trainees:
+      columns:
+        id: "Identificador"
+        survey: "Encuesta"
+        trainee: "Aprendiz"
+        rate: "Calificación"
+        answer: "Respuesta"
+    trainees_resources:
+      columns:
+        id: "Identificador"
+        trainee: "Aprendiz"
+        course_resource: "Recurso del curso"
+        label: "Etiqueta"

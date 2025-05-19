@@ -1,0 +1,14 @@
+{% trans_default_domain 'admin' %}
+
+<h5>{{ 'admin.pages.cohorts.export'|trans }}</h5>
+
+<form id="exportForm">
+  {% for field in fields|json_decode %}
+    <div class="form-check">
+      <input class="form-check-input" name="form_fields[]" type="checkbox" value="{{ field }}" id="exportParam{{ loop.index }}" checked />
+      <label class="form-check-label" for="exportParam{{ loop.index }}">{{ ('admin.pages.cohorts.columns.' ~ field)|trans }}</label>
+    </div>
+  {% else %}
+    <p>{{ 'admin.pages.cohorts.export.no_parameters'|trans }}</p>
+  {% endfor %}
+</form>

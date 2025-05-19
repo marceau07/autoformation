@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CourseResourceRepository::class)]
 #[Broadcast]
 class CourseResource
@@ -43,7 +44,7 @@ class CourseResource
     /**
      * @var Collection<int, TraineeResource>
      */
-    #[ORM\OneToMany(targetEntity: TraineeResource::class, mappedBy: 'resource')]
+    #[ORM\OneToMany(targetEntity: TraineeResource::class, mappedBy: 'courseResource')]
     private Collection $traineeResources;
 
     public function __construct()
@@ -148,25 +149,8 @@ class CourseResource
         return $this->traineeResources;
     }
 
-    public function addTraineeResource(TraineeResource $traineeResource): static
+    public function __toString(): string
     {
-        if (!$this->traineeResources->contains($traineeResource)) {
-            $this->traineeResources->add($traineeResource);
-            $traineeResource->setResource($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTraineeResource(TraineeResource $traineeResource): static
-    {
-        if ($this->traineeResources->removeElement($traineeResource)) {
-            // set the owning side to null (unless already changed)
-            if ($traineeResource->getResource() === $this) {
-                $traineeResource->setResource(null);
-            }
-        }
-
-        return $this;
+        return $this->getCourse() . " / " . $this->title;
     }
 }

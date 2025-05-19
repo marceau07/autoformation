@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Éditeur de Code
+{% endblock %}
+
+{% block main %}
+  <h1>Éditeur de Code</h1>
+  <div id="editor" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+  <script>
+    let editor = null
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' } })
+    require(['vs/editor/editor.main'], function () {
+      editor = monaco.editor.create(document.getElementById('editor'), {
+        value: `<?php\n    echo "Hello World!";`,
+        language: 'php',
+        theme: 'vs-' + localStorage.theme || 'light'
+      })
+    })
+  </script>
+{% endblock %}

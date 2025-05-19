@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ 'changelogs.title'|trans }}
+{% endblock %}
+
+{% block main %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1>{{ 'changelogs.title'|trans }}</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="accordion" id="accordionChangelogs">
+          {% for release in releases|json_decode %}
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button" type="button" id="btn_{{ release.tag_name|replace({ '.': '' }) }}" data-bs-toggle="collapse" data-bs-target="#collapse_{{ release.id }}" aria-expanded="true" aria-controls="collapse_{{ release.id }}">{{ release.tag_name }} - {{ release.published_at|time_ago }}</button></h2>
+              <div id="collapse_{{ release.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionChangelogs">
+                <div class="accordion-body">{{ release.body|markdown_to_html|linkify }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    $(document).ready(function() {
+      // Sélectionne le bouton par son ID et simule un clic
+      {% if version is defined and version is not empty %}
+        $('#btn_{{ version }}').trigger('click');
+      {% endif %}
+    });
+  </script>
+{% endblock %}

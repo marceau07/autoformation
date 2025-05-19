@@ -1,0 +1,422 @@
+Trainee: "Stagiaire"
+Trainer: "Formateur"
+Coordinator: "Coordinateur"
+Responsible: "Responsable"
+Sector: "Secteur"
+Avatar: "Avatar"
+Survey: "Sondage"
+SurveyTrainee: "Réponse Sondage"
+Cohort: "Cohorte"
+CourseModule: "Module"
+Course: "Cours"
+CourseResource: "Ressource de Cours"
+TraineeResource: "Ressource Stagiaire"
+CourseCohort: "Cours partagé"
+Sandbox: "Bac à sable"
+Quiz: "Quiz"
+QuizRow: "Ligne de Quiz"
+QuizShare: "Partagé"
+QuizTheme: "Thème"
+UserQuiz: "Réponse Quiz"
+CohortInternship: "Stage de la Cohorte"
+Prospect: "Prospect"
+Internship: "Stage"
+TraineeInternship: "Stage Stagiaire"
+SiteSettings: "Paramètres de la plateforme"
+ExportParameter: "Paramètres d'exportation"
+Notification: "Notification"
+Faq: "FAQ"
+
+admin:
+  title: 
+    dashboard: 
+      "Tableau de bord"
+  global:
+    file:
+      not_supported: "Type de fichier non pris en charge."
+      no_file: "Aucun fichier sélectionné."
+    language_french:
+      text: "Français"
+      code: "fr"
+    language_english:
+      text: "Anglais"
+      code: "en"
+    language_spanish:
+      text: "Espagnol"
+      code: "es"
+  menu:
+    language:
+      label: "Langage"
+    profile: "Mon profil"
+    settings: "Paramètres"
+    dashboard: "Tableau de bord"
+    users: 
+      label: "Utilisateurs"
+      users: "Utilisateurs"
+      trainees: "Stagiaires"
+      trainers: "Formateurs"
+      coordinators: "Coordinateurs"
+      responsibles: "Responsables"
+      sectors: "Secteurs"
+      avatars: "Avatars"
+      surveys: "Sondages"
+      surveys_trainees: "Réponses sondages stagiaires"
+    courses:
+      label: "Formations"
+      cohorts: "Cohortes"
+      modules: "Modules"
+      lessons: "Cours"
+      resources: "Ressources"
+      trainees_resources: "Ressources stagiaires"
+      shared: "Cours partagés"
+      sandboxes: "Bac à sable"
+    quizzes:
+      label: "Quiz"
+      questions: "Questions"
+      shared: "Partagés"
+      theme: "Thèmes"
+      answers: "Réponses"
+    internships: 
+      label: "Stages"
+      cohorts: "Cohortes"
+      prospects: "Prospets"
+      trainees: "Stagiaires"
+    other: "Autre"
+    application: "Application"
+    export_parameters: "Paramètres d'exportation"
+    notifications: "Notifications"
+    q_and_A: "FAQ"
+    back: "Retour sur la %app_name%"
+    logout: "Déconnexion"
+  dashboard:
+    title: "Tableau de bord"
+    management:
+      cohorts:
+        label: "Gestion des cohortes"
+        active: 
+          label: "Les cohortes actives"
+          no_cohort: "Aucune cohorte en cours de formation."
+        uncoming: 
+          label: "Les cohortes à venir"
+          no_cohort: "Aucune cohorte à venir."
+        inactive: 
+          label: "Les cohortes sorties"
+          no_cohort: "Aucune cohorte précédente."
+      internships:
+        label: "Gestion des stages"
+        no_internship_planned: "Pas de stage planifié pour cette cohorte."
+        no_internship: "Aucun stage en cours."
+      notifications:
+        label: "Notifications"
+        new_messages: "Nouveau message de la part de %from%."
+        new_internship: "&nbsp;&nbsp;Nouveau document de stage reçu de %from% concernant %about%."
+        no_notification: "Aucune notification."
+  choices:
+    diploma:
+      "null": "Aucun diplôme"
+      no_diploma: "Pas de diplôme"
+      partial_1: "Diplômé·e partiellement (CCP1)"
+      partial_2: "Diplômé·e partiellement (CCP2)"
+      partial_3: "Diplômé·e partiellement (CCP3)"
+      didnt_show_up: "Ne s'est pas présenté·e"
+      graduated: "Diplômé·e"
+  pages:
+    avatars:
+      columns:
+        id: "Identifiant"
+        label: "Nom"
+        link: "Lien"
+    users:
+      title: "Utilisateurs"
+      btn_add: "Créer un utilisateur"
+      columns:
+        id: "Identifiant"
+        username: "Nom d'utilisateur"
+        roles: "Rôles"
+        password: "Mot de passe"
+        last_name: "Nom"
+        first_name: "Prénom"
+        email: "Email"
+        activated: "Activé"
+        tmp_code: "Code temporaire de connexion"
+        tmp_code_date: "Date d'expiration du code temporaire"
+        dtype: "Type d'utilisateur"
+        avatar: "Avatar"
+        signature: "Signature"
+        uuid: "UUID"
+        phone_number: "Numéro de téléphone"
+      no_user: "Aucun utilisateur."
+    trainees:
+      title: "Stagiaire"
+      btn_add: "Créer un stagiaire"
+      columns:
+        password_save: "Mot de passe original"
+        diploma: "Diplôme"
+        cohort: "Cohorte"
+        tutorial_completed: "Tutoriel terminé"
+      no_trainee: "Aucun stagiaire."
+    trainers:
+      title: "Formateurs"
+      btn_add: "Créer un formateur"
+      columns:
+        role: "Rôle"
+        entrance_code: "Code d'entrée"
+        entrance_code_date: "Date d'expiration du code d'entrée"
+        coordinator: "Coordinateur"
+      no_responsible: "Aucun formateur."
+    coordinators:
+      title: "Coordinateurs"
+      btn_add: "Créer un coordinateur"
+      columns:
+        role: "Rôle"
+        entrance_code: "Code d'entrée"
+        entrance_code_date: "Date d'expiration du code d'entrée"
+        responsible: "Responsable"
+      no_coordinator: "Aucun coordinateur."
+    responsibles:
+      title: "Responsables"
+      btn_add: "Créer un responsable"
+      columns:
+        role: "Rôle"
+        entrance_code: "Code d'entrée"
+        entrance_code_date: "Date d'expiration du code d'entrée"
+        sector: "Secteur"
+      no_responsible: "Aucun responsable."
+    cohorts:
+      export: "Exporter"
+      columns:
+        id: "Identifiant"
+        trainer: "Formateur référent"
+        name: "Nom"
+        acronym: "Acronyme"
+        shield: "Blason"
+        start_date: "Date de début"
+        finish_date: "Date de fin"
+        uuid: "UUID"
+    modules:
+        columns:
+          id: "Identifiant"
+          label: "Nom"
+          position: "Position"
+          uuid: "UUID"
+          illustration: "Illustration"
+    courses:
+      columns:
+        id: "Identifiant"
+        title: "Titre"
+        synopsis: "Synopsis"
+        keywords: "Mots-clés"
+        link: "Lien"
+        position: "Position"
+        module: "Module"
+        trainer: "Auteur"
+        visitors: "Visiteurs"
+    courses_shared:
+      columns:
+        id: "Identifiant"
+        course: "[Module] Cours"
+        cohort: "Cohorte"
+        active: "Actif"
+    quizzes:
+      columns:
+        id: "Identifiant"
+        theme: "Thème"
+        title: "Titre"
+        uuid: "UUID"
+        trainer: "Auteur"
+        module: "Module"
+    quizzes_rows:
+      columns:
+        id: "Identifiant"
+        quiz: "Quiz"
+        uuid: "UUID"
+        question: "Question"
+        quiz_type:
+          label: "Type de quiz"
+          options:
+            default: "Défaut"
+            long_answer: "Réponse longue"
+            short_answer: "Réponse courte"
+            unique_choice: "Choix unique"
+            multiple_choice: "Choix multiple"
+            true_false: "Vrai ou faux"
+        timer: "Minuteur"
+        score: "Score"
+        hint: "Indice"
+        answer_explanation: "Explication de la réponse"
+        options:
+          1: "Option 1"
+          2: "Option 2"
+          3: "Option 3"
+          4: "Option 4"
+        answer: "Réponse"
+    quizzes_shared:
+      columns:
+        id: "Identifiant"
+        quiz: "[Module] Quiz"
+        start_date: "Date de début"
+        finish_date: "Date de fin"
+        uuid: "UUID"    
+    quizzes_themes:
+      columns:
+        id: "Identifiant"
+        illustration: "Illustration"
+        color: "Couleur"
+        name: "Nom"
+    quizzes_users:
+      columns:
+        id: "Identifiant"
+        user: "Utilisateur"
+        quiz_row: "Ligne de quiz"
+        real_answer: "Réponse réelle"
+        answer: "Réponse de l'utilisateur"
+        finish_date: "Date de fin"
+    cohorts_internships:
+      columns:
+        id: "Identifiant"
+        label: "Nom"
+        start_date: "Date de début"
+        finish_date: "Date de fin"
+        duration: "Durée"
+        cohort: "Cohorte"
+        uuid: "UUID"
+    prospects_internships:
+      columns:
+        id: "Identifiant"
+        name: "Nom"
+        siren: "SIREN"
+        nic: "NIC"
+        number: "Numéro"
+        street: "Rue"
+        postal_code: "Code postal"
+        city: "Ville"
+        country: "Pays"
+        additional_address: "Adresse complémentaire"
+        email: "Email"
+        phone_number: "Numéro de téléphone"
+        phone_number_bis: "Numéro de téléphone (BIS)"
+    internships:
+      columns:
+        id: "Identifiant"
+        trainee: "Stagiaire"
+        prospect: "Prospect"
+        tutor_last_name: "Nom du tuteur"
+        tutor_first_name: "Prénom du tuteur"
+        tutor_email: "Email du tuteur"
+        tutor_phone_number: "Numéro de téléphone du tuteur"
+    trainees_internships:
+      asking_elements:
+        missing_agreement: "Vous devez d'abord renseigner la convention de stage."
+        label: "Cliquez ici pour demander les documents de stage."
+      columns:
+        id: "Identifiant"
+        internship: "Stage"
+        trainee: "Stagiaire"
+        agreement: "Convention"
+        agreement_link: "Lien vers la convention"
+        certificate: "Attestation"
+        certificate_link: "Lien vers l'attestation"
+        evaluation: "Évaluation"
+        evaluation_link: "Lien vers l'évaluation"
+        cohort_internship: "Stage de la cohorte"
+    site_settings:
+      columns:
+        id: "Identifiant"
+        maintenance_mode: "Mode maintenance"
+        logo_path: "Lien vers le logo"
+        logo_name: "Nom du logo"
+        platform_name: "Nom de la plateforme"
+        primary_color: "Couleur primaire"
+        secondary_color: "Couleur secondaire"
+        tertiary_color: "Couleur tertiaire"
+        quaternary_color: "Couleur quaternaire"
+        lighten_color: "Couleur d'éclaircissement"
+        darken_color: "Couleur d'assombrissement"
+    notifications:
+      columns:
+        id: "Identifiant"
+        origin: "Origine"
+        message: "Message"
+        link: "Lien"
+        date: "Date"
+        category: 
+          label: "Catégorie"
+          options:
+            homework_to_do: "Devoir à faire"
+            new_course: "Nouveau cours"
+            new_features: "Nouvelles fonctionnalités"
+            new_internship: "Nouveau document stage"
+            new_message: "Nouveau message"
+        user: "Destinataire"
+    q_and_a:
+      columns:
+        id: "Identifiant"
+        sector: "Secteur"
+        theme: "Thème"
+        title: "Titre"
+        content: "Contenu"
+        visibility: "Visibilité"
+        priority: "Priorité"
+    courses_resources:
+      columns:
+        id: "Identifiant"
+        course: "Cours"
+        title: "Titre"
+        resume: "Résumé"
+        link: "Lien"
+        type: 
+          label: "Type"
+          options:
+            other: "Autre"
+            exercise: "Exercice"
+            tp: "TP"
+        record: "Enregistrement"
+        record_link: "Lien vers l'enregistrement"
+    export_parameters:
+      columns:
+        id: "Identifiant"
+        dtype: 
+          label: "Type"
+          options:
+            user: "Utilisateur"
+            trainee: "Stagiaire"
+            trainer: "Formateur"
+            coordinator: "Coordinateur"
+            responsible: "Responsable"
+            cohort: "Cohorte"
+            prospect: "Prospet"
+            internship: "Stage"
+        field: "Champs"
+    sectors:
+      columns:
+        id: "Identifiant"
+        label: "Nom"
+        logo: "Logo"
+    sandboxes:
+      columns:
+        id: "Identifiant"
+        course: "Cours"
+        author: "Auteur"
+        title: "Titre"
+        data: "Données"
+        created_at: "Créé le"
+        uuid: "UUID"
+        slide: "Diapositive"
+    surveys:
+      columns:
+        id: "Identifiant"
+        question: "Question"
+        resume: "Résumé"
+    surveys_trainees:
+      columns:
+        id: "Identifiant"
+        survey: "Sondage"
+        trainee: "Stagiaire"
+        rate: "Note"
+        answer: "Réponse"
+    trainees_resources:
+      columns:
+        id: "Identifiant"
+        trainee: "Stagiaire"
+        course_resource: "Ressource rattachée"
+        label: "Nom"

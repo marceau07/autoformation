@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: TrainerRepository::class)]
 #[Broadcast]
 class Trainer extends User implements UserInterface
@@ -26,7 +27,7 @@ class Trainer extends User implements UserInterface
     private Collection $courses;
 
     #[ORM\ManyToOne(inversedBy: 'trainers')]
-    private ?Sector $sector = null;
+    private ?Coordinator $coordinator = null;
 
     #[ORM\OneToMany(targetEntity: Cohort::class, mappedBy: 'trainer')]
     private Collection $cohorts;
@@ -37,6 +38,13 @@ class Trainer extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'trainer', orphanRemoval: true)]
     private Collection $quizzes;
 
+
+    /**
+     * @var Collection<int, Sandbox>
+     */
+    #[ORM\OneToMany(targetEntity: Sandbox::class, mappedBy: 'author')]
+    private Collection $sandboxes;
+
     public function __construct()
     {
         $roles = $this->getRoles();
@@ -45,6 +53,7 @@ class Trainer extends User implements UserInterface
         $this->courses = new ArrayCollection();
         $this->cohorts = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
+        $this->sandboxes = new ArrayCollection();
     }
 
     public function getRole(): ?string
@@ -113,14 +122,14 @@ class Trainer extends User implements UserInterface
         return $this;
     }
 
-    public function getSector(): ?Sector
+    public function getCoordinator(): ?Coordinator
     {
-        return $this->sector;
+        return $this->coordinator;
     }
 
-    public function setSector(?Sector $sector): static
+    public function setCoordinator(?Coordinator $coordinator): static
     {
-        $this->sector = $sector;
+        $this->coordinator = $coordinator;
 
         return $this;
     }
@@ -179,6 +188,41 @@ class Trainer extends User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($quiz->getTrainer() === $this) {
                 $quiz->setTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    /**
+     * @return Collection<int, Sandbox>
+     */
+    public function getSandboxes(): Collection
+    {
+        return $this->sandboxes;
+    }
+
+    public function addSandboxes(Sandbox $sandbox): static
+    {
+        if (!$this->sandboxes->contains($sandbox)) {
+            $this->sandboxes->add($sandbox);
+            $sandbox->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSandbox(Sandbox $sandbox): static
+    {
+        if ($this->sandboxes->removeElement($sandbox)) {
+            // set the owning side to null (unless already changed)
+            if ($sandbox->getAuthor() === $this) {
+                $sandbox->setAuthor(null);
             }
         }
 

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
 #[Broadcast]
 class Notification
@@ -31,7 +32,7 @@ class Notification
     #[ORM\Column(length: 100)]
     private ?string $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\ManyToOne(inversedBy: 'notifications', cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

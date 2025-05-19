@@ -37,6 +37,20 @@ class TrainerRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param string $sector
+     * @return Trainer[]
+     */
+    public function findAllBySector(string $sector): array
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.coordinator', 'c')
+            ->join('c.responsible', 'r')
+            ->where('r.sector = :sector')
+            ->setParameter('sector', $sector)
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Trainer[] Returns an array of Trainer objects
     //     */

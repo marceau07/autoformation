@@ -32,9 +32,14 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
         return [
             'feedbackCategories' => $this->globalDataService->getFeedbackCategories(),
             'notificationsHomeworksToDo' => $this->globalDataService->getNotificationsHomeworksToDo($this->getCurrentUser()),
+            'notificationsNews' => $this->globalDataService->getNotificationsNews(),
             'notificationsMessages' => $this->globalDataService->getNotificationsMessages($this->getCurrentUser()),
             'notificationsInternships' => $this->globalDataService->getNotificationsInternships($this->getCurrentUser()),
             'notificationsNewCourses' => $this->globalDataService->getNotificationsNewCourses($this->getCurrentUser()),
+            'platformName' => $this->globalDataService->getPlatformName(),
+            'getServerAI' => $this->globalDataService->getServerAI(),
+            'platformLogoName' => $this->globalDataService->getPlatformLogoName(),
+            'platformLogoPath' => $this->globalDataService->getPlatformLogoPath(),
         ];
     }
 
@@ -43,6 +48,8 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFilter('json_decode', [$this, 'jsonDecode']),
             new TwigFilter('time_ago', [$this, 'timeAgo']),
+            new TwigFilter('ondisk', [$this, 'onDisk']),
+            new TwigFilter('linkify', [$this, 'linkifyText'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -116,5 +123,27 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
             return $this->translator->trans('global.now');
         }
         // return $diffString ? implode(', ', $diffString) . ' ago' : 'just now';
+    }
+
+    /**
+     * Check if a file exists on disk
+     * @param string $path
+     * @return bool
+     */
+    public function onDisk($path)
+    {
+        return file_exists($path);
+    }
+
+    /**
+     * Convert URLs in a string to clickable links
+     * @param string $text
+     * @return string
+     */
+    public function linkifyText(string $text): string
+    {
+        $pattern = '/(https?:\/\/[^\s]+)/i';
+        $replacement = '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>';
+        return preg_replace($pattern, $replacement, $text);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Survey;
 use App\Entity\SurveyTrainee;
+use App\Entity\Trainee;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -22,14 +24,14 @@ class SurveyTraineeFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < self::NB_SURVEY_TRAINEE; $i++) {
             do {
                 $surveyIndex = rand(0, SurveyFixtures::NB_SURVEY - 1);
-                $traineeIndex = rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1));
+                $traineeIndex = rand((ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER), (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE) - 1);
                 $combination = $surveyIndex . '|' . $traineeIndex;
             } while (in_array($combination, $usedCombinations));
             $usedCombinations[] = $combination;
 
             $st = new SurveyTrainee();
-            $st->setSurvey($this->getReference(SurveyFixtures::SURVEY_REFERENCE_TAG . $surveyIndex));
-            $st->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex));
+            $st->setSurvey($this->getReference(SurveyFixtures::SURVEY_REFERENCE_TAG . $surveyIndex, Survey::class));
+            $st->setTrainee($this->getReference(TraineeFixtures::TRAINEE_REFERENCE_TAG . $traineeIndex, Trainee::class));
             $st->setRate(rand(0, 5));
             $st->setAnswer($faker->text(250));
 
@@ -39,7 +41,7 @@ class SurveyTraineeFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             SurveyFixtures::class,

@@ -1,13 +1,11 @@
 <?php
 
-// src/Security/UserChecker.php
-
 namespace App\Security;
 
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\User;  // Import your User entity
+use App\Entity\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserChecker implements UserCheckerInterface
@@ -25,7 +23,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->isActivated()) {
+        if (!$user->getActivated()) {
             $message = $this->translator->trans('account.not_activated');
             throw new CustomUserMessageAccountStatusException($message);
         }

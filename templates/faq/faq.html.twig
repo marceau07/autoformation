@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  FAQ
+  {{ 'faq.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('/css/faq.css') }}">
+  <link rel="stylesheet" href="{{ asset('/css/faq.css') }}" />
 {% endblock %}
 
 {% block main %}
   <div class="container-fluid">
     <div class="row p-5" id="faq_block">
       <div class="col-12">
-        <h1 class="text-white">Foire aux Questions</h1>
+        <h1 class="text-white">{{ 'faq.title'|trans }}</h1>
       </div>
     </div>
   </div>
@@ -21,12 +21,12 @@
       <div class="row">
         <div class="col-3 position-fixed">
           <div>
-            <a href="#{{ 'global' }}">Global</a>
+            <a href="#global">{{ 'faq.global'|trans }}</a>
           </div>
           {% for theme in listThemes %}
             {% if theme.theme != 'global' %}
               <div>
-                <a href="#{{ theme.theme|replace({' ': '-'}) }}">{{ theme.theme|capitalize }}</a>
+                <a href="#{{ theme.theme|replace({ ' ': '-' }) }}">{{ theme.theme|capitalize }}</a>
               </div>
             {% endif %}
           {% endfor %}
@@ -35,7 +35,7 @@
       <div class="row">
         <div class="col-7 offset-5">
           {% if listFaqs is defined and listFaqs is not empty %}
-            <h2 id="{{ 'global' }}" class="text-primary">Global</h2>
+            <h2 id="global" class="text-primary">{{ 'faq.global'|trans }}</h2>
             {% for faq in listFaqs %}
               {% if faq.theme == 'global' %}
                 <div class="ms-5">
@@ -47,11 +47,11 @@
               {% endif %}
             {% endfor %}
 
-            {% set actualTheme = "" %}
+            {% set actualTheme = '' %}
             {% for faq in listFaqs %}
               {% if faq.theme != 'global' %}
                 {% if actualTheme != faq.theme %}
-                  <h2 id="{{ faq.theme|replace({' ': '-'}) }}" class="text-primary">{{ faq.theme|capitalize }}</h2>
+                  <h2 id="{{ faq.theme|replace({ ' ': '-' }) }}" class="text-primary">{{ faq.theme|capitalize }}</h2>
                 {% endif %}
                 <div class="ms-5">
                   <h3>{{ faq.title }}</h3>
@@ -64,14 +64,14 @@
             {% endfor %}
           {% else %}
             <div class="ms-5">
-              <p>Aucune donnée n'est disponible.</p>
+              <p>{{ 'faq.no_content'|trans }}</p>
             </div>
           {% endif %}
         </div>
       </div>
     {% else %}
       <div>
-        <h2>Retrouvez la réponse à vos questions les plus génériques ici bientôt !</h2>
+        <h2>{{ 'faq.no_theme'|trans }}</h2>
       </div>
       <div>
         <img class="img-center" style="width: 50vw; height: 75vh;" src="{{ asset('/images/no_data.svg') }}" alt="Illustration pour une page non trouvée" />

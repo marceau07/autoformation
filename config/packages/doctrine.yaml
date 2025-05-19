@@ -24,6 +24,26 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: false
+        second_level_cache:
+            enabled: true
+            # TODO: vérifier cache avec APCU et conf dans framework.yaml
+            # region_cache_driver:
+            #     type: pool
+            #     pool: doctrine.l2_cache_pool
+            regions:
+                # Acutellement non utilisé, nécessite de configurer le cache avec Redis ou APCU
+                read_only:
+                    # expire automatically after 7 days
+                    lifetime: 604800
+                    cache_driver: { type: service, id: cache.app }
+                non_strict:
+                    # expire automatically after 1 hour
+                    lifetime: 3600
+                    cache_driver: { type: service, id: cache.app }
+                strict:
+                    # expire automatically after 1 hour
+                    lifetime: 3600
+                    cache_driver: { type: service, id: cache.app }
 
 when@test:
     doctrine:

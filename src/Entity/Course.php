@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[Broadcast]
 class Course
@@ -44,9 +45,9 @@ class Course
     #[Groups('course_search')]
     private ?CourseModule $module = null;
 
-    #[ORM\ManyToOne(inversedBy: null)]
+    #[ORM\ManyToOne(inversedBy: 'courses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $trainer = null;
+    private ?Trainer $trainer = null;
 
     #[ORM\OneToMany(targetEntity: CourseCohort::class, mappedBy: 'course')]
     private Collection $courseCohorts;
@@ -66,12 +67,20 @@ class Course
     #[ORM\OneToMany(targetEntity: TraineeCourseFavorite::class, mappedBy: 'course')]
     private Collection $traineeCourseFavorites;
 
+    /**
+     * @var Collection<int, Sandbox>
+     */
+    #[ORM\OneToMany(targetEntity: Sandbox::class, mappedBy: 'course')]
+    private Collection $sandboxes;
+
     public function __construct()
     {
         $this->courseCohorts = new ArrayCollection();
         $this->courseTrainees = new ArrayCollection();
         $this->courseResources = new ArrayCollection();
         $this->traineeCourseFavorites = new ArrayCollection();
+        $this->sandboxes = new ArrayCollection();
+        $this->visitors = 0;
     }
 
     public function getId(): ?int
@@ -151,12 +160,12 @@ class Course
         return $this;
     }
 
-    public function getTrainer(): ?User
+    public function getTrainer(): ?Trainer
     {
         return $this->trainer;
     }
 
-    public function setTrainer(?User $trainer): static
+    public function setTrainer(?Trainer $trainer): static
     {
         $this->trainer = $trainer;
 
@@ -289,6 +298,41 @@ class Course
             // set the owning side to null (unless already changed)
             if ($traineeCourseFavorite->getCourse() === $this) {
                 $traineeCourseFavorite->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return '[' . $this->getModule()->getLabel() . '] - ' . $this->getTitle();
+    }
+
+    /**
+     * @return Collection<int, Sandbox>
+     */
+    public function getSandboxes(): Collection
+    {
+        return $this->sandboxes;
+    }
+
+    public function addSandbox(Sandbox $sandbox): static
+    {
+        if (!$this->sandboxes->contains($sandbox)) {
+            $this->sandboxes->add($sandbox);
+            $sandbox->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSandbox(Sandbox $sandbox): static
+    {
+        if ($this->sandboxes->removeElement($sandbox)) {
+            // set the owning side to null (unless already changed)
+            if ($sandbox->getCourse() === $this) {
+                $sandbox->setCourse(null);
             }
         }
 

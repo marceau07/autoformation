@@ -16,27 +16,27 @@
     <meta name="theme-color" content="#317EFB" />
     {% block seo %}
       <meta name="robots" content="index, follow" />
-      <meta name="title" content="{{ 'global.meta_title'|trans }}" />
+      <meta name="title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}" />
       <meta name="description" content="{{ 'global.meta_description'|trans }}">
       <!--Seo Réseaux-->
-      <meta property="og:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="og:type" content=website >
       <meta property="og:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="og:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
-      <meta property="og:site_name" content="{{ 'global.meta_title'|trans }}">
+      <meta property="og:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
+      <meta property="og:site_name" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="og:url" content="{{ app.request.getSchemeAndHttpHost() }}">
       <!--Seo Twitter-->
-      <meta property="twitter:title" content="{{ 'global.meta_title'|trans }}">
+      <meta property="twitter:title" content="{{ 'global.meta_title'|trans({'%platformName%': platformName }) }}">
       <meta property="twitter:type" content=website >
       <meta property="twitter:description" content="{{ 'global.meta_description'|trans }}">
-      <meta property="twitter:image" content="{{ asset('/images/adrar_epa_logo.webp') }}">
+      <meta property="twitter:image" content="{{ asset('/website/' ~ platformLogoPath) }}">
       <meta name="twitter:card" content=summary >
     {% endblock %}
 
     <title>
       {% block title %}
 
-      {% endblock %}&nbsp;- {{ 'global.meta_title'|trans }}
+      {% endblock %}&nbsp;- {{ 'global.meta_title'|trans({'%platformName%': platformName }) }}
     </title>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon-32x32.png') }}" />
@@ -51,6 +51,7 @@
     {# <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> #}
     {# Permet d'afficher le code formaté pour les cours #}
     {# <link rel="stylesheet" href="{{ asset('css/prism.css') }}" /> #}
+    <link rel="stylesheet" href="{{ asset('css/colors.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/feedback.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/notifications.css') }}" />
@@ -61,17 +62,18 @@
 
     {# <link rel="stylesheet" href="//cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" /> #}
     {% block stylesheets %}
-
+      {{ encore_entry_link_tags('app') }}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {# <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> #}
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.0/af-2.7.0/r-3.0.2/datatables.min.js"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
     {% block javascripts %}
-      {% block importmap %}
+        {{ encore_entry_script_tags('app') }}
+      {# {% block importmap %}
         {{ importmap('app') }}
-      {% endblock %}
+      {% endblock %} #}
     {% endblock %}
   </head>
   <body>
@@ -79,7 +81,7 @@
       {% block header %}
         <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR" id="logo_adrar" /></a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}" id="logo_adrar" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -89,9 +91,9 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ path('app_modules') }}">{{ 'header.modules'|trans }}</a>
                 </li>
-                {% if is_granted('ROLE_TRAINER') %}
+                {% if is_granted('ROLE_ADMIN') %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_admin_dashboard') }}">{{ 'header.administration'|trans }}</a>
+                    <a class="nav-link" href="{{ path('admin') }}">{{ 'header.administration'|trans }}</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
@@ -143,6 +145,19 @@
                       <div class="d-none" data-category="trainers" id="searchTrainers">
                         <span class="h3">{{ 'global.trainers'|trans }}</span>
                         <div></div>
+                        <hr>
+                      </div>
+                      <div class="d-none" data-category="coordinators" id="searchCoordinators">
+                        <span class="h3">{{ 'global.coordinators'|trans }}</span>
+                        <div></div>
+                        <hr>
+                      </div>
+                      <div class="d-none" data-category="responsibles" id="searchResponsibles">
+                        <span class="h3">{{ 'global.responsibles'|trans }}</span>
+                        <div></div>
+                      </div>
+                      <div class="d-none" id="noResults">
+                        <span>{{ 'header.search_no_result'|trans }}</span>
                       </div>
                     </div>
                   </div>
@@ -151,6 +166,7 @@
                   <div class="dropdown-container">
                     <a href="#" type="button" data-dropdown="notificationMenu" class="position-relative px-1">
                       {% if (notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty) 
+                        or (notificationsNews is defined and notificationsNews is not empty) 
                         or (notificationsMessages is defined and notificationsMessages is not empty) 
                         or (notificationsInternships is defined and notificationsInternships is not empty) 
                         or (notificationsNewCourses is defined and notificationsNewCourses is not empty) %}
@@ -162,10 +178,29 @@
                       {% endif %}
                     </a>
                     <ul class="dropdown z-1" name="notificationMenu">
+                      <li class="notification-group" id="notificationsNews">
+                        <div class="notification-tab">
+                          <i class="fa fa-square-poll-vertical"></i>
+                          <h6>{{ 'header.notifications.news'|trans }}</h6>
+                          <span class="label">{{ notificationsNews is defined and notificationsNews is not empty ? notificationsNews|length : 0 }}</span>
+                        </div>
+                        <!-- tab -->
+                        <ul class="notification-list">
+                          {% if notificationsNews is defined and notificationsNews is not empty %}
+                            {% for notification in notificationsNews %}
+                              {% include "_components/_notification.html.twig" %}
+                            {% endfor %}
+                          {% else %}
+                            <li class="notification-list-item">
+                              <p class="message">{{ 'notifications.no_news'|trans }}</p>
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </li>
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsToDo">
                         <div class="notification-tab">
                           <i class="fa fa-list-check"></i>
-                          <h6>A faire</h6>
+                          <h6>{{ 'header.notifications.to_do'|trans }}</h6>
                           <span class="label">{{ notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty ? notificationsHomeworksToDo|length : 0 }}</span>
                         </div>
                         <!-- tab -->
@@ -184,7 +219,7 @@
                       <li class="notification-group" id="notificationsMessages">
                         <div class="notification-tab">
                           <i class="fa fa-envelope"></i>
-                          <h6>Messages</h6>
+                          <h6>{{ 'header.notifications.messages'|trans }}</h6>
                           <span class="label">{{ notificationsMessages is defined and notificationsMessages is not empty ? notificationsMessages|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -203,7 +238,7 @@
                       <li class="notification-group" id="notificationsInternships">
                         <div class="notification-tab">
                           <i class="fa fa-graduation-cap"></i>
-                          <h6>Internships</h6>
+                          <h6>{{ 'header.notifications.internships'|trans }}</h6>
                           <span class="label">{{ notificationsInternships is defined and notificationsInternships is not empty ? notificationsInternships|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -222,7 +257,7 @@
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsCourses">
                         <div class="notification-tab">
                           <i class="fa fa-circle-info"></i>
-                          <h6>Cours</h6>
+                          <h6>{{ 'header.notifications.courses'|trans }}</h6>
                           <span class="label">{{ notificationsNewCourses is defined and notificationsNewCourses is not empty ? notificationsNewCourses|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -241,33 +276,30 @@
                   </div>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ (app.request.get('_locale') is same as("en") ? 'global.language_english.code'|trans : 'global.language_french.code'|trans) }}</a>
+                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
-                    <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">{{ 'global.language_french.text'|trans }}</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">{{ 'global.language_english.text'|trans }}</a>
-                    </li>
+                    {% for switch in locale_switch_links() %}
+                      <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
+                    {% endfor %}
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.firstName|capitalize }}&nbsp;{{ app.user.lastName|upper }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_user">
                     <li>
-                      <a class="dropdown-item" href="{{ path('app_account') }}">Modifier mes informations</a>
+                      <a class="dropdown-item" href="{{ path('app_account_privacy_index') }}">{{ 'header.personal.modify'|trans }}</a>
                     </li>
                     <li>
-                      <a class="dropdown-item nav-link form-check form-switch" href="#">
+                      <a class="dropdown-item nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
                         <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
-                        <label class="form-check-label" for="form_dark_mode">Dark mode</label>
+                        <label class="form-check-label" for="form_dark_mode">{{ 'header.personal.dark_mode'|trans }}</label>
                       </a>
                     </li>
                     <li>
                       {% if is_granted('IS_IMPERSONATOR') %}
-                        <a class="dropdown-item" href="?_switch_user=_exit">Sortir de l'impersonation</a>
+                        <a class="dropdown-item" href="?_switch_user=_exit">{{ 'header.personal.exit_impersonation'|trans }}</a>
                       {% endif %}
-                      <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
+                      <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'header.personal.logout'|trans }}</a>
                     </li>
                     <li class="text-muted text-end pe-3">
                       <p class="text-reset">v.{{ app_version() ~ "." ~ app.environment|upper }}</p>
@@ -292,7 +324,7 @@
       {% for flashMessage in app.session.flashbag.get('error') %}
         {% include '_components/_alert.html.twig' with { 'type': 'error', 'bg': 'danger', 'fa': 'times', 'message': flashMessage } %}
       {% endfor %}
-      <main class="mb-5">
+      <main>
         {% block main %}
 
         {% endblock %}
@@ -300,7 +332,7 @@
       {% block footer %}
         <footer class="border-top border-light bg-v1-primary fixed-bottom">
           <p class="text-center m-0">
-            &copy; 2022 - {{ 'now'|date('Y') }} ADRAR - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
+            &copy; 2022 - {{ 'now'|date('Y') }} {{ platformName }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
           </p>
         </footer>
       {% endblock %}
@@ -318,21 +350,21 @@
         </button>
         <div class="main-title">
           <div>
-            <svg viewBox="0 0 640 512" title="robot">
-              <path fill="currentColor" d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z" />
-            </svg>
+            <span>Chatbot</span>
           </div>
-          <span>Chatbot</span>
         </div>
         <div class="chat-area" id="message-box">
           <div class="text-center">
-            <img src="{{ asset('/images/adrar_epa_logo.webp') }}" height="125" alt="Logo de l'ADRAR">
+            <img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}">
           </div>
-          <div class="chat-message-div"></div>
         </div>
         <div class="line"></div>
         <div class="input-div">
           <input class="input-message" name="message" type="text" id="message" placeholder="{{ 'chatbot.placeholder'|trans }}" autocomplete="off" />
+          <button class="input-activate-ia" title="{{ getServerAI ? 'Activer l\'IA':'L\'IA est momentanément indisponible' }}" onclick="activateAI();" {{ getServerAI ? '':'disabled' }}>
+            <span class="visually-hidden">ia</span>
+            <i class="fa-solid fa-robot"></i>
+          </button>
           <button class="input-send" onclick="send()">
             <span class="visually-hidden">message</span>
             <svg style="width:24px;height:24px">
@@ -396,11 +428,31 @@
                   </div>
                   <div class="row mt-2">
                     <div class="col-12">
-                      <a value="Envoyer" class="btn btn-primary float-end" onclick="sendFeedback();$('#form_feedback').reset();$('#modalFeedback').modal('hide');" role="button">{{ 'global.btn_send'|trans }}</a>
+                      <a value="Envoyer" class="btn btn-primary float-end" onclick="sendFeedback();document.getElementById('form_feedback').reset();$('#modalFeedback').modal('hide');" role="button">{{ 'global.btn_send'|trans }}</a>
                     </div>
                   </div>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal pour afficher les détails de l'événement -->
+      <div id="event-details-modal" class="modal modal-xl" style="display: none;" aria-labelledby="modalCalendarTitle">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="container">
+                <div class="row">
+                  <h5 class="modal-title w-auto" id="modalCalendarTitle">Détails de l'événement</h5>
+                  <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <!-- Les détails de l'événement seront insérés ici via JavaScript -->
             </div>
           </div>
         </div>
@@ -422,17 +474,87 @@
       <script src="{{ asset('js/notifications.js') }}"></script>
       {# <script src="{{ asset('js/chatbot.js') }}"></script> #}
       <script>
+        let ai_enabled = false;
         var running = false;
         function send() {
+          if(!ai_enabled) {
             if (running == true) return;
             var msg = document.getElementById("message").value.trim();
             if (msg == "") return;
             running = true;
             addMsg(msg);
-            console.log('Message sent: ' + msg);
             //DELEAY MESSAGE RESPOSE Echo
             window.setTimeout(addResponseMsg, 1000, msg, true);
+          } else {
+            let message = $('#message').val().trim();
+            if (message === '') return;
+
+            var div = document.createElement("div");
+            div.innerHTML = "<span style='flex-grow:1'></span><div class='chat-message-sent align-self-end'>" + message + "</div>";
+            div.className = "chat-message-div";
+            document.getElementById("message-box").appendChild(div);
+            let chatBox = $('#message-box');
+            $('#message').val('');
+            chatBox.scrollTop(chatBox.prop("scrollHeight"));
+
+            let botMessage = $('<div class="chat-message-received ia"></div>');
+            chatBox.append(botMessage);
+            chatBox.scrollTop(chatBox.prop("scrollHeight"));
+
+            let safeMessage = encodeURIComponent(message)
+              .replace(/%2F/g, '%252F')  // Double encodage du `/`
+              .replace(/%3F/g, '%253F')  // Double encodage du `?`
+              .replace(/%26/g, '%2526')  // Double encodage du `&`
+              .replace(/%3D/g, '%253D')  // Double encodage du `=`
+              .replace(/%23/g, '%2523')  // Double encodage du `#`
+              .replace(/%2B/g, '%252B')  // Double encodage du `+`
+              .replace(/%22/g, '%2522')  // Double encodage du `"`
+              .replace(/%3C/g, '%253C')  // Double encodage du `<`
+              .replace(/%3E/g, '%253E')  // Double encodage du `>`
+              .replace(/%27/g, '%2527')  // Double encodage du `'`
+              .replace(/%5C/g, '%255C'); // Double encodage du `\`
+            ;
+            let eventSource = new EventSource('/{{ app.request.get("_locale") }}/ai_chatbot/' + safeMessage);
+            let fullMessage = "";
+
+            eventSource.onmessage = function(event) {
+                if (event.data === "[DONE]") {
+                  eventSource.close(); // Fin du stream
+                } else {
+                  fullMessage += event.data; // Concaténer les fragments
+                  botMessage.html(formatMessage(fullMessage)); // Mettre à jour l'affichage
+                  chatBox.scrollTop(chatBox.prop("scrollHeight"));
+                }
+            };
+
+            eventSource.onerror = function() {
+              eventSource.close();
+            };
+          }
         }
+
+        function formatMessage(text) {
+          // Sépare les paragraphes
+          let paragraphs = text.split(/\n\n+/).map(p => p.trim()); 
+          
+          // Transforme chaque paragraphe en <p>...</p>
+          text = paragraphs.map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+
+          // Convertit le markdown simple en HTML
+          text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"); // Gras
+          text = text.replace(/\*(.*?)\*/g, "<em>$1</em>"); // Italique
+          text = text.replace(/_(.*?)_/g, "<u>$1</u>"); // Souligné
+
+          // Convertit les blocs de code multi-lignes ```code``` en <pre><code>code</code></pre>
+          text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+          
+          // Convertit les blocs de code inline `code` en <code>code</code>
+          text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+          // Ajoute automatiquement des <p> autour du texte
+          return "<p>" + text + "</p>";
+        }
+
         function addMsg(msg) {
             var div = document.createElement("div");
             div.innerHTML =
@@ -447,6 +569,7 @@
                 "message-box"
             ).scrollHeight;
         }
+
         function addResponseMsg(msg, ajax = false) {
             if (ajax) {
                 var formData = new FormData();
@@ -486,7 +609,6 @@
               ).scrollHeight;
               running = false;
             }
-            console.log('Message received: ' + msg);
         }
         document.getElementById("message").addEventListener("keyup", function (event) {
             if (event.keyCode === 13) {
@@ -500,12 +622,20 @@
               document.getElementById("chatbot_toggle").children[1].style.display = "none"
               document.getElementById("chatbot_toggle").children[2].style.display = ""
               // Default display message
-              setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username })|raw }}", false)
+              if($('#message-box .chat-message-div').length === 0) {
+                setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username })|raw }}", false)
+              }
             } else {
                 document.getElementById("chatbot").classList.add("collapsed")
                 document.getElementById("chatbot_toggle").children[1].style.display = ""
                 document.getElementById("chatbot_toggle").children[2].style.display = "none"
             }
+        }
+
+        // Gestion de l'IA
+        function activateAI() {
+          ai_enabled = !ai_enabled;
+          document.getElementById("message").classList.toggle("ai-enabled");
         }
       </script>
       <script>
@@ -517,8 +647,8 @@
           if ({{ is_granted('ROLE_TRAINEE') ? 'true' : 'false' }}) {
             const stepsTourGuideTrainee = [
               {
-                title: "Tutoriel",
-                content: "Ce petit tutoriel a pour but de vous montrer comment fonctionne le site. Libre à vous de le passer. <br>Vous pourrez le relancer à tout moment en cliquant sur le bouton en haut à droite dans vos informations personnelles.", 
+                title: "{{ 'tourguide.index.trainee.start.title'|trans }}",
+                content: "{{ 'tourguide.index.trainee.start.content'|trans|raw }}", 
                 position: 'center', 
                 group: 'trainee-index', 
                 order: 0,
@@ -613,7 +743,7 @@
                 group: 'trainee-modules',  
                 order: 1,
                 display_modal: false, 
-                link: "{{ path('app_course', {'course': '31deef88-6dc3-4b4b-8c80-44210a4eac31'}) }}"
+                link: "{{ path('app_course', {'course': '9b8e2dec-aaab-493f-a691-c2c5f92aa782'}) }}"
               }, 
               {
                 title: "{{ 'tourguide.index.trainee.courses.title'|trans }}",
@@ -643,7 +773,7 @@
                 group: 'trainee-modules',  
                 order: 4,
                 display_modal: false, 
-                link: "{{ path('app_embed', {'slide': '1kU91RMq87NsJ5YKlrs9yxNgudF3dr1cRPTTLSj3NHtM'}) }}"              
+                link: "{{ path('app_embed', {'slide': '2PACX-1vS1fqRHqPke4F_m70pDAqmJNntPHgGXCL7Jd-GX4JdsTeMpdYEgPmbBWV1kYvqgEz98Z6pAIygV6VVT'}) }}"              
               }, 
               {
                 title: "{{ 'tourguide.index.trainee.courses.example.embed.title'|trans }}",
@@ -809,16 +939,19 @@
             {% if is_granted('ROLE_TRAINEE') %}
             localStorage.setItem('tg_tours_complete', '{{ app.user.tutorialCompleted }}');
             {% endif %}
-            tg.onBeforeExit(async () => {
-              $.ajax({
-                url: '{{ path('app_save_completed_tutorial') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                  tours: localStorage.getItem('tg_tours_complete').toString()
-                }
+            if(localStorage.getItem('tg_tours_complete').toString() !== '') {
+
+              tg.onBeforeExit(async () => {
+                $.ajax({
+                  url: '{{ path('app_save_completed_tutorial') }}',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                    tours: localStorage.getItem('tg_tours_complete').toString()
+                  }
+                });
               });
-            });
+            }
             tg.onBeforeStepChange(()=>{
               return new Promise((resolve, reject) => {
                 if(tg.tourSteps[tg.activeStep].link !== null) {
@@ -857,37 +990,67 @@
                 },
                 success: (r) => {
                   // Suppression des résultats précédents
-                  $('#searchResults #searchCourses > div > a').remove()
+                  $('#searchResults #searchCourses > div > div > a').remove()
                   $('#searchResults #searchTrainees > div > div > a').remove()
                   $('#searchResults #searchTrainers > div > div > a').remove()
+                  $('#searchResults #searchCoordinators > div > div > a').remove()
+                  $('#searchResults #searchResponsibles > div > div > a').remove()
                   $('#containerSearchResults').removeClass('d-none')
                   $('#containerSearchResults').addClass('show')
-                  if (r.courses.length > 0) {
-                    $('#searchResults #searchCourses').removeClass('d-none')
-                    r.courses.forEach((course) => {
-                      $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;[' + course.module.label + ']&nbsp;-&nbsp;' + course.title + '</div></a>')
-                    })
-                  } else {
-                    0
+
+                  if(r.courses.length === 0 && r.trainees.length === 0 && r.trainers.length === 0 && r.coordinators.length === 0 && r.responsibles.length === 0) {
                     $('#searchResults #searchCourses').addClass('d-none')
-                  }
-        
-                  if (r.trainees.length > 0) {
-                    $('#searchResults #searchTrainees').removeClass('d-none')
-                    r.trainees.forEach((trainee) => {
-                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + "[20"+ trainee.username.slice(-2) + "] " + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}{% if is_granted("ROLE_TRAINER") %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
-                    })
-                  } else {
                     $('#searchResults #searchTrainees').addClass('d-none')
-                  }
-        
-                  if (r.trainers.length > 0) {
-                    $('#searchResults #searchTrainers').removeClass('d-none')
-                    r.trainers.forEach((trainer) => {
-                      $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainer/' + trainer.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
-                    })
-                  } else {
                     $('#searchResults #searchTrainers').addClass('d-none')
+                    $('#searchResults #searchCoordinators').addClass('d-none')
+                    $('#searchResults #searchResponsibles').addClass('d-none')
+                    $('#searchResults #noResults').removeClass('d-none')
+                  } else {
+                    $('#searchResults #noResults').addClass('d-none')
+                    if (r.courses.length > 0) {
+                      $('#searchResults #searchCourses').removeClass('d-none')
+                      r.courses.forEach((course) => {
+                        $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;[' + course.module.label + ']&nbsp;-&nbsp;' + course.title + '</div></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchCourses').addClass('d-none')
+                    }
+          
+                    if (r.trainees.length > 0) {
+                      $('#searchResults #searchTrainees').removeClass('d-none')
+                      r.trainees.forEach((trainee) => {
+                        $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + "[20"+ trainee.username.slice(-2) + "] " + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}{% if is_granted("ROLE_TRAINER") %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchTrainees').addClass('d-none')
+                    }
+          
+                    if (r.trainers.length > 0) {
+                      $('#searchResults #searchTrainers').removeClass('d-none')
+                      r.trainers.forEach((trainer) => {
+                        $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainer/' + trainer.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchTrainers').addClass('d-none')
+                    }
+          
+                    if (r.coordinators.length > 0) {
+                      $('#searchResults #searchCoordinators').removeClass('d-none')
+                      r.coordinators.forEach((coordinator) => {
+                        $('#searchResults #searchCoordinators > div').html($('#searchResults #searchCoordinators > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/coordinator/' + coordinator.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + coordinator.lastName + ' ' + coordinator.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/coordinator/' + coordinator.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/coordinator/' + coordinator.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchCoordinators').addClass('d-none')
+                    }
+          
+                    if (r.responsibles.length > 0) {
+                      $('#searchResults #searchResponsibles').removeClass('d-none')
+                      r.responsibles.forEach((responsible) => {
+                        $('#searchResults #searchResponsibles > div').html($('#searchResults #searchResponsibles > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/responsible/' + responsible.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + responsible.lastName + ' ' + responsible.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/responsible/' + responsible.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/responsible/' + responsible.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchResponsibles').addClass('d-none')
+                    }
                   }
                 },
                 error: (r) => {
@@ -895,9 +1058,11 @@
                 }
               })
             } else {
-              $('#searchResults #searchCourses > div > a').remove()
+              $('#searchResults #searchCourses > div > div > a').remove()
               $('#searchResults #searchTrainees > div > div > a').remove()
               $('#searchResults #searchTrainers > div > div > a').remove()
+              $('#searchResults #searchCoordinators > div > div > a').remove()
+              $('#searchResults #searchResponsibles > div > div > a').remove()
               $('#containerSearchResults').addClass('d-none')
             }
           })

@@ -3,11 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Prospect;
-use App\Entity\Trainer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use DateTimeImmutable;
 
 class ProspectFixtures extends Fixture
 {
@@ -32,6 +30,7 @@ class ProspectFixtures extends Fixture
             $prospect->setAdditionalAddress($faker->secondaryAddress());
             $prospect->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
             $prospect->setPhoneNumberBis("0" . $faker->unique()->numberBetween(400000000, 499999999));
+            $prospect->setAdditionalAddress(($faker->boolean(50)) ? $faker->secondaryAddress() : '');
 
             $manager->persist($prospect);
             $this->addReference(self::PROSPECT_REFERENCE_TAG . $i, $prospect);

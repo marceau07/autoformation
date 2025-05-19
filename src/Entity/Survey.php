@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: SurveyRepository::class)]
 #[Broadcast]
 class Survey
@@ -88,5 +89,10 @@ class Survey
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->question;
     }
 }

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Connexion
+  {{ 'code.title'|trans() }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -10,10 +10,10 @@
 
 {% block body %}
   <div class="container justify-content-center d-flex">
-    <div class="row form-security">
+    <div class="row form-security mx-2 p-4">
       <div class="col-12 text-center">
-        <img src="{{ asset('/images/adrar_epa_logo.webp') }}" alt="Logo de l'ADRAR" width="150" />
-        <h1 class="h3 mt-5 font-weight-700">Bienvenue sur l'ERP</h1>
+        <img src="{{ asset('/website/' ~ platformLogoPath) }}" alt="{{ platformLogoName }}" width="150" />
+        <h1 class="h3 mt-5 font-weight-700">{{ 'code.title'|trans() }}</h1>
       </div>
       <div class="col-12">
         <form method="post" href="{{ path('app_code', { code: code ?? null }) }}">
@@ -28,13 +28,13 @@
           {% endfor %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('signup') }}" />
           <div>
-            <label for="form_signup_code" class="text-white">Code reçu (6 chiffres)</label>
+            <label for="form_signup_code">{{ 'code.input'|trans() }}</label>
             <input type="text" name="form_signup_code" placeholder="{{ random(100000, 999999) }}" value="{{ code is defined ? code : '' }}" autocomplete="off" />
           </div>
           <p>
-            Là par erreur et vous avez un compte ? <a class="link link-opacity-75 link-opacity-100-hover" href="{{ path('app_login') }}">Connectez-vous !</a>
+            {{ 'code.return'|trans({'%path%': path('app_login')})|raw }}
           </p>
-          <input class="btn btn-lg btn-primary w-100" type="submit" value="Récupérer" />
+          <input class="btn btn-lg btn-primary w-100" type="submit" value="{{ 'global.btn_retrieve'|trans() }}" />
         </form>
       </div>
     </div>

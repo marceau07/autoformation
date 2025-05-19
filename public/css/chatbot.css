@@ -16,8 +16,8 @@
 }
 
 #chatbot.main-card {
-    background: var(--col-secondary);
-    color: var(--col-secondary);
+    background: var(--coul-ternaire);
+    color: var(--coul-ternaire);
     width: 100%;
     height: calc(100% - 170px);
     margin: 0px;
@@ -28,14 +28,14 @@
     bottom: 50px;
     position: fixed;
     transition: all 0.5s;
-    border: 1px solid var(--col-secondary);
+    border: 1px solid var(--coul-ternaire);
     z-index: 1054;
 }
 
 [data-theme="dark"] #chatbot.main-card {
-    background: var(--col-primary-dark) !important;
-    color: var(--col-primary-dark) !important;
-    border: 1px solid var(--col-primary-dark) !important;
+    background: var(--coul-foncee) !important;
+    color: var(--coul-foncee) !important;
+    border: 1px solid var(--coul-foncee) !important;
 }
 
 #chatbot_toggle {
@@ -46,21 +46,21 @@
     width: 48px;
     background: var(--coul-principale);
     padding: 14px;
-    color: var(--col-secondary);
+    color: var(--coul-ternaire);
 }
 
 /* [data-theme="dark"] #chatbot_toggle {
-    color: var(--col-primary-dark) !important;
+    color: var(--coul-foncee) !important;
 } */
 
 #chatbot_toggle:hover {
-    background: var(--col-primary);
-    color: var(--col-primary-dark);
+    background: var(--coul-claire);
+    color: var(--coul-foncee);
 }
 
 [data-theme="dark"] #chatbot_toggle:hover {
-    background: var(--col-primary-dark) !important;
-    color: var(--col-secondary) !important;
+    background: var(--coul-foncee) !important;
+    color: var(--coul-ternaire) !important;
 }
 
 #chatbot .line {
@@ -79,53 +79,59 @@
 }
 
 [data-theme="dark"] #chatbot .line {
-    background-color: var(--col-primary-dark) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .main-title>div {
     height: 48px;
     width: 48px;
     display: flex;
+    align-items: center;
     margin-left: 8px;
 }
 
 #chatbot .main-title svg {
-    color: var(--col-secondary) !important;
+    color: var(--coul-ternaire) !important;
     height: 24px;
     margin: auto;
 }
 
-#chatbot .main-title>span {
+#chatbot .main-title span {
     margin: auto auto auto 8px;
-    color: var(--col-secondary) !important;
+    color: var(--coul-ternaire) !important;
 }
 
-[data-theme="dark"] #chatbot .main-title>span {
-    color: var(--col-secondary) !important;
+[data-theme="dark"] #chatbot .main-title span {
+    color: var(--coul-ternaire) !important;
 }
 
 #chatbot .chat-area {
     flex-grow: 1;
     overflow: auto;
-    /* border-radius: 8px; */
     padding: 16px;
     display: flex;
     flex-direction: column;
-    background-color: var(--col-secondary);
+    background-color: var(--coul-ternaire);
 }
 
 [data-theme="dark"] #chatbot .chat-area {
-    background-color: var(--col-primary-dark) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .input-message {
     padding: 8px 48px 8px 16px;
     flex-grow: 1;
     border: none;
+    cursor: text;
 }
 
 #chatbot .input-message:focus {
     outline: none;
+}
+
+#chatbot .ai-enabled {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1;
 }
 
 #chatbot .input-div {
@@ -133,7 +139,8 @@
     display: flex;
 }
 
-#chatbot .input-send {
+#chatbot .input-send,
+#chatbot .input-activate-ia {
     background: transparent;
     width: 48px;
     height: 48px;
@@ -142,15 +149,22 @@
     cursor: pointer;
 }
 
-#chatbot .input-send:hover {
-    background: var(--col-secondary);
+#chatbot .input-activate-ia:disabled {
+    cursor: not-allowed;
 }
 
-[data-theme="dark"] #chatbot .input-send:hover {
-    background: var(--col-primary-dark) !important;
+#chatbot .input-send:hover,
+#chatbot .input-activate-ia:hover {
+    background: var(--coul-ternaire);
 }
 
-#chatbot .input-send svg {
+[data-theme="dark"] #chatbot .input-send:hover,
+[data-theme="dark"] #chatbot .input-activate-ia:hover {
+    background: var(--coul-foncee) !important;
+}
+
+#chatbot .input-send svg,
+#chatbot .input-activate-ia svg {
     fill: var(--coul-principale);
     margin: 11px 8px;
 }
@@ -167,16 +181,27 @@
     animation-iteration-count: 1;
     animation-timing-function: ease-in;
     animation-duration: 100ms;
-    color: var(--col-secondary);
-    border-color: var(--col-secondary);
+    color: var(--coul-ternaire);
+    border-color: var(--coul-ternaire);
     border-radius: 8px 8px 2px 8px;
-    background-color: var(--col-primary-dark);
+    background-color: var(--coul-foncee);
+}
+
+#chatbot .chat-message-received.ia pre,
+#chatbot .chat-message-received.ia code {
+    font-size: 0.75em;
+    font-family: 'Fira Code', monospace;
+    color: var(--coul-ternaire);
+    background-color: var(--coul-foncee);
+    border: 1px solid var(--coul-ternaire);
+    border-radius: 8px;
+    padding: 5px;
 }
 
 [data-theme="dark"] #chatbot .chat-message-sent {
-    color: var(--col-secondary) !important;
-    border: 0.5px solid var(--col-secondary) !important;
-    background-color: var(--col-primary-dark) !important;
+    color: var(--coul-ternaire) !important;
+    border: 0.5px solid var(--coul-ternaire) !important;
+    background-color: var(--coul-foncee) !important;
 }
 
 #chatbot .chat-message-received {
@@ -186,16 +211,23 @@
     animation-iteration-count: 1;
     animation-timing-function: ease-in;
     animation-duration: 100ms;
-    color: var(--col-primary-dark);
-    border-color: var(--col-primary-dark);
+    color: var(--coul-foncee);
+    border-color: var(--coul-foncee);
     border-radius: 8px 8px 8px 2px;
-    background-color: var(--col-primary);
+    background-color: var(--coul-claire);
 }
 
 [data-theme="dark"] #chatbot .chat-message-received {
-    color: var(--col-primary-dark) !important;
-    border-color: var(--col-primary-dark) !important;
-    background-color: var(--col-secondary) !important;
+    color: var(--coul-foncee) !important;
+    border-color: var(--coul-foncee) !important;
+    background-color: var(--coul-ternaire) !important;
+}
+
+#chatbot .chat-message-received.ia {
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1 !important;
+    background-origin: border-box;
+    background-clip: padding-box;
 }
 
 @keyframes fadeIn {

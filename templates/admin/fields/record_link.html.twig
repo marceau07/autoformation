@@ -1,0 +1,5 @@
+{% if entity.instance.link is defined and entity.instance.link is not empty %}
+  <a href="{{ entity.instance.link }}" target="_blank" class="btn btn-primary">{{ 'global.btn_consult'|trans }}</a>
+{% elseif entity.instance.recordLink is defined and entity.instance.recordLink is not empty %}
+  <a href="{{ path('app_download', { filename: entity.instance.record, trainer: entity.instance.course.trainer.username }) }}" target="_blank" class="btn btn-primary">{{ 'global.btn_download'|trans }}</a>
+{% endif %}

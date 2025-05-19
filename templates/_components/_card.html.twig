@@ -1,16 +1,17 @@
 {% if course.module.illustration starts with 'http://' or course.module.illustration starts with 'https://' %}
   {% set illustration = course.module.illustration %}
 {% else %}
-  {% set illustration = asset('images/' ~ course.module.illustration) %}
+  {% set illustration = asset('courses/' ~ course.module.illustration) %}
 {% endif %}
 
 <div class="col-sm-12 col-md-4 col-lg-3 col-12 mb-3">
-  <a title="{{ 'course.made_by'|trans({ '%trainer%': (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
-    <div class="card h-100">
+  <a title="{{ 'course.made_by'|trans({ '%trainer%': (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-decoration-none">
+    <div class="card shimmer-container h-100">
       <span class="card-img-top text-center">
-        <img class="img-course" alt="Illustration {{ course.title }}" src="{{ illustration }}" loading="lazy" />
+        <div class="shimmer"></div>
+        <img class="img-course shimmer-image" alt="Illustration {{ course.title }}" data-src="{{ illustration }}" loading="lazy" />
         {% if course.courseResources is defined and course.courseResources is not empty %}
-          <i class="fa-solid fa-book" style="position: absolute;top: 10px;right: 10px;"></i>
+          <i class="fa-solid fa-book" style="position: absolute;top: 10px;right: 10px;" data-toggle="tooltip" data-placement="top" title="Des ressources (exercices, TP) sont disponibles dans ce cours"></i>
         {% endif %}
       </span>
       <div class="card-body">

@@ -1,0 +1,291 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Documents
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/account.css') }}" />
+{% endblock %}
+
+{% block main %}
+  <div class="container-fluid mb-3">
+    <div>
+      {% include '_components/_subnavbarAccount.html.twig' with { 'choosenElement': "document" } %}
+    </div>
+  
+    <div class="tab-content">
+      <div class="tab-pane container-fluid active" id="documents">
+        <div class="row mt-3">
+          <div class="col-12">
+            <h2>Documents{% if is_granted('ROLE_TRAINER') %} personnels{% else %} en cours de formation{% endif %}</h2>
+            <table class="table table-bordered table-striped compact w-100" style="margin: 0 auto;">
+              <thead>
+                <tr>
+                  <th scope="col">Intitulé du document</th>
+                  <th scope="col">Lien</th>
+                </tr>
+              </thead>
+              <tbody>
+                {# TODO: implémenter la gestion des plannings #}
+                <tr class="d-none">
+                  <td>Planning</td>
+                  <td><div id="calendar"></div></td>
+                </tr>
+                {% if is_granted('ROLE_TRAINER') %}
+                <tr>
+                  <td colspan="2">Attestation de formation...</td>
+                </tr>
+                {% elseif is_granted('ROLE_TRAINEE') %}
+                <tr>
+                  <td colspan="2">Attestation d'entrée, de fin de formation, d'acquisition, délivrance de certificats complémentaires, démarches extérieures...</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% if is_granted('ROLE_TRAINEE') %}
+        <div class="row mt-3">
+          <div class="col-12">
+            <h2>Documents de stages</h2>
+            <table class="table table-bordered table-striped display responsive nowrap w-100" style="margin: 0 auto;" id="list_documents">
+              <thead>
+                <tr>
+                  <th scope="col">Stage</th>
+                  <th scope="col">Période</th>
+                  <th scope="col">Contact</th>
+                  <th scope="col">Convention</th>
+                  <th scope="col">Attestation</th>
+                  <th scope="col">Évaluation</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% if internships_periods is defined and internships_periods is not empty %}
+                  {% for period in internships_periods %}
+                    {% set internship = "" %}
+                    {% set isInternshipStarted = false %}
+                    {% if internships_trainee is defined and internships_trainee is not empty %}
+                      {% for internship in internships_trainee %}
+                        {% if internship.cohortInternship == period %}
+                          {% set isInternshipStarted = true %}
+                          {% include '_components/_internship.html.twig' with { 'internship': internship, 'period': period } %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if isInternshipStarted == false %}
+                      {% include '_components/_internship.html.twig' with { 'internship': internship, 'period': period } %}
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <tr><td colspan="5">Pas de stage programmé pour votre cohorte.</td></tr>
+                {% endif %}
+                
+                {# Ancien code #}
+                {# {% if trainee.documents is defined and trainee.documents is not empty %}
+                  {% set documents = trainee.documents|json_decode %} 
+                  {% set cohort_documents = cohort.documents|json_decode %} 
+                    {% if documents.internships is defined and documents.internships is not empty %}
+                      {% for internship in documents.internships %}
+                      <tr>
+                        <td>{{ cohort_documents.internships[internship.id - 1].label }}</td>
+                        <td>{{ cohort_documents.internships[internship.id - 1].start_date|date('d/m/Y') ~ " au " ~ cohort_documents.internships[internship.id - 1].finish_date|date('d/m/Y') }}</td>
+                        {% if internship.agreement == 0 %}
+                        <td>A définir...</td>
+                        <td class="text-center">
+                          <a href="{{ path('pdf_generate', {element: 'internship-agreement'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+                          <label for="upload-agreement"></label>
+                          <input type="file" id="upload-agreement" name="upload-agreement" onchange="sendAgreement(this.name);" accept=".pdf" class="d-none">
+                          <div class="btn btn-success" onclick="$('#upload-agreement').click();"><i class="fa-solid fa-upload"></i></div>
+                        </td>
+                        {% elseif internship.agreement == 2 %}
+                        <td>A définir par votre référent·e...</td>
+                        <td>En cours de révision par votre référent·e...</td>
+                        {% elseif internship.agreement == 1 and internship.agreement_link is defined and internship.agreement_link is not empty %}
+                        <td>
+                          {% for value in internships %}
+                            {% if value.id == internship.internship_id %}
+                              <div>
+                                {{ value.tutorLastName ~ ' ' ~ value.tutorFirstName }}
+                              </div>
+                              <div>
+                                <a href="mailto:{{ value.tutorEmail }}">{{ value.tutorEmail }}</a>
+                              </div>
+                              <div>
+                                <a href="tel:{{ value.tutorPhoneNumber }}">{{ value.tutorPhoneNumber }}</a>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                        </td>
+                        <td class="text-center"><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Convention_de_stage_' ~ internship.agreement_link ~ '.pdf') }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
+                        {% endif %} 
+                        
+                        {% if internship.certificate == 0 %}
+                        <td class="text-center">
+                          <a href="{{ path('pdf_generate', {element: 'internship-certificate'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+                          <label for="upload-certificate"></label>
+                          <input type="file" id="upload-certificate" name="upload-certificate" onchange="sendCertificate(this.name);" accept=".pdf" class="d-none">
+                          <div class="btn btn-success" onclick="$('#upload-certificate').click();"><i class="fa-solid fa-upload"></i></div>
+                        </td>
+                        {% elseif internship.certificate == 2 %}
+                        <td>En cours de révision par votre référent·e...</td>
+                        {% elseif internship.certificate == 1 and internship.certificate_link is defined and internship.certificate_link is not empty %}
+                        <td class="text-center"><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.certificate_link) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
+                        {% endif %} 
+                        
+                        {% if internship.evaluation == 0 %}
+                        <td class="text-center">
+                          <a href="{{ path('pdf_generate', {element: 'internship-evaluation'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+                          <label for="upload-evaluation"></label>
+                          <input type="file" id="upload-evaluation" name="upload-evaluation" onchange="sendEvaluation(this.name);" accept=".pdf" class="d-none">
+                          <div class="btn btn-success" onclick="$('#upload-evaluation').click();"><i class="fa-solid fa-upload"></i></div>
+                        </td>
+                        {% elseif internship.evaluation == 2 %}
+                        <td>En cours de révision par votre référent·e...</td>
+                        {% elseif internship.evaluation == 1 and internship.evaluation_link is defined and internship.evaluation_link is not empty %}
+                        <td class="text-center"><a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/' ~ internship.evaluation_link) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a></td>
+                        {% endif %} 
+                      </tr>
+                      {% endfor %}
+                    {% endif %}
+                {% elseif cohort.documents is defined and cohort.documents is not empty %}
+                  {% set documents = cohort.documents|json_decode %} 
+                  {% for internship in documents.internships %}
+                  <tr class="text-center">
+                    <td>{{ internship.label }}</td>
+                    <td>{{ internship.start_date|date('d/m/Y') }}&nbsp;-&nbsp;{{ internship.finish_date|date('d/m/Y') }}</td>
+                    <td><em>A définir...</em></td>
+                    <td><a href="{{ path('pdf_generate', {element: 'internship-agreement'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a></td>
+                    <td><a href="{{ path('pdf_generate', {element: 'internship-certificate'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a></td>
+                    <td><a href="{{ path('pdf_generate', {element: 'internship-evaluation'}) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a></td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr><td colspan="5">Pas de stage programmé pour votre cohorte.</td></tr>
+                {% endif %} #}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{{ asset('js/account.js') }}"></script>
+  <script>
+    {% if documents.internships is defined and documents.internships is not empty %}
+    $(document).ready(function () {
+      $('#list_documents').DataTable({
+        "destroy": true,
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": false,
+        "info": false,
+        "autoWidth": true,
+        // "scrollX": true, // If you want horizontal scrolling, and not responsive
+        "responsive": {
+          "details": true // If you want to show details in a responsive way
+        },
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/{{ app.request.locale == 'en' ? 'English' : 'French' }}.json"
+        }
+      });
+    });
+    {% endif %}
+    
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      timeZone: 'UTC',
+      initialView: "{{ is_granted('ROLE_TRAINER') ? 'multiMonthYear' : 'timeGridWeek'}}",
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'timeGridWeek,timeGridDay,listMonth{{is_granted('ROLE_TRAINER') ? ',multiMonthYear' : ''}}'
+      },
+      slotMinTime: '08:00:00',
+      slotMaxTime: '19:00:00',
+      locale: "{{ app.request.locale == 'en' ? 'en' : 'fr' }}",
+      events: '{{ path("app_events") }}',
+      editable: "{{ is_granted('ROLE_TRAINER') }}", 
+      selectable: "{{ is_granted('ROLE_TRAINER') }}", 
+      select: function(info) {
+        // Ouvre un formulaire pour ajouter un nouvel événement
+        let title = prompt('Titre de l\'évènement:');
+        let description = prompt('Description:');
+        if (title) {
+          // Crée un nouvel événement
+          let newEvent = {
+            title: title,
+            description: description,
+            start: info.startStr,
+            end: info.endStr,
+            allDay: info.allDay
+          };
+
+          // Ajoute l'événement au calendrier
+          calendar.addEvent(newEvent);
+
+          // Envoie l'événement au backend pour sauvegarde
+          fetch('{{ path("app_events_add") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newEvent),
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('Event added successfully!');
+            } else {
+              alert('Failed to add event.');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Error adding event.');
+          });
+        }
+        // Désélectionne le créneau sélectionné après ajout
+        calendar.unselect();
+      },
+      eventClick: function(info) {
+        // Affiche les détails de l'événement dans une modal ou un conteneur
+        showEventDetails(info.event);
+        // $('#calendar').fullCalendar('updateEvent', event);
+      },
+  });
+  calendar.render();
+
+  function showEventDetails(event) {
+    // Crée ou sélectionne un conteneur/modal pour afficher les informations
+    const modal = document.getElementById('event-details-modal');
+
+    // Ajoute les informations de l'événement dans le modal
+    modal.querySelector('.modal-title').textContent = event.title;
+    modal.querySelector('.modal-body').innerHTML = `
+      <div class="container">
+        <div class="row">
+          <div class="col-12" calendar-uuid="${event.extendedProps.uuid}">
+            <p><strong>Date de début :</strong> ${event.start.toLocaleString()}</p>
+            <p><strong>Date de fin :</strong> ${event.end ? event.end.toLocaleString() : 'Non spécifiée'}</p>
+            <p><strong>Description :</strong> ${event.extendedProps.description || 'Aucune description disponible.'}</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Affiche le modal
+    modal.style.display = 'block';
+
+    // Ajoute un événement pour fermer le modal
+    modal.querySelector('.modal-close').addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+  }
+  </script>
+{% endblock %}

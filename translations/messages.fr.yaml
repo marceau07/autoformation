@@ -1,6 +1,6 @@
 global:
   meta_title:
-    "PAF - Plateforme d'Apprentissage et de Formation"
+    "%platformName% - Plateforme d'Apprentissage et de Formation"
   meta_description:
     "Retrouvez tous vos cours et échangez avec vos formateurs et vos camarades de cohorte sur la plateforme andragogique."
   language_french:
@@ -9,7 +9,22 @@ global:
   language_english:
     text: "Anglais"
     code: "en"
+  language_spanish:
+    text: "Espagnol"
+    code: "es"
+  file_sent:
+    "Fichier envoyé"
+  file_not_found:
+    "Fichier introuvable"
+  date_format:
+    short: "d/m/Y"
+    long: "d/m/Y H:i:s"
   exceptions:
+    400:
+      title:
+        "Requête invalide"
+      content:
+        "La requête envoyée est invalide, veuillez réessayer."
     403:
       title:
         "Accès refusé"
@@ -25,11 +40,23 @@ global:
         "Erreur interne"
       content:
         "Une erreur interne est survenue, veuillez réessayer plus tard."
+    format:
+      title:
+        "Format invalide"
+      content:
+        "Le format de votre fichier est invalide, veuillez réessayer. (Formats acceptés: %formats%)"
+    size:
+      title:
+        "Taille invalide"
+      content:
+        "La taille de votre fichier est invalide, elle ne doit pas excéder %size%Mo. (Taille de votre fichier: %currentSize%octets)"
     other:
       title:
         "Erreur"
       content:
         "Une erreur est survenue, veuillez réessayer plus tard."
+  confirm_delete:
+    "Êtes-vous sûr de vouloir supprimer cet élément ?"
   btn_send:
     "Envoyer"
   btn_save:
@@ -56,6 +83,16 @@ global:
     "Télécharger"
   btn_upload:
     "Téléverser"
+  btn_export:
+    "Exporter"
+  btn_verify:
+    "Vérifier"
+  btn_consult:
+    "Consulter"
+  btn_retrieve: 
+    "Récupérer"
+  btn_login: 
+    "Se connecter"
   day:
     "il y a %time% jour"
   days:
@@ -90,10 +127,16 @@ global:
     "Oui"
   no:
     "Non"
+  "true":
+    "Vrai"
+  "false":
+    "Faux"
   courses:
     "Cours"
   course:
     "Cours"
+  quiz:
+    "Quiz"
   modules:
     "Modules"
   module:
@@ -110,6 +153,14 @@ global:
     "Formateurs"
   trainer:
     "Formateur"
+  coordinators:
+    "Coordinateurs"
+  coordinator:
+    "Coordinateur"
+  responsibles:
+    "Responsables"
+  responsible:
+    "Responsable"
   cohorts:
     "Cohortes"
   cohort:
@@ -128,13 +179,35 @@ header:
     "FAQ"
   search:
     "Rechercher..."
-
+  search_no_result:
+    "Aucun résultat trouvé"
+  login:
+    "Se connecter"
+  web_platform:
+    "Plateforme web"
+  mobile_application:
+    "Application mobile"
+  notifications: 
+    news: "Nouveautés"
+    to_do: "À faire"
+    messages: "Messages"
+    courses: "Cours"
+    internships: "Stages"
+  personal:
+    modify: "Modifier mes informations"
+    dark_mode: "Mode sombre"
+    exit_impersonation: "Sortir du mode impersonation"
+    logout: "Se déconnecter"
 
 home:
   welcome:
-    "Bienvenue sur la PAF"
+    "Bienvenue sur la %platformName%"
   welcome_small:
     "Votre Plateforme d'Apprentissage et de Formation"
+  current_calendar:
+    "Calendrier"
+  no_content_calendar:
+    "Pas de contenu pour le moment, réessayez plus tard..."
 
 feedback:
   title:
@@ -161,24 +234,81 @@ feedback:
     "Description du problème:"
   form_description_placeholder:
     "Décrivez le problème rencontré..."
+  message_sent:
+    "Message envoyé"
+  error:
+    "Une erreur est survenue, veuillez réessayer plus tard."
 
 survey:
   heading:
     "Enquête de satisfaction !"
+  intro:
+    "Merci de prendre quelques minutes pour nous donner votre avis.<br /><small>Les champs marqués par (<span class='required'>*</span>) sont obligatoires.</small>"
   paragraph:
     "Dites-nous ce que vous avez pensé de nous en répondant à ce bref questionnaire !"
   answer:
     "Répondre au questionnaire"
   review:
     "Ils sont passés par chez nous..."
+  emojis:
+    very_satisfied:
+      "Très satisfait"
+    satisfied:
+      "Satisfait"
+    neutral:
+      "Neutre"
+    unsatisfied:
+      "Insatisfait"
+    very_unsatisfied:
+      "Très insatisfait"
+  commentary:
+    "Commentaire"
   no_content:
     "Aucun avis pour le moment, réessayez plus tard..."
+  no_questions:
+    "Pas de questions pour le moment, réessayez plus tard..."
 
 module:
   text:
     "Les modules"
   no_content:
     "Pas de contenu pour le moment, réessayez plus tard..."
+
+quiz:
+  text:
+    "Quiz"
+  no_content:
+    "Pas de quiz pour le moment, réessayez plus tard..."
+  illustration_no_content_alt:
+    "Pas de quiz pour le moment, réessayez plus tard..."
+  launcher:
+    title:
+      "[%module%] - %level%"
+    author:
+      "Auteur : %trainer%"
+    theme:
+      illustration:
+        "Illustration de la thématique %theme%"
+    question:
+      "%question% (Question %index%/%total%)"
+    textarea:
+      placeholder:
+        long: "Ici, votre réponse détaillée..."
+        short: "Ici, votre réponse courte..."
+  redirect:
+    title:
+      "Redirection vers l'application"
+    message:
+      "Vous allez être redirigé vers l'application mobile pour répondre au quiz."
+
+sandbox:
+  builder:
+    title:
+      "Création d'un bac à sable"
+  created:
+    "Vos bacs à sable"
+  not_found:
+    "Aucun bac à sable trouvé."
 
 course:
   favorite:
@@ -194,7 +324,7 @@ course:
   no_content_popular_courses:
     "Aucun cours populaire pour le moment, réessayez plus tard..."
   text:
-    "Les cours"
+    "Les cours %module%"
   no_content:
     "Pas de cours pour le moment, réessayez plus tard..."
   illustration_no_content_alt:
@@ -204,8 +334,27 @@ course:
   filtered:
     no_content:
       "Pas de cours pour le moment avec les filtres sélectionnés, réessayez plus tard..."
+  action:
+    favorite:
+      added:
+        "Cours ajouté aux favoris avec succès"
+      deleted:
+        "Cours supprimé des favoris avec succès"
+
+embed:
+  resources: "Les ressources"
+  exercises: "Les exercices"
+  tps: "Les TPs"
 
 account:
+  privacy: 
+    "Informations personnelles"
+  created_sandboxes:
+    "Bac à sable créés"
+  favorite_courses:
+    "Cours favoris"
+  informations_cohort:
+    "Informations de la cohorte"
   personal_informations: 
     "Informations personnelles"
   documents:
@@ -243,6 +392,8 @@ account:
   not_activated:
     "Votre compte n'est pas encore activé, veuillez contacter votre formateur pour plus d'informations."
   graph:
+    title:
+      "Graphiques de progression"
     courses:
       text: "Cours"
       label_one: "Cours à voir"
@@ -252,13 +403,29 @@ account:
       label_one: "Devoirs à rendre"
       label_two: "Devoirs rendus"
 
+faq:
+  title:
+    "Foire aux Questions"
+  no_content:
+    "Retrouvez la réponse à vos questions les plus génériques ici bientôt !"
+  no_theme:
+    "Pas de thème pour le moment, réessayez plus tard..."
+  global:
+    "Générique"
+
 mailbox:
+  title:
+    "Boîte aux lettres"
   welcome:
     "Bienvenue dans votre boîte aux lettres"
   chat_cohort:
     "Discuter avec les membres de %cohort%"
   chat_trainer_referent:
-    "Échanger avec le/la référent(e) %trainer%"
+    "Échanger avec le/la référent·e %trainer%"
+  chat_coordinator:
+    "Échanger avec le/la coordinateur·trice %coordinator%"
+  chat_responsible:
+    "Échanger avec le/la responsable %responsible%"
   chat_with:
     "Parler avec %trainee%"
   start_conversation:
@@ -271,6 +438,12 @@ mailbox:
     "Commencer à taper un message ici..."
   no_account_available:
     "Aucun compte disponible pour le moment, réessayez plus tard..."
+  sender:
+    you:
+      "Vous"
+  groups:
+    administration:
+      "Administration"
 
 cohort:
   informations:
@@ -303,6 +476,12 @@ internship:
     "Fin du stage"
   no_internship:
     "Pas de stage pour votre cohorte"
+  sent_agreement:
+    "Convention de stage envoyée"
+  sent_certificate:
+    "Attestation de stage envoyée"
+  sent_evaluation:
+    "Évaluation de stage envoyée"
 
 footer:
   text:
@@ -314,9 +493,22 @@ footer:
 
 chatbot:
   welcome:
-    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Taoez <code>/aide</code> pour lister les actions possibles.</small>"
+    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Tapez <code>/aide</code> pour lister les actions possibles.</small>"
+  ia:
+    system: 
+      "Réponds toujours en français (n'y fais pas référence dans ta réponse). 
+        Si un / est présent, suivi directement par un mot (exemple: /aide), préviens l'utilisateur de désactiver le mode IA.
+        Tu es une IA intégrée dans un chatbot d'un site web de formation.
+        Tu dois répondre à des questions sur les cours, les modules, les utilisateurs, etc.
+        Tu termineras ton premier message par dire que tu es une IA, que tu peux donc faire des erreurs (texte en italique et texte souligné)."
+    not_available:
+      "Désolé, je ne suis pas disponible pour le moment. Veuillez réessayer plus tard."
   placeholder:
     "Que recherchez-vous ?"
+  found:
+    "Voilà ce que j'ai trouvé pour vous dans les <b>%subject%</b> avec les mots clés <b>%keywords%</b>:"
+  not_found:
+    "Désolé, je n'ai rien trouvé pour vous avec les mots clés <b>%keywords%</b>..."
   didnt_understand:
     "Je n'ai pas compris votre demande, veuillez reformuler."
   keys:
@@ -329,9 +521,9 @@ chatbot:
     courses:
       "cours"
     modules:
-      "module"
+      "modules"
     users:
-      "utilisateur"
+      "utilisateurs"
     goodbye:
       "au revoir"
   values:
@@ -340,7 +532,7 @@ chatbot:
     hey:
       "Salut ! Comment puis-je vous aider ?"
     help:
-      "Je suis là pour vous aider. Posez-moi une question ou tapez <code>/help</code> pour voir la liste des actions possibles."
+      "Je suis là pour vous aider. Posez-moi une question ou tapez <code>/aide</code> pour voir la liste des actions possibles."
     courses:
       "Tapez un mot-clé pour rechercher un cours..."
     goodbye:
@@ -360,6 +552,10 @@ notifications:
     "Vous avez reçu un nouveau message de la part de %from_username%"
   new_message_cohort:
     "Vous avez reçu un nouveau message dans %from_cohort%"
+  new_changelog:
+    "Nouveau changelog disponible: %features%"
+  no_news:
+    "Aucune nouveauté pour le moment"
   no_new_message:
     "Aucun nouveau message pour le moment"
   new_homework:
@@ -377,261 +573,16 @@ notifications:
   unread_messages:
     "Vous avez des messages non lus"
 
-administration:
-  default:
-    "Choisissez la catégorie à gérer ci-dessus...
-    Vous pouvez ajouter, modifier ou supprimer des éléments de cette catégorie."
-  course:
-    menu:
-      "Cours"
-    create:
-      "Créer un nouveau cours"
-    manage_courses:
-      "Gérer les cours"
-    manage_courses_searchbar:
-      "Rechercher un cours, un mot-clé, ..."
-    manage_courses_default_text:
-      "Veuillez sélectionner une cohorte et optionnellement: filtrer avec le statut du cours et/ou son titre et/ou mots-clés"
-    course_active:
-      "Tous les cours"
-    course_non_active:
-      "Cours non actifs"
-    id:
-      "Identifiant"
-    title:
-      "Titre"
-    synopsis:
-      "Synopsis"
-    keywords:
-      "Mots-clés"
-    link:
-      "Lien"
-    position:
-      "Position"
-    visitors:
-      "Visiteurs"
-    module:
-      "Module associé"
-    trainer:
-      "Formateur rédacteur"
-    no_course:
-      "Pas de cours pour le moment, réessayez plus tard..."
-  trainer:
-    menu:
-      "Formateurs"
-    create:
-      "Créer un nouveau formateur"
-    id:
-      "Identifiant"
-    activated:
-      "Actif"
-    lastname:
-      "Nom de famille"
-    firstname:
-      "Prénom"
-    username:
-      "Nom d'utilisateur"
-    role:
-      "Rôle"
-    active:
-      "Actif"
-    uuid:
-      "UUID"
-    email:
-      "Email"
-    phone_number:
-      "Numéro de téléphone"
-    avatar:
-      "Avatar"
-    entrance_date:
-      "Code d'entrée"
-    signature:
-      "Signature"
-    no_signature:
-      "Pas de signature pour %trainer%"
-    sector:
-      "Secteur"
-    no_trainer:
-      "Pas de formateur pour le moment, réessayez plus tard..."
-  cohort:
-    menu:
-      "Cohortes"
-    id:
-      "Identifiant"
-    name:
-      "Nom"
-    acronym:
-      "Acronyme"
-    shield:
-      "Blason"
-    shield_alt:
-      "Blason des %cohort%"
-    documents:
-      "Documents"
-    no_documents: 
-      "Pas de documents renseignés pour le moment"
-    start_date:
-      "Date de début"
-    finish_date:
-      "Date de fin"
-    uuid:
-      "UUID"
-    no_cohort:
-      "Pas de cohorte pour le moment, réessayez plus tard..."
-  trainee:
-    menu:
-      "Stagiaires"
-    id:
-      "Identifiant"
-    username:
-      "Nom d'utilisateur"
-    lastname:
-      "Nom de famille"
-    firstname:
-      "Prénom"
-    email:
-      "Email"
-    activated:
-      "Actif"
-    tmp_code:
-      "Code temporaire"
-    signature:
-      "Signature"
-    no_signature:
-      "Pas de signature pour %trainee%"
-    uuid:
-      "UUID"
-    documents:
-      "Documents"
-    no_document:
-      "Pas de document de stage"
-    diploma:
-      "Diplôme"
-    no_diploma:
-      "Pas de diplôme"
-    diploma_got_ccp1:
-      "Diplômé·e partiellement (CCP1)"
-    diploma_got_ccp2:
-      "Diplômé·e partiellement (CCP2)"
-    diploma_got_ccp3:
-      "Diplômé·e partiellement (CCP3)"
-    diploma_got_ccp1_ccp2:
-      "Diplômé·e partiellement (CCP1 et CCP2)"
-    diploma_got_ccp2_ccp3:
-      "Diplômé·e partiellement (CCP2 et CCP3)"
-    diploma_got_ccp1_ccp3:
-      "Diplômé·e partiellement (CCP1 et CCP3)"
-    diploma_not_show_up:
-      "Ne s'est pas présenté·e à l'examen"
-    diploma_full:
-      "Diplômé·e"
-    diploma_unknow:
-      "Non renseigné"
-    cohort:
-      "Cohorte"
-    no_trainee:
-      "Pas de stagiaire pour le moment, réessayez plus tard..."
-  faq:
-    menu:
-      "F.A.Q"
-    id:
-      "Identifiant"
-    theme:
-      "Thème"
-    title:
-      "Titre"
-    content:
-      "Contenu"
-    visibility:
-      "Visibilité"
-    priority:
-      "Priorité"
-    sector:
-      "Secteur"
-    no_faq:
-      "Pas de question pour le moment, réessayez plus tard..."
-  prospect:
-    menu:
-      "Prospects"
-    id:
-      "Identifiant"
-    name:
-      "Nom"
-    siren:
-      "SIREN"
-    nic:
-      "NIC"
-    address_number:
-      "Numéro de voie"
-    address_street:
-      "Nom de la voie"
-    address_additional_information:
-      "Complément d'adresse"
-    address_zipcode:
-      "Code postal"
-    address_city:
-      "Ville"
-    address_country:
-      "Pays"
-    email:
-      "Email"
-    phone_number:
-      "Numéro de téléphone"
-    phone_number_bis:
-      "Numéro de téléphone bis"
-    no_prospect:
-      "Pas de prospect pour le moment, réessayez plus tard..."
-  internship:
-    menu:
-      "Stages"
-    id:
-      "Identifiant"
-    tutor_lastname:
-      "Nom du tuteur"
-    tutor_firstname:
-      "Prénom du tuteur"
-    tutor_email:
-      "Email du tuteur"
-    tutor_phone_number:
-      "Numéro de téléphone du tuteur"
-    trainee:
-      "Stagiaire"
-    prospect:
-      "Prospect"
-    no_internship:
-      "Pas de stage pour le moment, réessayez plus tard..."
-  quiz:
-    menu:
-      "Quiz"
-    id:
-      "Identifiant"
-    title:
-      "Titre"
-    description:
-      "Description"
-    questions:
-      "Questions"
-    no_quiz:
-      "Pas de quiz pour le moment, réessayez plus tard..."
-  statistic:
-    menu:
-      "Statistiques"
-    internship:
-      agreement_percentage:
-        "<b>%percentage%%</b> de conventions reçues"
-      certificate_percentage:
-        "<b>%percentage%%</b> d'attestations reçues"
-      evaluation_percentage:
-        "<b>%percentage%%</b> d'évaluations reçues"
-    cohort:
-      graduation_percentage:
-        "<b>%percentage%%</b> de réussite"
-      satisfaction_percentage:
-        "<b>%percentage%%</b> de satisfaction"
-
 tourguide:
+  mark_as_done:
+    "Le tutoriel est terminé, vous pouvez le retrouver à tout moment dans votre compte."
   index:
     trainee:
+      start:
+        title:
+          "Tutoriel"
+        content:
+          "Ce petit tutoriel a pour but de vous montrer comment fonctionne le site. Libre à vous de le passer. <br>Vous pourrez le relancer à tout moment en cliquant sur le bouton en haut à droite dans vos informations personnelles."
       navbar:
         title:
           "La navigation"
@@ -687,7 +638,7 @@ tourguide:
           title:
             "Un cours"
           content:
-            "Ici, nous avons un cours sur Git."
+            "Ici, nous avons un cours sur les techniques de révision."
           resources:
             title:
               "Les ressources"
@@ -776,3 +727,78 @@ tourguide:
                 "Les messages"
               content:
                 "Commencez à taper un message ici..."
+
+event:
+  new:
+    title:
+      "Nouvel événement"
+    description:
+      "Détaillez l'événement ici"
+  added: "Ajouté"
+  error: "Une erreur s'est produite, veuillez réessayer plus tard."
+
+presentation:
+  title:
+    "Présentation de la %platformName%"
+  subtitle:
+    "Découvrez notre plateforme d'apprentissage et son application mobile"
+  platform:
+    title:
+      "La plateforme web"
+    description:
+      "La Plateforme d'Apprentissage et de Formation (%platformName%) est un outil numérique conçu pour faciliter votre parcours de formation. Elle vous permet de :"
+    features:
+      - "Accéder à vos cours et ressources pédagogiques"
+      - "Échanger avec vos formateurs et camarades"
+      - "Suivre votre progression"
+      - "Gérer vos documents administratifs"
+      - "Consulter votre planning"
+  mobile:
+    title:
+      "L'application mobile"
+    description:
+      "Restez connecté à votre formation où que vous soyez grâce à notre application mobile disponible sur iOS et Android."
+    features:
+      - "Notifications en temps réel"
+      - "Accès rapide aux cours"
+      - "Messagerie instantanée"
+      - "Mode hors-ligne"
+    download:
+      android: "Télécharger sur Google Play"
+      ios: "Télécharger sur l'App Store"
+  features:
+    courses:
+      title: "Cours interactifs"
+      description: "Accédez à des contenus pédagogiques riches et variés"
+    chat:
+      title: "Messagerie intégrée" 
+      description: "Communiquez facilement avec vos formateurs et camarades"
+    documents:
+      title: "Gestion documentaire"
+      description: "Gérez tous vos documents administratifs en un seul endroit"
+    calendar:
+      title: "Planning dynamique"
+      description: "Consultez votre emploi du temps et vos échéances"
+login:
+  title: "Connexion"
+  welcome: "Bienvenue sur la %platformName%"
+  username: "Nom d'utilisateur"
+  password: "Mot de passe"
+  remember_me: "Se souvenir de moi"
+  forgot_password: "Mot de passe oublié ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Générez-en un nouveau !</a>"
+recovery:
+  title: "Récupération de mot de passe"
+  username: "Nom d'utilisateur associé à votre compte"
+  return: "Là par erreur ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Connectez-vous !</a>"
+code:
+  title: "Utilisation d'un code temporaire"
+  input: "Code reçu (6 chiffres)"
+  return: "Là par erreur ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Connectez-vous !</a>"
+signup:
+  title: "Définition de votre mot de passe"
+  welcome: "Bienvenue sur la %platformName%"
+  new_password: "Nouveau mot de passe"
+  return: "Là par erreur ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Connectez-vous !</a>"
+  btn_new_password: "Définir mon mot de passe"
+changelogs:
+  title: "Changelogs"

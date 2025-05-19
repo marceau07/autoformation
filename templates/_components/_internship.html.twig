@@ -1,0 +1,91 @@
+<tr>
+  <td>{{ period.label }}</td>
+  <td>{{ period.startDate|date('d/m/Y') }} au {{ period.finishDate|date('d/m/Y') }}</td>
+  {% if internship is defined and internship is not empty %}
+    {% if internship.agreement is null %}
+      <td>A définir...</td>
+      <td class="text-center">
+        <a href="{{ path('pdf_generate', { element: 'internship-agreement' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+        <label for="upload-agreement"></label>
+        <input type="file" id="upload-agreement" name="upload-agreement" data-internship="{{ period.uuid }}" onchange="sendAgreement(this.name, '{{ period.uuid }}');" accept=".pdf" class="d-none" />
+        <div class="btn btn-success" onclick="$('#upload-agreement').click();">
+          <i class="fa-solid fa-upload"></i>
+        </div>
+      </td>
+    {% elseif internship.agreement == 1 and internship.agreementLink is defined and internship.agreementLink is not empty and internship.internship is defined and internship.internship is not empty %}
+      <td>
+        <div>{{ internship.internship.tutorLastName ~ ' ' ~ internship.internship.tutorFirstName }}</div>
+        <div>
+          <a href="mailto:{{ internship.internship.tutorEmail }}">{{ internship.internship.tutorEmail }}</a>
+        </div>
+        <div>
+          <a href="tel:{{ internship.internship.tutorPhoneNumber }}">{{ internship.internship.tutorPhoneNumber }}</a>
+        </div>
+      </td>
+      <td class="text-center">
+        <a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Convention_de_stage_' ~ internship.agreementLink ~ '.pdf') }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+      </td>
+    {% elseif internship.agreement == 0 %}
+      <td>A définir par votre référent·e...</td>
+      <td>En cours de révision par votre référent·e...</td>
+    {% endif %}
+
+    {% if internship.certificate is null %}
+      <td class="text-center">
+        <a href="{{ path('pdf_generate', { element: 'internship-certificate' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+        <label for="upload-certificate"></label>
+        <input type="file" id="upload-certificate" name="upload-certificate" data-internship="{{ period.uuid }}" onchange="sendCertificate(this.name, '{{ period.uuid }}');" accept=".pdf" class="d-none" />
+        <div class="btn btn-success" onclick="$('#upload-certificate').click();">
+          <i class="fa-solid fa-upload"></i>
+        </div>
+      </td>
+    {% elseif internship.certificate == 0 %}
+      <td>En cours de révision par votre référent·e...</td>
+    {% elseif internship.certificate == 1 and internship.certificateLink is defined and internship.certificateLink is not empty %}
+      <td class="text-center">
+        <a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Attestation_de_stage_' ~ internship.certificateLink ~ '.pdf') }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+      </td>
+    {% endif %}
+
+    {% if internship.evaluation is null %}
+      <td class="text-center">
+        <a href="{{ path('pdf_generate', { element: 'internship-evaluation' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+        <label for="upload-evaluation"></label>
+        <input type="file" id="upload-evaluation" name="upload-evaluation" data-internship="{{ period.uuid }}" onchange="sendEvaluation(this.name, '{{ period.uuid }}');" accept=".pdf" class="d-none" />
+        <div class="btn btn-success" onclick="$('#upload-evaluation').click();">
+          <i class="fa-solid fa-upload"></i>
+        </div>
+      </td>
+    {% elseif internship.evaluation == 0 %}
+      <td>En cours de révision par votre référent·e...</td>
+    {% elseif internship.evaluation == 1 and internship.evaluationLink is defined and internship.evaluationLink is not empty %}
+      <td class="text-center">
+        <a target="_blank" href="{{ asset('internships/' ~ trainee.username ~ '/Evaluation_de_stage_' ~ internship.evaluationLink ~ '.pdf') }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+      </td>
+    {% endif %}
+  {% else %}
+    <td>A définir...</td>
+    <td class="text-center">
+      <a href="{{ path('pdf_generate', { element: 'internship-agreement' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+      <label for="upload-agreement"></label>
+      <input type="file" id="upload-agreement" name="upload-agreement" data-internship="{{ period.uuid }}" onchange="sendAgreement(this.name, '{{ period.uuid }}');" accept=".pdf" class="d-none" />
+      <div class="btn btn-success" onclick="$('#upload-agreement').click();">
+        <i class="fa-solid fa-upload"></i>
+      </div>
+    </td>
+    <td class="text-center">
+      <a href="{{ path('pdf_generate', { element: 'internship-certificate' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+      <label for="upload-certificate"></label>
+      <div class="btn btn-success disabled">
+        <i class="fa-solid fa-upload"></i>
+      </div>
+    </td>
+    <td class="text-center">
+      <a href="{{ path('pdf_generate', { element: 'internship-evaluation' }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success"><i class="fa-solid fa-download"></i></a>
+      <label for="upload-evaluation"></label>
+      <div class="btn btn-success disabled not-allowed">
+        <i class="fa-solid fa-upload"></i>
+      </div>
+    </td>
+  {% endif %}
+</tr>

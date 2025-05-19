@@ -12,6 +12,8 @@
       {{ 'notifications.new_internship'|trans({ '%document%': notification.message }) }}
     {% elseif notification.category == 'homework_to_do' %}
       {{ 'notifications.new_homework'|trans({ '%course%': notification.message }) }}
+    {% elseif notification.category == 'new_features' %}
+      {{ 'notifications.new_changelog'|trans({ '%features%': notification.message }) }}
     {% endif %}
   </p>
   <div class="item-footer">

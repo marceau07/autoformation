@@ -1,24 +1,37 @@
-var signaturePad = new SignaturePad(document.querySelector('#signature-pad'), {
-    backgroundColor: 'rgba(255, 255, 255, 0)',
-    penColor: 'rgb(0, 0, 0)',
-    velocityFilterWeight: .7,
-    minWidth: 0.5,
-    maxWidth: 2.5,
-    throttle: 16, // max x milli seconds on event update, OBS! this introduces lag for event update
-    minPointDistance: 3,
-});
+function accountPrivacy() {
+    var canvas = document.querySelector('#signature-pad');
+    fitToContainer(canvas);
+    var signaturePad = new SignaturePad(canvas, {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        penColor: 'rgb(0, 0, 0)',
+        velocityFilterWeight: .7,
+        minWidth: 0.5,
+        maxWidth: 2.5,
+        throttle: 16, // max x milli seconds on event update, OBS! this introduces lag for event update
+        minPointDistance: 3,
+    });
 
-var approveButton = document.querySelector('#approve-signature');
-var clearButton = document.querySelector('#clear-signature');
+    var approveButton = document.querySelector('#approve-signature');
+    var clearButton = document.querySelector('#clear-signature');
 
-approveButton.addEventListener('click', function (event) {
-    document.querySelector('#form_signature').value = document.querySelector('#signature-pad').toDataURL('image/png');
-});
+    approveButton.addEventListener('click', function (event) {
+        document.querySelector('#form_signature').value = canvas.toDataURL('image/png');
+    });
 
-clearButton.addEventListener('click', function (event) {
-    signaturePad.clear();
-    document.querySelector('#form_signature').value = '';
-});
+    clearButton.addEventListener('click', function (event) {
+        signaturePad.clear();
+        document.querySelector('#form_signature').value = '';
+    });
+
+    function fitToContainer(canvas) {
+        // Make it visually fill the positioned parent
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        // ...then set the internal size to match
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+}
 
 function changerAvatar(img) {
     var avatars = document.querySelectorAll('.img-preview');
@@ -30,9 +43,10 @@ function changerAvatar(img) {
     $('#form_avatar').val(img.dataset.id);
 }
 
-function sendAgreement(input) {
+function sendAgreement(input, uuid) {
     var formData = new FormData();
     formData.append("file", document.querySelector('#' + input).files[0]);
+    formData.append("uuid", uuid);
     $.ajax({
         url: "/send_agreement",
         method: "post",
@@ -49,9 +63,10 @@ function sendAgreement(input) {
     });
 }
 
-function sendCertificate(input) {
+function sendCertificate(input, uuid) {
     var formData = new FormData();
     formData.append("file", document.querySelector('#' + input).files[0]);
+    formData.append("uuid", uuid);
     $.ajax({
         url: "/send_certificate",
         method: "post",
@@ -68,9 +83,10 @@ function sendCertificate(input) {
     });
 }
 
-function sendEvaluation(input) {
+function sendEvaluation(input, uuid) {
     var formData = new FormData();
     formData.append("file", document.querySelector('#' + input).files[0]);
+    formData.append("uuid", uuid);
     $.ajax({
         url: "/send_evaluation",
         method: "post",
@@ -94,7 +110,7 @@ function replayTutorial() {
         dataType: 'json',
         data: {
             tours: ''
-        }, 
+        },
         success: function (r) {
             document.location.reload();
         },

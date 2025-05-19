@@ -1,0 +1,51 @@
+{% trans_default_domain 'maintenance' %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <script>
+      const setTheme = (theme) => {
+        theme ??= localStorage.theme || 'light'
+        document.documentElement.dataset.theme = theme
+        document.documentElement.setAttribute('data-bs-theme', theme)
+        localStorage.theme = theme
+      }
+      setTheme()
+    </script>
+    <title>{{ 'title'|trans }}</title>
+    <meta name="description" content="{{ 'message'|trans }}" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/colors.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <style>
+      .sf-toolbar {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <img src="{{ asset('website/' ~ platformLogoPath) }}" alt="{{ platformLogoName }}" class="img-fluid" style="height: 15em;" />
+        </div>
+      </div>
+      <div class="row pt-5">
+        <div class="col-md-6 offset-md-3 text-center">
+          <h1>{{ 'header'|trans }}</h1>
+          <p>{{ 'message'|trans }}</p>
+        </div>
+      </div>
+      <div class="row pt-5">
+        <div class="col-12 text-center">
+          <img src="{{ asset('website/icons/under_maintenance.svg') }}" alt="Illustration maintenance de la plateforme" class="img-fluid" style="height: 17em;" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

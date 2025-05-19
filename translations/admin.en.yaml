@@ -1,0 +1,422 @@
+Trainee: "Trainee"
+Trainer: "Trainer"
+Coordinator: "Coordinator"
+Responsible: "Responsible"
+Sector: "Sector"
+Avatar: "Avatar"
+Survey: "Survey"
+SurveyTrainee: "Survey Trainee"
+Cohort: "Cohort"
+CourseModule: "Module"
+Course: "Course"
+CourseResource: "Course Resource"
+TraineeResource: "Trainee Resource"
+CourseCohort: "Course Shared"
+Sandbox: "Sandbox"
+Quiz: "Quiz"
+QuizRow: "Quiz Question"
+QuizShare: "Quiz Shared"
+QuizTheme: "Quiz Theme"
+UserQuiz: "User Quiz"
+CohortInternship: "Cohort Internship"
+Prospect: "Prospect"
+Internship: "Internship"
+TraineeInternship: "Internship's Trainee"
+SiteSettings: "Application Settings"
+ExportParameter: "Export Parameters"
+Notification: "Notification"
+Faq: "Q&A"
+
+admin:
+  title: 
+    dashboard: 
+      "Dashboard"
+  global:
+    file:
+      not_supported: "File type not supported."
+      no_file: "No file selected."
+    language_french:
+      text: "French"
+      code: "fr"
+    language_english:
+      text: "English"
+      code: "en"
+    language_spanish:
+      text: "Spanish"
+      code: "es"
+  menu:
+    language:
+      label: "Language"
+    profile: "My profile"
+    settings: "Settings"
+    dashboard: "Dashboard"
+    users: 
+      label: "Users"
+      users: "Users"
+      trainees: "Trainees"
+      trainers: "Trainers"
+      coordinators: "Coordinators"
+      responsibles: "Responsibles"
+      sectors: "Sectors"
+      avatars: "Avatars"
+      surveys: "Surveys"
+      surveys_trainees: "Answer's trainees surveys"
+    courses:
+      label: "Courses"
+      cohorts: "Cohorts"
+      modules: "Modules"
+      lessons: "Lessons"
+      resources: "Resources"
+      trainees_resources: "Trainees resources"
+      shared: "Shared courses"
+      sandboxes: "Sandboxes"
+    quizzes:
+      label: "Quizzes"
+      questions: "Questions"
+      shared: "Shared"
+      theme: "Themes"
+      answers: "Answers"
+    internships: 
+      label: "Internships"
+      cohorts: "Cohorts"
+      prospects: "Prospects"
+      trainees: "Trainees"
+    other: "Other"
+    application: "Application"
+    export_parameters: "Export parameters"
+    notifications: "Notifications"
+    q_and_A: "Q&A"
+    back: "Back to %app_name%"
+    logout: "Logout"
+  dashboard:
+    title: "Dashboard"
+    management:
+      cohorts:
+        label: "Cohort Management"
+        active: 
+          label: "Active Cohorts"
+          no_cohort: "No active cohorts."
+        uncoming: 
+          label: "Uncoming Cohorts"
+          no_cohort: "No uncoming cohorts."
+        inactive: 
+          label: "Outgoing Cohorts"
+          no_cohort: "No previous cohorts."
+      internships:
+        label: "Internship Management"
+        no_internship_planned: "No internship planned for this cohort."
+        no_internship: "No ongoing internship."
+      notifications:
+        label: "Notifications"
+        new_messages: "New message from %from%."
+        new_internship: "&nbsp;&nbsp;New internship document received from %from% regarding %about%."
+        no_notification: "No notification."
+  choices:
+    diploma:
+      "null": "No diploma"
+      no_diploma: "No diploma"
+      partial_1: "Partial diploma (CCP1)"
+      partial_2: "Partial diploma (CCP2)"
+      partial_3: "Partial diploma (CCP3)"
+      didnt_show_up: "Did not show up"
+      graduated: "Graduated"
+  pages:
+    avatars:
+      columns:
+        id: "Identifier"
+        label: "Label"
+        link: "Link"
+    users:
+      title: "Users"
+      btn_add: "Create a user"
+      columns:
+        id: "Identifier"
+        username: "Username"
+        roles: "Roles"
+        password: "Password"
+        last_name: "Last name"
+        first_name: "First name"
+        email: "Email"
+        activated: "Activated"
+        tmp_code: "Temporary login code"
+        tmp_code_date: "Temporary code expiration date"
+        dtype: "User type"
+        avatar: "Avatar"
+        signature: "Signature"
+        uuid: "UUID"
+        phone_number: "Phone number"
+      no_user: "No user."
+    trainees:
+      title: "Trainees"
+      btn_add: "Create a trainee"
+      columns:
+        password_save: "Original password"
+        diploma: "Diploma"
+        cohort: "Cohort"
+        tutorial_completed: "Tutorial completed"
+      no_trainee: "No trainee."
+    trainers:
+      title: "Trainers"
+      btn_add: "Create a trainer"
+      columns:
+        role: "Role"
+        entrance_code: "Entry code"
+        entrance_code_date: "Entry code expiration date"
+        coordinator: "Coordinator"
+      no_responsible: "No trainer."
+    coordinators:
+      title: "Coordinators"
+      btn_add: "Create a coordinator"
+      columns:
+        role: "Role"
+        entrance_code: "Entry code"
+        entrance_code_date: "Entry code expiration date"
+        responsible: "Responsible"
+      no_coordinator: "No coordinator."
+    responsibles:
+      title: "Responsibles"
+      btn_add: "Create a responsible"
+      columns:
+        role: "Role"
+        entrance_code: "Entry code"
+        entrance_code_date: "Entry code expiration date"
+        sector: "Sector"
+      no_responsible: "No responsible."
+    cohorts:
+      export: "Export"
+      columns:
+        id: "Identifier"
+        trainer: "Trainer"
+        name: "Name"
+        acronym: "Acronym"
+        shield: "Shield"
+        start_date: "Start date"
+        finish_date: "End date"
+        uuid: "UUID"
+    modules:
+      columns:
+        id: "Identifier"
+        label: "Name"
+        position: "Position"
+        uuid: "UUID"
+        illustration: "Illustration"
+    courses:
+      columns:
+        id: "Identifier"
+        title: "Title"
+        synopsis: "Synopsis"
+        keywords: "Keywords"
+        link: "Link"
+        position: "Position"
+        module: "Module"
+        trainer: "Author"
+        visitors: "Visitors"
+    courses_shared:
+      columns:
+        id: "Identifier"
+        course: "[Module] Course"
+        cohort: "Cohort"
+        active: "Active"
+    quizzes:
+      columns:
+        id: "Identifier"
+        theme: "Theme"
+        title: "Title"
+        uuid: "UUID"
+        trainer: "Author"
+        module: "Module"
+    quizzes_rows:
+      columns:
+        id: "Identifier"
+        quiz: "Quiz"
+        uuid: "UUID"
+        question: "Question"
+        quiz_type: 
+          label: "Quiz type"
+          options:
+            default: "Default"
+            long_answer: "Long answer"
+            short_answer: "Short answer"
+            unique_choice: "Unique choice"
+            multiple_choice: "Multiple choice"
+            true_false: "True or false"
+        timer: "Timer"
+        score: "Score"
+        hint: "Hint"
+        answer_explanation: "Answer explanation"
+        options:
+          1: "Option 1"
+          2: "Option 2"
+          3: "Option 3"
+          4: "Option 4"
+        answer: "Answer"
+    quizzes_shared:
+      columns:
+        id: "Identifier"
+        quiz: "[Module] Quiz"
+        start_date: "Start date"
+        finish_date: "Finish date"
+        uuid: "UUID"
+    quizzes_themes:
+      columns:
+        id: "Identifier"
+        illustration: "Illustration"
+        color: "Color"
+        name: "Name"
+    quizzes_users:
+      columns:
+        id: "Identifier"
+        user: "User"
+        quiz_row: "Quiz row"
+        real_answer: "Real answer"
+        answer: "User's answer"
+        finish_date: "Finish date"
+    cohorts_internships:
+      columns:
+        id: "Identifier"
+        label: "Label"
+        start_date: "Start date"
+        finish_date: "Finish date"
+        duration: "Duration"
+        cohort: "Cohort"
+        uuid: "UUID"
+    prospects_internships:
+      columns:
+        id: "Identifier"
+        name: "Name"
+        siren: "SIREN"
+        nic: "NIC"
+        number: "Number"
+        street: "Street"
+        postal_code: "Postal code"
+        city: "City"
+        country: "Country"
+        additional_address: "Additional address"
+        email: "Email"
+        phone_number: "Phone number"
+        phone_number_bis: "Phone number (BIS)"
+    internships:
+      columns:
+        id: "Identifier"
+        trainee: "Trainee"
+        prospect: "Prospect"
+        tutor_last_name: "Tutor last name"
+        tutor_first_name: "Tutor first name"
+        tutor_email: "Tutor email"
+        tutor_phone_number: "Tutor phone number"
+    trainees_internships:
+      asking_elements:
+        missing_agreement: "You have not provided the internship agreement."
+        label: "Click here to retrieve documents."
+      columns:
+        id: "Identifier"
+        internship: "Internship"
+        trainee: "Trainee"
+        agreement: "Agreement"
+        agreement_link: "Agreement link"
+        certificate: "Certificate"
+        certificate_link: "Certificate link"
+        evaluation: "Evaluation"
+        evaluation_link: "Evaluation link"
+        cohort_internship: "Cohort internship"
+    site_settings:
+      columns:
+        id: "Identifier"
+        maintenance_mode: "Maintenance mode"
+        logo_path: "Logo link"
+        logo_name: "Logo name"
+        platform_name: "Platform name"
+        primary_color: "Primary color"
+        secondary_color: "Secondary color"
+        tertiary_color: "Tertiary color"
+        quaternary_color: "Quaternary color"
+        lighten_color: "Lighten color"
+        darken_color: "Darken color"
+    notifications:
+      columns:
+        id: "Identifier"
+        origin: "Origin"
+        message: "Message"
+        link: "Link"
+        date: "Date"
+        category: 
+          label: "Category"
+          options:
+            homework_to_do: "Homework to do"
+            new_course: "New course"
+            new_features: "New features"
+            new_internship: "New internship's document"
+            new_message: "New message"
+        user: "Recipient"
+    q_and_a:
+      columns:
+        id: "Identifier"
+        sector: "Sector"
+        theme: "Theme"
+        title: "Title"
+        content: "Content"
+        visibility: "Visibility"
+        priority: "Priority"
+    courses_resources:
+      columns:
+        id: "Identifier"
+        course: "Course"
+        title: "Title"
+        resume: "Resume"
+        link: "Link"
+        type: 
+          label: "Type"
+          options:
+            other: "Other"
+            exercise: "Exercise"
+            tp: "TP"
+        record: "Record"
+        record_link: "Record link"
+    export_parameters:
+      columns:
+        id: "Identifier"
+        dtype: 
+          label: "Type"
+          options:
+            user: "User"
+            trainee: "Trainee"
+            trainer: "Trainer"
+            coordinator: "Coordinator"
+            responsible: "Responsible"
+            cohort: "Cohort"
+            prospect: "Prospect"
+            internship: "Internship"
+        field: "Field"
+    sectors:
+      columns:
+        id: "Identifier"
+        label: "Name"
+        logo: "Logo"
+    sandboxes:
+      columns:
+        id: "Identifier"
+        course: "Course"
+        author: "Author"
+        title: "Title"
+        data: "Data"
+        created_at: "Created at"
+        uuid: "UUID"
+        slide: "Slide"
+    surveys:
+      columns:
+        id: "Identifier"
+        question: "Question"
+        resume: "Resume"
+    surveys_trainees:
+      columns:
+        id: "Identifier"
+        survey: "Survey"
+        trainee: "Trainee"
+        rate: "Rate"
+        answer: "Answer"
+    trainees_resources:
+      columns:
+        id: "Identifier"
+        trainee: "Trainee"
+        course_resource: "Course resource"
+        label: "Label"

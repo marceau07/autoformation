@@ -15,12 +15,18 @@
               {% if value.module.illustration starts with 'http://' or value.module.illustration starts with 'https://' %}
                 {% set illustration = value.module.illustration %}
               {% else %}
-                {% set illustration = asset('images/' ~ value.module.illustration) %}
+                {% set illustration = asset('courses/' ~ value.module.illustration) %}
               {% endif %}
               <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-12 mb-3">
-                <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}" class="text-black">
-                  <div class="card">
-                    <span class="card-img-top text-center"><img class="img-course" alt="Illustration {{ value.module.label }}" src="{{ illustration }}" loading="lazy" /></span>
+                <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}">
+                  <div class="card shimmer-container">
+                    <span class="card-img-top text-center">
+                      <div class="shimmer"></div>
+                      <img class="img-course shimmer-image d-none" alt="Illustration {{ value.module.label }}" data-src="{{ illustration }}" loading="lazy" />
+                      {% if value.module.quizzes is defined and value.module.quizzes is not empty %}
+                        <i class="fa-solid fa-qrcode" style="position: absolute;top: 10px;right: 10px;" data-toggle="tooltip" data-placement="top" title="Des quiz sont disponibles dans ce module"></i>
+                      {% endif %}
+                    </span>
                     <div class="card-body">
                       <p class="card-title h5 text-decoration-underline">{{ value.module.label|upper }}</p>
                     </div>
@@ -39,12 +45,12 @@
 
 {% block js %}
   <script>
-  $(document).ready(function () {
-    if($('#liste_modules .card').length > 0) {
-      if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-modules') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
-        tg.start('trainee-modules');
+    $(document).ready(function () {
+      if($('#liste_modules .card').length > 0) {
+        if (localStorage.getItem('tg_tours_complete') !== null && !localStorage.getItem('tg_tours_complete').includes('trainee-modules') && {{ is_granted('ROLE_TRAINEE') ? "true" : "false" }}) {
+          tg.start('trainee-modules');
+        }
       }
-    }
-  });
-</script>
+    });
+  </script>
 {% endblock %}

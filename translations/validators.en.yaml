@@ -1,0 +1,25 @@
+global:
+  invalid:
+    "The value is invalid"
+  required:
+    "This field is required"
+  min_length:
+    "The value must be at least {min} characters long"
+  max_length:
+    "The value must be at most {max} characters long"
+  min_value:
+    "The value must be at least {min}"
+  max_value:
+    "The value must be at most {max}"
+  not_equal:
+    "The values must be different"
+  not_in_list:
+    "The value is not in the list"
+
+prospect:
+  siren:
+    invalid:
+      "The SIREN must contain 9 digits"
+  nic:
+    invalid:
+      "The NIC must contain 5 digits"

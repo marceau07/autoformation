@@ -1,0 +1,26 @@
+{% if canvas.module.illustration is defined and canvas.module.illustration is not empty %}
+  {% if canvas.module.illustration starts with 'http://' or canvas.module.illustration starts with 'https://' %}
+    {# If the illustration is hosted elsewhere #}
+    {% set illustration = canvas.module.illustration %}
+  {% else %}
+    {# If the resource is local #}
+    {% set illustration = asset('courses/' ~ canvas.module.illustration) %}
+  {% endif %}
+{% else %}
+  {# If no illustration is found, we use a default one #}
+  {% set illustration = asset('courses/not_found_404.svg') %}
+{% endif %}
+
+<div class="col-12">
+  <div class="row shimmer-container position-relative">
+    <div class="col-3">
+      <a href="{{ path('sandbox_show', { uuid: canvas.uuid }) }}">
+        <div class="shimmer"></div>
+        <img class="img-course shimmer-image d-none" alt="Illustration {{ canvas.title }}" data-src="{{ illustration }}" loading="lazy" />
+      </a>
+    </div>
+    <div class="col-9">
+      <h2>{{ canvas.title }}</h2>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: TraineeRepository::class)]
 #[Broadcast]
 class Trainee extends User implements UserInterface
@@ -54,6 +55,12 @@ class Trainee extends User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $tutorial_completed = null;
 
+    /**
+     * @var Collection<int, TraineeInternship>
+     */
+    #[ORM\OneToMany(targetEntity: TraineeInternship::class, mappedBy: 'trainee')]
+    private Collection $traineeInternships;
+
     public function __construct()
     {
         $roles = $this->getRoles();
@@ -64,6 +71,7 @@ class Trainee extends User implements UserInterface
         $this->traineeResources = new ArrayCollection();
         $this->internships = new ArrayCollection();
         $this->traineeCourseFavorites = new ArrayCollection();
+        $this->traineeInternships = new ArrayCollection();
     }
 
     public function getPasswordSave(): ?string
@@ -298,6 +306,41 @@ class Trainee extends User implements UserInterface
     public function setTutorialCompleted(?string $tutorial_completed): static
     {
         $this->tutorial_completed = $tutorial_completed;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return '[' . $this->getCohort()->__toString() . '] ' . $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    /**
+     * @return Collection<int, TraineeInternship>
+     */
+    public function getTraineeInternships(): Collection
+    {
+        return $this->traineeInternships;
+    }
+
+    public function addTraineeInternship(TraineeInternship $traineeInternship): static
+    {
+        if (!$this->traineeInternships->contains($traineeInternship)) {
+            $this->traineeInternships->add($traineeInternship);
+            $traineeInternship->setTrainee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraineeInternship(TraineeInternship $traineeInternship): static
+    {
+        if ($this->traineeInternships->removeElement($traineeInternship)) {
+            // set the owning side to null (unless already changed)
+            if ($traineeInternship->getTrainee() === $this) {
+                $traineeInternship->setTrainee(null);
+            }
+        }
 
         return $this;
     }
