@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Mailbox
+  {{ 'mailbox.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -29,25 +29,79 @@
             </div>
 
             <div id="liste_contacts" class="d-none d-sm-none d-md-block">
+              <div class="ps-3 pt-2 pb-2">{{ 'mailbox.groups.administration'|trans }}</div>
+              {% set firstTurn = true %}
+              
               {% for cohort in cohorts|sort((a, b) => b.startDate <=> a.startDate) %}
-                {% if is_granted('ROLE_TRAINER') or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
-                  <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_cohort'|trans({ '%cohort%': cohort.name }) }}">
+                {# Responsable filière #}
+                {% if firstTurn %}
+                  <a href="{{ path('app_mailbox_people', { people: 'responsible', uuid: cohort.trainer.coordinator.responsible.uuid }) }}" data-uuid="user-{{ cohort.trainer.coordinator.responsible.uuid }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.trainer.coordinator.responsible.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_responsible'|trans({ '%responsible%': (cohort.trainer.coordinator.responsible.firstname|capitalize) ~ ' ' ~ (cohort.trainer.coordinator.responsible.lastname|upper) }) }}">
+                    {# <div class="badge bg-success float-end">5</div> #}
+                    <div class="badge float-end bg-danger">
+                      <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <div class="d-flex align-items-start text-truncate">
+                      {% if cohort.trainer.coordinator.responsible.avatar.link starts with 'http://' or cohort.trainer.coordinator.responsible.avatar.link starts with 'https://' %}
+                        {% set avatarResponsible = cohort.trainer.coordinator.responsible.avatar.link %}
+                      {% else %}
+                        {% set avatarResponsible = asset('avatars/' ~ cohort.trainer.coordinator.responsible.avatar.link) %}
+                      {% endif %}
+                      <img src="{{ avatarResponsible }}" class="rounded-circle me-1" alt="{{ cohort.trainer.coordinator.responsible.firstname|capitalize }}{{ cohort.trainer.coordinator.responsible.lastname|upper }}" width="35" height="35" />
+                      <div class="flex-grow-1 ms-3">
+                        ({{ cohort.trainer.coordinator.responsible.id }})&nbsp;{{ cohort.trainer.coordinator.responsible.firstname|capitalize }}&nbsp;{{ cohort.trainer.coordinator.responsible.lastname|upper }}<div class="small">
+                          {# <span class="fas fa-circle chat-online"></span> Online #}
+                          {# <span class="fas fa-circle chat-offline"></span> Offline #}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+
+                {# Coordinateur filière #}
+                  <a href="{{ path('app_mailbox_people', { people: 'coordinator', uuid: cohort.trainer.coordinator.uuid }) }}" data-uuid="user-{{ cohort.trainer.coordinator.uuid }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.trainer.coordinator.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_coordinator'|trans({ '%coordinator%': (cohort.trainer.coordinator.firstname|capitalize) ~ ' ' ~ (cohort.trainer.coordinator.lastname|upper) }) }}">
+                    {# <div class="badge bg-success float-end">5</div> #}
+                    <div class="badge float-end bg-warning">
+                      <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <div class="d-flex align-items-start text-truncate">
+                      {% if cohort.trainer.coordinator.avatar.link starts with 'http://' or cohort.trainer.coordinator.avatar.link starts with 'https://' %}
+                        {% set avatarCoordinator = cohort.trainer.coordinator.avatar.link %}
+                      {% else %}
+                        {% set avatarCoordinator = asset('avatars/' ~ cohort.trainer.coordinator.avatar.link) %}
+                      {% endif %}
+                      <img src="{{ avatarCoordinator }}" class="rounded-circle me-1" alt="{{ cohort.trainer.coordinator.firstname|capitalize }} {{ cohort.trainer.coordinator.lastname|upper }}" width="35" height="35" />
+                      <div class="flex-grow-1 ms-3">
+                        ({{ cohort.trainer.coordinator.id }})&nbsp;{{ cohort.trainer.coordinator.firstname|capitalize }}&nbsp;{{ cohort.trainer.coordinator.lastname|upper }}<div class="small">
+                          {# <span class="fas fa-circle chat-online"></span> Online #}
+                          {# <span class="fas fa-circle chat-offline"></span> Offline #}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                  <hr>
+                {% endif %}
+                {% set firstTurn = false %}
+              {% endfor %}
+
+              {% for cohort in cohorts|sort((a, b) => b.startDate <=> a.startDate) %}
+                {% if (is_granted('ROLE_RESPONSIBLE') or is_granted('ROLE_COORDINATOR') or is_granted('ROLE_TRAINER')) or (is_granted('ROLE_TRAINEE') and cohort.id == app.user.cohort.id) %}
+                  <a href="{{ path('app_mailbox_cohort', { uuid: cohort.uuid }) }}" data-uuid="cohort-{{ cohort.uuid }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_cohort'|trans({ '%cohort%': cohort.name }) }}">
                     <div class="row ps-1 pt-2 pb-2">{{ cohort.name }}&nbsp;({{ cohort.trainees|length }})</div>
                     {# <div class="badge bg-success float-end">5</div> #}
                   </a>
+                  {# Formateur référent #}
                   {% if app.user.id != cohort.trainer.id %}
-                    <a href="{{ path('app_mailbox_trainer', { uuid: cohort.trainer.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_trainer_referent'|trans({ '%trainer%': (cohort.trainer.firstname|capitalize) ~ ' ' ~ (cohort.trainer.lastname|upper) }) }}">
+                    <a href="{{ path('app_mailbox_people', { people: 'trainer', uuid: cohort.trainer.uuid }) }}" data-uuid="user-{{ cohort.trainer.uuid }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == cohort.trainer.uuid ? ' style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_trainer_referent'|trans({ '%trainer%': (cohort.trainer.firstname|capitalize) ~ ' ' ~ (cohort.trainer.lastname|upper) }) }}">
                       {# <div class="badge bg-success float-end">5</div> #}
-                      <div class="badge float-end bg-warning">
+                      <div class="badge float-end bg-primary">
                         <i class="fa-solid fa-certificate"></i>
                       </div>
                       <div class="d-flex align-items-start text-truncate">
                         {% if cohort.trainer.avatar.link starts with 'http://' or cohort.trainer.avatar.link starts with 'https://' %}
                           {% set avatarTrainer = cohort.trainer.avatar.link %}
                         {% else %}
-                          {% set avatarTrainer = asset('../avatars/' ~ cohort.trainer.avatar.link) %}
+                          {% set avatarTrainer = asset('avatars/' ~ cohort.trainer.avatar.link) %}
                         {% endif %}
-                        <img src="{{ avatarTrainer }}" class="rounded-circle me-1" alt="{{ cohort.trainer.firstname|capitalize }}{{ cohort.trainer.lastname|upper }}" width="35" height="35" />
+                        <img src="{{ avatarTrainer }}" class="rounded-circle me-1" alt="{{ cohort.trainer.firstname|capitalize }} {{ cohort.trainer.lastname|upper }}" width="35" height="35" />
                         <div class="flex-grow-1 ms-3">
                           ({{ cohort.trainer.id }})&nbsp;{{ cohort.trainer.firstname|capitalize }}&nbsp;{{ cohort.trainer.lastname|upper }}<div class="small">
                             {# <span class="fas fa-circle chat-online"></span> Online #}
@@ -62,19 +116,19 @@
                     <span id="chat-trainees">
                       {% for trainee in cohort.trainees|sort((a, b) => a.lastName <=> b.lastName) %}
                         {% if app.user.id != trainee.id %}
-                          <a href="{{ path('app_mailbox_trainee', { uuid: trainee.uuid }) }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? 'style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_with'|trans({ '%trainee%': trainee.firstname|capitalize }) }} {{ trainee.lastname|upper }}">
+                          <a href="{{ path('app_mailbox_people', { people: 'trainee', uuid: trainee.uuid }) }}" data-uuid="user-{{ trainee.uuid }}" class="fake-link list-group-item list-group-item-action border-0" {{ uuid is defined and uuid is not empty and uuid == trainee.uuid ? 'style="background-color:var(--coul-principale);color:var(--coul-claire);"' : '' }} title="{{ 'mailbox.chat_with'|trans({ '%trainee%': trainee.firstname|capitalize }) }} {{ trainee.lastname|upper }}">
                             {# <div class="badge bg-success float-end">5</div> #}
                             <div class="d-flex align-items-start text-truncate">
                               {% if trainee.avatar.link starts with 'http://' or trainee.avatar.link starts with 'https://' %}
                                 {% set avatarTrainee = trainee.avatar.link %}
                               {% else %}
-                                {% set avatarTrainee = asset('../avatars/' ~ trainee.avatar.link) %}
+                                {% set avatarTrainee = asset('avatars/' ~ trainee.avatar.link) %}
                               {% endif %}
                               <img src="{{ avatarTrainee }}" class="rounded-circle me-1" alt="{{ trainee.firstname|capitalize }} {{ trainee.lastname|upper }}" width="35" height="35" />
                               <div class="flex-grow-1 ms-3">
                                 ({{ trainee.id }})&nbsp;{{ trainee.firstname|capitalize }}&nbsp;{{ trainee.lastname|upper }}<div class="small">
-                                  {# <span class="fas fa-circle chat-online"></span> Online #}
-                                  {# <span class="fas fa-circle chat-offline"></span> Offline #}
+                                  {# <span class="fas fa-circle chat-online"></span> Online
+                                  <span class="fas fa-circle chat-offline"></span> Offline #}
                                 </div>
                               </div>
                             </div>
@@ -98,11 +152,11 @@
                       {% if contact.avatar.link starts with 'http://' or contact.avatar.link starts with 'https://' %}
                         {% set avatarContact = contact.avatar.link %}
                       {% else %}
-                        {% set avatarContact = asset('../avatars/' ~ contact.avatar.link) %}
+                        {% set avatarContact = asset('avatars/' ~ contact.avatar.link) %}
                       {% endif %}
                       <img src="{{ avatarContact }}" class="rounded-circle me-1" alt="{{ contact.firstname|capitalize }} {{ contact.lastname|upper }}" width="40" height="40" />
                     {% elseif cohort is defined and cohort is not empty %}
-                      <img src="{{ asset('images/shields/' ~ cohort.shield) }}" class="rounded-circle me-1" alt="{{ cohort.name|upper }}" width="40" height="40" />
+                      <img src="{{ asset('shields/' ~ cohort.shield) }}" class="rounded-circle me-1" alt="{{ cohort.name|upper }}" width="40" height="40" />
                     {% endif %}
                   </div>
                   <div class="flex-grow-1 ps-3">
@@ -118,7 +172,7 @@
                 </div>
               </div>
 
-              <div class="position-relative" style="height:38rem;overflow: auto;" id="contenu">
+              <div class="position-relative" style="height:50vh;overflow: auto;" id="contenu">
                 <div class="chat-messages p-4">
                   {% include '/mailbox/messages.html.twig' %}
                 </div>
@@ -210,18 +264,24 @@
     function filterContacts() {
       // Récupérer la valeur saisie dans l'input
       const filter = document.getElementById('search_contact').value.toLowerCase();
-      
-      // Récupérer tous les éléments de la liste des contacts
       const contacts = document.querySelectorAll('#liste_contacts .fake-link');
+      const displayedUuids = new Set();
 
       // Boucle sur chaque contact pour vérifier s'il correspond au filtre
       contacts.forEach(contact => {
         // Récupérer le texte du nom et prénom à partir de l'attribut title
         const title = contact.getAttribute('title').toLowerCase();
-        
+        const uuid = contact.getAttribute('data-uuid');
+
         // Si le titre correspond à la saisie, on affiche le contact, sinon on le masque
         if (title.includes(filter)) {
-          contact.style.display = ''; // Affiche l'élément
+          if (!displayedUuids.has(uuid)) {
+            contact.style.display = '';
+            displayedUuids.add(uuid);
+          } else {
+            // Même contact déjà affiché ailleurs
+            contact.style.display = 'none';
+          }
         } else {
           contact.style.display = 'none'; // Masque l'élément
         }
@@ -239,7 +299,7 @@
       const from = element.getAttribute('data-from');
       const media = element.getAttribute('data-media');
       document.getElementById('form_original_message').value = id;
-      document.getElementById('form_original_content').innerHTML = "&ldquo;&nbsp;" + (message != "" ? message + media : media) + "&nbsp;&bdquo; - " + from;
+      document.getElementById('form_original_content').innerHTML = "&ldquo;&nbsp;" + (message != "" && media != "" ? message + '&nbsp;<img src="/messages/' + media + '">' : media != "" ? '<img src="/messages/' + media + '">' : message) + "&nbsp;&bdquo; - " + from;
       document.getElementById('form_original_content').classList.remove('d-none');
       document.getElementById('form_message').focus();
     }
