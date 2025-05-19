@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: InternshipRepository::class)]
 #[ORM\UniqueConstraint(name: "unique_trainee_prospect", columns: ["trainee_id", "prospect_id"])]
 #[Broadcast]
@@ -154,5 +155,10 @@ class Internship
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return '(' . $this->getProspect()->getSiren() . $this->getProspect()->getNic() . ') ' . $this->getProspect()->getName() . ' - ' . $this->getTutorLastName() . ' ' . $this->getTutorFirstName();
     }
 }

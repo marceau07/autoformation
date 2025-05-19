@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "READ_ONLY", region: "read_only")]
 #[ORM\Entity(repositoryClass: FeedbackCategoryRepository::class)]
 #[Broadcast]
 class FeedbackCategory

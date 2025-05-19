@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: TrainerRepository::class)]
 #[Broadcast]
 class Trainer extends User implements UserInterface
@@ -26,7 +27,7 @@ class Trainer extends User implements UserInterface
     private Collection $courses;
 
     #[ORM\ManyToOne(inversedBy: 'trainers')]
-    private ?Sector $sector = null;
+    private ?Coordinator $coordinator = null;
 
     #[ORM\OneToMany(targetEntity: Cohort::class, mappedBy: 'trainer')]
     private Collection $cohorts;
@@ -37,11 +38,6 @@ class Trainer extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'trainer', orphanRemoval: true)]
     private Collection $quizzes;
 
-    /**
-     * @var Collection<int, Calendar>
-     */
-    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'trainer')]
-    private Collection $calendars;
 
     /**
      * @var Collection<int, Sandbox>
@@ -57,7 +53,6 @@ class Trainer extends User implements UserInterface
         $this->courses = new ArrayCollection();
         $this->cohorts = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
-        $this->calendars = new ArrayCollection();
         $this->sandboxes = new ArrayCollection();
     }
 
@@ -127,14 +122,14 @@ class Trainer extends User implements UserInterface
         return $this;
     }
 
-    public function getSector(): ?Sector
+    public function getCoordinator(): ?Coordinator
     {
-        return $this->sector;
+        return $this->coordinator;
     }
 
-    public function setSector(?Sector $sector): static
+    public function setCoordinator(?Coordinator $coordinator): static
     {
-        $this->sector = $sector;
+        $this->coordinator = $coordinator;
 
         return $this;
     }
@@ -202,36 +197,6 @@ class Trainer extends User implements UserInterface
     public function __toString()
     {
         return $this->getFirstName() . ' ' . $this->getLastName();
-    }
-
-    /**
-     * @return Collection<int, Calendar>
-     */
-    public function getCalendars(): Collection
-    {
-        return $this->calendars;
-    }
-
-    public function addCalendar(Calendar $calendar): static
-    {
-        if (!$this->calendars->contains($calendar)) {
-            $this->calendars->add($calendar);
-            $calendar->setTrainer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCalendar(Calendar $calendar): static
-    {
-        if ($this->calendars->removeElement($calendar)) {
-            // set the owning side to null (unless already changed)
-            if ($calendar->getTrainer() === $this) {
-                $calendar->setTrainer(null);
-            }
-        }
-
-        return $this;
     }
 
     /**

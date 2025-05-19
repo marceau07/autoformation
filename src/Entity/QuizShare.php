@@ -13,10 +13,10 @@ use Endroid\QrCode\Label\Font\NotoSans;
 use Endroid\QrCode\Label\LabelAlignment;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: QuizShareRepository::class)]
 #[Broadcast]
 class QuizShare
@@ -103,12 +103,12 @@ class QuizShare
             ->writer(new PngWriter())
             ->writerOptions([])
             ->data("https://" . $_SERVER['SERVER_NAME'] . "/fr/quiz/redirect/" . $this->uuid)
-            // ->data("paf://quiz/" . $this->uuid) // Fonctionne mais conflit avec certaines applications
+            // ->data("paf://quiz/" . $this->uuid) // TODO: Fonctionne mais conflit avec certaines applications
             ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(ErrorCorrectionLevel::Quartile)
             ->margin(10)
             ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->logoPath(($this->isAvailable() ? 'assets/images/adrar_epa_logo_w_bg-5711b70db1d30a73d629b99c345bf989.png' : 'assets/images/lock-86937728444f01bc906bf2302329ffb4.png'))
+            ->logoPath(($this->isAvailable() ? '../public/website/logo_w_bg.png' : '../public/quizzes/lock.png'))
             ->logoResizeToWidth(70)
             ->logoPunchoutBackground(false)
             ->labelText($this->quiz->getTitle())

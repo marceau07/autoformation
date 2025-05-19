@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CohortRepository::class)]
 #[Broadcast]
 class Cohort
@@ -269,7 +270,7 @@ class Cohort
 
         return $this;
     }
-    
+
     public function __toString()
     {
         return $this->getName();

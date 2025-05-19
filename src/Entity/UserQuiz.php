@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "READ_ONLY", region: "read_only")]
 #[ORM\Entity(repositoryClass: UserQuizRepository::class)]
 #[Broadcast]
 class UserQuiz

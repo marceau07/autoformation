@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CohortInternshipRepository::class)]
 class CohortInternship
 {
@@ -151,5 +152,10 @@ class CohortInternship
         $this->uuid = $uuid;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getLabel() . " " . $this->getStartDate()->format('d/m/Y') . " - " . $this->getFinishDate()->format('d/m/Y');
     }
 }

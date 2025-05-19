@@ -6,6 +6,7 @@ use App\Repository\TraineeResourceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: TraineeResourceRepository::class)]
 #[ORM\UniqueConstraint(name: "unique_trainee_resource", columns: ["trainee_id", "course_resource_id"])]
 #[Broadcast]
@@ -16,9 +17,9 @@ class TraineeResource
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userResources')]
+    #[ORM\ManyToOne(inversedBy: 'traineeResources')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $trainee = null;
+    private ?Trainee $trainee = null;
 
     #[ORM\ManyToOne(inversedBy: 'traineeResources')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,12 +33,12 @@ class TraineeResource
         return $this->id;
     }
 
-    public function getTrainee(): ?User
+    public function getTrainee(): ?Trainee
     {
         return $this->trainee;
     }
 
-    public function setTrainee(?User $trainee): static
+    public function setTrainee(?Trainee $trainee): static
     {
         $this->trainee = $trainee;
 

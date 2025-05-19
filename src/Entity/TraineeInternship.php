@@ -6,6 +6,7 @@ use App\Repository\TraineeInternshipRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Filesystem\Filesystem;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: TraineeInternshipRepository::class)]
 class TraineeInternship
 {
@@ -98,14 +99,14 @@ class TraineeInternship
             $this->setAgreementLink(null);
             $this->agreement = null;
         }
-        
+
         $notification = new Notification();
         $notification->setOrigin($this->getTrainee()->getUserIdentifier());
         $notification->setMessage("convention");
-        if($this->isAgreement() === true) {
-            $notification->setLink( "/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Convention_de_stage_'. $this->getAgreementLink() . '.pdf');
+        if ($this->isAgreement() === true) {
+            $notification->setLink("/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Convention_de_stage_' . $this->getAgreementLink() . '.pdf');
         } else {
-            $notification->setLink( "/../internships/tmp/". $this->getAgreementLink());
+            $notification->setLink("/../internships/tmp/" . $this->getAgreementLink());
         }
         $notification->setCategory("new_internship");
         $notification->setDate(new \DateTimeImmutable());
@@ -150,14 +151,14 @@ class TraineeInternship
             $this->setCertificateLink(null);
             $fs->remove('internships/' . $this->trainee->getUsername() . '/Attestation_de_stage_' . $this->getCertificateLink() . '.pdf');
         }
-        
+
         $notification = new Notification();
         $notification->setOrigin($this->getTrainee()->getUserIdentifier());
         $notification->setMessage("attestation");
-        if($this->isCertificate() === true) {
-            $notification->setLink( "/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Attestation_de_stage_'. $this->getCertificateLink() . '.pdf');
+        if ($this->isCertificate() === true) {
+            $notification->setLink("/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Attestation_de_stage_' . $this->getCertificateLink() . '.pdf');
         } else {
-            $notification->setLink( "/../internships/tmp/". $this->getCertificateLink());
+            $notification->setLink("/../internships/tmp/" . $this->getCertificateLink());
         }
         $notification->setCategory("new_internship");
         $notification->setDate(new \DateTimeImmutable());
@@ -194,7 +195,7 @@ class TraineeInternship
             $this->setEvaluationLink($link);
             $fs->copy('internships/tmp/Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf', 'internships/' . $this->trainee->getUsername() . '/Evaluation_de_stage_' . $link . '.pdf');
             $fs->remove('internships/tmp/Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf');
-        }  elseif (!$evaluation && $fs->exists('internships/tmp/Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf')) {
+        } elseif (!$evaluation && $fs->exists('internships/tmp/Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf')) {
             $this->evaluation = 0;
             $this->setEvaluationLink('Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf');
         } elseif (!$evaluation && !$fs->exists('internships/tmp/Evaluation_de_stage_' . strtoupper($this->trainee->getLastName()) . '_' . ucwords($this->trainee->getFirstName()) . '.pdf')) {
@@ -202,14 +203,14 @@ class TraineeInternship
             $fs->remove('internships/' . $this->trainee->getUsername() . '/Evaluation_de_stage_' . $this->getEvaluationLink() . '.pdf');
             $this->setEvaluationLink(null);
         }
-        
+
         $notification = new Notification();
         $notification->setOrigin($this->getTrainee()->getUserIdentifier());
         $notification->setMessage("evaluation");
-        if($this->isEvaluation() === true) {
-            $notification->setLink( "/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Evaluation_de_stage_'. $this->getEvaluationLink() . '.pdf');
+        if ($this->isEvaluation() === true) {
+            $notification->setLink("/../internships/" . $this->getTrainee()->getUserIdentifier() . '/Evaluation_de_stage_' . $this->getEvaluationLink() . '.pdf');
         } else {
-            $notification->setLink( "/../internships/tmp/". $this->getEvaluationLink());
+            $notification->setLink("/../internships/tmp/" . $this->getEvaluationLink());
         }
         $notification->setCategory("new_internship");
         $notification->setDate(new \DateTimeImmutable());

@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\UuidV7;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -22,19 +23,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[ORM\Column(length: 50)]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 75)]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 75)]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?string $firstName = null;
 
     /**
@@ -63,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?Avatar $avatar = null;
 
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', cascade: ["persist"])]
@@ -73,44 +74,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $signature = null;
 
     /**
-     * @var Collection<int, TraineeResource>
-     */
-    #[ORM\OneToMany(targetEntity: TraineeResource::class, mappedBy: 'trainee')]
-    private Collection $userResources;
-
-    /**
      * @var Collection<int, Feedback>
      */
     #[ORM\OneToMany(targetEntity: Feedback::class, mappedBy: 'user')]
     private Collection $feedback;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['trainee_search', 'trainer_search'])]
+    #[Groups(['trainee_search', 'trainer_search', 'coordinator_search', 'responsible_search'])]
     private ?string $uuid = null;
 
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'send_trainer')]
-    private Collection $sent_messages_trainer;
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'send_people')]
+    private Collection $sent_messages_people;
 
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'trainer')]
-    private Collection $received_messages_trainer;
-
-    /**
-     * @var Collection<int, Message>
-     */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'send_trainee')]
-    private Collection $sent_messages_trainee;
-
-    /**
-     * @var Collection<int, Message>
-     */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'trainee')]
-    private Collection $received_messages_trainee;
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'people')]
+    private Collection $received_messages_people;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $phoneNumber = null;
@@ -121,19 +104,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserQuiz::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userQuizzes;
 
+    /**
+     * @var Collection<int, Calendar>
+     */
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'user')]
+    private Collection $calendars;
+
     public function __construct()
     {
         $this->activated = true;
         $this->notifications = new ArrayCollection();
-        $this->userResources = new ArrayCollection();
         $this->feedback = new ArrayCollection();
-        $this->sent_messages_trainer = new ArrayCollection();
-        $this->received_messages_trainer = new ArrayCollection();
-        $this->sent_messages_trainee = new ArrayCollection();
-        $this->received_messages_trainee = new ArrayCollection();
+        $this->sent_messages_people = new ArrayCollection();
+        $this->received_messages_people = new ArrayCollection();
         $uuid = new UuidV7();
         $this->uuid = $uuid->toString();
         $this->userQuizzes = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -216,7 +203,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return in_array($role, $this->roles, true);
     }
-    
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -344,36 +331,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, TraineeResource>
-     */
-    public function getTraineeResources(): Collection
-    {
-        return $this->userResources;
-    }
-
-    public function addTraineeResource(TraineeResource $traineeResource): static
-    {
-        if (!$this->userResources->contains($traineeResource)) {
-            $this->userResources->add($traineeResource);
-            $traineeResource->setTrainee($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTraineeResource(TraineeResource $traineeResource): static
-    {
-        if ($this->userResources->removeElement($traineeResource)) {
-            // set the owning side to null (unless already changed)
-            if ($traineeResource->getTrainee() === $this) {
-                $traineeResource->setTrainee(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Feedback>
      */
     public function getFeedback(): Collection
@@ -418,27 +375,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Message>
      */
-    public function getSentMessagesTrainer(): Collection
+    public function getSentMessagesPeople(): Collection
     {
-        return $this->sent_messages_trainer;
+        return $this->sent_messages_people;
     }
 
-    public function addSentMessageTrainer(Message $sentMessage): static
+    public function addSentMessagePeople(Message $sentMessage): static
     {
-        if (!$this->sent_messages_trainer->contains($sentMessage)) {
-            $this->sent_messages_trainer->add($sentMessage);
-            $sentMessage->setSendTrainer($this);
+        if (!$this->sent_messages_people->contains($sentMessage)) {
+            $this->sent_messages_people->add($sentMessage);
+            $sentMessage->setSendPeople($this);
         }
 
         return $this;
     }
 
-    public function removeSentMessageTrainer(Message $sentMessage): static
+    public function removeSentMessagePeople(Message $sentMessage): static
     {
-        if ($this->sent_messages_trainer->removeElement($sentMessage)) {
+        if ($this->sent_messages_people->removeElement($sentMessage)) {
             // set the owning side to null (unless already changed)
-            if ($sentMessage->getSendTrainer() === $this) {
-                $sentMessage->setSendTrainer(null);
+            if ($sentMessage->getSendPeople() === $this) {
+                $sentMessage->setSendPeople(null);
             }
         }
 
@@ -448,87 +405,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Message>
      */
-    public function getReceivedMessagesTrainer(): Collection
+    public function getReceivedMessagesPeople(): Collection
     {
-        return $this->received_messages_trainer;
+        return $this->received_messages_people;
     }
 
-    public function addReceivedMessageTrainer(Message $receivedMessage): static
+    public function addReceivedMessagePeople(Message $receivedMessage): static
     {
-        if (!$this->received_messages_trainer->contains($receivedMessage)) {
-            $this->received_messages_trainer->add($receivedMessage);
-            $receivedMessage->setTrainer($this);
+        if (!$this->received_messages_people->contains($receivedMessage)) {
+            $this->received_messages_people->add($receivedMessage);
+            $receivedMessage->setSendPeople($this);
         }
 
         return $this;
     }
 
-    public function removeReceivedMessageTrainer(Message $receivedMessage): static
+    public function removeReceivedMessagePeople(Message $receivedMessage): static
     {
-        if ($this->received_messages_trainer->removeElement($receivedMessage)) {
+        if ($this->received_messages_people->removeElement($receivedMessage)) {
             // set the owning side to null (unless already changed)
-            if ($receivedMessage->getTrainer() === $this) {
-                $receivedMessage->setTrainer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getSentMessagesTrainee(): Collection
-    {
-        return $this->sent_messages_trainee;
-    }
-
-    public function addSentMessageTrainee(Message $sentMessage): static
-    {
-        if (!$this->sent_messages_trainee->contains($sentMessage)) {
-            $this->sent_messages_trainee->add($sentMessage);
-            $sentMessage->setSendTrainee($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSentMessageTrainee(Message $sentMessage): static
-    {
-        if ($this->sent_messages_trainee->removeElement($sentMessage)) {
-            // set the owning side to null (unless already changed)
-            if ($sentMessage->getSendTrainee() === $this) {
-                $sentMessage->setSendTrainee(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getReceivedMessagesTrainee(): Collection
-    {
-        return $this->received_messages_trainee;
-    }
-
-    public function addReceivedMessageTrainee(Message $receivedMessage): static
-    {
-        if (!$this->received_messages_trainee->contains($receivedMessage)) {
-            $this->received_messages_trainee->add($receivedMessage);
-            $receivedMessage->setTrainee($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReceivedMessageTrainee(Message $receivedMessage): static
-    {
-        if ($this->received_messages_trainee->removeElement($receivedMessage)) {
-            // set the owning side to null (unless already changed)
-            if ($receivedMessage->getTrainee() === $this) {
-                $receivedMessage->setTrainee(null);
+            if ($receivedMessage->getSendPeople() === $this) {
+                $receivedMessage->setSendPeople(null);
             }
         }
 
@@ -571,6 +468,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userQuiz->getUser() === $this) {
                 $userQuiz->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getUser() === $this) {
+                $calendar->setUser(null);
             }
         }
 

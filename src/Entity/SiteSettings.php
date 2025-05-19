@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SiteSettingsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: SiteSettingsRepository::class)]
 class SiteSettings
 {

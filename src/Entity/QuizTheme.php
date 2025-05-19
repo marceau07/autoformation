@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "READ_ONLY", region: "read_only")]
 #[ORM\Entity(repositoryClass: QuizThemeRepository::class)]
 #[Broadcast]
 class QuizTheme
@@ -106,5 +107,10 @@ class QuizTheme
         $this->name = $name;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return '[<span style="display:inline-block;height:10px;width:10px;border-radius:15px;background-color:' . $this->color . '"></span>]&nbsp;' . $this->name;
     }
 }

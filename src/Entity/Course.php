@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[Broadcast]
 class Course
@@ -44,9 +45,9 @@ class Course
     #[Groups('course_search')]
     private ?CourseModule $module = null;
 
-    #[ORM\ManyToOne(inversedBy: null)]
+    #[ORM\ManyToOne(inversedBy: 'courses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $trainer = null;
+    private ?Trainer $trainer = null;
 
     #[ORM\OneToMany(targetEntity: CourseCohort::class, mappedBy: 'course')]
     private Collection $courseCohorts;
@@ -159,12 +160,12 @@ class Course
         return $this;
     }
 
-    public function getTrainer(): ?User
+    public function getTrainer(): ?Trainer
     {
         return $this->trainer;
     }
 
-    public function setTrainer(?User $trainer): static
+    public function setTrainer(?Trainer $trainer): static
     {
         $this->trainer = $trainer;
 

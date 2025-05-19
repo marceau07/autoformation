@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Config\QuizType;
-use App\Repository\QuizRepository;
+use App\Repository\QuizRowRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
-#[ORM\Entity(repositoryClass: QuizRepository::class)]
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
+#[ORM\Entity(repositoryClass: QuizRowRepository::class)]
 #[Broadcast]
 class QuizRow
 {
@@ -261,5 +262,10 @@ class QuizRow
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return "[" . $this->getQuiz()->getModule() . " - " . $this->getQuiz()->getTitle() . "] " . $this->getQuestion();
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\ExportParameterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Cache(usage: "READ_ONLY", region: "read_only")]
 #[ORM\Entity(repositoryClass: ExportParameterRepository::class)]
 class ExportParameter
 {
@@ -14,8 +15,8 @@ class ExportParameter
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING)]
-    private ?string $dtype = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $dtype;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $field = null;
@@ -30,7 +31,7 @@ class ExportParameter
         return $this->dtype;
     }
 
-    public function setDtype(string $dtype): static
+    public function setDtype(?string $dtype): static
     {
         $this->dtype = $dtype;
 

@@ -2,6 +2,11 @@
 framework:
     secret: '%env(APP_SECRET)%'
     csrf_protection: true
+    # TODO: vérifier le cache avec APCU et conf dans doctrine.yaml
+    # cache:
+    #     pools:
+    #         doctrine.l2_cache_pool:
+    #             adapter: cache.adapter.apcu
 
     # Note that the session will be started ONLY if you read or write from it.
     session: 

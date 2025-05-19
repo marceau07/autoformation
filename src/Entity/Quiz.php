@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: QuizRepository::class)]
 #[Broadcast]
 class Quiz
@@ -178,5 +179,10 @@ class Quiz
         $this->module = $module;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return "[" . $this->module->getLabel() . "] " . $this->title . " (" . $this->trainer . ")";
     }
 }

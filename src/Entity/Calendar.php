@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Config\EventType;
 use App\Repository\CalendarRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: CalendarRepository::class)]
 #[Broadcast]
 class Calendar
@@ -33,7 +35,10 @@ class Calendar
     private ?Cohort $cohort = null;
 
     #[ORM\ManyToOne(inversedBy: 'calendars')]
-    private ?Trainer $trainer = null;
+    private ?User $user = null;
+
+    #[ORM\Column(enumType: EventType::class)]
+    private ?EventType $eventType = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $uuid = null;
@@ -109,14 +114,26 @@ class Calendar
         return $this;
     }
 
-    public function getTrainer(): ?Trainer
+    public function getUser(): ?User
     {
-        return $this->trainer;
+        return $this->user;
     }
 
-    public function setTrainer(?Trainer $trainer): static
+    public function setUser(?User $user): static
     {
-        $this->trainer = $trainer;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEventType(): ?EventType
+    {
+        return $this->eventType;
+    }
+
+    public function setEventType(EventType $eventType): static
+    {
+        $this->eventType = $eventType;
 
         return $this;
     }

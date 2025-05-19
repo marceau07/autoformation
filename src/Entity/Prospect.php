@@ -6,8 +6,10 @@ use App\Repository\ProspectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "non_strict")]
 #[ORM\Entity(repositoryClass: ProspectRepository::class)]
 #[Broadcast]
 class Prospect
@@ -18,36 +20,53 @@ class Prospect
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $name = null;
 
     #[ORM\Column(length: 9)]
+    #[Assert\NotBlank(message: 'global.required')]
+    #[Assert\Regex(
+        pattern: '/^\d{9}$/',
+        message: 'prospect.siren.invalid',
+    )]
     private ?string $siren = null;
 
     #[ORM\Column(length: 5)]
+    #[Assert\NotBlank(message: 'global.required')]
+    #[Assert\Regex(
+        pattern: '/^\d{5}$/',
+        message: 'prospect.nic.invalid',
+    )]
     private ?string $nic = null;
 
     #[ORM\Column(length: 11, nullable: true)]
     private ?int $number = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $street = null;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $additional_address = null;
 
     #[ORM\Column(length: 5)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $postal_code = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $city = null;
 
     #[ORM\Column(length: 25)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $country = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $email = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: 'global.required')]
     private ?string $phone_number = null;
 
     #[ORM\Column(length: 10, nullable: true)]
