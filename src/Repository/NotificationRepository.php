@@ -21,7 +21,7 @@ class NotificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Notification::class);
     }
 
-    public function deleteANotification(string $origin = null, string $cohort_uuid = null, string $category, int $user_id): void
+    public function deleteANotification(string $category, int $user_id, ?string $origin = null, ?string $cohort_uuid = null): void
     {
         $this->createQueryBuilder('n')
             ->delete()

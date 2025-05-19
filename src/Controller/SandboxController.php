@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Translation\TranslatableMessage;
 
 final class SandboxController extends AbstractController
 {
@@ -21,7 +22,7 @@ final class SandboxController extends AbstractController
      */
     #[IsGranted('ROLE_TRAINER')]
     #[Route('/sandbox/save/{uuid?}', name: 'sandbox_save', methods: ['POST'])]
-    public function saveSandbox(?string $uuid, Request $request, SandboxRepository $sandboxRepository, EntityManagerInterface $em): JsonResponse
+    public function saveSandbox(Request $request, SandboxRepository $sandboxRepository, EntityManagerInterface $em, ?string $uuid = null): JsonResponse
     {
         if (isset($uuid)) {
             $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
@@ -33,7 +34,7 @@ final class SandboxController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (!$data || !isset($data['canvas'])) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Données invalides'], 400);
+            return new JsonResponse(['status' => 'error', 'message' => new TranslatableMessage('global.exceptions.400.message')], 400);
         }
 
         $sandbox->setTitle($data['title'] ?? 'Sans titre');
@@ -53,13 +54,13 @@ final class SandboxController extends AbstractController
      * Récupère un canevas par son identifiant pour modification.
      *
      */
-    #[Route('/{_locale}/sandbox/{uuid}/edit', name: 'sandbox_edit', methods: ['GET'])]
+    #[Route('/sandbox/{uuid}/edit', name: 'sandbox_edit', methods: ['GET'])]
     public function editSandbox(string $uuid, SandboxRepository $sandboxRepository): Response
     {
         $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
 
         if (!$sandbox) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Sandbox non trouvée'], 404);
+            return new JsonResponse(['status' => 'error', 'message' => new TranslatableMessage('sandbox.not_found')], 404);
         }
 
         return $this->render('sandbox/builder.html.twig', [
@@ -73,13 +74,13 @@ final class SandboxController extends AbstractController
      * Récupère un canevas par son identifiant pour affichage.
      *
      */
-    #[Route('/{_locale}/sandbox/{uuid}', name: 'sandbox_show', methods: ['GET'])]
+    #[Route('/sandbox/{uuid}', name: 'sandbox_show', methods: ['GET'])]
     public function showSandbox(string $uuid, SandboxRepository $sandboxRepository): Response
     {
         $sandbox = $sandboxRepository->findOneBy(['uuid' => $uuid]);
 
         if (!$sandbox) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Sandbox non trouvée'], 404);
+            return new JsonResponse(['status' => 'error', 'message' => new TranslatableMessage('sandbox.not_found')], 404);
         }
 
         return $this->render('sandbox/builder.html.twig', [
