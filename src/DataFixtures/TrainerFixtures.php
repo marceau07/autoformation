@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Avatar;
-use App\Entity\Sector;
+use App\Entity\Coordinator;
 use App\Entity\Trainer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -25,7 +25,6 @@ class TrainerFixtures extends Fixture implements DependentFixtureInterface
         $trainer->setRole("Formateur référent");
         $trainer->setEntranceCode(null);
         $trainer->setEntranceCodeDate(null);
-        $trainer->setSector($this->getReference(SectorFixtures::SECTOR_REFERENCE_TAG . rand(0, SectorFixtures::NB_SECTOR - 1), Sector::class));
         $trainer->setRoles(['ROLE_TRAINER']);
         $trainer->setUsername("marceaurodrigues");
         $trainer->setPassword(password_hash("adrar", PASSWORD_BCRYPT, ['cost' => 12]));
@@ -41,14 +40,13 @@ class TrainerFixtures extends Fixture implements DependentFixtureInterface
         $trainer->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
 
         $manager->persist($trainer);
-        for ($i = 0; $i < self::NB_TRAINER; $i++) {
+        for ($i = (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR); $i < (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + self::NB_TRAINER); $i++) {
             $trainer = new Trainer();
             $trainer->setRole($faker->words(3, true));
             $trainer->setEntranceCode($faker->numberBetween(10000, 99999));
             $trainer->setEntranceCodeDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 day', '+1 week')));
-            $trainer->setSector($this->getReference(SectorFixtures::SECTOR_REFERENCE_TAG . rand(0, SectorFixtures::NB_SECTOR - 1), Sector::class));
             $trainer->setRoles(['ROLE_TRAINER']);
-            $trainer->setUsername($faker->unique()->userName());
+            $trainer->setUsername($faker->unique()->userName() . rand(0, 100));
             $sPassword = $faker->password(10);
             $trainer->setPassword(password_hash($sPassword, PASSWORD_BCRYPT, ['cost' => 12]));
             $trainer->setLastName($faker->lastName());
@@ -63,8 +61,10 @@ class TrainerFixtures extends Fixture implements DependentFixtureInterface
             $trainer->setSignature($faker->imageUrl(300, 300, 'signature'));
             $trainer->setUuid($faker->unique()->uuid());
             $trainer->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
+            $trainer->setCoordinator($this->getReference(CoordinatorFixtures::COORDINATOR_REFERENCE_TAG . rand((ResponsibleFixtures::NB_RESPONSIBLE), (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR) - 1), Coordinator::class));
 
             $manager->persist($trainer);
+
             $this->addReference(self::USER_REFERENCE_TAG . $i, $trainer);
             $this->addReference(self::TRAINER_REFERENCE_TAG . $i, $trainer);
         }
@@ -75,7 +75,7 @@ class TrainerFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AvatarFixtures::class,
-            SectorFixtures::class
+            CoordinatorFixtures::class,
         ];
     }
 }

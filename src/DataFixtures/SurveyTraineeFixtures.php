@@ -24,7 +24,7 @@ class SurveyTraineeFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < self::NB_SURVEY_TRAINEE; $i++) {
             do {
                 $surveyIndex = rand(0, SurveyFixtures::NB_SURVEY - 1);
-                $traineeIndex = rand(TrainerFixtures::NB_TRAINER, (TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE - 1));
+                $traineeIndex = rand((ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER), (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER + TraineeFixtures::NB_TRAINEE) - 1);
                 $combination = $surveyIndex . '|' . $traineeIndex;
             } while (in_array($combination, $usedCombinations));
             $usedCombinations[] = $combination;

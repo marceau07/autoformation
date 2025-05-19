@@ -29,7 +29,7 @@ class CourseFixtures extends Fixture implements DependentFixtureInterface
             $course->setLink("2PACK-" . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
             $course->setPosition(rand(0, self::NB_COURSE));
             $course->setModule($this->getReference(CourseModuleFixtures::COURSE_MODULE_REFERENCE_TAG . rand(0, CourseModuleFixtures::NB_COURSE_MODULE - 1), CourseModule::class));
-            $course->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1), Trainer::class));
+            $course->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand((ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR), (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER) - 1), Trainer::class));
             $course->setVisitors(rand(0, 10000));
 
             $manager->persist($course);

@@ -10,7 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 // The DependentFixtureInterface is imported to use the getDependencies method to avoid the error of loading fixtures in the wrong order
 class TraineeFixtures extends Fixture implements DependentFixtureInterface
@@ -22,8 +21,8 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        
-        for ($i = TrainerFixtures::NB_TRAINER; $i < (TrainerFixtures::NB_TRAINER + self::NB_TRAINEE); $i++) {
+
+        for ($i = (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER); $i < (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER + self::NB_TRAINEE); $i++) {
             $trainee = new Trainee();
             $trainee->setRoles(['ROLE_TRAINEE']);
             $sPassword = $faker->password(10);
@@ -31,7 +30,7 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
             $trainee->setDocuments('{}');
             $trainee->setDiploma(rand(-7, 1));
             $trainee->setCohort($this->getReference(CohortFixtures::COHORT_REFERENCE_TAG . rand(0, CohortFixtures::NB_COHORT - 1), Cohort::class));
-            $trainee->setUsername($faker->unique()->userName());
+            $trainee->setUsername($faker->unique()->userName() . rand(0, 100));
             $trainee->setPassword(password_hash($sPassword, PASSWORD_BCRYPT, ['cost' => 12]));
             $trainee->setLastName($faker->lastName());
             $trainee->setFirstName($faker->firstName());
@@ -45,8 +44,16 @@ class TraineeFixtures extends Fixture implements DependentFixtureInterface
             $trainee->setSignature($faker->imageUrl(300, 300, 'signature'));
             $trainee->setUuid($faker->unique()->uuid());
             $trainee->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
+            $trainee->setTutorialCompleted($faker->randomElement([
+                'trainee-index',
+                'trainee-index,trainee-mailbox',
+                'trainee-index,trainee-mailbox,trainee-modules',
+                'trainee-index,trainee-modules,trainee-end-survey-index',
+                'trainee-mailbox,trainee-informations',
+            ]));
 
             $manager->persist($trainee);
+
             $this->addReference(self::USER_REFERENCE_TAG . $i, $trainee);
             $this->addReference(self::TRAINEE_REFERENCE_TAG . $i, $trainee);
         }

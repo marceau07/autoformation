@@ -21,7 +21,7 @@ class CohortFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < self::NB_COHORT; $i++) {
             $cohort = new Cohort();
-            $cohort->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand(0, TrainerFixtures::NB_TRAINER - 1), Trainer::class));
+            $cohort->setTrainer($this->getReference(TrainerFixtures::TRAINER_REFERENCE_TAG . rand((ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR), (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR + TrainerFixtures::NB_TRAINER) - 1), Trainer::class));
             $cohort->setName($faker->word());
             $cohort->setAcronym($faker->word());
             $cohort->setShield($faker->imageUrl(640, 480, 'shield'));
