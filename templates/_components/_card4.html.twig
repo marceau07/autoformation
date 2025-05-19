@@ -4,11 +4,11 @@
     {% set illustration = course.module.illustration %}
   {% else %}
     {# If the resource is local #}
-    {% set illustration = asset('images/' ~ course.module.illustration) %}
+    {% set illustration = asset('courses/' ~ course.module.illustration) %}
   {% endif %}
 {% else %}
   {# If no illustration is found, we use a default one #}
-  {% set illustration = asset('images/not_found_404.svg') %}
+  {% set illustration = asset('courses/not_found_404.svg') %}
 {% endif %}
 
 <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-2 pb-5" id="cours_{{ course.id }}_{{ cohort.id }}" onclick="updateStatusCourse({{ course.id }},{{ cohort.id }});">

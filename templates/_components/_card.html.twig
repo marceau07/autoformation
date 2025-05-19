@@ -1,11 +1,11 @@
 {% if course.module.illustration starts with 'http://' or course.module.illustration starts with 'https://' %}
   {% set illustration = course.module.illustration %}
 {% else %}
-  {% set illustration = asset('images/' ~ course.module.illustration) %}
+  {% set illustration = asset('courses/' ~ course.module.illustration) %}
 {% endif %}
 
 <div class="col-sm-12 col-md-4 col-lg-3 col-12 mb-3">
-  <a title="{{ 'course.made_by'|trans({ '%trainer%': (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-black text-decoration-none">
+  <a title="{{ 'course.made_by'|trans({ '%trainer%': (course.trainer.firstname|capitalize) ~ ' ' ~ (course.trainer.lastname|upper) }) }}" href="{{ path('app_embed', { slide: course.link }) }}" class="text-decoration-none">
     <div class="card shimmer-container h-100">
       <span class="card-img-top text-center">
         <div class="shimmer"></div>

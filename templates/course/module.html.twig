@@ -15,10 +15,10 @@
               {% if value.module.illustration starts with 'http://' or value.module.illustration starts with 'https://' %}
                 {% set illustration = value.module.illustration %}
               {% else %}
-                {% set illustration = asset('images/' ~ value.module.illustration) %}
+                {% set illustration = asset('courses/' ~ value.module.illustration) %}
               {% endif %}
               <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-12 mb-3">
-                <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}" class="text-black">
+                <a href="{{ path('app_course', { course: value.module.uuid, search: '' }) }}">
                   <div class="card shimmer-container">
                     <span class="card-img-top text-center">
                       <div class="shimmer"></div>

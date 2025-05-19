@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Quiz
+  {{  'quiz.title'|trans() }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -9,13 +9,54 @@
 {% endblock %}
 
 {% block main %}
-  <div class="container-fluid">
-    <div class="row p-5" id="quizzes_block">
+  <div class="container">
+    <div class="row" id="quizzes_block">
       <div class="col-12">
-        <h1 class="text-white">[{{ quiz.quiz.title }}] Quiz {{ quiz.quiz.module.label }}</h1>
+        <h1 class="text-white text-center">{{ 'quiz.launcher.title'|trans({'%module%': quiz.quiz.module.label, '%level%': quiz.quiz.title}) }}</h1>
+        <p class="text-muted text-end">{{ 'quiz.launcher.author'|trans({'%trainer%': quiz.quiz.trainer}) }}</p>
       </div>
     </div>
   </div>
 
-  <pre>{{ dump(quiz.quiz) }}</pre>for<div class="container pt-5">{{ quiz.quiz.title }}</div>
+  <div class="container-fluid position-absolute top-10 start-0 end-0 bottom-0">
+    <video src="{{ asset('/images/quizzes/' ~ quiz.quiz.theme.illustration) }}" alt="{{ 'quiz.launcher.theme.illustration'|trans({'%theme%': quiz.quiz.theme.name}) }}" style="opacity:0.6;width:100%;max-height:75vh;object-fit: cover;" autoplay loop muted />
+  </div>
+  <div class="container position-relative" style="z-index: 1; border-radius: 10px; border: 2px solid #000; background-color: rgba(0, 0, 0, 0.5); padding: 15px; margin-top: 7vh;">
+    {% for row in quiz.quiz.quizRows %}
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2>{{ 'quiz.launcher.question'|trans({'%question%': row.question, '%index%': loop.index, '%total%': quiz.quiz.quizRows|length}) }}</h2>
+          <p class="text-muted">Type: {{ row.quizType.value }}</p>
+          {% if row.quizType == constant('App\\Config\\QuizType::UNIQUE_CHOICE') %}
+            {% for i in 1..4 %}
+              {% set field = 'option' ~ i %}
+              {% if attribute(row, field) is not empty %}
+                <label for="{{ field }}"><input type="radio" name="option" value="{{ field }}" id="{{ field }}" />&nbsp;{{ attribute(row, field) }}</label>
+              {% endif %}
+            {% endfor %}
+          {% elseif row.quizType == constant('App\\Config\\QuizType::MULTIPLE_CHOICE') %}
+            {% for i in 1..4 %}
+              {% set field = 'option' ~ i %}
+              {% if attribute(row, field) is not empty %}
+                <label for="{{ field }}"><input type="checkbox" name="option" value="{{ field }}" id="{{ field }}" />&nbsp;{{ attribute(row, field) }}</label>
+              {% endif %}
+            {% endfor %}
+          {% elseif row.quizType == constant('App\\Config\\QuizType::TRUE_FALSE') %}
+            <label for="optionTrue"><input type="radio" name="option" value="true" id="optionTrue" />&nbsp;{{ 'global.true'|trans }} </label>
+            <label for="optionFalse"><input type="radio" name="option" value="false" id="optionFalse" />&nbsp;{{ 'global.false'|trans }} </label>
+          {% elseif row.quizType == constant('App\\Config\\QuizType::LONG_ANSWER') %}
+            <textarea rows="5" style="width: -webkit-fill-available;" placeholder="{{ 'quiz.launcher.textarea.placeholder.long'|trans }}"></textarea>
+          {% else %}
+            {# SHORT_ANSWER/DEFAULT #}
+            <textarea rows="1" style="width: -webkit-fill-available;" placeholder="{{ 'quiz.launcher.textarea.placeholder.long'|trans }}"></textarea>
+          {% endif %}
+        </div>
+      </div>
+      <br />
+    {% endfor %}
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-primary" id="submit_quiz">{{ 'global.btn_send'|trans }}</button>
+      </div>
+  </div>
 {% endblock %}
