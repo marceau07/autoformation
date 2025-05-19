@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Repository\ChangelogRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ChangelogController extends AbstractController
-{    
+{
     #[Route('/{_locale}/changelogs', name: 'app_changelogs')]
     public function index(): Response
     {

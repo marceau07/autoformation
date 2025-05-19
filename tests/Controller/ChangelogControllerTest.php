@@ -4,11 +4,12 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ChangelogControllerTest extends WebTestCase{
+final class ChangelogControllerTest extends WebTestCase
+{
     public function testIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/changelog');
+        $client->request('GET', '/changelogs/');
 
         self::assertResponseIsSuccessful();
     }

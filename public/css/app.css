@@ -30,18 +30,6 @@
     }
 }
 
-/*Redéfinition couleurs toolbar Symfony*/
-.sf-toolbarreset,
-.sf-toolbarreset .hide-button {
-    background-color: var(--coul-ternaire) !important;
-}
-
-[data-theme="dark"] .sf-toolbarreset,
-[data-theme="dark"] .sf-toolbarreset .hide-button {
-    background-color: var(--coul-foncee) !important;
-}
-
-/* Fin définition des couleurs */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--coul-ternaire) !important;
@@ -95,9 +83,7 @@ form input[type="submit"] {
     font-size: 16px;
 }
 
-.nav-link,
-.dropdown-menu a,
-span {
+:is(.nav-link, .dropdown-menu a, span):not(.sf-toolbarreset :is(.nav-link, .dropdown-menu a, span)) {
     color: var(--coul-foncee) !important;
 }
 
@@ -172,10 +158,7 @@ blockquote {
     background-color: var(--coul-foncee) !important;
 }
 
-[data-theme="dark"] .nav-link,
-[data-theme="dark"] .dropdown-menu a,
-[data-theme="dark"] span,
-[data-theme="dark"] .card {
+:is([data-theme="dark"] .nav-link, [data-theme="dark"] .dropdown-menu a, [data-theme="dark"] span, [data-theme="dark"] .card):not([data-theme="dark"] .sf-toolbarreset :is([data-theme="dark"] .nav-link, [data-theme="dark"] .dropdown-menu a, [data-theme="dark"] span, [data-theme="dark"] .card)) {
     color: var(--coul-claire) !important;
 }
 
@@ -238,7 +221,10 @@ blockquote {
     max-width: 350px;
     margin: 20px;
     right: 0;
-    background-color: var(--coul-principale);
+}
+
+.alert-temporary.bg-info {
+    background-color: var(--coul-principale) !important;
 }
 
 /* End flash Messages */

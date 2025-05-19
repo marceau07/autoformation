@@ -8,7 +8,6 @@ use App\Entity\UserQuiz;
 use App\Repository\QuizRepository;
 use App\Repository\QuizRowRepository;
 use App\Repository\QuizShareRepository;
-use App\Repository\UserQuizRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;

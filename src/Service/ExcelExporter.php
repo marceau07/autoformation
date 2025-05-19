@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -25,7 +25,7 @@ class ExcelExporter
             'font' => [
                 'color' => ['rgb' => 'FFFFFF'], // Texte blanc
                 'bold' => true,
-            ], 
+            ],
             'borders' => [
                 'outline' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -35,7 +35,7 @@ class ExcelExporter
         ];
 
         // Remplacer les en-têtes par les vrais en-têtes si fournies
-        if(!empty($realHeaders)){
+        if (!empty($realHeaders)) {
             $headers = $realHeaders;
         }
         // Remplir les en-têtes dans la première ligne et appliquer le style
@@ -68,11 +68,11 @@ class ExcelExporter
         // Remplir les données à partir de la ligne 2
         $row = 2;
         $letters = range('A', 'Z');
+        $lastLetter = $letters[count($headers) - 1];
         foreach ($data as $item) {
-            foreach($headers as $key => $column) if(!is_object($item)) {
+            foreach ($headers as $key => $column) if (!is_object($item)) {
                 $sheet->setCellValue($letters[$key] . $row, $item[$key]);
             }
-            $lastLetter = $letters[count($headers) - 1];
             // Appliquer le style bleu clair aux cellules de données impaires
             if ($row % 2 !== 0) $sheet->getStyle("A{$row}:{$lastLetter}{$row}")->applyFromArray($dataStyle);
             $row++;
@@ -98,7 +98,7 @@ class ExcelExporter
 
         // Définir les headers de la réponse pour forcer le téléchargement du fichier
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="' . uniqid($dtype."_", true) . '.xlsx"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . uniqid($dtype . "_", true) . '.xlsx"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;

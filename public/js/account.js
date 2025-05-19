@@ -10,26 +10,26 @@ function accountPrivacy() {
         throttle: 16, // max x milli seconds on event update, OBS! this introduces lag for event update
         minPointDistance: 3,
     });
-    
+
     var approveButton = document.querySelector('#approve-signature');
     var clearButton = document.querySelector('#clear-signature');
-    
+
     approveButton.addEventListener('click', function (event) {
         document.querySelector('#form_signature').value = canvas.toDataURL('image/png');
     });
-    
+
     clearButton.addEventListener('click', function (event) {
         signaturePad.clear();
         document.querySelector('#form_signature').value = '';
     });
 
-    function fitToContainer(canvas){
-    // Make it visually fill the positioned parent
-    canvas.style.width ='100%';
-    canvas.style.height='100%';
-    // ...then set the internal size to match
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    function fitToContainer(canvas) {
+        // Make it visually fill the positioned parent
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        // ...then set the internal size to match
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
     }
 }
 
