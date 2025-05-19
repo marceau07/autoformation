@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Cohort;
-use App\Form\CohortType;
 use App\Repository\CohortRepository;
 use App\Repository\ExportParameterRepository;
 use App\Service\ExcelExporter;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,79 +15,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/{_locale}/cohort')]
 class CohortController extends AbstractController
 {
-    #[Route('/', name: 'app_cohort_index', methods: ['GET'])]
-    public function index(CohortRepository $cohortRepository, ExportParameterRepository $parameter): Response
-    {
-        return $this->render('cohort/index.html.twig', [
-            'cohorts' => $cohortRepository->findAll(),
-            'exportParameters' => json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_cohort_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $cohort = new Cohort();
-        $form = $this->createForm(CohortType::class, $cohort);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($cohort);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_cohort_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('cohort/new.html.twig', [
-            'cohort' => $cohort,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{uuid}', name: 'app_cohort_show', methods: ['GET'])]
-    public function show(CohortRepository $cohortRepository, string $uuid): Response
-    {
-        return $this->render('cohort/show.html.twig', [
-            'cohort' => $cohortRepository->findOneBy(['uuid' => $uuid]),
-        ]);
-    }
-
-    #[Route('/{uuid}/edit', name: 'app_cohort_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, CohortRepository $cohortRepository, EntityManagerInterface $entityManager, string $uuid): Response
-    {
-        $cohort = $cohortRepository->findOneBy(['uuid' => $uuid]);
-        $form = $this->createForm(CohortType::class, $cohort);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_cohort_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('cohort/edit.html.twig', [
-            'cohort' => $cohort,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{uuid}', name: 'app_cohort_delete', methods: ['POST'])]
-    public function delete(Request $request, CohortRepository $cohortRepository, EntityManagerInterface $entityManager, string $uuid): Response
-    {
-        $cohort = $cohortRepository->findOneBy(['uuid' => $uuid]);
-        if ($this->isCsrfTokenValid('delete' . $cohort->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($cohort);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_cohort_index', [], Response::HTTP_SEE_OTHER);
-    }
-    
     #[Route('/export/', name: 'app_cohort_export', methods: ['GET'], priority: 1)]
     public function export(Request $request, ExcelExporter $excelExporter, CohortRepository $cohortRepository, ExportParameterRepository $parameter): Response
     {
         $formFields = $request->query->all('form_fields');
-        if(!is_array($formFields)) {
+        if (!is_array($formFields)) {
             $formFields = (array)[$formFields];
         }
 
@@ -105,5 +34,16 @@ class CohortController extends AbstractController
 
         // Utiliser le service pour générer le fichier Excel
         return $excelExporter->exportData('cohort_list', json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true), $data, $formFields);
+    }
+
+    #[Route('/export-content', name: 'app_cohort_export_content', priority: 1)]
+    public function exportContent(ExportParameterRepository $repository): Response
+    {
+        // On récupère tous les paramètres liés à un label donné ("cohort_x" par exemple)
+        $fields = $repository->findOneBy(['dtype' => 'cohort'])->getField();
+
+        return $this->render('admin/fields/export_modal_content.html.twig', [
+            'fields' => $fields,
+        ]);
     }
 }

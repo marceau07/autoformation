@@ -2,15 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Course;
 use App\Entity\CourseCohort;
 use App\Entity\Notification;
-use App\Form\CourseType;
 use App\Repository\CohortRepository;
 use App\Repository\CourseCohortRepository;
 use App\Repository\CourseRepository;
 use App\Repository\NotificationRepository;
-use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,79 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/{_locale}/course')]
 class CourseController extends AbstractController
 {
-    #[Route('/', name: 'app_course_index', methods: ['GET'])]
-    public function index(CourseRepository $courseRepository, TrainerRepository $trainerRepository, UserRepository $userRepository, CourseCohortRepository $courseCohortRepository): Response
-    {
-        $trainers = $trainerRepository->findBy(['sector' => $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getSector()]);
-        $cohorts = [];
-        foreach ($trainers as $trainer) {
-            $cohorts = array_merge($cohorts, $trainer->getCohorts()->toArray());
-        }
-        
-        return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findAll(),
-            'trainerCohorts' => $cohorts,
-            'courseCohorts' => $courseCohortRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_course_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $course = new Course();
-        $form = $this->createForm(CourseType::class, $course);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($course);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('course/new.html.twig', [
-            'course' => $course,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_course_show', methods: ['GET'])]
-    public function show(Course $course): Response
-    {
-        return $this->render('course/show.html.twig', [
-            'course' => $course,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_course_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Course $course, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(CourseType::class, $course);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('course/edit.html.twig', [
-            'course' => $course,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_course_delete', methods: ['POST'])]
-    public function delete(Request $request, Course $course, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $course->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($course);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
-    }
-
     #[Route('/cohort/fetch/{cohortId}/active/{active}/search/{search}', requirements: ['search' => '\w*'], name: 'app_courses_fetch', methods: ['POST'])]
     public function fetch(Request $request, CourseCohortRepository $courseCohortRepository, TranslatorInterface $translator, CourseRepository $courseRepository, CohortRepository $cohortRepository, int $cohortId, bool $active, string $search): Response
     {
@@ -148,7 +72,7 @@ class CourseController extends AbstractController
         if ($courseCohort) {
             if ($courseCohort->isActive()) { // If notification exists, delete it to avoid accessing it again
                 foreach ($cohort->getTrainees() as $trainee) {
-                    $notificationRepository->deleteANotification("[" . $course->getModule()->getLabel() . "]", null, "new_course", $trainee->getId());
+                    $notificationRepository->deleteANotification("new_course", $trainee->getId(), "[" . $course->getModule()->getLabel() . "]", null);
                 }
             } else {
                 foreach ($cohort->getTrainees() as $trainee) {
