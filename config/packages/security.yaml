@@ -80,8 +80,12 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
     role_hierarchy:
         ROLE_TRAINER: [ROLE_ALLOWED_TO_SWITCH]
+        ROLE_COORDINATOR: [ROLE_ALLOWED_TO_SWITCH]
+        ROLE_RESPONSIBLE: [ROLE_ALLOWED_TO_SWITCH]
 
 when@test:
     security:
