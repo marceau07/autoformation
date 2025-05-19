@@ -25,12 +25,17 @@
 
 ###> symfony/asset-mapper ###
 /public/assets/
-/public/internships/
+/public/courses/
 /public/homeworks/
+/public/internships/
 /public/messages/
-/public/quiz-themes/
+/public/quizzes/
+/public/quizzes-themes/
+/public/sectors/
+/public/shields/
+/public/surveys/
+/public/website/
 /assets/vendor/
-/assets/images/shields/
 ###< symfony/asset-mapper ###
 
 ###> lexik/jwt-authentication-bundle ###
@@ -42,3 +47,5 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+/public/debug_log.txt
+/public/debug_raw.txt
