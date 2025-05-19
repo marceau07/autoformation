@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Config\ExportParameterType;
 use App\Entity\Calendar;
 use App\Entity\Course;
 use App\Entity\Feedback;
@@ -14,7 +15,6 @@ use App\Entity\TraineeResource;
 use App\Repository\CalendarRepository;
 use App\Repository\CohortInternshipRepository;
 use App\Repository\CohortRepository;
-use App\Repository\CourseModuleRepository;
 use App\Repository\CourseRepository;
 use App\Repository\CourseResourceRepository;
 use App\Repository\FeedbackCategoryRepository;
@@ -50,6 +50,9 @@ class DefaultController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
+    /**
+     * Permet de charger un fichier CSS fictif avec les couleurs du thème
+     */
     #[Route('/css/colors.css', name: 'app_colors_css')]
     public function themeCss(SiteSettingsRepository $siteSettingsRepository): Response
     {
@@ -86,19 +89,19 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * WIP
+     * TODO: WIP
      */
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/events', name: 'app_events', methods: "GET")]
-    public function events(CalendarRepository $calendarRepository, TraineeRepository $traineeRepository, TrainerRepository $trainerRepository): JsonResponse
+    public function events(CalendarRepository $calendarRepository, TraineeRepository $traineeRepository, UserRepository $userRepository): JsonResponse
     {
         $data = [];
         if ($this->isGranted('ROLE_TRAINEE')) {
             $cohortId = $traineeRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getCohort()->getId();
             $events = $calendarRepository->findBy(['cohort' => $cohortId], ['startDate' => 'ASC']);
         } elseif ($this->isGranted('ROLE_TRAINER')) {
-            $trainerId = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getId();
-            $events = $calendarRepository->findBy(['trainer' => $trainerId], ['startDate' => 'ASC']);
+            $userId = $userRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()])->getId();
+            $events = $calendarRepository->findBy(['user' => $userId], ['startDate' => 'ASC']);
         }
 
         foreach ($events as $event) {
@@ -115,7 +118,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * WIP
+     * TODO: WIP
      */
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER")'))]
     #[Route('/events/new', name: 'app_events_add', methods: "POST")]
@@ -131,7 +134,7 @@ class DefaultController extends AbstractController
         $endDate = new DateTimeImmutable($data['end']);
         $calendar->setFinishDate($endDate);
         $calendar->setCohort(null);
-        $calendar->setTrainer($this->getUser());
+        $calendar->setUser($this->getUser());
 
         try {
             $entityManager->persist($calendar);
@@ -291,7 +294,7 @@ class DefaultController extends AbstractController
                                 $closest,
                                 '<div>
                                     <h6 class="fw-bold fs-5 ">' . $course->getModule()->getLabel() . '</h6>
-                                    <img src="' . $assets->getUrl('images/' . $course->getModule()->getIllustration()) . '" title="' . $course->getModule()->getIllustration() . '">
+                                    <img src="' . $assets->getUrl('courses/' . $course->getModule()->getIllustration()) . '" title="' . $course->getModule()->getIllustration() . '">
                                     <a class="btn btn-primary text-center" href="/' . $request->getLocale() . '/course/read/' . $course->getModule()->getUuid() . '">' . $translator->trans('global.btn_consult', [], null, $request->getLocale()) . '</a>
                                 </div>'
                             );
@@ -311,7 +314,7 @@ class DefaultController extends AbstractController
                                 $closest,
                                 '<div>
                                     <div class="d-flex justify-content-center">
-                                        <img src="' . $assets->getUrl('../avatars/' . $trainee->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainee->getAvatar()->getLabel() . '">
+                                        <img src="' . $assets->getUrl('avatars/' . $trainee->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainee->getAvatar()->getLabel() . '">
                                     </div>
                                     <h6 class="fw-bold fs-5 ">' . $trainee->getFirstName() . ' ' . $trainee->getLastName() . '</h6>
                                     <p class="fs-6">' . $trainee->getCohort()->getName() . '</p>
@@ -334,7 +337,7 @@ class DefaultController extends AbstractController
                                     <div class="d-flex justify-content-center">
                                         <img src="' . $assets->getUrl('../avatars/' . $trainer->getAvatar()->getLink()) . '" width="100" height="100" title="' . $trainer->getAvatar()->getLabel() . '">
                                     </div>
-                                    <h6 class="fw-bold fs-5 ">[' . $trainer->getSector()->getLabel() . ']&nbsp;' . $trainer->getFirstName() . ' ' . $trainer->getLastName() . '</h6>
+                                    <h6 class="fw-bold fs-5 ">[' . $trainer->getCoordinator()->getResponsible()->getSector()->getLabel() . ']&nbsp;' . $trainer->getFirstName() . ' ' . $trainer->getLastName() . '</h6>
                                     <p class="fs-6">' . $trainer->getEmail() . '</p>
                                     
                                     <div class="d-flex justify-content-center">
@@ -456,6 +459,7 @@ class DefaultController extends AbstractController
             'parallel_tool_calls' => null,
         ];
         $url = $this->getParameter("ai_url") . '/';
+        // die(!$this->isCurlServerAlive($url . 'healthz') ? 'not alive' : 'alive');
         if (!$this->isCurlServerAlive($url)) {
             $response = new StreamedResponse(function () use ($translator, $request) {
                 ob_implicit_flush(true);
@@ -523,14 +527,15 @@ class DefaultController extends AbstractController
     function isCurlServerAlive($url): bool
     {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return $result !== false && $httpCode === 200;
+        // var_dump($httpCode, $url);die;
+        return $httpCode === 200;
     }
 
     #[IsGranted(new Expression('is_granted("ROLE_TRAINEE")'))]
@@ -737,7 +742,7 @@ class DefaultController extends AbstractController
         );
     }
 
-    #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
+    #[IsGranted(new Expression('is_granted("ROLE_RESPONSIBLE") or is_granted("ROLE_COORDINATOR") or is_granted("ROLE_TRAINER") or is_granted("ROLE_TRAINEE")'))]
     #[Route('/send_message', name: 'app_send_message', methods: "POST")]
     public function sendMessage(TranslatorInterface $translator, Request $request, UserRepository $userRepository, CohortRepository $cohortRepository, MessageRepository $messageRepository, EntityManagerInterface $entityManager): Response
     {
@@ -758,15 +763,8 @@ class DefaultController extends AbstractController
             $message->setOriginalMessage(null);
         }
 
-        if ($this->isGranted("ROLE_TRAINER")) {
-            $message->setSendTrainer($this->getUser());
-
-            $notificationNewMessage->setLink($this->generateUrl('app_mailbox_trainer', ['uuid' => $request->request->get('form_sender_uuid')]), true);
-        } elseif ($this->isGranted("ROLE_TRAINEE")) {
-            $message->setSendTrainee($this->getUser());
-
-            $notificationNewMessage->setLink($this->generateUrl('app_mailbox_trainee', ['uuid' => $request->request->get('form_sender_uuid')]), true);
-        }
+        $message->setSendPeople($this->getUser());
+        $notificationNewMessage->setLink($this->generateUrl('app_mailbox_people', ['people' => strtolower($request->request->get('form_origin')), 'uuid' => $request->request->get('form_sender_uuid')]), true);
 
         if (!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "cohort") {
             $cohort = $cohortRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
@@ -784,16 +782,11 @@ class DefaultController extends AbstractController
                 $entityManager->persist($notificationNewMessage);
                 $entityManager->flush();
             }
-        } elseif ((!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "trainee")) {
-            $trainee = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
-            $message->setTrainee($trainee);
+        } else {
+            $user = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
+            $message->setPeople($user);
 
-            $notificationNewMessage->setUser($trainee);
-        } elseif ((!empty($request->request->get('form_origin')) && $request->request->get('form_origin') == "trainer")) {
-            $trainer = $userRepository->findOneBy(['uuid' => $request->request->get('form_receiver_uuid')]);
-            $message->setTrainer($trainer);
-
-            $notificationNewMessage->setUser($trainer);
+            $notificationNewMessage->setUser($user);
         }
         $message->setContent($request->request->get('form_message'));
 
@@ -855,7 +848,7 @@ class DefaultController extends AbstractController
                             $entityManager->flush();
 
                             $currentUser = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
-                            $notificationRepository->deleteANotification($courseResource->getCourse()->getModule()->getLabel(), null, "homework_to_do", $currentUser->getId());
+                            $notificationRepository->deleteANotification("homework_to_do", $currentUser->getId(), $courseResource->getCourse()->getModule()->getLabel(), null);
 
                             $this->addFlash('notice', $translator->trans('global.file_sent', [], null, $request->getLocale()));
                             return $this->json(
@@ -1004,5 +997,14 @@ class DefaultController extends AbstractController
             ],
             status: Response::HTTP_BAD_REQUEST
         );
+    }
+
+    #[Route('/admin/export-parameters/fields/{dtype}', name: 'admin_export_fields', methods: ['GET'])]
+    public function getFields(string $dtype, EntityManagerInterface $em): JsonResponse
+    {
+        $type = ExportParameterType::from($dtype);
+        $fields = $type->getEntityProperties();
+
+        return new JsonResponse($fields);
     }
 }
