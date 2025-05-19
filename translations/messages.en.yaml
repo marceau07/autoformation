@@ -9,8 +9,16 @@ global:
   language_english:
     text: "English"
     code: "en"
+  language_spanish:
+    text: "Spanish"
+    code: "es"
   file_sent:
     "File sent"
+  file_not_found:
+    "File not found"
+  date_format:
+    short: "m-d-Y"
+    long: "m-d-Y H:i:s"
   exceptions:
     400:
       title:
@@ -47,6 +55,8 @@ global:
         "An error occurred"
       message:
         "An error occurred, please try again later."
+  confirm_delete:
+    "Are you sure you want to delete this item?"
   btn_send:
     "Send"
   btn_save:
@@ -79,6 +89,10 @@ global:
     "Verify"
   btn_consult:
     "Consult"
+  btn_retrieve: 
+    "Retrieve"
+  btn_login: 
+    "Login"
   day:
     " %time% day ago"
   days:
@@ -113,6 +127,10 @@ global:
     "Yes"
   no:
     "No"
+  "true":
+    "True"
+  "false":
+    "False"
   courses:
     "Courses"
   course:
@@ -135,6 +153,14 @@ global:
     "Trainers"
   trainer:
     "Trainer"
+  coordinators:
+    "Coordinators"
+  coordinator:
+    "Coordinator"
+  responsibles:
+    "Responsibles"
+  responsible:
+    "Responsible"
   cohorts:
     "Cohorts"
   cohort:
@@ -154,21 +180,38 @@ header:
   mailbox:
     "Mailbox"
   faq:
-    "FAQ"
+    "Q&A"
   search:
     "Search..."
+  search_no_result:
+    "No results found"
   login:
     "Log In"
   web_platform:
     "Web Platform"
   mobile_application:
     "Mobile Application"
+  notifications: 
+    news: "News"
+    to_do: "To Do"
+    messages: "Messages"
+    courses: "Courses"
+    internships: "Internships"
+  personal:
+    modify: "Modify my informations"
+    dark_mode: "Dark mode"
+    exit_impersonation: "Exit impersonation"
+    logout: "Logout"
 
 home:
   welcome:
     "Welcome to %platformName%"
   welcome_small:
     "Your Learning and Training Platform"
+  current_calendar:
+    "Calendar"
+  no_content_calendar:
+    "No calendar events at the moment, please try again later..."
 
 feedback:
   title:
@@ -199,14 +242,31 @@ feedback:
 survey:
   heading:
     "Satisfaction Survey!"
+  intro:
+    "Thank you for taking the time to answer this questionnaire.<br /><small>Fields labelled by (<span class='required'>*</span>) are required.</small>"
   paragraph:
     "Tell us what you think about us by answering this short questionnaire!"
   answer:
     "Answer the questionnaire"
   review:
     "They have been here..."
+  emojis:
+    very_satisfied:
+      "Very satisfied"
+    satisfied:
+      "Satisfied"
+    neutral:
+      "Neutral"
+    unsatisfied:
+      "Unsatisfied"
+    very_unsatisfied:
+      "Very unsatisfied"
+  commentary:
+    "Commentary"
   no_content:
     "No reviews at the moment, please try again later..."
+  no_questions:
+    "No questions at the moment, please try again later..."
 
 module:
   text:
@@ -219,10 +279,36 @@ quiz:
     "Quizzes"
   no_content:
     "No quizzes at the moment, please try again later..."
+  illustration_no_content_alt:
+    "No quizzes at the moment, please try again later..."
+  launcher:
+    title:
+      "[%module%] - %level%"
+    author:
+      "Author : %trainer%"
+    theme:
+      illustration:
+        "Illustration of the theme %theme%"
+    question:
+      "%question% (Question %index%/%total%)"
+    textarea:
+      placeholder:
+        long: "Here, your long answer..."
+        short: "Here, your short answer..."
+  redirect:
+    title:
+      "Redirecting to the mobile application"
+    message:
+      "You are being redirected to the mobile application to take the quiz."
 
 sandbox:
+  builder:
+    title:
+      "Sandbox Builder"
   created:
     "Your sandboxes"
+  not_found:
+    "No sandbox found, please try again later..."
 
 course:
   favorite:
@@ -238,7 +324,7 @@ course:
   no_content_popular_courses:
     "No popular courses at the moment, please try again later..."
   text:
-    "Courses"
+    "Courses %module%"
   no_content:
     "No courses at the moment, please try again later..."
   illustration_no_content_alt:
@@ -254,6 +340,11 @@ course:
         "Added course to favorite successfully"
       deleted:
         "Deleted course from favorite successfully"
+
+embed:
+  resources: "Resources"
+  exercises: "Exercises"
+  tps: "TPs"
 
 account:
   personal_informations:
@@ -293,6 +384,8 @@ account:
   not_activated:
     "Your account is not yet activated, please contact your trainer for more information."
   graph:
+    title:
+      "Your Progress"
     courses:
       text: "Courses"
       label_one: "Courses unlocked"
@@ -302,13 +395,29 @@ account:
       label_one: "Homeworks to do"
       label_two: "Homeworks done"
 
+faq:
+  title:
+    "Frequently Asked Questions"
+  no_content:
+    "No questions at the moment, please try again later..."
+  no_theme:
+    "No theme for the moment, please try again later..."
+  global:
+    "Generic"
+
 mailbox:
+  title:
+    "Mailbox"
   welcome:
     "Welcome to your mailbox"
   chat_cohort:
     "Chat with %cohort% members"
   chat_trainer_referent:
     "Exchange with %trainer% referent"
+  chat_coordinator:
+    "Exchange with %coordinator%"
+  chat_responsible:
+    "Exchange with %responsible%"
   chat_with:
     "Chat with %trainee%"
   start_conversation:
@@ -321,6 +430,12 @@ mailbox:
     "Start typing a message here..."
   no_account_available:
     "No account available at the moment, please try again later..."
+  sender:
+    you:
+      "You"
+  groups:
+    administration:
+      "Administration"
 
 cohort:
   informations:
@@ -450,278 +565,16 @@ notifications:
   unread_messages:
     "You have unread messages"
 
-administration:
-  default:
-    "Choose the category to manage above...
-    You can add, edit, or delete items in this category."
-  privacy:
-    menu:
-      "Privacy"
-  created_sandbox:
-    menu:
-      "Sandboxes"
-  favorite_course:
-    menu:
-      "Favorite courses"
-  information_cohort:
-    menu:
-      "Cohort's Information"
-  document:
-    menu:
-      "Documents"
-  course:
-    menu:
-      "Courses"
-    create:
-      "Create a new course"
-    manage_courses:
-      "Manage courses"
-    manage_courses_searchbar:
-      "Search for a course, keyword, ..."
-    manage_courses_default_text:
-      "Please select a cohort to view the courses available and optionally filter throw active and/or title's and/or keywords" 
-    course_active:
-      "All courses"
-    course_non_active:
-      "Course non-active"
-    id:
-      "ID"
-    title:
-      "Title"
-    synopsis:
-      "Synopsis"
-    keywords:
-      "Keywords"
-    link:
-      "Link"
-    position:
-      "Position"
-    visitors:
-      "Visitors"
-    module:
-      "Associated Module"
-    trainer:
-      "Writing Trainer"
-    no_course:
-      "No courses at the moment, please try again later..."
-  trainer:
-    menu:
-      "Trainers"
-    create:
-      "Create a new trainer"
-    id:
-      "ID"
-    activated:
-      "Active"
-    lastname:
-      "Last Name"
-    firstname:
-      "First Name"
-    username:
-      "Username"
-    role:
-      "Role"
-    active:
-      "Active"
-    uuid:
-      "UUID"
-    email:
-      "Email"
-    phone_number:
-      "Phone Number"
-    avatar:
-      "Avatar"
-    entrance_date:
-      "Entry Code"
-    signature:
-      "Signature"
-    no_signature:
-      "No signature for %trainer%"
-    sector:
-      "Sector"
-    no_trainer:
-      "No trainers at the moment, please try again later..."
-  cohort:
-    menu:
-      "Cohorts"
-    id:
-      "ID"
-    name:
-      "Name"
-    acronym:
-      "Acronym"
-    shield:
-      "Shield"
-    shield_alt:
-      "%cohort%'s Shield"
-    documents:
-      "Documents"
-    no_documents: 
-      "No documents for the moment, please try again later..."
-    start_date:
-      "Start Date"
-    finish_date:
-      "Finish Date"
-    uuid:
-      "UUID"
-    no_cohort:
-      "No cohorts at the moment, please try again later..."
-  trainee:
-    menu:
-      "Trainees"
-    id:
-      "ID"
-    username:
-      "Username"
-    lastname:
-      "Last Name"
-    firstname:
-      "First Name"
-    email:
-      "Email"
-    activated:
-      "Active"
-    tmp_code:
-      "Temporary Code"
-    signature:
-      "Signature"
-    no_signature:
-      "No signature for %trainee%"
-    uuid:
-      "UUID"
-    documents:
-      "Documents"
-    no_document:
-      "No internship document"
-    diploma:
-      "Diploma"
-    no_diploma:
-      "No diploma"
-    diploma_got_ccp1:
-      "Partially certified (CCP1)"
-    diploma_got_ccp2:
-      "Partially certified (CCP2)"
-    diploma_got_ccp3:
-      "Partially certified (CCP3)"
-    diploma_got_ccp1_ccp2:
-      "Partially certified (CCP1 and CCP2)"
-    diploma_got_ccp2_ccp3:
-      "Partially certified (CCP2 and CCP3)"
-    diploma_got_ccp1_ccp3:
-      "Partially certified (CCP1 and CCP3)"
-    diploma_not_show_up:
-      "Did not show up for the exam"
-    diploma_full:
-      "Certified"
-    diploma_unknow:
-      "Not specified"
-    cohort:
-      "Cohort"
-    no_trainee:
-      "No trainees at the moment, please try again later..."
-  faq:
-    menu:
-      "F.A.Q"
-    id:
-      "ID"
-    theme:
-      "Theme"
-    title:
-      "Title"
-    content:
-      "Content"
-    visibility:
-      "Visibility"
-    priority:
-      "Priority"
-    sector:
-      "Sector"
-    no_faq:
-      "No questions at the moment, please try again later..."
-  prospect:
-    menu:
-      "Prospects"
-    id:
-      "ID"
-    name:
-      "Name"
-    siren:
-      "SIREN"
-    nic:
-      "NIC"
-    address_number:
-      "Street Number"
-    address_street:
-      "Street Name"
-    address_additional_information:
-      "Additional Address Information"
-    address_zipcode:
-      "Zip Code"
-    address_city:
-      "City"
-    address_country:
-      "Country"
-    email:
-      "Email"
-    phone_number:
-      "Phone Number"
-    phone_number_bis:
-      "Secondary Phone Number"
-    no_prospect:
-      "No prospects at the moment, please try again later..."
-  internship:
-    menu:
-      "Internships"
-    id:
-      "ID"
-    tutor_lastname:
-      "Tutor Last Name"
-    tutor_firstname:
-      "Tutor First Name"
-    tutor_email:
-      "Tutor Email"
-    tutor_phone_number:
-      "Tutor Phone Number"
-    trainee:
-      "Trainee"
-    prospect:
-      "Prospect"
-    no_internship:
-      "No internships at the moment, please try again later..."
-  quiz:
-    menu:
-      "Quizzes"
-    id:
-      "ID"
-    title:
-      "Title"
-    description:
-      "Description"
-    duration:
-      "Duration"
-    no_quiz:
-      "No quizzes at the moment, please try again later..."
-  statistic:
-    menu:
-      "Statistics"
-    internship:
-      agreement_percentage:
-        "<b>%percentage%%</b> of received agreements"
-      certificate_percentage:
-        "<b>%percentage%%</b> of received certificates"
-      evaluation_percentage:
-        "<b>%percentage%%</b> of received evaluations"
-    cohort:
-      graduation_percentage:
-        "<b>%percentage%%</b> success rate"
-      satisfaction_percentage:
-        "<b>%percentage%%</b> satisfaction rate"
-
 tourguide:
   mark_as_done:
     "Tutorial completed, you can replay it at any time from the account section."
   index:
     trainee:
+      start:
+        title:
+          "Tutorial"
+        content:
+          "Welcome to the tutorial!<br>We will guide you through the different sections of the platform.<br>You can replay this tutorial at any time from the account section."
       navbar:
         title:
           "Navigation"
@@ -867,6 +720,15 @@ tourguide:
               content:
                 "Start typing a message here..."
 
+event:
+  new:
+    title:
+      "New Event"
+    description:
+      "Details of the event"
+  added: "Added event successfully"
+  error: "An error occurred while adding the event, please try again later."
+
 presentation:
   title:
     "Presentation of %platformName%"
@@ -909,3 +771,26 @@ presentation:
     calendar:
       title: "Dynamic Schedule"
       description: "Consult your timetable and deadlines"
+login:
+  title: "Login"
+  welcome: "Welcome back to %platformName% !"
+  username: "Username"
+  password: "Password"
+  remember_me: "Remember me"
+  forgot_password: "Forgot password ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Generate a new one !</a>"
+recovery:
+  title: "Password Recovery"
+  username: "Username linked to your account"
+  return: "Here by error ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Login !</a>"
+code:
+  title: "Use a temporary code"
+  input: "Received code (6 digits)"
+  return: "Here by error ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Login !</a>"
+signup:
+  title: "Change your password"
+  welcome: "Welcome to %platformName% !"
+  new_password: "New password"
+  return: "Here by error ? <a class='link link-opacity-75 link-opacity-100-hover' href='%path%'>Login !</a>"
+  btn_new_password: "Change my password"
+changelogs:
+  title: "Changelogs"

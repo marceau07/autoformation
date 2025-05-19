@@ -1,0 +1,67 @@
+title: "Avisos legales"
+h1: "Avisos legales del sitio %serverName%"
+articles:
+  - title: "1 - Editor del sitio"
+    content: |
+      De conformidad con el artículo 6 de la Ley n.° 2004-575, de 21 de junio de 2004, sobre la confianza en la economía digital, se informa a los usuarios del sitio web <a href="https://%serverName%">https://%serverName%</a> de la identidad de las distintas partes implicadas en su creación y mantenimiento:
+
+      <ul>
+        <li>
+        Propietario del sitio: RODRIGUES Marceau
+
+        <ol>
+          - Contacto: marceaurodrigues@adrar-formation.com <a href="tel:+33448201712">04 48 20 17 12</a>
+        </ol>
+        <ol>
+          - Dirección: 4657 rue de la Jeune Parque, 34070 - Montpellier.
+        </ol>
+
+        <!--
+        <li>Identificación de la empresa: RODRIGUES Marceau con un capital social de € - SIREN: - RCS o RM: - Dirección postal: 4657 rue de la Jeune Parque</li> 
+        --> 
+        <li>Director de publicación: RODRIGUES Marceau - Contacto: marceaurodrigues@adrar-formation.com.</li> 
+        <!-- 
+        <li>Anfitrión: OVH SAS - 2 rue Kellermann - BP 80157 - 59053 Roubaix Cedex 1 - Teléfono: 1007</li> 
+        --> 
+        <li>Host: autohospedado en las instalaciones del propietario usando Debian 12</li> 
+        <li>Delegado de Protección de Datos: RODRIGUES Marceau - marceaurodrigues@adrar-formation.com</li> 
+      </ul>
+  - title: "2 - Propiedad intelectual y falsificación"
+    content: |
+      RODRIGUES Marceau es titular de los derechos de propiedad intelectual y ostenta los derechos de uso de todos los elementos accesibles en el sitio web, incluyendo textos, imágenes, gráficos, logotipos, vídeos, arquitectura, iconos y sonidos.
+
+      Queda prohibida cualquier reproducción, representación, modificación, publicación o adaptación de la totalidad o parte de los elementos del sitio web, independientemente del medio o proceso utilizado, sin la autorización previa por escrito de RODRIGUES Marceau.
+
+      Cualquier uso no autorizado del sitio web o de cualquiera de los elementos que contiene se considerará una infracción y será perseguido de conformidad con lo dispuesto en los artículos L.335-2 y siguientes del Código de la Propiedad Intelectual.
+  - title: "3 - Limitaciones de responsabilidad"
+    content: |
+      RODRIGUES Marceau no se responsabiliza de ningún daño directo o indirecto causado al equipo del usuario al acceder al sitio web <a href="https://%serverName%">https://%serverName%</a>.
+
+      RODRIGUES Marceau declina toda responsabilidad por el uso que pueda hacerse de la información y el contenido de <a href="https://%serverName%">https://%serverName%</a>.
+
+      RODRIGUES Marceau se compromete a garantizar la seguridad del sitio web <a href="https://%serverName%">https://%serverName%</a> en la mayor medida posible; sin embargo, no se responsabiliza de la importación e instalación de datos no deseados en su sitio sin su conocimiento.
+
+      Las áreas interactivas (contacto o comentarios) están a disposición de los usuarios. RODRIGUES Marceau se reserva el derecho de eliminar, sin previo aviso, cualquier contenido publicado en este espacio que infrinja la legislación francesa aplicable, en particular las disposiciones relativas a la protección de datos.
+
+      En su caso, RODRIGUES Marceau también se reserva el derecho de ejercer responsabilidades civiles y/o penales contra el usuario, en particular en caso de mensajes racistas, ofensivos, difamatorios o pornográficos, sea cual sea el soporte utilizado (texto, fotografías, etc.).
+  - title: "4 - CNIL y gestión de datos personales"
+    content: |
+      De conformidad con la Ley 78-17 del 6 de enero de 1978, en su versión modificada, los usuarios del sitio web tienen derecho a acceder, modificar y eliminar la información recopilada. Para ejercer este derecho, envíe un mensaje a nuestro Delegado de Protección de Datos: RODRIGUES Marceau - marceaurodrigues@adrar-formation.com.
+
+      Para más información sobre cómo tratamos sus datos (tipo de datos, finalidad, destinatario, etc.), consulte nuestra <a href="%path%">Política de Privacidad</a>.
+  - title: "5 - Enlaces hipertextuales y cookies"
+    content: |
+      El sitio web <a href="https://%serverName%">https://%serverName%</a> contiene hipervínculos a otros sitios web y se exime de toda responsabilidad por estos enlaces externos o enlaces creados por otros sitios web a <a href="https://%serverName%">https://%serverName%</a>.
+
+      La navegación por el sitio web <a href="https://%serverName%">https://%serverName%</a> puede provocar la instalación de cookies en el ordenador del usuario.
+
+      Una "cookie" es un pequeño archivo que registra información sobre la navegación del usuario en un sitio web. Los datos recopilados pueden utilizarse, por ejemplo, para medir el tráfico.
+
+      Puede aceptar o rechazar las cookies modificando la configuración de su navegador. No se almacenarán cookies sin su consentimiento.
+
+      Las cookies se almacenan durante un máximo de un mes.
+
+      Para obtener más información sobre cómo utilizamos las cookies, consulte nuestra <a href="%path%">Política de Privacidad</a>.
+  - title: "6 - Ley aplicable y atribución de jurisdicción"
+    content: |
+      Cualquier controversia relacionada con el uso del sitio web <a href="https://%serverName%">https://%serverName%</a> se regirá por la legislación francesa. Salvo en los casos en que la ley no lo permita, la jurisdicción exclusiva corresponde a los tribunales competentes de Montpellier.
