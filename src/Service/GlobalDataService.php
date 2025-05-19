@@ -55,7 +55,11 @@ class GlobalDataService
 
     public function getPlatformName()
     {
-        return strtoupper($this->entityManager->getRepository(SiteSettings::class)->find(1)->getPlatformName());
+        $setting = $this->entityManager->getRepository(SiteSettings::class)->find(1);
+        if ($setting === null) {
+            return 'Default Platform Name';
+        }
+        return strtoupper($setting->getPlatformName());
     }
 
     public function getServerAI()
@@ -65,11 +69,19 @@ class GlobalDataService
 
     public function getPlatformLogoName()
     {
-        return $this->entityManager->getRepository(SiteSettings::class)->find(1)->getLogoName();
+        $setting = $this->entityManager->getRepository(SiteSettings::class)->find(1);
+        if ($setting === null) {
+            return 'Default Logo Name';
+        }
+        return $setting->getLogoName();
     }
 
     public function getPlatformLogoPath()
     {
-        return $this->entityManager->getRepository(SiteSettings::class)->find(1)->getLogoPath();
+        $setting = $this->entityManager->getRepository(SiteSettings::class)->find(1);
+        if ($setting === null) {
+            return '#';
+        }
+        return $setting->getLogoPath();
     }
 }
