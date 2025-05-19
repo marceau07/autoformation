@@ -1,3 +1,5 @@
+{% trans_default_domain 'maintenance' %}
+
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -13,8 +15,8 @@
       }
       setTheme()
     </script>
-    <title>Site en Maintenance</title>
-    <meta name="description" content="Site en maintenance" />
+    <title>{{ 'title'|trans }}</title>
+    <meta name="description" content="{{ 'message'|trans }}" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="googlebot" content="noindex, nofollow" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.min.css') }}" />
@@ -30,18 +32,18 @@
     <div class="container">
       <div class="row">
         <div class="col-12 text-center">
-          <img src="{{ asset('images/adrar_epa_logo.webp') }}" alt="{{ platformLogoName }}" class="img-fluid" style="height: 15em;" />
+          <img src="{{ asset('website/' ~ platformLogoPath) }}" alt="{{ platformLogoName }}" class="img-fluid" style="height: 15em;" />
         </div>
       </div>
       <div class="row pt-5">
         <div class="col-md-6 offset-md-3 text-center">
-          <h1>Nous reviendrons bientôt !</h1>
-          <p>Le site est actuellement en maintenance. Merci de revenir plus tard.</p>
+          <h1>{{ 'header'|trans }}</h1>
+          <p>{{ 'message'|trans }}</p>
         </div>
       </div>
       <div class="row pt-5">
         <div class="col-12 text-center">
-          <img src="{{ asset('images/under_maintenance.svg') }}" alt="Illustration maintenance de la plateforme" class="img-fluid" style="height: 17em;" />
+          <img src="{{ asset('website/icons/under_maintenance.svg') }}" alt="Illustration maintenance de la plateforme" class="img-fluid" style="height: 17em;" />
         </div>
       </div>
     </div>

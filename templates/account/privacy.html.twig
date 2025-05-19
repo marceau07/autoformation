@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Informations personnelles
+  {{ 'account.personal_informations'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -53,30 +53,30 @@
                 {{ form_start(form, { method: 'POST' }) }}
                 <div class="row">
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.username, { label: "account.username"|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.username, { label: "account.username" }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.lastName, { label: 'account.lastname'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.lastName, { label: 'account.lastname' }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.firstName, { label: 'account.firstname'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.firstName, { label: 'account.firstname' }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.password, { label: 'account.password'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.password, { label: 'account.password' }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.email, { label: 'account.email'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.email, { label: 'account.email' }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3">
-                    <div class="form-group">{{ form_row(form.phoneNumber, { label: 'account.phone_number'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.phoneNumber, { label: 'account.phone_number' }) }}</div>
                   </div>
                   <div class="col-6 col-sm-3 d-none">
-                    <div class="form-group">{{ form_row(form.avatar, { label: 'account.avatar'|trans }) }}</div>
+                    <div class="form-group">{{ form_row(form.avatar, { label: 'account.avatar' }) }}</div>
                   </div>
                 </div>
                 <div class="row py-2">
                   <div class="col-6 col-sm-3">
-                    <div class="form-group d-none">{{ form_row(form.signature, { label: 'account.signature'|trans }) }}</div>
+                    <div class="form-group d-none">{{ form_row(form.signature, { label: 'account.signature' }) }}</div>
                     <div class="form-group">
                       <span class="pt-2">{{ 'account.draw_signature'|trans }}</span>
                       <canvas class="box-signature" id="signature-pad" width="auto" style="touch-action: none;"></canvas>
@@ -98,7 +98,7 @@
                   {% endif %}
                 </div>
                 <div class="row float-end my-3">
-                  <div class="form-group">{{ form_row(form.save, { label: 'global.btn_save'|trans, label_attr: { class: 'btn btn-dark' } }) }}</div>
+                  <div class="form-group">{{ form_row(form.save, { label: 'global.btn_save', label_attr: { class: 'btn btn-dark' } }) }}</div>
                 </div>
 
                 {{ form_end(form) }}

@@ -91,7 +91,7 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ path('app_modules') }}">{{ 'header.modules'|trans }}</a>
                 </li>
-                {% if is_granted('ROLE_TRAINER') %}
+                {% if is_granted('ROLE_ADMIN') %}
                   <li class="nav-item">
                     <a class="nav-link" href="{{ path('admin') }}">{{ 'header.administration'|trans }}</a>
                   </li>
@@ -145,6 +145,19 @@
                       <div class="d-none" data-category="trainers" id="searchTrainers">
                         <span class="h3">{{ 'global.trainers'|trans }}</span>
                         <div></div>
+                        <hr>
+                      </div>
+                      <div class="d-none" data-category="coordinators" id="searchCoordinators">
+                        <span class="h3">{{ 'global.coordinators'|trans }}</span>
+                        <div></div>
+                        <hr>
+                      </div>
+                      <div class="d-none" data-category="responsibles" id="searchResponsibles">
+                        <span class="h3">{{ 'global.responsibles'|trans }}</span>
+                        <div></div>
+                      </div>
+                      <div class="d-none" id="noResults">
+                        <span>{{ 'header.search_no_result'|trans }}</span>
                       </div>
                     </div>
                   </div>
@@ -168,7 +181,7 @@
                       <li class="notification-group" id="notificationsNews">
                         <div class="notification-tab">
                           <i class="fa fa-square-poll-vertical"></i>
-                          <h6>Nouveautés</h6>
+                          <h6>{{ 'header.notifications.news'|trans }}</h6>
                           <span class="label">{{ notificationsNews is defined and notificationsNews is not empty ? notificationsNews|length : 0 }}</span>
                         </div>
                         <!-- tab -->
@@ -187,7 +200,7 @@
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsToDo">
                         <div class="notification-tab">
                           <i class="fa fa-list-check"></i>
-                          <h6>A faire</h6>
+                          <h6>{{ 'header.notifications.to_do'|trans }}</h6>
                           <span class="label">{{ notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty ? notificationsHomeworksToDo|length : 0 }}</span>
                         </div>
                         <!-- tab -->
@@ -206,7 +219,7 @@
                       <li class="notification-group" id="notificationsMessages">
                         <div class="notification-tab">
                           <i class="fa fa-envelope"></i>
-                          <h6>Messages</h6>
+                          <h6>{{ 'header.notifications.messages'|trans }}</h6>
                           <span class="label">{{ notificationsMessages is defined and notificationsMessages is not empty ? notificationsMessages|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -225,7 +238,7 @@
                       <li class="notification-group" id="notificationsInternships">
                         <div class="notification-tab">
                           <i class="fa fa-graduation-cap"></i>
-                          <h6>Internships</h6>
+                          <h6>{{ 'header.notifications.internships'|trans }}</h6>
                           <span class="label">{{ notificationsInternships is defined and notificationsInternships is not empty ? notificationsInternships|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -244,7 +257,7 @@
                       <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsCourses">
                         <div class="notification-tab">
                           <i class="fa fa-circle-info"></i>
-                          <h6>Cours</h6>
+                          <h6>{{ 'header.notifications.courses'|trans }}</h6>
                           <span class="label">{{ notificationsNewCourses is defined and notificationsNewCourses is not empty ? notificationsNewCourses|length : 0 }}</span>
                         </div>
                         <ul class="notification-list">
@@ -263,33 +276,30 @@
                   </div>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ (app.request.get('_locale') is same as("en") ? 'global.language_english.code'|trans : 'global.language_french.code'|trans) }}</a>
+                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
-                    <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/en/": "/fr/"}) }}">{{ 'global.language_french.text'|trans }}</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{{ app.request.requestUri|replace({"/fr/": "/en/"}) }}">{{ 'global.language_english.text'|trans }}</a>
-                    </li>
+                    {% for switch in locale_switch_links() %}
+                      <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
+                    {% endfor %}
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.firstName|capitalize }}&nbsp;{{ app.user.lastName|upper }}</a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_user">
                     <li>
-                      <a class="dropdown-item" href="{{ path('app_account_privacy_index') }}">Modifier mes informations</a>
+                      <a class="dropdown-item" href="{{ path('app_account_privacy_index') }}">{{ 'header.personal.modify'|trans }}</a>
                     </li>
                     <li>
-                      <a class="dropdown-item nav-link form-check form-switch" href="#">
+                      <a class="dropdown-item nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
                         <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
-                        <label class="form-check-label" for="form_dark_mode">Dark mode</label>
+                        <label class="form-check-label" for="form_dark_mode">{{ 'header.personal.dark_mode'|trans }}</label>
                       </a>
                     </li>
                     <li>
                       {% if is_granted('IS_IMPERSONATOR') %}
-                        <a class="dropdown-item" href="?_switch_user=_exit">Sortir de l'impersonation</a>
+                        <a class="dropdown-item" href="?_switch_user=_exit">{{ 'header.personal.exit_impersonation'|trans }}</a>
                       {% endif %}
-                      <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
+                      <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'header.personal.logout'|trans }}</a>
                     </li>
                     <li class="text-muted text-end pe-3">
                       <p class="text-reset">v.{{ app_version() ~ "." ~ app.environment|upper }}</p>
@@ -314,7 +324,7 @@
       {% for flashMessage in app.session.flashbag.get('error') %}
         {% include '_components/_alert.html.twig' with { 'type': 'error', 'bg': 'danger', 'fa': 'times', 'message': flashMessage } %}
       {% endfor %}
-      <main class="mb-5">
+      <main>
         {% block main %}
 
         {% endblock %}
@@ -423,6 +433,26 @@
                   </div>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal pour afficher les détails de l'événement -->
+      <div id="event-details-modal" class="modal modal-xl" style="display: none;" aria-labelledby="modalCalendarTitle">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="container">
+                <div class="row">
+                  <h5 class="modal-title w-auto" id="modalCalendarTitle">Détails de l'événement</h5>
+                  <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <!-- Les détails de l'événement seront insérés ici via JavaScript -->
             </div>
           </div>
         </div>
@@ -617,8 +647,8 @@
           if ({{ is_granted('ROLE_TRAINEE') ? 'true' : 'false' }}) {
             const stepsTourGuideTrainee = [
               {
-                title: "Tutoriel",
-                content: "Ce petit tutoriel a pour but de vous montrer comment fonctionne le site. Libre à vous de le passer. <br>Vous pourrez le relancer à tout moment en cliquant sur le bouton en haut à droite dans vos informations personnelles.", 
+                title: "{{ 'tourguide.index.trainee.start.title'|trans }}",
+                content: "{{ 'tourguide.index.trainee.start.content'|trans|raw }}", 
                 position: 'center', 
                 group: 'trainee-index', 
                 order: 0,
@@ -909,16 +939,19 @@
             {% if is_granted('ROLE_TRAINEE') %}
             localStorage.setItem('tg_tours_complete', '{{ app.user.tutorialCompleted }}');
             {% endif %}
-            tg.onBeforeExit(async () => {
-              $.ajax({
-                url: '{{ path('app_save_completed_tutorial') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                  tours: localStorage.getItem('tg_tours_complete').toString()
-                }
+            if(localStorage.getItem('tg_tours_complete').toString() !== '') {
+
+              tg.onBeforeExit(async () => {
+                $.ajax({
+                  url: '{{ path('app_save_completed_tutorial') }}',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                    tours: localStorage.getItem('tg_tours_complete').toString()
+                  }
+                });
               });
-            });
+            }
             tg.onBeforeStepChange(()=>{
               return new Promise((resolve, reject) => {
                 if(tg.tourSteps[tg.activeStep].link !== null) {
@@ -957,37 +990,67 @@
                 },
                 success: (r) => {
                   // Suppression des résultats précédents
-                  $('#searchResults #searchCourses > div > a').remove()
+                  $('#searchResults #searchCourses > div > div > a').remove()
                   $('#searchResults #searchTrainees > div > div > a').remove()
                   $('#searchResults #searchTrainers > div > div > a').remove()
+                  $('#searchResults #searchCoordinators > div > div > a').remove()
+                  $('#searchResults #searchResponsibles > div > div > a').remove()
                   $('#containerSearchResults').removeClass('d-none')
                   $('#containerSearchResults').addClass('show')
-                  if (r.courses.length > 0) {
-                    $('#searchResults #searchCourses').removeClass('d-none')
-                    r.courses.forEach((course) => {
-                      $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;[' + course.module.label + ']&nbsp;-&nbsp;' + course.title + '</div></a>')
-                    })
-                  } else {
-                    0
+
+                  if(r.courses.length === 0 && r.trainees.length === 0 && r.trainers.length === 0 && r.coordinators.length === 0 && r.responsibles.length === 0) {
                     $('#searchResults #searchCourses').addClass('d-none')
-                  }
-        
-                  if (r.trainees.length > 0) {
-                    $('#searchResults #searchTrainees').removeClass('d-none')
-                    r.trainees.forEach((trainee) => {
-                      $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + "[20"+ trainee.username.slice(-2) + "] " + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}{% if is_granted("ROLE_TRAINER") %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
-                    })
-                  } else {
                     $('#searchResults #searchTrainees').addClass('d-none')
-                  }
-        
-                  if (r.trainers.length > 0) {
-                    $('#searchResults #searchTrainers').removeClass('d-none')
-                    r.trainers.forEach((trainer) => {
-                      $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainer/' + trainer.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
-                    })
-                  } else {
                     $('#searchResults #searchTrainers').addClass('d-none')
+                    $('#searchResults #searchCoordinators').addClass('d-none')
+                    $('#searchResults #searchResponsibles').addClass('d-none')
+                    $('#searchResults #noResults').removeClass('d-none')
+                  } else {
+                    $('#searchResults #noResults').addClass('d-none')
+                    if (r.courses.length > 0) {
+                      $('#searchResults #searchCourses').removeClass('d-none')
+                      r.courses.forEach((course) => {
+                        $('#searchResults #searchCourses > div').html($('#searchResults #searchCourses > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/embed/' + course.link + '"><div><i class="fa-solid fa-pager"></i>&nbsp;[' + course.module.label + ']&nbsp;-&nbsp;' + course.title + '</div></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchCourses').addClass('d-none')
+                    }
+          
+                    if (r.trainees.length > 0) {
+                      $('#searchResults #searchTrainees').removeClass('d-none')
+                      r.trainees.forEach((trainee) => {
+                        $('#searchResults #searchTrainees > div').html($('#searchResults #searchTrainees > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + "[20"+ trainee.username.slice(-2) + "] " + trainee.lastName + ' ' + trainee.firstName + '</div></a>{% if is_granted("ROLE_TRAINER") and app.environment == "dev" %}<a class="btn btn-outline-primary m-1" href="?_switch_user=' + trainee.username + '"><i class="fa-solid fa-plug"></i></a>{% endif %}{% if is_granted("ROLE_TRAINER") %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainee/' + trainee.uuid + '"><i class="fa-solid fa-eye"></i></a>{% endif %}<a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainee/' + trainee.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchTrainees').addClass('d-none')
+                    }
+          
+                    if (r.trainers.length > 0) {
+                      $('#searchResults #searchTrainers').removeClass('d-none')
+                      r.trainers.forEach((trainer) => {
+                        $('#searchResults #searchTrainers > div').html($('#searchResults #searchTrainers > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + trainer.lastName + ' ' + trainer.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/trainer/' + trainer.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/trainer/' + trainer.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchTrainers').addClass('d-none')
+                    }
+          
+                    if (r.coordinators.length > 0) {
+                      $('#searchResults #searchCoordinators').removeClass('d-none')
+                      r.coordinators.forEach((coordinator) => {
+                        $('#searchResults #searchCoordinators > div').html($('#searchResults #searchCoordinators > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/coordinator/' + coordinator.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + coordinator.lastName + ' ' + coordinator.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/coordinator/' + coordinator.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/coordinator/' + coordinator.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchCoordinators').addClass('d-none')
+                    }
+          
+                    if (r.responsibles.length > 0) {
+                      $('#searchResults #searchResponsibles').removeClass('d-none')
+                      r.responsibles.forEach((responsible) => {
+                        $('#searchResults #searchResponsibles > div').html($('#searchResults #searchResponsibles > div').html() + '<div><a href="/' + '{{ app.request.attributes.get("_locale") }}' + '/responsible/' + responsible.uuid + '"><div><i class="fa-solid fa-user"></i>&nbsp;' + responsible.lastName + ' ' + responsible.firstName + '</div></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/responsible/' + responsible.uuid + '"><i class="fa-solid fa-eye"></i></a><a class="btn btn-outline-primary m-1" href="/' + '{{ app.request.attributes.get("_locale") }}' + '/mailbox/responsible/' + responsible.uuid + '"><i class="fa-solid fa-paper-plane"></i></a></div>')
+                      })
+                    } else {
+                      $('#searchResults #searchResponsibles').addClass('d-none')
+                    }
                   }
                 },
                 error: (r) => {
@@ -995,9 +1058,11 @@
                 }
               })
             } else {
-              $('#searchResults #searchCourses > div > a').remove()
+              $('#searchResults #searchCourses > div > div > a').remove()
               $('#searchResults #searchTrainees > div > div > a').remove()
               $('#searchResults #searchTrainers > div > div > a').remove()
+              $('#searchResults #searchCoordinators > div > div > a').remove()
+              $('#searchResults #searchResponsibles > div > div > a').remove()
               $('#containerSearchResults').addClass('d-none')
             }
           })
