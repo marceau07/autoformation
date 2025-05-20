@@ -52,7 +52,7 @@ class HomeController extends AbstractController
                 'satisfactionSurvey' => $traineeRepository->getCohortsInformations($this->getUser()->getUserIdentifier()),
                 'latestCourses' => $courseRepository->getLatestCoursesByTrainee($this->getUser()->getUserIdentifier()),
                 'popularCourses' => ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getPopularCoursesSector($this->getUser()->getUserIdentifier()) : $courseRepository->getPopularCoursesCohort($this->getUser()->getUserIdentifier())),
-                'traineesOpinions' => $surveyTraineeRepository->getGlobalSurveys($this->getUser()->getUserIdentifier()),
+                'traineesOpinions' => $surveyTraineeRepository->getGlobalSurveys(),
                 'currentCalendar' => $currentCalendar,
             ]);
         } else {
@@ -64,9 +64,10 @@ class HomeController extends AbstractController
     #[Route('/modules', name: 'app_modules', methods: "GET")]
     public function modules(CourseRepository $courseRepository): Response
     {
-        $listModulesBasics = ($this->isGranted('ROLE_USER') ? [$courseRepository->findOneBy(['module' => 1])] : []);
+        $defaultModule = $courseRepository->findOneBy(['module' => 1]);
+        $listModulesBasics = ($this->isGranted('ROLE_USER') && !empty($defaultModule) ? [$defaultModule] : []);
         $listModules = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesModulesBySector($this->getUser()->getUserIdentifier()) : $courseRepository->getCoursesModulesByCohort($this->getUser()->getUserIdentifier()));
-
+        
         return $this->render('course/module.html.twig', [
             'listModules' => array_merge($listModulesBasics, $listModules)
         ]);
