@@ -2,6 +2,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.26.3",
     "@symfony/webpack-encore": "^5.0.1",
+    "cypress": "^14.3.3",
     "webpack-notifier": "^1.15.0"
   },
   "dependencies": {
