@@ -45,7 +45,7 @@ class CoordinatorFixtures extends Fixture implements DependentFixtureInterface
         $coordinator->setSignature($this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . ".png" . "?text=signature");
         $coordinator->setUuid($faker->uuid());
         $coordinator->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
-        $coordinator->setResponsible($this->getReference(ResponsibleFixtures::RESPONSIBLE_REFERENCE_TAG . rand(0, ResponsibleFixtures::NB_RESPONSIBLE - 1), Responsible::class));
+        $coordinator->setResponsible($this->getReference(ResponsibleFixtures::RESPONSIBLE_REFERENCE_TAG . ResponsibleFixtures::NB_RESPONSIBLE - 1 , Responsible::class));
 
         $manager->persist($coordinator);
         $this->addReference(self::USER_REFERENCE_TAG . (ResponsibleFixtures::NB_RESPONSIBLE + self::NB_COORDINATOR) - 1, $coordinator);

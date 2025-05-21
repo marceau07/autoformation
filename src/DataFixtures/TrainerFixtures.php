@@ -45,6 +45,7 @@ class TrainerFixtures extends Fixture implements DependentFixtureInterface
         $trainer->setSignature($this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . ".png" . "?text=signature");
         $trainer->setUuid($faker->uuid());
         $trainer->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
+        $trainer->setCoordinator($this->getReference(CoordinatorFixtures::COORDINATOR_REFERENCE_TAG . (ResponsibleFixtures::NB_RESPONSIBLE + CoordinatorFixtures::NB_COORDINATOR) -1, Coordinator::class));
 
         $manager->persist($trainer);
 
