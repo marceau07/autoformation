@@ -20,6 +20,7 @@ use App\Repository\TraineeRepository;
 use App\Repository\TraineeResourceRepository;
 use App\Repository\TrainerRepository;
 use App\Repository\UserRepository;
+use App\Service\SectorResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,11 +63,20 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/modules', name: 'app_modules', methods: "GET")]
-    public function modules(CourseRepository $courseRepository): Response
+    public function modules(CourseRepository $courseRepository, ResponsibleRepository $responsibleRepository, CoordinatorRepository $coordinatorRepository, TrainerRepository $trainerRepository, SectorResolver $sectorResolver): Response
     {
+        $user = null;
+        if($this->isGranted('ROLE_RESPONSIBLE')) {
+            $user = $responsibleRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        } else if($this->isGranted('ROLE_COORDINATOR')) {
+            $user = $coordinatorRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        } else if($this->isGranted('ROLE_TRAINER')) {
+            $user = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        }
+
         $defaultModule = $courseRepository->findOneBy(['module' => 1]);
         $listModulesBasics = ($this->isGranted('ROLE_USER') && !empty($defaultModule) ? [$defaultModule] : []);
-        $listModules = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesModulesBySector($this->getUser()->getUserIdentifier()) : $courseRepository->getCoursesModulesByCohort($this->getUser()->getUserIdentifier()));
+        $listModules = ($user !== null ? $courseRepository->getCoursesModulesBySector($sectorResolver->resolve($user)) : $courseRepository->getCoursesModulesByCohort($this->getUser()->getUserIdentifier()));
         
         return $this->render('course/module.html.twig', [
             'listModules' => array_merge($listModulesBasics, $listModules)
