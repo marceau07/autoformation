@@ -3,10 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Course;
-use App\Entity\Trainee;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,19 +44,21 @@ class CourseRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get the list of courses modules for a trainee
+     * Get the list of courses modules for an user
      * 
-     * @param string $userId The trainer identifier
+     * @param int $sector The sector
      * @return Course[] The list of courses
      */
-    function getCoursesModulesBySector(string $userId): array
+    function getCoursesModulesBySector(int $sector): array
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.trainer', 't')
             ->innerJoin('c.module', 'cm')
+            ->innerJoin('t.coordinator', 'co')
+            ->innerJoin('co.responsible', 'r')
             ->addSelect('cm', 't')
-            ->where('t.username = :username')
-            ->setParameter('username', $userId)
+            ->where('r.sector = :sector')
+            ->setParameter('sector', $sector)
             ->andWhere('c.module != 1')
             ->groupBy('cm.id')
             ->orderBy('cm.position', 'ASC')
