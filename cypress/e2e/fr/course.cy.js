@@ -1,4 +1,4 @@
-describe('Tester la page module', () => {
+describe('Tester la page cours', () => {
   it('Pour un stagiaire', () => {
     cy.visit('fr/login');
     cy.get('input[name="username"]').type('lestagiaire');
@@ -8,7 +8,8 @@ describe('Tester la page module', () => {
     cy.visit('fr/modules');
 
     cy.location('pathname', 'fr/modules');
-    cy.contains('Les modules');
+    cy.get('#liste_modules a').first().click();
+    cy.contains('Les cours');
   });
 
   it('Pour un formateur', () => {
@@ -19,7 +20,8 @@ describe('Tester la page module', () => {
     cy.visit('fr/modules');
 
     cy.location('pathname', 'fr/modules');
-    cy.contains('Les modules');
+    cy.get('#liste_modules a').first().click();
+    cy.contains('Les cours');
   });
 
   it('Pour un coordinateur', () => {
@@ -30,7 +32,8 @@ describe('Tester la page module', () => {
     cy.visit('fr/modules');
 
     cy.location('pathname', 'fr/modules');
-    cy.contains('Les modules');
+    cy.get('#liste_modules a').first().click();
+    cy.contains('Les cours');
   });
 
   it('Pour un responsable', () => {
@@ -41,6 +44,7 @@ describe('Tester la page module', () => {
     cy.visit('fr/modules');
 
     cy.location('pathname', 'fr/modules');
-    cy.contains('Les modules');
+    cy.get('#liste_modules a').first().click();
+    cy.contains('Les cours');
   });
 })
