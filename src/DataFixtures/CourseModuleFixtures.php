@@ -6,11 +6,18 @@ use App\Entity\CourseModule;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CourseModuleFixtures extends Fixture
 {
     public const COURSE_MODULE_REFERENCE_TAG = 'course-module-';
     public const NB_COURSE_MODULE = 100;
+    private ParameterBagInterface $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -21,7 +28,7 @@ class CourseModuleFixtures extends Fixture
             $cm->setLabel($faker->countryCode() . ' - ' . $faker->word());
             $cm->setPosition(rand(0, self::NB_COURSE_MODULE));
             $cm->setUuid($faker->uuid());
-            $cm->setIllustration($faker->imageUrl(300, 300, 'illustration', true, 'Faker', false, 'png'));
+            $cm->setIllustration($this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . ".png" . "?text=module");
 
             $manager->persist($cm);
             $this->addReference(self::COURSE_MODULE_REFERENCE_TAG . $i, $cm);

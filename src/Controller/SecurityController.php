@@ -64,11 +64,11 @@ class SecurityController extends AbstractController
                 $user->setTmpCode(mt_rand(100000, 999999));
                 $user->setTmpCodeDate(new \DateTimeImmutable('+7 days'));
                 $entityManager->persist($user);
-                $entityManager->flush($user);
+                $entityManager->flush();
                 $email = (new Email())
                     ->from('no-reply@marceau-rodrigues.fr')
                     ->subject($translator->trans('recovery.subject', [], 'email'));
-                if ($_ENV['APP_ENV'] === 'prod') {
+                if ($_ENV['APP_ENV'] === 'prod' || $_ENV['APP_ENV'] === 'test') {
                     $email->to($user->getEmail());
                 } elseif ($_ENV['APP_ENV'] === 'preprod' || $_ENV['APP_ENV'] === 'dev') {
                     $email->to('contact@marceau-rodrigues.fr');
@@ -141,7 +141,7 @@ class SecurityController extends AbstractController
                 $email = (new Email())
                     ->from('contact@marceau-rodrigues.fr')
                     ->subject($translator->trans('signup.subject', [], 'email'));
-                if ($_ENV['APP_ENV'] === 'prod') {
+                if ($_ENV['APP_ENV'] === 'prod' || $_ENV['APP_ENV'] === 'test') {
                     $email->to($user->getEmail());
                 } elseif ($_ENV['APP_ENV'] === 'dev') {
                     $email->to('contact@marceau-rodrigues.fr');
@@ -162,7 +162,7 @@ class SecurityController extends AbstractController
 
                 $mailer->send($email);
                 $entityManager->persist($user);
-                $entityManager->flush($user);
+                $entityManager->flush();
                 $this->addFlash(
                     'notice',
                     $translator->trans('signup.success', [], 'email')

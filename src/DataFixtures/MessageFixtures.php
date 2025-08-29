@@ -13,12 +13,19 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 // The DependentFixtureInterface is imported to use the getDependencies method to avoid the error of loading fixtures in the wrong order
 class MessageFixtures extends Fixture implements DependentFixtureInterface
 {
   public const MESSAGE_REFERENCE_TAG = 'message-';
   public const NB_MESSAGE = 1000;
+    private ParameterBagInterface $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
 
   public function load(ObjectManager $manager): void
   {
@@ -54,7 +61,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
       $message->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
       $message->setReaded($faker->boolean(90));
       $mimeType = $faker->randomElement(['png', 'jpeg', 'jpg']); // TODO: add more mime types for files and videos
-      $message->setDocument($isMessageWithFile ? $faker->imageUrl(300, 300, 'file', true, null, false, $mimeType) : null);
+      $message->setDocument($isMessageWithFile ? $this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . "." . $mimeType . "?text=file" : null);
       $message->setMimeType($isMessageWithFile ? $mimeType : null);
 
       $manager->persist($message);

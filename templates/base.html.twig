@@ -81,7 +81,7 @@
       {% block header %}
         <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}" id="logo_adrar" /></a>
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ (platformLogoPath starts with "http" or platformLogoPath starts with "https" ? platformLogoPath : asset('/website/' ~ platformLogoPath)) }}" height="125" alt="{{ platformLogoName }}" id="logo_platform" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -355,7 +355,7 @@
         </div>
         <div class="chat-area" id="message-box">
           <div class="text-center">
-            <img src="{{ asset('/website/' ~ platformLogoPath) }}" height="125" alt="{{ platformLogoName }}">
+            <img src="{{ (platformLogoPath starts with "http" or platformLogoPath starts with "https" ? platformLogoPath : asset('/website/' ~ platformLogoPath)) }}" height="125" alt="{{ platformLogoName }}">
           </div>
         </div>
         <div class="line"></div>

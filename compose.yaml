@@ -1,0 +1,47 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: symfony_app
+    ports:
+      - "${APACHE_PORT}:${APACHE_REAL_PORT}"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      APP_ENV: ${APP_ENV}
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:${MYSQL_PORT}/${MYSQL_DATABASE}"
+    # command: symfony server:start --port=${APACHE_REAL_PORT}
+    command: php -S 0.0.0.0:${APACHE_REAL_PORT} -t public # TODO: trouver une solution pour les fichiers non chargés (ex: colors.css)
+
+  db:
+    image: mysql:9.1
+    container_name: mysql_symfony
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: symfony_phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+

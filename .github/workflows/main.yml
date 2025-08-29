@@ -1,0 +1,74 @@
+name: Symfony 7 + Cypress E2E Tests
+
+on:
+  workflow_dispatch:  # permet de le lancer manuellement
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  Symfony-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:9.1
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install netcat
+        run: sudo apt-get update && sudo apt-get install -y netcat-openbsd
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..15}; do
+            nc -z 127.0.0.1 3306 && echo "MySQL is up" && break
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, intl, pdo_mysql, sodium
+          tools: composer
+
+      - name: Set up .env for CI
+        run: |
+          cp .env .env.test
+          echo "APP_ENV=test" >> .env
+          echo "APP_ENV=test" >> .env.test
+          echo "DATABASE_URL=mysql://root:root@127.0.0.1:3306/app" >> .env.test
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run DB migrations
+        run: |
+          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:migrations:migrate --no-interaction
+
+      - name: Start Symfony server
+        run: |
+          php -S 127.0.0.1:8000 -t public &
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: php -S 127.0.0.1:8000 -t public
+          wait-on: 'http://127.0.0.1:8000'
+          wait-on-timeout: 60

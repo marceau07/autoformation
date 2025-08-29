@@ -10,6 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 // The DependentFixtureInterface is imported to use the getDependencies method to avoid the error of loading fixtures in the wrong order
 class ResponsibleFixtures extends Fixture implements DependentFixtureInterface
@@ -17,6 +18,12 @@ class ResponsibleFixtures extends Fixture implements DependentFixtureInterface
     public const USER_REFERENCE_TAG = 'user-';
     public const RESPONSIBLE_REFERENCE_TAG = 'responsible-';
     public const NB_RESPONSIBLE = 20;
+    private ParameterBagInterface $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -27,21 +34,23 @@ class ResponsibleFixtures extends Fixture implements DependentFixtureInterface
         $responsible->setEntranceCodeDate(null);
         $responsible->setSector($this->getReference(SectorFixtures::SECTOR_REFERENCE_TAG . rand(0, SectorFixtures::NB_SECTOR - 1), Sector::class));
         $responsible->setRoles(['ROLE_RESPONSIBLE']);
-        $responsible->setUsername("jeromechretienne");
-        $responsible->setPassword(password_hash("adrar", PASSWORD_BCRYPT, ['cost' => 12]));
-        $responsible->setLastName("CHRETIENNE");
-        $responsible->setFirstName("Jérôme");
-        $responsible->setEmail("jeromechretienne@adrar-formation.com");
+        $responsible->setUsername("leresponsable");
+        $responsible->setPassword(password_hash("T3sts!", PASSWORD_BCRYPT, ['cost' => 12]));
+        $responsible->setLastName("RESPONSABLE");
+        $responsible->setFirstName("Le");
+        $responsible->setEmail("leresponsable@yopmail.com");
         $responsible->setActivated(true);
         $responsible->setTmpCode(null);
         $responsible->setTmpCodeDate(null);
         $responsible->setAvatar($this->getReference(AvatarFixtures::AVATAR_REFERENCE_TAG . rand(0, AvatarFixtures::NB_AVATAR - 1), Avatar::class));
-        $responsible->setSignature($faker->imageUrl(300, 300, 'signature'));
+        $responsible->setSignature($this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . ".png" . "?text=signature");
         $responsible->setUuid($faker->uuid());
         $responsible->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
 
         $manager->persist($responsible);
-        for ($i = 0; $i < self::NB_RESPONSIBLE; $i++) {
+        $this->addReference(self::USER_REFERENCE_TAG . self::NB_RESPONSIBLE - 1, $responsible);
+        $this->addReference(self::RESPONSIBLE_REFERENCE_TAG . self::NB_RESPONSIBLE - 1, $responsible);
+        for ($i = 0; $i < self::NB_RESPONSIBLE - 1; $i++) {
             $responsible = new Responsible();
             $responsible->setRole($faker->words(3, true));
             $responsible->setEntranceCode($faker->numberBetween(10000, 99999));
@@ -60,7 +69,7 @@ class ResponsibleFixtures extends Fixture implements DependentFixtureInterface
             $responsible->setTmpCodeDate($bIsTemporaryBlocked ? DateTimeImmutable::createFromMutable($faker->dateTimeBetween('+1 week', '+2 week')) : null);
             $responsible->setAvatar($this->getReference(AvatarFixtures::AVATAR_REFERENCE_TAG . rand(0, AvatarFixtures::NB_AVATAR - 1), Avatar::class));
             // $responsible->setSignature($sPassword);
-            $responsible->setSignature($faker->imageUrl(300, 300, 'signature'));
+            $responsible->setSignature($this->params->get(name: 'PLACEHOLDER_LINK') . "300x300/" . str_replace('#', '', $faker->safeHexColor()) . "/" . str_replace('#', '', $faker->safeHexColor()) . ".png" . "?text=signature");
             $responsible->setUuid($faker->unique()->uuid());
             $responsible->setPhoneNumber("0" . $faker->unique()->numberBetween(600000000, 799999999));
 

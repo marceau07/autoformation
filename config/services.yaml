@@ -14,6 +14,7 @@ parameters:
         fr: 'global.language_french.text'
         en: 'global.language_english.text'
         es: 'global.language_spanish.text'
+    PLACEHOLDER_LINK: '%env(PLACEHOLDER_LINK)%'
 
 services:
     App\Service\LocaleService:
