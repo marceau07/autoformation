@@ -85,9 +85,17 @@ class HomeController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/course/read/{course}/{search}', name: 'app_course', methods: "GET", requirements: ['search' => '.+'])]
-    public function course(CourseRepository $courseRepository, CourseModuleRepository $courseModuleRepository, QuizShareRepository $quizShareRepository, string $course, ?string $search = null): Response
+    public function course(CourseRepository $courseRepository, ResponsibleRepository $responsibleRepository, CoordinatorRepository $coordinatorRepository, TrainerRepository $trainerRepository, CourseModuleRepository $courseModuleRepository, QuizShareRepository $quizShareRepository, string $course, ?string $search = null): Response
     {
-        $listCourses = ($this->isGranted('ROLE_TRAINER') ? $courseRepository->getCoursesInformationsBySector($course, $search) : $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), $course, $search));
+        $user = null;
+        if($this->isGranted('ROLE_RESPONSIBLE')) {
+            $user = $responsibleRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        } else if($this->isGranted('ROLE_COORDINATOR')) {
+            $user = $coordinatorRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        } else if($this->isGranted('ROLE_TRAINER')) {
+            $user = $trainerRepository->findOneBy(['username' => $this->getUser()->getUserIdentifier()]);
+        }
+        $listCourses = ($user !== null ? $courseRepository->getCoursesInformationsBySector($course, $search) : $courseRepository->getCoursesInformationsByCohort($this->getUser()->getUserIdentifier(), $course, $search));
 
         $listQuizzes = [];
         $quiz_visible = [];
@@ -155,7 +163,6 @@ class HomeController extends AbstractController
         if (!file_exists($path)) {
             $this->addFlash('error', $translator->trans('global.file_not_found'));
             return $this->redirectToRoute('app_home');
-            throw $this->createNotFoundException();
         }
         $response = new BinaryFileResponse($path);
         $response->headers->set('Content-Type', 'application/force-download');
