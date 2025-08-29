@@ -51,15 +51,12 @@ class PdfGeneratorController extends AbstractController
                 case 'internship-agreement':
                     $html = $this->renderView('pdf_generator/internship_agreement.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/2._Conventions_de_stage.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 case 'internship-certificate':
                     $html = $this->renderView('pdf_generator/internship_certificate.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/8._Attestation_de_stage_en_entreprise.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 case 'internship-evaluation':
                     $html = $this->renderView('pdf_generator/internship_evaluation.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/3._Evaluation_du_stage_en_entreprise.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 default:
                     return $this->redirectToRoute('app_home');
             }
@@ -118,15 +115,12 @@ class PdfGeneratorController extends AbstractController
                 case 'internship-agreement':
                     $html = $this->renderView('pdf_generator/internship_agreement.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/2._Conventions_de_stage.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 case 'internship-certificate':
                     $html = $this->renderView('pdf_generator/internship_certificate.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/8._Attestation_de_stage_en_entreprise.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 case 'internship-evaluation':
                     $html = $this->renderView('pdf_generator/internship_evaluation.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/3._Evaluation_du_stage_en_entreprise.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
-                    break;
                 default:
                     return $this->redirectToRoute('app_home');
             }
