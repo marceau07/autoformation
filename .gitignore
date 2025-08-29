@@ -49,3 +49,5 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /public/debug_log.txt
 /public/debug_raw.txt
+
+/cypress/screenshots/
