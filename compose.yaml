@@ -1,32 +1,46 @@
 services:
-  php:
+  app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: symfony_app
     ports:
-      - "${APACHE_PORT}:${APACHE_REAL_PORT}"
+      - "${APP_PORT:-8080}:8000"
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      DATABASE_URL: "mysql://${MYSQL_USER:-symfony}:${MYSQL_PASSWORD:-symfony}@db:3306/${MYSQL_DATABASE:-symfony}"
     volumes:
       - .:/var/www/html
+      - ./var:/var/www/html/var
+      - ./vendor:/var/www/html/vendor
+      - ./public/avatars:/var/www/html/public/avatars
+      - ./public/homeworks:/var/www/html/public/homeworks
+      - ./public/internships:/var/www/html/public/internships
+    command: symfony server:start --allow-all-ip
     depends_on:
       - db
-    environment:
-      APP_ENV: ${APP_ENV}
-      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:${MYSQL_PORT}/${MYSQL_DATABASE}"
-    # command: symfony server:start --port=${APACHE_REAL_PORT}
-    command: php -S 0.0.0.0:${APACHE_REAL_PORT} -t public # TODO: trouver une solution pour les fichiers non chargés (ex: colors.css)
+
+  node:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    command: npm run dev
+    ports:
+      - "8081:8080"
 
   db:
-    image: mysql:9.1
+    image: mysql:9.0
     container_name: mysql_symfony
     restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-symfony}
+      MYSQL_USER: ${MYSQL_USER:-symfony}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-symfony}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
     ports:
-      - "${MYSQL_PORT}:${MYSQL_PORT}"
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
@@ -34,14 +48,13 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: symfony_phpmyadmin
     restart: always
-    ports:
-      - "8080:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "8082:80"
     depends_on:
       - db
 
 volumes:
   db_data:
-
