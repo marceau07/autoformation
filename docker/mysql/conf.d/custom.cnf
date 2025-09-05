@@ -1,0 +1,3 @@
+[mysqld]
+# On garde le mode strict mais on supprime ONLY_FULL_GROUP_BY
+sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
