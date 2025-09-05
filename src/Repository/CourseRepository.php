@@ -60,7 +60,7 @@ class CourseRepository extends ServiceEntityRepository
             ->where('r.sector = :sector')
             ->setParameter('sector', $sector)
             ->andWhere('c.module != 1')
-            ->having('cm.id = 1')
+            ->groupBy('c.module')
             ->orderBy('cm.position', 'ASC')
             ->getQuery()
             ->getResult();
