@@ -97,7 +97,7 @@ class PdfGeneratorController extends AbstractController
         }
         // dump($trainee);
         $data = [
-            'imgLogoAdrar'  => $this->imageToBase64($this->getParameter(name: 'kernel.project_dir') . '/assets/images/adrar_logo.svg'),
+            'imgLogoSite'  => $this->imageToBase64($this->getParameter(name: 'kernel.project_dir') . '/public/website/logo.webp'),
             'imageSrc'  => $this->getParameter('kernel.project_dir') . '/avatars/default.jpeg',
             // 'name'         => $trainee->getLastName() . " " . $trainee->getFirstName(),
             'name'         => " ",
@@ -122,7 +122,7 @@ class PdfGeneratorController extends AbstractController
                     $html = $this->renderView('pdf_generator/internship_evaluation.html.twig', $data);
                     return $this->file(new File($this->getParameter('kernel.project_dir') . '/assets/internships/3._Evaluation_du_stage_en_entreprise.pdf'), $request->attributes->get('element') . '.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
                 default:
-                    return $this->redirectToRoute('app_home');
+                    return $this->redirectToRoute('app_home', ['_locale' => 'fr']);
             }
         } else {
             return $this->redirectToRoute('app_home');
