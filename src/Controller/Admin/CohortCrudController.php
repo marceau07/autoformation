@@ -36,14 +36,15 @@ class CohortCrudController extends AbstractCrudController
         $export = Action::new('export', new TranslatableMessage('admin.pages.cohorts.export', domain: $this->getTranslationDomain()), 'fa fa-file-excel')
             ->displayAsLink()
             ->createAsGlobalAction()
-            ->linkToUrl('#')
-            ->setHtmlAttributes([
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#exampleModal',
-                'href' => '#', // pour éviter la redirection
-                'onclick' => 'fetchData("' . $this->generateUrl('app_cohort_export_content') . '")', // optionnel, pour charger du contenu dynamique
-            ]);
-
+            ->linkToUrl($this->generateUrl('app_cohort_export'))
+            // ->linkToUrl('#')
+            // ->setHtmlAttributes([
+                // 'data-bs-toggle' => 'modal',
+                // 'data-bs-target' => '#exampleModal',
+                // 'href' => '#', // pour éviter la redirection
+                // 'onclick' => 'fetchData("' . $this->generateUrl('app_cohort_export_content') . '")', // optionnel, pour charger du contenu dynamique
+            // ])
+        ;
         $actions->add(Crud::PAGE_INDEX, $export);
 
         return $actions;
