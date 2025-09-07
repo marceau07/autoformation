@@ -19,10 +19,13 @@ class CohortController extends AbstractController
     public function export(Request $request, ExcelExporter $excelExporter, CohortRepository $cohortRepository, ExportParameterRepository $parameter): Response
     {
         $formFields = $request->query->all('form_fields');
-        if (!is_array($formFields)) {
+        if (empty($formFields)) {
+            // Temporaire : on prend ceux par défaut en base tant que la personnalisation n'est pas fonctionnelle
+            $formFields = json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true);
+        } else if (!is_array($formFields)) {
             $formFields = (array)[$formFields];
         }
-
+        
         $data = [];
         $i = 0;
         foreach ($cohortRepository->findAll() as $cohort) {
@@ -31,7 +34,7 @@ class CohortController extends AbstractController
             }
             $i++;
         }
-
+        
         // Utiliser le service pour générer le fichier Excel
         return $excelExporter->exportData('cohort_list', json_decode($parameter->findOneBy(['dtype' => 'cohort'])->getField(), true), $data, $formFields);
     }
