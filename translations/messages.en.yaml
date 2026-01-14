@@ -187,6 +187,8 @@ header:
     "No results found"
   login:
     "Log In"
+  book_platform:
+    "Solutions"
   web_platform:
     "Web Platform"
   mobile_application:
@@ -485,7 +487,7 @@ footer:
 
 chatbot:
   welcome:
-    "Welcome to the chatbot! How can I assist you?<br><small>Type <code>/help</code> to see the list of possible actions.</small>"
+    "Welcome to the chatbot <code><b>%user%</b></code> ! How can I assist you?<br><small>Type <code>/help</code> to see the list of possible actions.</small>"
   ia:
     system: 
       "Always reply in English (do not refer to it in your response).
@@ -730,6 +732,8 @@ event:
   error: "An error occurred while adding the event, please try again later."
 
 presentation:
+  book:
+    "Book your solution !"
   title:
     "Presentation of %platformName%"
   subtitle:

@@ -187,6 +187,8 @@ header:
     "No se encontraron resultados"
   login:
     "Iniciar sesión"
+  book_platform:
+    "Soluciones"
   web_platform:
     "Plataforma web"
   mobile_application:
@@ -485,7 +487,7 @@ footer:
 
 chatbot:
   welcome:
-    "¡Bienvenido al chatbot! ¿Cómo puedo ayudarte?<br><small>Escribe <code>/ayuda</code> para ver la lista de posibles acciones.</small>"
+    "¡Bienvenido al chatbot <code><b>%user%</b></code>! ¿Cómo puedo ayudarte?<br><small>Escribe <code>/ayuda</code> para ver la lista de posibles acciones.</small>"
   ia:
     system: 
       "Responda siempre en español (no haga referencia a él en su respuesta). 
@@ -730,6 +732,8 @@ event:
   error: "Se produjo un error al agregar el evento, inténtelo nuevamente más tarde."
 
 presentation:
+  book:
+    "¡Reserva tu solución!"
   title:
     "Presentación de %platformName%"
   subtitle:

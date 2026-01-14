@@ -35,7 +35,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/{_locale}')]
 class HomeController extends AbstractController
 {
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    // #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/home', name: 'app_home', methods: "GET")]
     public function home(TraineeRepository $traineeRepository, CourseRepository $courseRepository, CalendarRepository $calendarRepository, CourseTraineeRepository $courseTraineeRepository, SurveyTraineeRepository $surveyTraineeRepository): Response
     {
@@ -57,7 +57,7 @@ class HomeController extends AbstractController
                 'currentCalendar' => $currentCalendar,
             ]);
         } else {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_presentation');
         }
     }
 

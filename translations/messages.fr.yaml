@@ -183,6 +183,8 @@ header:
     "Aucun résultat trouvé"
   login:
     "Se connecter"
+  book_platform:
+    "Solutions"
   web_platform:
     "Plateforme web"
   mobile_application:
@@ -493,7 +495,7 @@ footer:
 
 chatbot:
   welcome:
-    "Bienvenue sur le chatbot ! Comment puis-je vous aider ?<br><small>Tapez <code>/aide</code> pour lister les actions possibles.</small>"
+    "Bienvenue sur le chatbot <code><b>%user%</b></code> ! Comment puis-je vous aider ?<br><small>Tapez <code>/aide</code> pour lister les actions possibles.</small>"
   ia:
     system: 
       "Réponds toujours en français (n'y fais pas référence dans ta réponse). 
@@ -738,6 +740,8 @@ event:
   error: "Une erreur s'est produite, veuillez réessayer plus tard."
 
 presentation:
+  book:
+    "Réservez votre solution !"
   title:
     "Présentation de la %platformName%"
   subtitle:

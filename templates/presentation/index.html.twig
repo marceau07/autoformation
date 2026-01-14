@@ -48,71 +48,43 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ (platformLogoPath starts with "http" or platformLogoPath starts with "https" ? platformLogoPath : asset('/website/' ~ platformLogoPath)) }}" height="125" alt="{{ platformLogoName }}" id="logo_platform" /></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="#web_platform">{{ 'header.web_platform'|trans }}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#mobile_application">{{ 'header.mobile_application'|trans }}</a>
-            </li>
-          </ul>
-          {% if app.environment is same as 'dev' %}
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
-              <li>DEBUG</li>
-            </ul>
-          {% endif %}
-
-          {% if app.request.get('_locale') is defined and app.request.get('_locale') is not empty %}
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') is same as('en') ? 'global.language_english.code'|trans:'global.language_french.code'|trans }}</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
-                  {% for switch in locale_switch_links() %}
-                    <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
-                  {% endfor %}
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
-                    <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
-                    <label class="form-check-label" for="form_dark_mode">{{ 'header.personal.dark_mode'|trans }}</label>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link btn-primary border rounded" href="{{ path('app_login') }}">{{ 'header.login'|trans }}</a>
-              </li>
-            </ul>
-          {% endif %}
+    {% include "_components/_navbar_disconnected.html.twig" %}
+    
+    <!-- Book a solution -->
+    <div class="container-fluid text-light d-flex flex-column justify-content-evenly text-center" style="background-color: var(--coul-principale); height: 25vh;">
+      <div class="row">
+        <div class="col-12" id="book_platform">
+          <p class="h1">{{ 'presentation.book'|trans }}</p>
         </div>
       </div>
-    </nav>
+      <div class="row">
+        <div class="col-12">
+          <a href="http://" target="_blank" rel="noopener noreferrer" class="btn bg-white text-dark">En savoir plus</a>
+        </div>
+      </div>
+    </div>
     <div class="container my-5">
         <div class="text-center mb-5">
-        <h1>{{ 'presentation.title'|trans({ '%platformName%': platformName }) }}</h1>
-        <p class="lead">{{ 'presentation.subtitle'|trans }}</p>
+          <h1>{{ 'presentation.title'|trans({ '%platformName%': platformName }) }}</h1>
+          <p class="lead">{{ 'presentation.subtitle'|trans }}</p>
         </div>
 
         <!-- Platform Section -->
         <div class="row align-items-center mb-5">
-        <div class="col-md-6" id="web_platform">
-            <h2>{{ 'presentation.platform.title'|trans }}</h2>
-            <p>{{ 'presentation.platform.description'|trans({ '%platformName%': platformName }) }}</p>
-            <ul class="list-unstyled">
-            {% for feature in 'presentation.platform.features'|trans %}
-                <li>
-                <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div class="col-md-6">
-            <img src="{{ asset('images/platform-preview.png') }}" alt="Platform Preview" class="img-fluid rounded shadow" />
-        </div>
+          <div class="col-md-6" id="web_platform">
+              <h2>{{ 'presentation.platform.title'|trans }}</h2>
+              <p>{{ 'presentation.platform.description'|trans({ '%platformName%': platformName }) }}</p>
+              <ul class="list-unstyled">
+              {% for feature in 'presentation.platform.features'|trans %}
+                  <li>
+                  <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
+                  </li>
+              {% endfor %}
+              </ul>
+          </div>
+          <div class="col-md-6">
+              <img src="{{ asset('images/platform-preview.png') }}" alt="Platform Preview" class="img-fluid rounded shadow" />
+          </div>
         </div>
 
         <!-- Features Grid -->
@@ -148,38 +120,34 @@
         </div>
 
         <!-- Mobile App Section -->
-        <div class="row align-items-center" id="mobile_application">
-        <div class="col-md-6">
-            <img src="{{ asset('images/mobile-preview.jpg') }}" alt="Mobile App Preview" class="img-fluid rounded shadow" />
-        </div>
-        <div class="col-md-6">
-            <h2>{{ 'presentation.mobile.title'|trans }}</h2>
-            <p>{{ 'presentation.mobile.description'|trans }}</p>
-            <ul class="list-unstyled">
-            {% for feature in 'presentation.mobile.features'|trans %}
-                <li>
-                <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="app-stores mt-4">
-            <a href="https://play.google.com/store/apps/details?id=dev.adrar.paf" target="_blank" class="btn btn-dark me-2">
-                <i class="fab fa-google-play me-2"></i>
-                {{ 'presentation.mobile.download.android'|trans }}
-            </a>
-            <a href="#" class="btn btn-dark disabled" target="_blank" style="cursor:not-allowed">
-                <i class="fab fa-apple me-2"></i>
-                {{ 'presentation.mobile.download.ios'|trans }}
-            </a>
-            </div>
-        </div>
+        <div class="row align-items-center text-center" id="mobile_application">
+          <div class="col-md-6">
+              <img src="{{ asset('images/mobile-preview.jpg') }}" alt="Mobile App Preview" class="img-fluid rounded shadow" style="max-height: 40vh;" />
+          </div>
+          <div class="col-md-6">
+              <h2>{{ 'presentation.mobile.title'|trans }}</h2>
+              <p>{{ 'presentation.mobile.description'|trans }}</p>
+              <ul class="list-unstyled">
+              {% for feature in 'presentation.mobile.features'|trans %}
+                  <li>
+                  <i class="fa-solid fa-check text-success me-2"></i>{{ feature }}
+                  </li>
+              {% endfor %}
+              </ul>
+              <div class="app-stores mt-4">
+              <a href="https://play.google.com/store/apps/details?id=dev.adrar.paf" target="_blank" class="btn btn-dark me-2">
+                  <i class="fab fa-google-play me-2"></i>
+                  {{ 'presentation.mobile.download.android'|trans }}
+              </a>
+              <a href="#" class="btn btn-dark disabled" target="_blank" style="cursor:not-allowed">
+                  <i class="fab fa-apple me-2"></i>
+                  {{ 'presentation.mobile.download.ios'|trans }}
+              </a>
+              </div>
+          </div>
         </div>
     </div>
-    <footer class="border-top border-light bg-v1-primary fixed-bottom">
-        <p class="text-center m-0">
-        &copy; 2022 - {{ 'now'|date('Y') }} {{ platformName }} - v.{{ app_version() ~ '.' ~ (app.environment|upper) }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
-        </p>
-    </footer>
+    {% include "_components/_footer.html.twig" %}
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
       if(typeof locale === "undefined") {

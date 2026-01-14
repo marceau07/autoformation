@@ -79,238 +79,11 @@
   <body>
     {% block body %}
       {% block header %}
-        <nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ (platformLogoPath starts with "http" or platformLogoPath starts with "https" ? platformLogoPath : asset('/website/' ~ platformLogoPath)) }}" height="125" alt="{{ platformLogoName }}" id="logo_platform" /></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarText">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="{{ path('app_home') }}">{{ 'header.home'|trans }}</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_modules') }}">{{ 'header.modules'|trans }}</a>
-                </li>
-                {% if is_granted('ROLE_ADMIN') %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ path('admin') }}">{{ 'header.administration'|trans }}</a>
-                  </li>
-                {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_mailbox') }}">{{ 'header.mailbox'|trans }}</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ path('app_q_and_a') }}">{{ 'header.faq'|trans }}</a>
-                </li>
-                {# <li class="nav-item">
-                  <form action="{{ path('_update_session_filter') }}">
-                    <select name="form_filter_session" id="form_filter_session" class="form-select pe-5" onchange="this.form.submit();">
-                      <option value="-1">Tout le secteur</option>
-                      <option value="0" selected="">Toutes mes sessions</option>
-                    </select>
-                  </form>
-                </li> #}
-              </ul>
-              {% if app.environment is same as("dev") %}
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
-                <li>DEBUG</li>
-              </ul>
-              {% endif %}
-              
-              {% if app.request.get('_locale') is defined and app.request.get('_locale') is not empty %}
-              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <form class="d-flex formIndex" role="search" action="#" method="GET" id="searchForm2">
-                    <div class="hero">
-                      <div id="searchBox" class="border rounded">
-                        <i class="fa-solid fa-magnifying-glass fa-lg" id="searchIcon"></i>
-                        <input type="text" class="inputNav" id="searchInput" placeholder="{{ 'header.search'|trans }}" autocomplete="off" />
-                      </div>
-                    </div>
-                  </form>
-                </li>
-                <li>
-                  <div class="z-3 border position-absolute d-none bg-dark" id="containerSearchResults">
-                    <div class="d-flex flex-column mx-3 my-2" id="searchResults">
-                      <div class="d-none" data-category="courses" id="searchCourses">
-                        <span class="h3">{{ 'global.courses'|trans }}</span>
-                        <div></div>
-                        <hr />
-                      </div>
-                      <div class="d-none" data-category="trainees" id="searchTrainees">
-                        <span class="h3">{{ 'global.trainees'|trans }}</span>
-                        <div></div>
-                        <hr />
-                      </div>
-                      <div class="d-none" data-category="trainers" id="searchTrainers">
-                        <span class="h3">{{ 'global.trainers'|trans }}</span>
-                        <div></div>
-                        <hr>
-                      </div>
-                      <div class="d-none" data-category="coordinators" id="searchCoordinators">
-                        <span class="h3">{{ 'global.coordinators'|trans }}</span>
-                        <div></div>
-                        <hr>
-                      </div>
-                      <div class="d-none" data-category="responsibles" id="searchResponsibles">
-                        <span class="h3">{{ 'global.responsibles'|trans }}</span>
-                        <div></div>
-                      </div>
-                      <div class="d-none" id="noResults">
-                        <span>{{ 'header.search_no_result'|trans }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="nav-item d-flex align-items-center px-1">
-                  <div class="dropdown-container">
-                    <a href="#" type="button" data-dropdown="notificationMenu" class="position-relative px-1">
-                      {% if (notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty) 
-                        or (notificationsNews is defined and notificationsNews is not empty) 
-                        or (notificationsMessages is defined and notificationsMessages is not empty) 
-                        or (notificationsInternships is defined and notificationsInternships is not empty) 
-                        or (notificationsNewCourses is defined and notificationsNewCourses is not empty) %}
-                      <i class="fa fa-md fa-bell faa-tada animated"></i>
-                      <span class="position-absolute top-0 start-25 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">{{ 'notifications.unread_messages'|trans }}</span>
-                      </span>
-                      {% else %}
-                      <i class="fa fa-md fa-bell"></i>
-                      {% endif %}
-                    </a>
-                    <ul class="dropdown z-1" name="notificationMenu">
-                      <li class="notification-group" id="notificationsNews">
-                        <div class="notification-tab">
-                          <i class="fa fa-square-poll-vertical"></i>
-                          <h6>{{ 'header.notifications.news'|trans }}</h6>
-                          <span class="label">{{ notificationsNews is defined and notificationsNews is not empty ? notificationsNews|length : 0 }}</span>
-                        </div>
-                        <!-- tab -->
-                        <ul class="notification-list">
-                          {% if notificationsNews is defined and notificationsNews is not empty %}
-                            {% for notification in notificationsNews %}
-                              {% include "_components/_notification.html.twig" %}
-                            {% endfor %}
-                          {% else %}
-                            <li class="notification-list-item">
-                              <p class="message">{{ 'notifications.no_news'|trans }}</p>
-                            </li>
-                          {% endif %}
-                        </ul>
-                      </li>
-                      <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsToDo">
-                        <div class="notification-tab">
-                          <i class="fa fa-list-check"></i>
-                          <h6>{{ 'header.notifications.to_do'|trans }}</h6>
-                          <span class="label">{{ notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty ? notificationsHomeworksToDo|length : 0 }}</span>
-                        </div>
-                        <!-- tab -->
-                        <ul class="notification-list">
-                          {% if notificationsHomeworksToDo is defined and notificationsHomeworksToDo is not empty %}
-                            {% for notification in notificationsHomeworksToDo %}
-                              {% include "_components/_notification.html.twig" %}
-                            {% endfor %}
-                          {% else %}
-                            <li class="notification-list-item">
-                              <p class="message">{{ 'notifications.no_new_homework'|trans }}</p>
-                            </li>
-                          {% endif %}
-                        </ul>
-                      </li>
-                      <li class="notification-group" id="notificationsMessages">
-                        <div class="notification-tab">
-                          <i class="fa fa-envelope"></i>
-                          <h6>{{ 'header.notifications.messages'|trans }}</h6>
-                          <span class="label">{{ notificationsMessages is defined and notificationsMessages is not empty ? notificationsMessages|length : 0 }}</span>
-                        </div>
-                        <ul class="notification-list">
-                          {% if notificationsMessages is defined and notificationsMessages is not empty %}
-                            {% for notification in notificationsMessages %}
-                              {% include "_components/_notification.html.twig" %}
-                            {% endfor %}
-                          {% else %}
-                            <li class="notification-list-item">
-                              <p class="message">{{ 'notifications.no_new_message'|trans }}</p>
-                            </li>
-                          {% endif %}
-                        </ul>
-                      </li>
-                      {% if is_granted('ROLE_TRAINER') %}
-                      <li class="notification-group" id="notificationsInternships">
-                        <div class="notification-tab">
-                          <i class="fa fa-graduation-cap"></i>
-                          <h6>{{ 'header.notifications.internships'|trans }}</h6>
-                          <span class="label">{{ notificationsInternships is defined and notificationsInternships is not empty ? notificationsInternships|length : 0 }}</span>
-                        </div>
-                        <ul class="notification-list">
-                          {% if notificationsInternships is defined and notificationsInternships is not empty %}
-                            {% for notification in notificationsInternships %}
-                              {% include "_components/_notification.html.twig" %}
-                            {% endfor %}
-                          {% else %}
-                            <li class="notification-list-item">
-                              <p class="message">{{ 'notifications.no_new_internship'|trans }}</p>
-                            </li>
-                          {% endif %}
-                        </ul>
-                      </li>
-                      {% endif %}
-                      <li class="notification-group {{ is_granted('ROLE_TRAINER') ? 'd-none' : '' }}" id="notificationsCourses">
-                        <div class="notification-tab">
-                          <i class="fa fa-circle-info"></i>
-                          <h6>{{ 'header.notifications.courses'|trans }}</h6>
-                          <span class="label">{{ notificationsNewCourses is defined and notificationsNewCourses is not empty ? notificationsNewCourses|length : 0 }}</span>
-                        </div>
-                        <ul class="notification-list">
-                          {% if notificationsNewCourses is defined and notificationsNewCourses is not empty %}
-                            {% for notification in notificationsNewCourses %}
-                              {% include "_components/_notification.html.twig" %}
-                            {% endfor %}
-                          {% else %}
-                            <li class="notification-list-item">
-                              <p class="message">{{ 'notifications.no_new_course'|trans }}</p>
-                            </li>
-                          {% endif %}
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
-                    {% for switch in locale_switch_links() %}
-                      <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.firstName|capitalize }}&nbsp;{{ app.user.lastName|upper }}</a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_user">
-                    <li>
-                      <a class="dropdown-item" href="{{ path('app_account_privacy_index') }}">{{ 'header.personal.modify'|trans }}</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
-                        <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
-                        <label class="form-check-label" for="form_dark_mode" onclick="document.getElementById('form_dark_mode').click();">{{ 'header.personal.dark_mode'|trans }}</label>
-                      </a>
-                    </li>
-                    <li>
-                      {% if is_granted('IS_IMPERSONATOR') %}
-                        <a class="dropdown-item" href="?_switch_user=_exit">{{ 'header.personal.exit_impersonation'|trans }}</a>
-                      {% endif %}
-                      <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'header.personal.logout'|trans }}</a>
-                    </li>
-                    <li class="text-muted text-end pe-3">
-                      <p class="text-reset">v.{{ app_version() ~ "." ~ app.environment|upper }}</p>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              {% endif %}
-            </div>
-          </div>
-        </nav>
+        {% if user is defined %}
+          {% include "_components/_navbar_connected.html.twig" %}
+        {% else %}
+          {% include "_components/_navbar_disconnected.html.twig" %}
+        {% endif %}
       {% endblock %}
       {% block feedback %}
         <a role="button" data-bs-toggle="modal" data-bs-target="#modalFeedback" class="feedback-button" href="#">Feedback</a>
@@ -330,11 +103,7 @@
         {% endblock %}
       </main>
       {% block footer %}
-        <footer class="border-top border-light bg-v1-primary fixed-bottom">
-          <p class="text-center m-0">
-            &copy; 2022 - {{ 'now'|date('Y') }} {{ platformName }} - {{ 'footer.text'|trans }} <a href="http://www.marceau-rodrigues.fr" target="_blank">Marceau RODRIGUES</a>&nbsp;-&nbsp;<a href="{{ path('app_legal_notices') }}">{{ 'footer.legal_notices'|trans }}</a>&nbsp;|&nbsp;<a href="{{ path('app_privacy_policy') }}">{{ 'footer.privacy_policy'|trans }}</a>
-          </p>
-        </footer>
+        {% include "_components/_footer.html.twig" %}
       {% endblock %}
       <div id="chatbot" class="main-card collapsed border">
         <button id="chatbot_toggle">
@@ -623,8 +392,8 @@
               document.getElementById("chatbot_toggle").children[2].style.display = ""
               // Default display message
               if($('#message-box .chat-message-div').length === 0) {
-                setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': app.user.username })|raw }}", false)
-              }
+                setTimeout(addResponseMsg, 1000, "{{ 'chatbot.welcome'|trans({'%user%': is_granted('ROLE_USER') ? app.user.username : 'anonymous' })|raw }}", false)
+              } 
             } else {
                 document.getElementById("chatbot").classList.add("collapsed")
                 document.getElementById("chatbot_toggle").children[1].style.display = ""

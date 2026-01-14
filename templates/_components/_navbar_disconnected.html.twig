@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-light border-bottom border-light sticky-top bg-v1-primary" id="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ (platformLogoPath starts with "http" or platformLogoPath starts with "https" ? platformLogoPath : asset('/website/' ~ platformLogoPath)) }}" height="125" alt="{{ platformLogoName }}" id="logo_platform" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" href="#book_platform">{{ 'header.book_platform'|trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#web_platform">{{ 'header.web_platform'|trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#mobile_application">{{ 'header.mobile_application'|trans }}</a>
+            </li>
+            </ul>
+            {% if app.environment is same as 'dev' %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-white bg-danger px-2">
+                <li>DEBUG</li>
+            </ul>
+            {% endif %}
+
+            {% if app.request.get('_locale') is defined and app.request.get('_locale') is not empty %}
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbar_dropdown_language" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.request.get('_locale') }}</a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar_dropdown_language">
+                    {% for switch in locale_switch_links() %}
+                    <li><a class="dropdown-item" href="{{ switch.url }}">{{ switch.label|trans }}</a></li>
+                    {% endfor %}
+                </ul>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link form-check form-switch" href="#" onclick="document.getElementById('form_dark_mode').click();">
+                    <input class="form-check-input" type="checkbox" role="switch" id="form_dark_mode" />
+                    <label class="form-check-label" for="form_dark_mode" onclick="document.getElementById('form_dark_mode').click();">{{ 'header.personal.dark_mode'|trans }}</label>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link btn-primary border rounded" style="color: var(--coul-ternaire)!important;" href="{{ path('app_login') }}">{{ 'header.login'|trans }}</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>

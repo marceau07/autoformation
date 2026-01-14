@@ -43,7 +43,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DefaultController extends AbstractController
 {
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
+    // #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     #[Route('/', name: 'app_default', methods: "GET")]
     public function index(): Response
     {
